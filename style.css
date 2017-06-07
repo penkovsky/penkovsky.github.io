@@ -1,0 +1,76 @@
+#container {
+}
+body { 
+  padding: 0;
+  margin: 0;
+}
+a:visited, a:link {
+  color: black;
+}
+h1 a:link {
+  color: blue;
+}
+#creature {
+  margin: 0;
+  padding: 0;
+  top: 0;
+  left: 0;
+  position: fixed;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  background: url(https://dl.dropboxusercontent.com/s/4qlvtmxhpvixfqm/creature2.jpg) no-repeat top left;
+  background-size: 100%;
+  opacity: 0.3;
+}
+article {
+  padding: 100px 60px 40px 60px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border: 1px rgba(255, 255, 255, 0.5) solid;
+}
+article h3 {
+  padding-top: 40px;
+}
+footer {
+  line-height: 27px;
+  margin-top: 15px;
+  background-color: rgba(0, 0, 0, 0.5);
+  width: 100%;
+  padding: 7px 10px 7px 210px;
+  color: #eee;
+  font-size: 12px;
+}
+footer p {
+  font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+footer a {
+  color: #eee;
+}
+footer .img {
+  float: left;
+  background: url(me.png) 0 -3px;
+  width: 70px;
+  height: 80px;
+  margin-right: 20px;
+  border: 1px solid #ccc;
+}
+p { 
+  width: 600px;
+}
+h1, h2, h3, h4, h5, h6, p {
+  font-family: Arial;
+  font-weight: normal;
+}
+p {
+}
+p.small {
+  font-size: 13px;
+}
+p.noindent {
+  text-indent: 0;
+}
+.centered {
+  margin-left: auto;
+  margin-right: auto;
+  width: 700px!important;
+}
