@@ -23,5 +23,14 @@ Here is an example of a DDE model with two delays from a recent publication:
 -- Equation right-hand side rhs phi0 = DDE.RHS derivative where derivative ((V2 x y), (DDE.</description>
     </item>
     
+    <item>
+      <title>Hmep</title>
+      <link>http://penkovsky.com/project/hmep/</link>
+      <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/hmep/</guid>
+      <description>Multi Expression Programming is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.</description>
+    </item>
+    
   </channel>
 </rss>

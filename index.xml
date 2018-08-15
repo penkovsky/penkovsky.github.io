@@ -59,5 +59,15 @@ rhs phi0 = DDE.RHS derivative
 </description>
     </item>
     
+    <item>
+      <title>Hmep</title>
+      <link>http://penkovsky.com/project/hmep/</link>
+      <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/hmep/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://github.com/masterdezign/hmep&#34;&gt;Multi Expression Programming&lt;/a&gt; is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.&lt;/p&gt;
+</description>
+    </item>
+    
   </channel>
 </rss>
