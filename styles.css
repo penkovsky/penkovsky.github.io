@@ -41,7 +41,7 @@ body {
   font-size: 1rem;
   line-height: inherit;
   color: inherit;
-  background-color: #fff;
+  background-color: rgb(40, 42, 54);
   margin-top: 71px; /* Offset body content by navbar height. */
   padding-top: 0;
   counter-reset: captions;
@@ -1213,7 +1213,7 @@ a.label:hover {
 }
 
 .navbar-default {
-  background: #dfe2ea;
+  background: #333;
   box-shadow: 0 0.125rem 0.25rem 0 rgba(0,0,0,.11)
 }
 
@@ -1236,12 +1236,12 @@ nav#navbar-main li {
   white-space: nowrap;
   -webkit-transition: 0.2s ease;
   transition: 0.2s ease;
-  color: #34495e;
+  color: #ddd;
   font-weight: 600;
 }
 
 .navbar-default .navbar-nav>li>a:focus {
-  color: #34495e;
+  color: #ddd;
   background-color: transparent;
 }
 
@@ -1271,11 +1271,11 @@ nav#navbar-main li {
 }
 
 .navbar-default .navbar-toggle .icon-bar {
-  background-color: #34495e !important;
+  background-color: #ddd !important;
 }
 
 .dropdown-menu {
-  background-color: #dfe2ea !important;
+  background-color: #333 !important;
 }
 
 .dropdown-menu > li > a {
@@ -1284,7 +1284,7 @@ nav#navbar-main li {
   clear: both;
   font-weight: 400;
   line-height: 1.42857143;
-  color: #34495e;
+  color: #ddd;
   white-space: nowrap;
 }
 
@@ -1292,13 +1292,13 @@ nav#navbar-main li {
 .dropdown-menu>li>a:hover {
   color: #0095eb;
   text-decoration: none;
-  background-color: #dfe2ea;
+  background-color: #333;
 }
 
 .dropdown-menu > .active > a,
 .dropdown-menu > .active > a:focus,
 .dropdown-menu > .active > a:hover {
-  color: #dfe2ea;
+  color: #333;
   text-decoration: none;
   background-color: #0095eb;
   outline: 0;
@@ -1308,20 +1308,20 @@ nav#navbar-main li {
 .navbar-default .navbar-nav>.open>a:focus,
 .navbar-default .navbar-nav>.open>a:hover,
 .navbar-default .navbar-nav>.open>a:visited {
-  color: #34495e !important;
-  background-color: #dfe2ea !important;
+  color: #ddd !important;
+  background-color: #333 !important;
 }
 
 .navbar-default .navbar-brand {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.2em;
-  color: #2b2b2b;
+  color: #ccc;
 }
 
 .navbar-default .navbar-brand:focus,
 .navbar-default .navbar-brand:hover {
-  color: #2b2b2b;
+  color: #ccc;
   background-color: transparent;
 }
 
@@ -1386,7 +1386,7 @@ nav#navbar-main li {
     clear: both;
     font-weight: 400;
     line-height: 1.42857143;
-    color: #34495e;
+    color: #ddd;
     white-space: nowrap;
   }
 
@@ -1403,7 +1403,7 @@ nav#navbar-main li {
   .navbar-default .navbar-nav .open .dropdown-menu > li > a {
     padding: 5px 15px 5px 25px;
     line-height: 20px;
-    color: #34495e;
+    color: #ddd;
   }
 
   .navbar-default .navbar-nav .open .dropdown-menu > li > a:focus,
