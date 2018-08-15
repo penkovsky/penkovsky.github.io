@@ -40,6 +40,15 @@
     </item>
     
     <item>
+      <title>My PhD</title>
+      <link>http://penkovsky.com/home/myphd/</link>
+      <pubDate>Thu, 20 Apr 2017 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/home/myphd/</guid>
+      <description>PhD thesis promo recorded on the regional final of &amp;quot;Ma thèse en 180&amp;quot; contest. The speech is in French, but it will take less than 180 seconds :)</description>
+    </item>
+    
+    <item>
       <title>Selected Publications</title>
       <link>http://penkovsky.com/home/publications_selected/</link>
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
@@ -100,16 +109,6 @@
       
       <guid>http://penkovsky.com/home/projects/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Custom Section</title>
-      <link>http://penkovsky.com/home/teaching/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/home/teaching/</guid>
-      <description>This is an example of using the custom widget to create your own homepage section.
-To remove this section, either delete content/home/teaching.md or edit the frontmatter of the file to deactivate the widget by setting active = false.</description>
     </item>
     
     <item>
