@@ -1316,12 +1316,12 @@ nav#navbar-main li {
   text-transform: uppercase;
   font-weight: bold;
   font-size: 1.2em;
-  color: #ccc;
+  color: #c0c0c0;
 }
 
 .navbar-default .navbar-brand:focus,
 .navbar-default .navbar-brand:hover {
-  color: #ccc;
+  color: #c0c0c0;
   background-color: transparent;
 }
 
