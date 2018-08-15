@@ -347,7 +347,7 @@ still I had no fast and flexible library. So here is one now.</p>
 
 <p>Here is an example of a DDE model with two delays
 from a <a href="https://arxiv.org/abs/1712.03283">recent publication</a>
-given by the following integro-differential equation:</p>
+given by the following delay differential equation:</p>
 
 <p>$$
 \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi =
@@ -359,7 +359,8 @@ $\Phi_0$ is a control parameter.
 Let us fix dynamics parameters $\varepsilon = 0.01$,
 $\gamma = 0.5$, and $\delta = 0.009$.</p>
 
-<p>We transform it into an equivalent system of equations:</p>
+<p>We transform the integro-differential equation
+into an equivalent system of equations:</p>
 
 <p>$$\begin{aligned}
 \varepsilon \dot x &amp;= -x -\delta\cdot y + (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),\\<br />
@@ -405,6 +406,8 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
 
 
 <div class="article-tags">
+  
+  <a class="label label-default" href="http://penkovsky.com/tags/dde/">DDE</a>
   
   <a class="label label-default" href="http://penkovsky.com/tags/haskell/">haskell</a>
   

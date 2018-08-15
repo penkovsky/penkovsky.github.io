@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Package on Bogdan Penkovsky, PhD</title>
-    <link>http://penkovsky.com/tags/package/</link>
-    <description>Recent content in Package on Bogdan Penkovsky, PhD</description>
+    <title>DDE on Bogdan Penkovsky, PhD</title>
+    <link>http://penkovsky.com/tags/dde/</link>
+    <description>Recent content in DDE on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
     <lastBuildDate>Wed, 15 Aug 2018 10:01:19 +0200</lastBuildDate>
     
-	<atom:link href="http://penkovsky.com/tags/package/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://penkovsky.com/tags/dde/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -21,15 +21,6 @@
       <description>DDE package is a fast library written in Haskell that I have extracted after my PhD. My work involved a lot dynamical systems described by DDEs. I kept switching between several tools, still I had no fast and flexible library. So here is one now.
 Here is an example of a DDE model with two delays from a recent publication given by the following delay differential equation:
 $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right), $$</description>
-    </item>
-    
-    <item>
-      <title>Hmep</title>
-      <link>http://penkovsky.com/project/hmep/</link>
-      <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/hmep/</guid>
-      <description>Multi Expression Programming is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.</description>
     </item>
     
   </channel>
