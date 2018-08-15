@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>http://penkovsky.com/project/dde/</loc>
+      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/post/welcome/</loc>
       <lastmod>2018-08-15T06:53:44+02:00</lastmod>
     </url>
@@ -53,6 +61,33 @@
     
     <url>
     
+      <loc>http://penkovsky.com/tags/haskell/</loc>
+      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/package/</loc>
+      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/project/</loc>
+      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/publication_types/</loc>
       <priority>0</priority>
     </url>
@@ -62,6 +97,7 @@
     <url>
     
       <loc>http://penkovsky.com/tags/</loc>
+      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
       <priority>0</priority>
     </url>
     

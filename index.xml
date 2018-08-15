@@ -11,6 +11,45 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Delay Differential Equations</title>
+      <link>http://penkovsky.com/project/dde/</link>
+      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/dde/</guid>
+      <description>&lt;p&gt;&lt;a href=&#34;https://hackage.haskell.org/package/dde&#34;&gt;DDE package&lt;/a&gt; is a fast library written in Haskell that I have extracted after my PhD. My work involved a lot dynamical systems
+described by DDEs. I kept switching
+&lt;a href=&#34;https://github.com/masterdezign/aivika-experiment-dde-test&#34;&gt;between&lt;/a&gt;
+&lt;a href=&#34;http://pydelay.sourceforge.net&#34;&gt;several&lt;/a&gt;
+&lt;a href=&#34;http://www.math.pitt.edu/~bard/xpp/xpp.html&#34;&gt;tools&lt;/a&gt;,
+still I had no fast and flexible library. So here is one now.&lt;/p&gt;
+
+&lt;p&gt;Here is an example of a DDE model with two delays
+from a &lt;a href=&#34;https://arxiv.org/abs/1712.03283&#34;&gt;recent publication&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;-- Equation right-hand side
+rhs phi0 = DDE.RHS derivative
+  where
+    derivative ((V2 x y), (DDE.Hist histSnapshots), _) = V2 x&amp;#39; y&amp;#39;
+      where
+        -- DDE Eq. (4) from arXiv:1712.03283
+        x&amp;#39; = (-x - delta * y + (1 - gamma) * f x_tau1 + gamma * f x_tau2) / epsilon
+        y&amp;#39; = x
+
+        f = airy phi0
+
+        -- Delay terms where tau2 / tau1 = 100
+        (V2 x_tau1 _):(V2 x_tau2 _):_ = histSnapshots
+
+        -- Constants
+        epsilon = 0.01
+        gamma = 0.5
+        delta = 0.009&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The complete model is available &lt;a href=&#34;https://gist.github.com/pkvk/18aca8694da3cf16fbf14eacd154cbdd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Welcome</title>
       <link>http://penkovsky.com/post/welcome/</link>
       <pubDate>Wed, 15 Aug 2018 06:53:44 +0200</pubDate>

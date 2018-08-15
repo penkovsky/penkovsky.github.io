@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Package on Bogdan Penkovsky, PhD</title>
+    <link>http://penkovsky.com/tags/package/</link>
+    <description>Recent content in Package on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
+    <lastBuildDate>Wed, 15 Aug 2018 10:01:19 +0200</lastBuildDate>
+    
+	<atom:link href="http://penkovsky.com/tags/package/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Delay Differential Equations</title>
+      <link>http://penkovsky.com/project/dde/</link>
+      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/dde/</guid>
+      <description>DDE package is a fast library written in Haskell that I have extracted after my PhD. My work involved a lot dynamical systems described by DDEs. I kept switching between several tools, still I had no fast and flexible library. So here is one now.
+Here is an example of a DDE model with two delays from a recent publication:
+-- Equation right-hand side rhs phi0 = DDE.RHS derivative where derivative ((V2 x y), (DDE.</description>
+    </item>
+    
+  </channel>
+</rss>
