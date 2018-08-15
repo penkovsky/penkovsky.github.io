@@ -48,5 +48,23 @@
       <description></description>
     </item>
     
+    <item>
+      <title>RNN</title>
+      <link>http://penkovsky.com/tags/rnn/</link>
+      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/rnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reservoir computing</title>
+      <link>http://penkovsky.com/tags/reservoir-computing/</link>
+      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>

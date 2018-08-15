@@ -348,6 +348,15 @@ still I had no fast and flexible library. So here is one now.</p>
 <p>Here is an example of a DDE model with two delays
 from a <a href="https://arxiv.org/abs/1712.03283">recent publication</a>:</p>
 
+<p>$$\varepsilon \dot x +x+\delta\cdot y = (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),$$</p>
+
+<p>$$\dot y = x,$$</p>
+
+<p>where $ \tau_2 = 100 \tau_1$ are delay times.
+$\Phi_0$ is a control parameter.
+Let us fix dynamics parameters $\varepsilon = 0.01$,
+$\gamma = 0.5$, and $\delta = 0.009$.</p>
+
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">-- Equation right-hand side
 rhs phi0 = DDE.RHS derivative
   where
@@ -366,6 +375,14 @@ rhs phi0 = DDE.RHS derivative
         epsilon = 0.01
         gamma = 0.5
         delta = 0.009</code></pre></div>
+
+<p>We define the nonlinear Airy function
+$f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follows:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">airy phi0 x = beta / (1 + m * (sin (x + phi0))^2)
+  where
+    m = 50
+    beta = 1.6</code></pre></div>
 
 <p>The complete model is available <a href="https://gist.github.com/pkvk/18aca8694da3cf16fbf14eacd154cbdd">here</a>.</p>
 
@@ -495,6 +512,15 @@ rhs phi0 = DDE.RHS derivative
 
     
     
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
 
     
     
@@ -512,6 +538,8 @@ rhs phi0 = DDE.RHS derivative
       
 
       
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
       
     
 

@@ -28,6 +28,14 @@
     
     <url>
     
+      <loc>http://penkovsky.com/talk/juelich2018/</loc>
+      <lastmod>2018-06-02T13:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/project/hmep/</loc>
       <lastmod>2017-10-15T10:36:48+02:00</lastmod>
     </url>
@@ -123,6 +131,24 @@
     <url>
     
       <loc>http://penkovsky.com/publication_types/</loc>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/rnn/</loc>
+      <lastmod>2018-06-02T13:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/reservoir-computing/</loc>
+      <lastmod>2018-06-02T13:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
