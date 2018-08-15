@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Homes on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/home/</link>
+    <description>Recent content in Homes on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
+    <lastBuildDate>Sun, 15 Oct 2017 00:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/home/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title></title>
+      <link>https://penkovsky.com/home/hero_carousel/</link>
+      <pubDate>Sun, 15 Oct 2017 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/hero_carousel/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Creature</title>
+      <link>https://penkovsky.com/home/hero/</link>
+      <pubDate>Wed, 01 Aug 2018 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/hero/</guid>
+      <description>This watercolor depicts a chimera, monstrous fire-breathing creature. It appears that chimeras exist not only in Greek mythology. Learn more about my chimera-related work. </description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://penkovsky.com/home/about/</link>
+      <pubDate>Tue, 14 Aug 2018 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/about/</guid>
+      <description>About Currently I work at the FEMTO-ST lab in Besançon, France. My main research interest is in the field of reservoir computing. The story began in May 2012, at the conference in Mellas, Crimea, Ukraine where I attended a brilliant talk by Prof. Laurent Larger. I was already familiar with artificial neural networks, and the talk had further ignited my interest. I learned that those structures can be implemented with the help of a laser or even a bucket of water.</description>
+    </item>
+    
+    <item>
+      <title>Selected Publications</title>
+      <link>https://penkovsky.com/home/publications_selected/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/publications_selected/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://penkovsky.com/home/skills/</link>
+      <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
+      
+      <guid>https://penkovsky.com/home/skills/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Recent Publications</title>
+      <link>https://penkovsky.com/home/publications/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/publications/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Selected Talks</title>
+      <link>https://penkovsky.com/home/talks_selected/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/talks_selected/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Recent &amp; Upcoming Talks</title>
+      <link>https://penkovsky.com/home/talks/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/talks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Recent Posts</title>
+      <link>https://penkovsky.com/home/posts/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/posts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>https://penkovsky.com/home/projects/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/projects/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Custom Section</title>
+      <link>https://penkovsky.com/home/teaching/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/teaching/</guid>
+      <description>This is an example of using the custom widget to create your own homepage section.
+To remove this section, either delete content/home/teaching.md or edit the frontmatter of the file to deactivate the widget by setting active = false.</description>
+    </item>
+    
+    <item>
+      <title>Tags</title>
+      <link>https://penkovsky.com/home/tags/</link>
+      <pubDate>Wed, 20 Sep 2017 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/tags/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Search</title>
+      <link>https://penkovsky.com/home/search/</link>
+      <pubDate>Mon, 23 Jul 2018 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/search/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Contact</title>
+      <link>https://penkovsky.com/home/contact/</link>
+      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/home/contact/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>
