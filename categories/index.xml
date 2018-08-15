@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Categories on Bogdan Penkovsky, PhD</title>
-    <link>https://penkovsky.com/categories/</link>
+    <link>http://penkovsky.com/categories/</link>
     <description>Recent content in Categories on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
     
-	<atom:link href="https://penkovsky.com/categories/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://penkovsky.com/categories/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

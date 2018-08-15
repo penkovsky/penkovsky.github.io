@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</title>
-    <link>https://penkovsky.com/</link>
+    <link>http://penkovsky.com/</link>
     <description>Recent content in Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>Welcome</title>
-      <link>https://penkovsky.com/post/welcome/</link>
+      <link>http://penkovsky.com/post/welcome/</link>
       <pubDate>Wed, 15 Aug 2018 06:53:44 +0200</pubDate>
       
-      <guid>https://penkovsky.com/post/welcome/</guid>
+      <guid>http://penkovsky.com/post/welcome/</guid>
       <description>&lt;p&gt;I am pleased to welcome you on my blog page.&lt;/p&gt;
 </description>
     </item>
