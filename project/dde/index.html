@@ -346,16 +346,29 @@ described by DDEs. I kept switching
 still I had no fast and flexible library. So here is one now.</p>
 
 <p>Here is an example of a DDE model with two delays
-from a <a href="https://arxiv.org/abs/1712.03283">recent publication</a>:</p>
+from a <a href="https://arxiv.org/abs/1712.03283">recent publication</a>
+given by the following integro-differential equation:</p>
 
-<p>$$\varepsilon \dot x +x+\delta\cdot y = (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),$$</p>
-
-<p>$$\dot y = x,$$</p>
+<p>$$
+\varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi =
+(1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right),
+$$</p>
 
 <p>where $ \tau_2 = 100 \tau_1$ are delay times.
 $\Phi_0$ is a control parameter.
 Let us fix dynamics parameters $\varepsilon = 0.01$,
 $\gamma = 0.5$, and $\delta = 0.009$.</p>
+
+<p>We transform it into an equivalent system of equations:</p>
+
+<p>$$\begin{aligned}
+\varepsilon \dot x &amp;= -x -\delta\cdot y + (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),\\<br />
+\dot y &amp;= x.
+\end{aligned}
+$$</p>
+
+<p>Now, this system can be simply written in a vectorial
+(V2) form:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">-- Equation right-hand side
 rhs phi0 = DDE.RHS derivative

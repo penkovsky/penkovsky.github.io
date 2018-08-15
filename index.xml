@@ -33,16 +33,29 @@ described by DDEs. I kept switching
 still I had no fast and flexible library. So here is one now.&lt;/p&gt;
 
 &lt;p&gt;Here is an example of a DDE model with two delays
-from a &lt;a href=&#34;https://arxiv.org/abs/1712.03283&#34;&gt;recent publication&lt;/a&gt;:&lt;/p&gt;
+from a &lt;a href=&#34;https://arxiv.org/abs/1712.03283&#34;&gt;recent publication&lt;/a&gt;
+given by the following integro-differential equation:&lt;/p&gt;
 
-&lt;p&gt;$$\varepsilon \dot x +x+\delta\cdot y = (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),$$&lt;/p&gt;
-
-&lt;p&gt;$$\dot y = x,$$&lt;/p&gt;
+&lt;p&gt;$$
+\varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi =
+(1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right),
+$$&lt;/p&gt;
 
 &lt;p&gt;where $ \tau_2 = 100 \tau_1$ are delay times.
 $\Phi_0$ is a control parameter.
 Let us fix dynamics parameters $\varepsilon = 0.01$,
 $\gamma = 0.5$, and $\delta = 0.009$.&lt;/p&gt;
+
+&lt;p&gt;We transform it into an equivalent system of equations:&lt;/p&gt;
+
+&lt;p&gt;$$\begin{aligned}
+\varepsilon \dot x &amp;amp;= -x -\delta\cdot y + (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),\\&lt;br /&gt;
+\dot y &amp;amp;= x.
+\end{aligned}
+$$&lt;/p&gt;
+
+&lt;p&gt;Now, this system can be simply written in a vectorial
+(V2) form:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;-- Equation right-hand side
 rhs phi0 = DDE.RHS derivative
