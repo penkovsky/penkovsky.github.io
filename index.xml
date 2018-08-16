@@ -25,16 +25,16 @@
       <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
       
       <guid>http://penkovsky.com/project/dde/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://hackage.haskell.org/package/dde&#34;&gt;DDE package&lt;/a&gt; is a fast library written in Haskell that I have extracted after my PhD. My work involved a lot dynamical systems
+      <description>&lt;p&gt;&lt;a href=&#34;https://hackage.haskell.org/package/dde&#34;&gt;DDE package&lt;/a&gt; is a fast library written in Haskell that I have extracted after my PhD. Previously, my work involved a lot dynamical systems
 described by DDEs. I kept switching
 &lt;a href=&#34;https://github.com/masterdezign/aivika-experiment-dde-test&#34;&gt;between&lt;/a&gt;
 &lt;a href=&#34;http://pydelay.sourceforge.net&#34;&gt;several&lt;/a&gt;
 &lt;a href=&#34;http://www.math.pitt.edu/~bard/xpp/xpp.html&#34;&gt;tools&lt;/a&gt;,
 still I had no fast and flexible library. So here is one now.&lt;/p&gt;
 
-&lt;p&gt;Here is an example of a DDE model with two delays
-from a &lt;a href=&#34;https://arxiv.org/abs/1712.03283&#34;&gt;recent publication&lt;/a&gt;
-given by the following delay differential equation:&lt;/p&gt;
+&lt;p&gt;Below is an example of a dual-delay model taken
+from a &lt;a href=&#34;http://penkovsky.com/publication/chimeras-and-dissipative-solitons/&#34;&gt;recent publication&lt;/a&gt;.
+It is given by the following delay differential equation:&lt;/p&gt;
 
 &lt;p&gt;$$
 \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi =
@@ -97,6 +97,24 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
       <guid>http://penkovsky.com/post/welcome/</guid>
       <description>&lt;p&gt;I am pleased to welcome you on my blog page.&lt;/p&gt;
 </description>
+    </item>
+    
+    <item>
+      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
+      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
+      <pubDate>Sun, 12 Aug 2018 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
+      <link>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
+      <pubDate>Mon, 30 Jul 2018 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
+      <description></description>
     </item>
     
     <item>

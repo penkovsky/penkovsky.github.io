@@ -18,8 +18,8 @@
       <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
       
       <guid>http://penkovsky.com/project/dde/</guid>
-      <description>DDE package is a fast library written in Haskell that I have extracted after my PhD. My work involved a lot dynamical systems described by DDEs. I kept switching between several tools, still I had no fast and flexible library. So here is one now.
-Here is an example of a DDE model with two delays from a recent publication given by the following delay differential equation:
+      <description>DDE package is a fast library written in Haskell that I have extracted after my PhD. Previously, my work involved a lot dynamical systems described by DDEs. I kept switching between several tools, still I had no fast and flexible library. So here is one now.
+Below is an example of a dual-delay model taken from a recent publication. It is given by the following delay differential equation:
 $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right), $$</description>
     </item>
     
