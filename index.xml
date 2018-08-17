@@ -30,7 +30,8 @@ described by DDEs. I kept switching
 &lt;a href=&#34;https://github.com/masterdezign/aivika-experiment-dde-test&#34;&gt;between&lt;/a&gt;
 &lt;a href=&#34;http://pydelay.sourceforge.net&#34;&gt;several&lt;/a&gt;
 &lt;a href=&#34;http://www.math.pitt.edu/~bard/xpp/xpp.html&#34;&gt;tools&lt;/a&gt;,
-still I had no fast and flexible library. So here is one now.&lt;/p&gt;
+still I had no fast and flexible library.
+So &lt;a href=&#34;http://github.com/masterdezign/dde&#34;&gt;here&lt;/a&gt; is one now.&lt;/p&gt;
 
 &lt;p&gt;Below is an example of a dual-delay model taken
 from a &lt;a href=&#34;http://penkovsky.com/publication/chimeras-and-dissipative-solitons/&#34;&gt;recent publication&lt;/a&gt;.
