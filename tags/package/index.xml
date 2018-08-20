@@ -24,7 +24,7 @@ $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (
     </item>
     
     <item>
-      <title>Hmep</title>
+      <title>HMEP</title>
       <link>http://penkovsky.com/project/hmep/</link>
       <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
       
