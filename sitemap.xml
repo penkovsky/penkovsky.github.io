@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>http://penkovsky.com/project/bioinspired/</loc>
+      <lastmod>2018-08-20T10:01:19+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/talk/ddays2018/</loc>
       <lastmod>2018-08-15T13:00:00+02:00</lastmod>
     </url>
@@ -162,6 +170,15 @@
     
     <url>
     
+      <loc>http://penkovsky.com/tags/machine-learning/</loc>
+      <lastmod>2018-08-20T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/tags/package/</loc>
       <lastmod>2018-08-15T10:01:19+02:00</lastmod>
       <priority>0</priority>
@@ -172,7 +189,7 @@
     <url>
     
       <loc>http://penkovsky.com/project/</loc>
-      <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+      <lastmod>2018-08-20T10:01:19+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -190,6 +207,15 @@
     <url>
     
       <loc>http://penkovsky.com/tags/rnn/</loc>
+      <lastmod>2018-08-20T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/reservoir-computing/</loc>
       <lastmod>2018-06-02T13:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>

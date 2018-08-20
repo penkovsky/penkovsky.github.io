@@ -49,6 +49,15 @@
     </item>
     
     <item>
+      <title>Machine-learning</title>
+      <link>http://penkovsky.com/tags/machine-learning/</link>
+      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Package</title>
       <link>http://penkovsky.com/tags/package/</link>
       <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
@@ -60,7 +69,7 @@
     <item>
       <title>RNN</title>
       <link>http://penkovsky.com/tags/rnn/</link>
-      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
+      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
       
       <guid>http://penkovsky.com/tags/rnn/</guid>
       <description></description>
@@ -68,6 +77,15 @@
     
     <item>
       <title>Reservoir computing</title>
+      <link>http://penkovsky.com/tags/reservoir-computing/</link>
+      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reservoir-computing</title>
       <link>http://penkovsky.com/tags/reservoir-computing/</link>
       <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
       
