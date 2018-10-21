@@ -22,47 +22,11 @@
     </item>
     
     <item>
-      <title>Chimera</title>
-      <link>http://penkovsky.com/tags/chimera/</link>
-      <pubDate>Wed, 15 Aug 2018 13:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/tags/chimera/</guid>
-      <description></description>
-    </item>
-    
-    <item>
       <title>DDE</title>
       <link>http://penkovsky.com/tags/dde/</link>
       <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
       
       <guid>http://penkovsky.com/tags/dde/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Haskell</title>
-      <link>http://penkovsky.com/tags/haskell/</link>
-      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/tags/haskell/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Machine learning</title>
-      <link>http://penkovsky.com/tags/machine-learning/</link>
-      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/tags/machine-learning/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Package</title>
-      <link>http://penkovsky.com/tags/package/</link>
-      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/tags/package/</guid>
       <description></description>
     </item>
     
@@ -76,7 +40,43 @@
     </item>
     
     <item>
-      <title>Reservoir computing</title>
+      <title>chimera</title>
+      <link>http://penkovsky.com/tags/chimera/</link>
+      <pubDate>Wed, 15 Aug 2018 13:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/chimera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>haskell</title>
+      <link>http://penkovsky.com/tags/haskell/</link>
+      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>machine learning</title>
+      <link>http://penkovsky.com/tags/machine-learning/</link>
+      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>package</title>
+      <link>http://penkovsky.com/tags/package/</link>
+      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/tags/package/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>reservoir computing</title>
       <link>http://penkovsky.com/tags/reservoir-computing/</link>
       <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
       

@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
+      <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/photonic-neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Bioinspired computing</title>
       <link>http://penkovsky.com/project/bioinspired/</link>
       <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
@@ -124,15 +133,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
       <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/talk/juelich2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
-      <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
-      <pubDate>Wed, 30 May 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/photonic-neural-networks/</guid>
       <description></description>
     </item>
     
