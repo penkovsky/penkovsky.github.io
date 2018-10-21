@@ -13,9 +13,18 @@
     <item>
       <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
       <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
+      <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/publication/photonic-neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
+      <link>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
       <description></description>
     </item>
     
@@ -116,15 +125,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
       <guid>http://penkovsky.com/blog/welcome/</guid>
       <description>&lt;p&gt;I am pleased to welcome you on my blog page.&lt;/p&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
-      <link>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
-      <pubDate>Fri, 08 Jun 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
-      <description></description>
     </item>
     
     <item>
