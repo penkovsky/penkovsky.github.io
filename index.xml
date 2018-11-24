@@ -11,6 +11,27 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Towards Binarized Neural Networks Hardware</title>
+      <link>http://penkovsky.com/talk/icee2018/</link>
+      <pubDate>Sat, 24 Nov 2018 13:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/talk/icee2018/</guid>
+      <description>&lt;p&gt;B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz&lt;/p&gt;
+
+&lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress. With new memories available, such as Resistive and Magnetoelectric Random Access Memory (RRAM and MRAM), thanks to the latest advancements in nanotechnology, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation. The simplicity and energy efficiency of BNNs makes them especially suitable for wearable devices, including but not limited to biomedical, healthcare, and sport application domains. In this talk, we discuss our latest BNN developments along with our vision towards the future of energy-efficient smart devices.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
+      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
+      <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
       <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
       <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
@@ -133,15 +154,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
       <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/talk/juelich2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
-      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
       <description></description>
     </item>
     

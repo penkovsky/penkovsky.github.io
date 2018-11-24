@@ -13,6 +13,15 @@
     
     
     <item>
+      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
+      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
+      <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
       <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
       <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
@@ -27,15 +36,6 @@
       <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
-      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
-      <pubDate>Mon, 30 Apr 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
       <description></description>
     </item>
     
