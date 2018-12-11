@@ -40,6 +40,15 @@
     </item>
     
     <item>
+      <title>Recent Posts</title>
+      <link>http://penkovsky.com/home/posts/</link>
+      <pubDate>Sat, 01 Dec 2018 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/home/posts/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>My PhD</title>
       <link>http://penkovsky.com/home/myphd/</link>
       <pubDate>Thu, 20 Apr 2017 00:00:00 +0200</pubDate>
@@ -90,15 +99,6 @@
       <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/home/talks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Recent Posts</title>
-      <link>http://penkovsky.com/home/posts/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/home/posts/</guid>
       <description></description>
     </item>
     

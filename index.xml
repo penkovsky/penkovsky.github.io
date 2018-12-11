@@ -11,6 +11,376 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Day 1: Learning Neural Networks The Hard Way</title>
+      <link>http://penkovsky.com/post/neural-networks/</link>
+      <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks/</guid>
+      <description>
+
+&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
+
+&lt;p&gt;Neural networks is a topic that recurrently appears throughout my life.
+Once, when I was a BSc student,
+I got obsessed with the idea to build an &amp;ldquo;intelligent&amp;rdquo; machine&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
+I spent a couple of sleepless nights thinking. I read a few essays
+shedding some light on this philosophical subject,
+among which the most prominent, perhaps, stand Marvin Minsky&amp;rsquo;s writings&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+As a result, I came across neural networks idea.
+It was 2010, and &lt;em&gt;deep learning&lt;/em&gt; was not nearly as popular as
+it is now&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+Moreover, no one made much effort linking to neural networks
+in calculus or linear algebra curricula. Even guys doing classical
+optimization and statistics sometimes
+seemed puzzled when hearing about neural nets.
+Some year later, I have implemented
+a &lt;a href=&#34;https://bitbucket.org/masterdezign/labNN&#34; target=&#34;_blank&#34;&gt;simple neural net&lt;/a&gt; with sigmoid
+activations as a part of a decision-making course.
+At the time I realized that existing state of our knowledge
+was still lacking to really build &amp;ldquo;thinking computers&amp;rdquo;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;It was 2012, the conference in Crimea, Ukraine where
+I attended a brilliant talk by Prof. Laurent Larger.
+He explained how to build a high-speed hardware for speech recognition
+using a laser. The talk really inspired me, and a year later
+I have started a PhD with an aim to develop
+&lt;em&gt;reservoir computing&lt;/em&gt;, recurrent neural networks implemented
+directly in hardware.
+Finally, now I am using deep neural networks as a part of my
+job.&lt;/p&gt;
+
+&lt;p&gt;In this series of posts I will highlight some
+curious details of problem solving with neural networks.
+I am pretty much against duplicate efforts,
+therefore I would avoid repeating aspects
+described many times somewhere else.
+For those who are completely new to
+the subject, instead of introducing neural networks
+all over again I would refer to Chapter 1.2
+of my &lt;a href=&#34;https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf&#34; target=&#34;_blank&#34;&gt;PhD thesis&lt;/a&gt;.
+Here I will only summarize that neural networks are
+to some extent inspired by biological neurons.
+Similarly to its biological counterpart,
+artificial neuron receives many inputs, performs
+a nonlinear transformation, and produces
+an output. The equation below formalizes this kind of behavior:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{equation}
+y = f(w_1 x_1 + w_2 x_2 + \dots + w_N x_N) = f(\sum_i w_i x_i),
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;where $N$ is the number of inputs $x_i$,
+$w_i$ are synaptic weights&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;,
+and $y$ is the result. Surprising as it may appear,
+in a modern neural network
+$f$ can be practically any nonlinear function.
+This nonlinear function is often called an &lt;em&gt;activation function&lt;/em&gt;.
+Congratulations, we have arrived at a
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Perceptron&#34; target=&#34;_blank&#34;&gt;neural network from 1950-s&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;To continue reading
+this article, some mathematical background is useful, but not mandatory.
+Anyone can develop an intuition about neural networks!&lt;/p&gt;
+
+&lt;h2 id=&#34;gradient-descent-a-cs-freshman-year&#34;&gt;Gradient Descent: A CS Freshman Year&lt;/h2&gt;
+
+&lt;p&gt;&lt;img alt=&#34;Gradient Descent&#34; src=&#34;https://upload.wikimedia.org/wikipedia/commons/f/ff/Gradient_descent.svg&#34; style=&#34;width: 15cm&#34;/&gt;&lt;/p&gt;
+
+&lt;p&gt;The very basic idea behind neural networks
+training and deep learning is a local optimization method known
+as &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;gradient descent&lt;/em&gt;&lt;/a&gt;.
+For those who have hard time remembering their freshman year,
+just watch an &lt;a href=&#34;https://www.youtube.com/watch?v=jc2IthslyzM&#34; target=&#34;_blank&#34;&gt;introductory video&lt;/a&gt;
+explaining the idea.&lt;/p&gt;
+
+&lt;p&gt;How does a concept as simple as gradient descent work for a neural network?
+Well, a neural network is only a function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;, mapping an input to some output.
+By comparing the neural network&amp;rsquo;s output to some desired output, one can obtain
+another function known as an &lt;em&gt;error function&lt;/em&gt;. This error function
+has a certain &lt;em&gt;error landscape&lt;/em&gt;, like in the mountains.
+By using gradient descent, we modify our neural network
+in such a way that we are descending this landscape.
+Therefore, we aim at finding an error minimum.
+The key concept of the optimization method is that the
+error gradients give us a direction in which to change the neural network.
+In a similar way one would be able to descend a hill
+covered with a thick fog. In both cases only a local gradient (slope)
+is available.&lt;/p&gt;
+
+&lt;p&gt;Gradient descent can be described by a formula:&lt;/p&gt;
+
+&lt;p&gt;$$\begin{equation}
+x_{n+1} = x_n - \gamma \cdot \nabla F(x_n),
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;where constant $\gamma$ is what is referred to in deep learning as
+the &lt;em&gt;learning rate&lt;/em&gt;, i.e. the amount of learning per iteration $n$.
+In the simplest case, $x$ is a scalar variable. The gradient descent
+method can be implemented in few lines of code.
+The Haskell &lt;a href=&#34;https://repl.it/@masterdezign/Grad&#34; target=&#34;_blank&#34;&gt;code snippet&lt;/a&gt;
+below is interactive. Press the green triangle
+button to Run the code.&lt;/p&gt;
+
+&lt;iframe height=&#34;400px&#34; width=&#34;100%&#34; src=&#34;https://repl.it/@penkovsky/Grad?lite=true&#34; scrolling=&#34;no&#34; frameborder=&#34;no&#34; allowtransparency=&#34;true&#34; allowfullscreen=&#34;true&#34; sandbox=&#34;allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals&#34;&gt;&lt;/iframe&gt;
+
+&lt;p&gt;That outputs the following sequence:
+$0.0,2.4,2.88,2.976,2.9952,2.99904,2.999808,2.9999616,\dots$
+Indeed, the value minimizing function $f(x)$ is $3$,
+i.e. $\min f(x) = f(3) = (x-3)^2 = 0$.
+And the sequence is gradually converging towards that number.
+Let us look more carefully what does the code above do.&lt;/p&gt;
+
+&lt;p&gt;Lines 1-3: We define the gradient descent method, which
+iteratively applies the function &lt;code&gt;step&lt;/code&gt; implementing equation (2).
+We provide the intermediate results taking the first &lt;code&gt;iterN&lt;/code&gt; values.&lt;/p&gt;
+
+&lt;p&gt;Line 5: Suppose, we would like to optimize a function $f(x) = (x-3)^2$.
+Its gradient &lt;code&gt;gradF_test&lt;/code&gt; is then $\nabla f(x) = 2\cdot(x-3)$.&lt;/p&gt;
+
+&lt;p&gt;Lines 7-10: Finally, we run our gradient descent using
+learning rate $\gamma = 0.4$.&lt;/p&gt;
+
+&lt;p&gt;It is crucial to realize that the value of $\gamma$ affects
+the convergence.
+When $\gamma$ is too small, the algorithm will take many more
+iterations to converge, however,
+when $\gamma$ is too large the algorithm will never converge.
+At the moment, I am not aware of a good way how to determine
+the best $\gamma$ for a given problem. Therefore, often different
+$\gamma$ values have to be tried. Feel free to modify the code above
+and see what comes out! For example, you can try out different
+values of &lt;code&gt;gamma&lt;/code&gt;, such as &lt;code&gt;gamma = 0.01&lt;/code&gt;, &lt;code&gt;gamma = 0.1&lt;/code&gt;, &lt;code&gt;gamma = 1.1&lt;/code&gt;.
+The method is generalizable to $N$ dimensions. Essentially, we would
+replace the &lt;code&gt;gradF_test&lt;/code&gt; function with the one operating on vectors
+rather than scalars.&lt;/p&gt;
+
+&lt;h2 id=&#34;neural-network-ingredients-for-classification&#34;&gt;Neural Network Ingredients For Classification&lt;/h2&gt;
+
+&lt;p&gt;&lt;img alt=&#34;Iris&#34; style=&#34;height: 270px&#34; src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/49/Iris_germanica_%28Purple_bearded_Iris%29%2C_Wakehurst_Place%2C_UK_-_Diliff.jpg&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;Now that we realize how the gradient descent works, we may want to
+train a moderately useful network. Let&amp;rsquo;s say we want to perform
+&lt;em&gt;Iris&lt;/em&gt; flower classification using four distinctive features&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;:
+sepal length, sepal width, petal length, petal width.
+There are three classes of flowers we want to be able to recognize:
+&lt;em&gt;Setosa&lt;/em&gt;, &lt;em&gt;Versicolour&lt;/em&gt;, and &lt;em&gt;Virginica&lt;/em&gt;.
+Now, there is a problem: how do we encode those three
+classes so that our neural network can handle them?&lt;/p&gt;
+
+&lt;h3 id=&#34;naive-solution-and-why-it-does-not-work&#34;&gt;Naive Solution And Why It Does Not Work&lt;/h3&gt;
+
+&lt;p&gt;The most simple solution to indicate each species
+would be using &lt;a href=&#34;https://en.wikipedia.org/wiki/Natural_number&#34; target=&#34;_blank&#34;&gt;natural numbers&lt;/a&gt;.
+For instance, &lt;em&gt;Iris Setosa&lt;/em&gt; can be encoded as &lt;code&gt;1&lt;/code&gt;,
+&lt;em&gt;Versicolour&lt;/em&gt;, as &lt;code&gt;2&lt;/code&gt;, and &lt;em&gt;Virginica&lt;/em&gt;, as &lt;code&gt;3&lt;/code&gt;.
+There is, however, a problem with this kind of encoding:
+we impose a &lt;em&gt;bias&lt;/em&gt;. First, by encoding those classes
+as numbers, we impose a &lt;em&gt;linear order&lt;/em&gt; over those three
+classes. It means, we start our count with &lt;em&gt;Setosa&lt;/em&gt;, then, &lt;em&gt;Versicolour&lt;/em&gt;,
+and then we arrive at &lt;em&gt;Virginica&lt;/em&gt;. However, in reality it doesn&amp;rsquo;t really matter
+if we end with &lt;em&gt;Virginica&lt;/em&gt; or &lt;em&gt;Vernicolour&lt;/em&gt;.
+Second, we also assume that the distance between
+&lt;em&gt;Virginica&lt;/em&gt; and &lt;em&gt;Setosa&lt;/em&gt; &lt;code&gt;3 - 1 = 2&lt;/code&gt; is larger than between
+&lt;em&gt;Virginica&lt;/em&gt; and &lt;em&gt;Versicolor&lt;/em&gt; &lt;code&gt;3 - 2 = 1&lt;/code&gt;,
+which is a priory wrong.&lt;/p&gt;
+
+&lt;h3 id=&#34;one-hot-encoding&#34;&gt;One-Hot Encoding&lt;/h3&gt;
+
+&lt;p&gt;So which kind of encoding do we need?
+First, we want not to impose any restriction on ordering and second,
+we want the distances between classes to be equal.
+Therefore, we would prefer encoding each class to be orthogonal,
+i.e. independent from the other two.
+That becomes possible if we use vectors of three dimensions.
+Therefore, now &lt;em&gt;Setosa&lt;/em&gt; class is encoded as $[𝟷, 0, 0]$,
+&lt;em&gt;Versicolour&lt;/em&gt;, as $[0, 1, 0]$, and &lt;em&gt;Virginica&lt;/em&gt; as $[0, 0, 1]$.
+The &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34; target=&#34;_blank&#34;&gt;Euclidean distance&lt;/a&gt;
+between any two classes is equal to $1$.&lt;/p&gt;
+
+&lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting It All Together&lt;/h3&gt;
+
+&lt;p&gt;Now that we are familiar with basic neural networks and gradient descent
+and also have some data to play with&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;, let the fun begin!&lt;/p&gt;
+
+&lt;p&gt;First, we create a network of three neurons.
+To do that, we generalize formula (1):&lt;/p&gt;
+
+&lt;p&gt;$$\begin{equation}
+y_{i}=f (\sum_k w_{ik} x_k),
+\end{equation}
+$$
+where $(x_1, x_2, x_3, x_4) = \mathbf{x}$ is a 4D input vector,
+$w_{ik} \in \mathbf{W}, i=1 \dots 3, k=1 \dots 4$ is synaptic weights matrix,
+and result $(y_1, y_2, y_3) = \mathbf{y}$ is a 3D vector.
+Generally speaking, we perform a matrix-vector multiplication
+with a subsequent element-wise activation:&lt;/p&gt;
+
+&lt;p&gt;$$\begin{equation}
+\mathbf y = f (\mathbf {W x}).
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;As a nonlinear activation function $f$ we will use the &lt;em&gt;sigmoid&lt;/em&gt; function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;
+$\sigma(x) = [1 + e^{-x}]^{-1}$.
+We will exploit &lt;a href=&#34;http://hackage.haskell.org/package/hmatrix&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;hmatrix&lt;/code&gt;&lt;/a&gt;
+Haskell library for linear algebra operations
+such as matrix multiplication. With &lt;code&gt;hmatrix&lt;/code&gt;,
+Equation (4) can be written as:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;import Numeric.LinearAlgebra as LA
+
+sigmoid = cmap f
+  where
+    f x = recip $ 1.0 + exp (-x)
+
+forward x w =
+  let h = x LA.&amp;lt;&amp;gt; w
+      y = sigmoid h
+  in [h, y]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;where &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; denotes the matrix product function from &lt;code&gt;LA&lt;/code&gt; module.
+Note that &lt;code&gt;x&lt;/code&gt; can be a vector, but it can be also a dataset matrix.
+In the latter case, &lt;code&gt;forward&lt;/code&gt; will transform our entire dataset.
+Notice that we provide not only the result of our computation &lt;code&gt;y&lt;/code&gt;,
+but also an intermediate step &lt;code&gt;h&lt;/code&gt; since it will be later
+reused for &lt;code&gt;w&lt;/code&gt; gradient computation.&lt;/p&gt;
+
+&lt;p&gt;Each neuron $y_i$
+is supposed to fire when it &amp;lsquo;thinks&amp;rsquo; that it detected one of the thee
+species. E.g. when we have an output [0.89, 0.1, 0.2], we would
+assume that the fist neuron is the most &amp;lsquo;confident&amp;rsquo;,
+i.e. we interpret the result as &lt;em&gt;Setosa&lt;/em&gt;.
+In other words, this output is treated as similar to [1, 0, 0].
+As you can see, the maximal
+element was set to one and others, two zero.
+This is a so-called &amp;lsquo;winner takes all&amp;rsquo; rule.&lt;/p&gt;
+
+&lt;p&gt;Before training the neural network, we need some
+measure of error or &lt;em&gt;loss function&lt;/em&gt; to minimize.
+For instance, we can use
+the &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34; target=&#34;_blank&#34;&gt;Euclidean distance&lt;/a&gt;
+$\text{loss} = \sum_i (\hat y_i - y_i)^2$
+where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
+dataset:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;loss y tgt =
+  let diff = y - tgt
+  in sumElements $ cmap (^2) diff&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;For the sake of gradient descend illustration,
+we will reuse the &lt;code&gt;descend&lt;/code&gt; function defined above.
+Now, we have to specify the gradient function for our neural
+network equation (4).
+We use what is called a &lt;em&gt;backpropagation&lt;/em&gt;
+or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a result of the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;grad (x, y) w = dW
+  where
+    [h, y_pred] = forward x w
+    dE = loss&amp;#39; y_pred y
+    dY = sigmoid&amp;#39; h dE
+    dW = linear&amp;#39; x dY&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code&gt;linear&#39;&lt;/code&gt;, &lt;code&gt;sigmoid&#39;&lt;/code&gt;, &lt;code&gt;loss&#39;&lt;/code&gt;
+are gradients of matrix multiplication,
+sigmoid activation $\sigma(x)$,
+and the loss function.
+Below are their definitions in Haskell&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;linear&amp;#39; x dy = cmap (/ m) (tr&amp;#39; x LA.&amp;lt;&amp;gt; dy)
+  where
+    m = fromIntegral $ rows x
+
+sigmoid&amp;#39; x dY = dY * y * (ones - y)
+  where
+    y = sigmoid x
+    ones = (rows y) &amp;gt;&amp;lt; (cols y) $ repeat 1.0
+
+loss&amp;#39; y tgt =
+  let diff = y - tgt
+  in cmap (* 2) diff&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To test our network, we download the dataset &lt;a href=&#34;https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;
+(there are two files: x.dat and y.dat) and the code
+&lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+As instructed in the comments,
+we run our program:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ stack --resolver lts-10.6 --install-ghc runghc --package hmatrix-0.18.2.0 Iris.hs
+Initial loss &lt;span style=&#34;color:#ae81ff&#34;&gt;169&lt;/span&gt;.33744797846379
+Loss after training &lt;span style=&#34;color:#ae81ff&#34;&gt;61&lt;/span&gt;.41242708538934
+Some predictions by an untrained network:
+&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;.797633210095851e-2, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15127581829026382, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9482351750129188
+,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.11279346747947296,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1733431584272155, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9502442520696124
+,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.10592462402394615, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.17057190568339017, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9367875655363787
+,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.10167941966201806, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.20651101803783944, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9300343579182122
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;.328154248684484e-2, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15568011758813116,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.940816298954776 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+Some predictions by a trained network:
+&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6989749292681016, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.14916793398555747,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1442697900857393
+,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.678406436711954,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1691062984304366,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.2052955124240905
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6842327447503195, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.16782087736820395, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.16721778476233148
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6262988163006756, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.19656943129188192, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.17521133197774072
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6905553549763312, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15299944611286123, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.12910826989854146 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
+Targets
+&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
+, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That&amp;rsquo;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;code&lt;/a&gt;.
+&lt;strong&gt;Hint&lt;/strong&gt;: you may have noticed that &lt;code&gt;grad&lt;/code&gt; calls &lt;code&gt;sigmoid&lt;/code&gt; twice on the same
+data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
+the code to avoid this redundancy.&lt;/p&gt;
+
+&lt;p&gt;In the future posts we will highlight the advantages of multilayer neural
+networks. We will also show that nonlinear activations are crucial.
+Finally, we will spend some time discussing
+neural network weights initialization.
+If you have any questions or interesting problems to highlight in the next post,
+please leave your comments below.&lt;/p&gt;
+
+&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
+});
+&lt;/script&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;There exists even a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34; target=&#34;_blank&#34;&gt;Why people think computers can&amp;rsquo;t&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-3&#34;&gt;With Google Trends in hand, we can witness the raise of global &lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;q=deep%20learning&#34; target=&#34;_blank&#34;&gt;deep learning&lt;/a&gt; interest.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-4&#34;&gt;Despite people have fantasized about it long before Alan Turing.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-5&#34;&gt;Essentially, a synaptic weight $w_i$ determines the strength of connection to the $i$-th input.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-6&#34;&gt;With recurrent neural networks it is not true. Those have an internal state, making such networks equivalent to computer programs, i.e. potentially more complex than maps.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-7&#34;&gt;Here we refer to the classical &lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets/iris&#34; target=&#34;_blank&#34;&gt;Iris dataset&lt;/a&gt;. If you prefer another light dataset please let me know.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Towards Binarized Neural Networks Hardware</title>
       <link>http://penkovsky.com/talk/icee2018/</link>
       <pubDate>Sat, 24 Nov 2018 13:00:00 +0100</pubDate>
@@ -19,6 +389,16 @@
       <description>&lt;p&gt;B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz&lt;/p&gt;
 
 &lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress. With new memories available, such as Resistive and Magnetoelectric Random Access Memory (RRAM and MRAM), thanks to the latest advancements in nanotechnology, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation. The simplicity and energy efficiency of BNNs makes them especially suitable for wearable devices, including but not limited to biomedical, healthcare, and sport application domains. In this talk, we discuss our latest BNN developments along with our vision towards the future of energy-efficient smart devices.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Archive</title>
+      <link>http://penkovsky.com/post/archive/</link>
+      <pubDate>Thu, 01 Nov 2018 06:53:44 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/archive/</guid>
+      <description>&lt;p&gt;Hello! An archive of old posts can be found &lt;a href=&#34;//blog.penkovsky.com&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     
@@ -135,16 +515,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
     beta = 1.6&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The complete model is available &lt;a href=&#34;https://gist.github.com/pkvk/18aca8694da3cf16fbf14eacd154cbdd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Welcome</title>
-      <link>http://penkovsky.com/blog/welcome/</link>
-      <pubDate>Wed, 15 Aug 2018 06:53:44 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/blog/welcome/</guid>
-      <description>&lt;p&gt;I am pleased to welcome you on my blog page.&lt;/p&gt;
 </description>
     </item>
     

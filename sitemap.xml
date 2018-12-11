@@ -4,8 +4,24 @@
     
     <url>
     
+      <loc>http://penkovsky.com/post/neural-networks/</loc>
+      <lastmod>2018-12-11T16:22:28+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/talk/icee2018/</loc>
       <lastmod>2018-11-24T13:00:00+01:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/post/archive/</loc>
+      <lastmod>2018-11-01T06:53:44+02:00</lastmod>
     </url>
     
   
@@ -60,14 +76,6 @@
     
     <url>
     
-      <loc>http://penkovsky.com/blog/welcome/</loc>
-      <lastmod>2018-08-15T06:53:44+02:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>http://penkovsky.com/talk/juelich2018/</loc>
       <lastmod>2018-06-02T13:00:00+02:00</lastmod>
     </url>
@@ -84,7 +92,7 @@
     
     <url>
     
-      <loc>http://penkovsky.com/blog/</loc>
+      <loc>http://penkovsky.com/post/</loc>
       <lastmod>2017-01-01T00:00:00+01:00</lastmod>
     </url>
     
@@ -110,6 +118,15 @@
     
       <loc>http://penkovsky.com/publication/laser-chimeras/</loc>
       <lastmod>2015-07-14T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/categories/10-days-of-grad/</loc>
+      <lastmod>2018-12-11T16:22:28+02:00</lastmod>
+      <priority>0</priority>
     </url>
     
   
@@ -144,6 +161,7 @@
     <url>
     
       <loc>http://penkovsky.com/categories/</loc>
+      <lastmod>2018-12-11T16:22:28+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -153,6 +171,24 @@
     
       <loc>http://penkovsky.com/tags/dde/</loc>
       <lastmod>2018-08-15T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/deep-learning/</loc>
+      <lastmod>2018-12-11T16:22:28+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/tags/haskell/</loc>
+      <lastmod>2018-12-11T16:22:28+02:00</lastmod>
       <priority>0</priority>
     </url>
     

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Posts on Bogdan Penkovsky, PhD</title>
-    <link>http://penkovsky.com/post/</link>
-    <description>Recent content in Posts on Bogdan Penkovsky, PhD</description>
+    <title>10 Days Of Grad on Bogdan Penkovsky, PhD</title>
+    <link>http://penkovsky.com/categories/10-days-of-grad/</link>
+    <description>Recent content in 10 Days Of Grad on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
-    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Tue, 11 Dec 2018 16:22:28 +0200</lastBuildDate>
     
-	<atom:link href="http://penkovsky.com/post/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="http://penkovsky.com/categories/10-days-of-grad/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
@@ -19,15 +19,6 @@
       
       <guid>http://penkovsky.com/post/neural-networks/</guid>
       <description>10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &amp;ldquo;intelligent&amp;rdquo; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&amp;rsquo;s writings2. As a result, I came across neural networks idea.</description>
-    </item>
-    
-    <item>
-      <title>Archive</title>
-      <link>http://penkovsky.com/post/archive/</link>
-      <pubDate>Thu, 01 Nov 2018 06:53:44 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/post/archive/</guid>
-      <description>Hello! An archive of old posts can be found here.</description>
     </item>
     
   </channel>
