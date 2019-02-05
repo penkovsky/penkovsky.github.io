@@ -15,7 +15,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="generator" content="Source Themes Academic 2.4.0">
-  <meta name="generator" content="Hugo 0.52" />
+  <meta name="generator" content="Hugo 0.53" />
   <meta name="author" content="Bogdan Penkovsky">
 
   
@@ -58,7 +58,7 @@
     
       
       
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
       
     
 
@@ -334,7 +334,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    11 min read
+    12 min read
   </span>
   
 
@@ -472,6 +472,37 @@ Congratulations, we have arrived at a
 <p>To continue reading
 this article, some mathematical background is useful, but not mandatory.
 Anyone can develop an intuition about neural networks!</p>
+
+<h2 id="a-word-on-haskell">A Word On Haskell</h2>
+
+<p>This series of posts practically illustrate all the concepts
+in Haskell programming language.
+To motivate you, here are some Q &amp; A you always wanted to know.</p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az" target="_blank">Q:</a>
+Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?</strong></p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t" target="_blank">A:</a></strong>
+Neural networks are very &ldquo;function objects&rdquo;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.</p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx" target="_blank">Q:</a>
+As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?</strong></p>
+
+<p><strong>A:</strong> The benefits of using Haskell:</p>
+
+<ol>
+<li>It is much easier to reason about what your program is doing.</li>
+<li>Great when refactoring existing code base.</li>
+<li>Haskell shapes your thinking towards problem solving
+in a pragmatic way.</li>
+<li>Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast" target="_blank">fast</a>.</li>
+</ol>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9" target="_blank">Q:</a>
+I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.</strong></p>
+
+<p><strong>A:</strong> Thank you. I find Haskell to be very intuitive
+when explaining neural nets.</p>
 
 <h2 id="gradient-descent-a-cs-freshman-year">Gradient Descent: A CS Freshman Year</h2>
 
@@ -619,16 +650,16 @@ Haskell library for linear algebra operations
 such as matrix multiplication. With <code>hmatrix</code>,
 Equation (4) can be written as:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">import Numeric.LinearAlgebra as LA
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">import</span> Numeric.LinearAlgebra <span style="color:#66d9ef">as</span> LA
 
-sigmoid = cmap f
-  where
-    f x = recip $ 1.0 + exp (-x)
+<span style="color:#a6e22e">sigmoid</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> <span style="color:#a6e22e">f</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">recip</span> <span style="color:#f92672">$</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">exp</span> (<span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>)
 
-forward x w =
-  let h = x LA.&lt;&gt; w
-      y = sigmoid h
-  in [h, y]</code></pre></div>
+<span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">w</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">h</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">w</span>
+      <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">h</span>
+  <span style="color:#66d9ef">in</span> [<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">y</span>]</code></pre></div>
 
 <p>where <code>&lt;&gt;</code> denotes the matrix product function from <code>LA</code> module.
 Note that <code>x</code> can be a vector, but it can be also a dataset matrix.
@@ -638,13 +669,13 @@ but also an intermediate step <code>h</code> since it will be later
 reused for <code>w</code> gradient computation.</p>
 
 <p>Each neuron $y_i$
-is supposed to fire when it &lsquo;thinks&rsquo; that it detected one of the thee
+is supposed to fire when it &lsquo;thinks&rsquo; that it has detected one of the three
 species. E.g. when we have an output [0.89, 0.1, 0.2], we would
 assume that the fist neuron is the most &lsquo;confident&rsquo;,
 i.e. we interpret the result as <em>Setosa</em>.
 In other words, this output is treated as similar to [1, 0, 0].
 As you can see, the maximal
-element was set to one and others, two zero.
+element was set to one and others, to zero.
 This is a so-called &lsquo;winner takes all&rsquo; rule.</p>
 
 <p>Before training the neural network, we need some
@@ -655,9 +686,9 @@ $\text{loss} = \sum_i (\hat y_i - y_i)^2$
 where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
 dataset:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">loss y tgt =
-  let diff = y - tgt
-  in sumElements $ cmap (^2) diff</code></pre></div>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">loss</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">tgt</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
+  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">sumElements</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">diff</span></code></pre></div>
 
 <p>For the sake of gradient descend illustration,
 we will reuse the <code>descend</code> function defined above.
@@ -665,33 +696,58 @@ Now, we have to specify the gradient function for our neural
 network equation (4).
 We use what is called a <em>backpropagation</em>
 or shortly <em>backprop</em> method, which is essentially a result of the
-<a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a>:</p>
+<a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> and is illustrated
+for an individual neuron in the figure below.</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">grad (x, y) w = dW
-  where
-    [h, y_pred] = forward x w
-    dE = loss&#39; y_pred y
-    dY = sigmoid&#39; h dE
-    dW = linear&#39; x dY</code></pre></div>
+<figure>
+
+<img src="/img/posts/neural-networks/backprop.png" alt="First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$" width="570px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Backpropation for a single neuron.</h4>
+  <p>
+    First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Now we can calculate the weights gradient <code>dW</code> using the <em>backprop</em> method from above:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">grad</span> (<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span>) <span style="color:#a6e22e">w</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dW</span>
+  <span style="color:#66d9ef">where</span>
+    [<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">y_pred</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">w</span>
+    <span style="color:#a6e22e">dE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">loss&#39;</span> <span style="color:#a6e22e">y_pred</span> <span style="color:#a6e22e">y</span>
+    <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid&#39;</span> <span style="color:#a6e22e">h</span> <span style="color:#a6e22e">dE</span>
+    <span style="color:#a6e22e">dW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dY</span></code></pre></div>
 
 <p>Here <code>linear'</code>, <code>sigmoid'</code>, <code>loss'</code>
-are gradients of matrix multiplication,
+are gradients of linear operation (multiplication),
 sigmoid activation $\sigma(x)$,
 and the loss function.
-Below are their definitions in Haskell<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">9</a></sup>:</p>
+Note that by operating on matrices rather than scalar values
+we calculate the gradients vector <code>dW</code>
+denoting every synaptic weight gradient $dw_i$.
+Below are those &ldquo;<a href="https://en.wikipedia.org/wiki/Array_programming" target="_blank"><em>vectorized</em></a>&ldquo;
+functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">9</a></sup>:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-hashell" data-lang="hashell">linear&#39; x dy = cmap (/ m) (tr&#39; x LA.&lt;&gt; dy)
-  where
-    m = fromIntegral $ rows x
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">/</span> <span style="color:#a6e22e">m</span>) (<span style="color:#a6e22e">tr&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">dy</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">m</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fromIntegral</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">rows</span> <span style="color:#a6e22e">x</span>
 
-sigmoid&#39; x dY = dY * y * (ones - y)
-  where
-    y = sigmoid x
-    ones = (rows y) &gt;&lt; (cols y) $ repeat 1.0
+<span style="color:#a6e22e">sigmoid&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dY</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">ones</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">y</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">x</span>
+    <span style="color:#a6e22e">ones</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">rows</span> <span style="color:#a6e22e">y</span>) <span style="color:#f92672">&gt;&lt;</span> (<span style="color:#a6e22e">cols</span> <span style="color:#a6e22e">y</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">repeat</span> <span style="color:#ae81ff">1.0</span>
 
-loss&#39; y tgt =
-  let diff = y - tgt
-  in cmap (* 2) diff</code></pre></div>
+<span style="color:#a6e22e">loss&#39;</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">tgt</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
+  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">diff</span></code></pre></div>
 
 <p>To test our network, we download the dataset <a href="https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets" target="_blank">here</a>
 (there are two files: x.dat and y.dat) and the code
@@ -732,9 +788,7 @@ the code to avoid this redundancy.</p>
 <p>In the future posts we will highlight the advantages of multilayer neural
 networks. We will also show that nonlinear activations are crucial.
 Finally, we will spend some time discussing
-neural network weights initialization.
-If you have any questions or interesting problems to highlight in the next post,
-please leave your comments below.</p>
+neural network weights initialization.</p>
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -784,8 +838,12 @@ MathJax.Hub.Config({
 
 
     
+    <div class="article-widget">
+      Next: <a href="http://penkovsky.com/post/neural-networks-2/">Day 2: Why My Network Does Not Work?</a>
+    </div>
     
 
+    
     
 
     
@@ -824,7 +882,7 @@ MathJax.Hub.Config({
 
     <p class="powered-by">
 
-      &copy; Bogdan Penkovsky 2018 &middot; 
+      &copy; Bogdan Penkovsky 2019 &middot; 
 
       Powered by
       <a href="https://sourcethemes.com/academic/" target="_blank" rel="noopener">Hugo Academic</a>.

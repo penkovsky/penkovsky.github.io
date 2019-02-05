@@ -6,11 +6,22 @@
     <description>Recent content in Posts on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; Bogdan Penkovsky 2018</copyright>
+    <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
     <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Day 2: Why My Network Does Not Work?</title>
+      <link>http://penkovsky.com/post/neural-networks-2/</link>
+      <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks-2/</guid>
+      <description>10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
+&amp;ldquo;I have built a handwritten digits recognition network. But my accuracy is only Y.</description>
+    </item>
     
     <item>
       <title>Day 1: Learning Neural Networks The Hard Way</title>
