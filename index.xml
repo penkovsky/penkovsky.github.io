@@ -1014,7 +1014,18 @@ when explaining neural nets.&lt;/p&gt;
 
 &lt;h2 id=&#34;gradient-descent-a-cs-freshman-year&#34;&gt;Gradient Descent: A CS Freshman Year&lt;/h2&gt;
 
-&lt;p&gt;&lt;img alt=&#34;Gradient Descent&#34; src=&#34;https://upload.wikimedia.org/wikipedia/commons/f/ff/Gradient_descent.svg&#34; style=&#34;width: 15cm&#34;/&gt;&lt;/p&gt;
+&lt;figure&gt;
+
+&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/f/ff/Gradient_descent.svg&#34; width=&#34;590px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Gradient Descent. &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Gradient_descent.svg&#34; target=&#34;_blank&#34;&gt;Image credit&lt;/a&gt;&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
 
 &lt;p&gt;The very basic idea behind neural networks
 training and deep learning is a local optimization method known
@@ -1087,7 +1098,18 @@ rather than scalars.&lt;/p&gt;
 
 &lt;h2 id=&#34;neural-network-ingredients-for-classification&#34;&gt;Neural Network Ingredients For Classification&lt;/h2&gt;
 
-&lt;p&gt;&lt;img alt=&#34;Iris&#34; style=&#34;height: 270px&#34; src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/49/Iris_germanica_%28Purple_bearded_Iris%29%2C_Wakehurst_Place%2C_UK_-_Diliff.jpg&#34; /&gt;&lt;/p&gt;
+&lt;figure&gt;
+
+&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/49/Iris_germanica_%28Purple_bearded_Iris%29%2C_Wakehurst_Place%2C_UK_-_Diliff.jpg&#34; width=&#34;250px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Iris plant. Image credit &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg&#34; target=&#34;_blank&#34;&gt;David Iliff&lt;/a&gt; &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/3.0/&#34; target=&#34;_blank&#34;&gt;(CC-BY-SA 3.0)&lt;/a&gt;&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
 
 &lt;p&gt;Now that we realize how the gradient descent works, we may want to
 train a moderately useful network. Let&amp;rsquo;s say we want to perform
