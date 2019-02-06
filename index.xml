@@ -79,7 +79,7 @@ as shown below.&lt;/p&gt;
 The goal of the neural network training will be to learn
 how to prescribe a class to
 a new dot by knowing its coordinates $(x_1, x_2)$.
-It turns our these simple tasks cannot be solved with a single-layer architecture,
+It turns out these simple tasks cannot be solved with a single-layer architecture,
 which is only capable of drawing straight lines in the input space $(x_1, x_2)$.
 Let us bring an additional layer.&lt;/p&gt;
 
@@ -115,7 +115,7 @@ will be the first activation
 function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
 will be second activation function already known from the
 previous article. The particularity of sigmoid is squashing its inputs
-between 0 and 1. This output tends to useful in our case where
+between 0 and 1. This output tends to be useful in our case where
 we have only two classes: blue dots denoted by 0
 and orange dots, by 1.
 As a loss function to minimize during neural network training,
@@ -162,8 +162,8 @@ Therefore, you would like to select neural network weights randomly&lt;/p&gt;
 for three cases of initialization.
 First, when the weights are initialized as zeroes, the network is not able to learn anything.
 In the second case, the weights are initialized as non-zero, but identical values.
-Even thought the network is able to learn something, every neuron has no distinction from the others.
-Therefore, the whole network behaves as one big neuron.
+Even though the network is able to learn something, every neuron has no distinction from the others.
+Therefore, the whole network behaves like one big neuron.
 Finally, the neural network initialized with random weights is able to learn.&lt;/p&gt;
 
 &lt;h3 id=&#34;how-to-train&#34;&gt;How To Train?&lt;/h3&gt;
@@ -174,10 +174,11 @@ should be sufficient to approximate any reasonable function.
 However, it says nothing about how to obtain or how difficult is to obtain those
 neural network weights&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-0&#34;&gt;&lt;a href=&#34;#fn:fn-0&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
 As we have seen from weights initialization example,
-using simple gradient descend training,
-the our  network was able to distinguish between the two
-circles. How about the more difficult example: spirals.
-As it can be seen from the
+using simple gradient descent training,
+our network was able to distinguish between the two
+circles. How about the more difficult example: spirals,
+which &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;is hard due to its extreme nonlinearity&lt;/em&gt;&lt;/a&gt;.
+As you can see from the
 animation on the left below,
 a naive gradient descent training can be easily stuck in a suboptimal setting.&lt;/p&gt;
 
@@ -276,7 +277,7 @@ To avoid this issue, all activation functions must remain nonlinear.&lt;/p&gt;
 &lt;h3 id=&#34;how-many-layers&#34;&gt;How Many Layers?&lt;/h3&gt;
 
 &lt;p&gt;We have solved the spirals problem with a single hidden layer network.
-Why to add more layers?
+Why add more layers?
 To address this question,
 let us animate the decision boundaries during neural network training for three different architectures.
 All the networks have &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34; target=&#34;_blank&#34;&gt;ReLU&lt;/a&gt; activations in non-terminal layers and sigmoid in the final layer.
@@ -307,9 +308,11 @@ one benefits of adding more layers.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;From the figure we may conclude that more neurons is not always the best option.
-The most contrasting border indicating the highest confidence in the least number of steps, is achieved with
-the three hidden layer neural network. This network has 1416 parameters counting both weights and biases.
+&lt;p&gt;From the figure we may conclude that
+more neurons are not always the best option.
+The most contrasting border indicating the highest confidence in
+the least number of steps is achieved with
+the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
 This number is about 30 percent less than the second architecture with a single hidden layer.
 Indeed, one may need to carefully &lt;a href=&#34;http://proceedings.mlr.press/v70/real17a/real17a.pdf&#34; target=&#34;_blank&#34;&gt;pick&lt;/a&gt;
 &lt;a href=&#34;https://github.com/JasperSnoek/spearmint&#34; target=&#34;_blank&#34;&gt;the&lt;/a&gt; &lt;a href=&#34;https://aip.scitation.org/doi/10.1063/1.5039826&#34; target=&#34;_blank&#34;&gt;architecture&lt;/a&gt;
@@ -331,7 +334,7 @@ in the case of a single-layer (no hidden layer) network.
 The method easily extends towards the case of multiple layers.
 Here is a nice
 &lt;a href=&#34;https://www.youtube.com/watch?v=d14TUNcbn1k&amp;amp;index=4&amp;amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;
-to provide you more technical details. Below, we remind
+to provide you with more technical details. Below, we remind
 how does backprop work for each individual neuron.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -448,7 +451,7 @@ We also have to define the &lt;code&gt;Gradients&lt;/code&gt; data type:&lt;/p&g
 
 &lt;p&gt;To update all layers in functional programming we would need
 an analog to the &lt;code&gt;for&lt;/code&gt; loop construct known from imperative programming languages.
-Great news: there exists different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
+Great news: there exist different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=map&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;map&lt;/code&gt;&lt;/a&gt;,
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zip&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zip&lt;/code&gt;&lt;/a&gt;,
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;,
@@ -558,7 +561,7 @@ This last interface change is a matter of convenience.&lt;/p&gt;
 &lt;/div&gt;
 &lt;/div&gt;
 
-&lt;p&gt;Let us break up what the code above does.
+&lt;p&gt;Let us break down what the code above does.
 First, we get as inputs our neural network &lt;code&gt;net&lt;/code&gt;
 and training data with desired outputs &lt;code&gt;(x, tgt)&lt;/code&gt;.
 The function will provide inference result and gradients
@@ -698,7 +701,7 @@ with randomly generated samples.&lt;/p&gt;
 and the &lt;code&gt;testSet&lt;/code&gt; with 100 data samples.
 &lt;code&gt;0.6&lt;/code&gt; and &lt;code&gt;0.1&lt;/code&gt; are model parameters, for the full
 implementation feel free to check &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;Main.hs&lt;/a&gt;.
-In a similar way we will create train and validation
+In a similar way we will create training and validation
 datasets for the spirals problem.&lt;/p&gt;
 
 &lt;h4 id=&#34;defining-the-architecture&#34;&gt;Defining The Architecture&lt;/h4&gt;
@@ -743,7 +746,7 @@ from this &lt;a href=&#34;https://arxiv.org/pdf/1502.01852.pdf&#34; target=&#34;
           &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;
           &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;This strategy becomes more useful as soon as you neural network becomes &amp;ldquo;deeper&amp;rdquo;,
+&lt;p&gt;This strategy becomes more useful as soon as your neural network becomes &amp;ldquo;deeper&amp;rdquo;,
 i.e. gets more and more layers.&lt;/p&gt;
 
 &lt;h4 id=&#34;adam&#34;&gt;Adam&lt;/h4&gt;
@@ -854,7 +857,7 @@ Reduce the number of layers in the opposite case.&lt;/li&gt;
 &lt;li&gt;Apply training strategies with momentum instead of naive gradient descent.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;In future posts we will take a look on automatic differentiation,
+&lt;p&gt;In future posts we will take a look on automatic differentiation and
 regularization techniques.
 We will also discuss how Haskell compiler can help to make sure
 that our neural network is correct.
@@ -896,7 +899,7 @@ MathJax.Hub.Config({
 &lt;ol&gt;
 &lt;li id=&#34;fn:fn-0&#34;&gt;Such a useless theorem!
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-0&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;Attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
+&lt;li id=&#34;fn:fn-1&#34;&gt;The attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-2&#34;&gt;For now, there is nothing that prevents us from mismatching matrix dimensions, however, we will revisit this issue in the future.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1362,16 +1365,6 @@ MathJax.Hub.Config({
       <description>&lt;p&gt;B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz&lt;/p&gt;
 
 &lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress. With new memories available, such as Resistive and Magnetoelectric Random Access Memory (RRAM and MRAM), thanks to the latest advancements in nanotechnology, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation. The simplicity and energy efficiency of BNNs makes them especially suitable for wearable devices, including but not limited to biomedical, healthcare, and sport application domains. In this talk, we discuss our latest BNN developments along with our vision towards the future of energy-efficient smart devices.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Archive</title>
-      <link>http://penkovsky.com/post/archive/</link>
-      <pubDate>Thu, 01 Nov 2018 06:53:44 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/post/archive/</guid>
-      <description>&lt;p&gt;Hello! An archive of old posts can be found &lt;a href=&#34;//blog.penkovsky.com&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

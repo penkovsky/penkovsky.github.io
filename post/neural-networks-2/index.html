@@ -472,7 +472,7 @@ as shown below.</p>
 The goal of the neural network training will be to learn
 how to prescribe a class to
 a new dot by knowing its coordinates $(x_1, x_2)$.
-It turns our these simple tasks cannot be solved with a single-layer architecture,
+It turns out these simple tasks cannot be solved with a single-layer architecture,
 which is only capable of drawing straight lines in the input space $(x_1, x_2)$.
 Let us bring an additional layer.</p>
 
@@ -508,7 +508,7 @@ will be the first activation
 function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
 will be second activation function already known from the
 previous article. The particularity of sigmoid is squashing its inputs
-between 0 and 1. This output tends to useful in our case where
+between 0 and 1. This output tends to be useful in our case where
 we have only two classes: blue dots denoted by 0
 and orange dots, by 1.
 As a loss function to minimize during neural network training,
@@ -555,8 +555,8 @@ Therefore, you would like to select neural network weights randomly</p>
 for three cases of initialization.
 First, when the weights are initialized as zeroes, the network is not able to learn anything.
 In the second case, the weights are initialized as non-zero, but identical values.
-Even thought the network is able to learn something, every neuron has no distinction from the others.
-Therefore, the whole network behaves as one big neuron.
+Even though the network is able to learn something, every neuron has no distinction from the others.
+Therefore, the whole network behaves like one big neuron.
 Finally, the neural network initialized with random weights is able to learn.</p>
 
 <h3 id="how-to-train">How To Train?</h3>
@@ -567,10 +567,11 @@ should be sufficient to approximate any reasonable function.
 However, it says nothing about how to obtain or how difficult is to obtain those
 neural network weights<sup class="footnote-ref" id="fnref:fn-0"><a href="#fn:fn-0">1</a></sup>.
 As we have seen from weights initialization example,
-using simple gradient descend training,
-the our  network was able to distinguish between the two
-circles. How about the more difficult example: spirals.
-As it can be seen from the
+using simple gradient descent training,
+our network was able to distinguish between the two
+circles. How about the more difficult example: spirals,
+which <a href="https://www.gwern.net/docs/ai/1988-lang.pdf" target="_blank"><em>is hard due to its extreme nonlinearity</em></a>.
+As you can see from the
 animation on the left below,
 a naive gradient descent training can be easily stuck in a suboptimal setting.</p>
 
@@ -669,7 +670,7 @@ To avoid this issue, all activation functions must remain nonlinear.</p>
 <h3 id="how-many-layers">How Many Layers?</h3>
 
 <p>We have solved the spirals problem with a single hidden layer network.
-Why to add more layers?
+Why add more layers?
 To address this question,
 let us animate the decision boundaries during neural network training for three different architectures.
 All the networks have <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)" target="_blank">ReLU</a> activations in non-terminal layers and sigmoid in the final layer.
@@ -700,9 +701,11 @@ one benefits of adding more layers.</p>
 
 </figure>
 
-<p>From the figure we may conclude that more neurons is not always the best option.
-The most contrasting border indicating the highest confidence in the least number of steps, is achieved with
-the three hidden layer neural network. This network has 1416 parameters counting both weights and biases.
+<p>From the figure we may conclude that
+more neurons are not always the best option.
+The most contrasting border indicating the highest confidence in
+the least number of steps is achieved with
+the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
 This number is about 30 percent less than the second architecture with a single hidden layer.
 Indeed, one may need to carefully <a href="http://proceedings.mlr.press/v70/real17a/real17a.pdf" target="_blank">pick</a>
 <a href="https://github.com/JasperSnoek/spearmint" target="_blank">the</a> <a href="https://aip.scitation.org/doi/10.1063/1.5039826" target="_blank">architecture</a>
@@ -724,7 +727,7 @@ in the case of a single-layer (no hidden layer) network.
 The method easily extends towards the case of multiple layers.
 Here is a nice
 <a href="https://www.youtube.com/watch?v=d14TUNcbn1k&amp;index=4&amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk" target="_blank">video</a>
-to provide you more technical details. Below, we remind
+to provide you with more technical details. Below, we remind
 how does backprop work for each individual neuron.</p>
 
 <figure>
@@ -841,7 +844,7 @@ We also have to define the <code>Gradients</code> data type:</p>
 
 <p>To update all layers in functional programming we would need
 an analog to the <code>for</code> loop construct known from imperative programming languages.
-Great news: there exists different <code>for</code>-loops for different needs:
+Great news: there exist different <code>for</code>-loops for different needs:
 <a href="https://www.haskell.org/hoogle/?hoogle=map" target="_blank"><code>map</code></a>,
 <a href="https://www.haskell.org/hoogle/?hoogle=zip" target="_blank"><code>zip</code></a>,
 <a href="https://www.haskell.org/hoogle/?hoogle=zipWith" target="_blank"><code>zipWith</code></a>,
@@ -951,7 +954,7 @@ This last interface change is a matter of convenience.</p>
 </div>
 </div>
 
-<p>Let us break up what the code above does.
+<p>Let us break down what the code above does.
 First, we get as inputs our neural network <code>net</code>
 and training data with desired outputs <code>(x, tgt)</code>.
 The function will provide inference result and gradients
@@ -1091,7 +1094,7 @@ with randomly generated samples.</p>
 and the <code>testSet</code> with 100 data samples.
 <code>0.6</code> and <code>0.1</code> are model parameters, for the full
 implementation feel free to check <a href="http://github.com/penkovsky/10-days-of-grad/tree/master/day2" target="_blank">Main.hs</a>.
-In a similar way we will create train and validation
+In a similar way we will create training and validation
 datasets for the spirals problem.</p>
 
 <h4 id="defining-the-architecture">Defining The Architecture</h4>
@@ -1136,7 +1139,7 @@ from this <a href="https://arxiv.org/pdf/1502.01852.pdf" target="_blank">paper</
           <span style="color:#a6e22e">w</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randn</span> <span style="color:#a6e22e">nin</span> <span style="color:#a6e22e">nout</span>
           <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">k</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">w</span>)</code></pre></div>
 
-<p>This strategy becomes more useful as soon as you neural network becomes &ldquo;deeper&rdquo;,
+<p>This strategy becomes more useful as soon as your neural network becomes &ldquo;deeper&rdquo;,
 i.e. gets more and more layers.</p>
 
 <h4 id="adam">Adam</h4>
@@ -1247,7 +1250,7 @@ Reduce the number of layers in the opposite case.</li>
 <li>Apply training strategies with momentum instead of naive gradient descent.</li>
 </ul>
 
-<p>In future posts we will take a look on automatic differentiation,
+<p>In future posts we will take a look on automatic differentiation and
 regularization techniques.
 We will also discuss how Haskell compiler can help to make sure
 that our neural network is correct.
@@ -1289,7 +1292,7 @@ MathJax.Hub.Config({
 <ol>
 <li id="fn:fn-0">Such a useless theorem!
  <a class="footnote-return" href="#fnref:fn-0"><sup>^</sup></a></li>
-<li id="fn:fn-1">Attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
+<li id="fn:fn-1">The attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
  <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
 <li id="fn:fn-2">For now, there is nothing that prevents us from mismatching matrix dimensions, however, we will revisit this issue in the future.
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
