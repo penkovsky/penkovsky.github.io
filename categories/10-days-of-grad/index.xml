@@ -18,7 +18,7 @@
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/post/neural-networks-2/</guid>
-      <description>10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+      <description>10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
 &amp;ldquo;I have built a handwritten digits recognition network. But my accuracy is only Y.</description>
     </item>

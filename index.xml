@@ -21,7 +21,7 @@
 &lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
 
 &lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
-we have introduced learning in a single-layer neural network.
+we have introduced the concept of learning in a single-layer neural network.
 Today, we will learn about the
 benefits of multi-layer neural networks,
 how to properly design and train them.&lt;/p&gt;
@@ -34,7 +34,7 @@ have just started discovering machine learning techniques:&lt;/p&gt;
 recognition network.
 But my accuracy is only &lt;strong&gt;Y&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
 
-&lt;p&gt;&amp;ldquo;&lt;em&gt;It seems to be much less than the state of the art&lt;/em&gt;&amp;rdquo;, I wonder.&lt;/p&gt;
+&lt;p&gt;&amp;ldquo;&lt;em&gt;It seems to be much less than state-of-the-art&lt;/em&gt;&amp;rdquo;, I contemplate.&lt;/p&gt;
 
 &lt;p&gt;&amp;ldquo;Indeed. Maybe the reason is &lt;strong&gt;X&lt;/strong&gt;?&amp;rdquo;&lt;/p&gt;
 
@@ -75,13 +75,13 @@ as shown below.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;Both datasets have two classes depicted by orange and blue dots, respectively.
+&lt;p&gt;Both datasets feature two classes depicted by orange and blue dots, respectively.
 The goal of the neural network training will be to learn
 how to prescribe a class to
 a new dot by knowing its coordinates $(x_1, x_2)$.
 It turns out these simple tasks cannot be solved with a single-layer architecture,
-which is only capable of drawing straight lines in the input space $(x_1, x_2)$.
-Let us bring an additional layer.&lt;/p&gt;
+as it is only capable of drawing straight lines in the input space $(x_1, x_2)$.
+Let us bring in an additional layer.&lt;/p&gt;
 
 &lt;h3 id=&#34;two-layer-network&#34;&gt;Two-layer network&lt;/h3&gt;
 
@@ -113,10 +113,10 @@ $$&lt;/p&gt;
 &lt;p&gt;where $f_1(x) = \max(0, x)$ also known as &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34; target=&#34;_blank&#34;&gt;ReLU&lt;/a&gt;
 will be the first activation
 function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
-will be second activation function already known from the
+will be the second activation function, which you already have seen in the
 previous article. The particularity of sigmoid is squashing its inputs
 between 0 and 1. This output tends to be useful in our case where
-we have only two classes: blue dots denoted by 0
+we only have two classes: blue dots denoted by 0
 and orange dots, by 1.
 As a loss function to minimize during neural network training,
 we will use &lt;em&gt;binary cross-entropy&lt;/em&gt;:&lt;/p&gt;
@@ -129,16 +129,16 @@ $$&lt;/p&gt;
 This loss function was
 &lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function&#34; target=&#34;_blank&#34;&gt;specifically designed&lt;/a&gt; to efficiently train
 neural networks.
-Another beauty of cross-entropy is that in conjunction with
+Another perk of cross-entropy is that in conjunction with
 sigmoid activation, the error gradient
 is simply a difference between predicted and desired outputs.&lt;/p&gt;
 
 &lt;h3 id=&#34;how-to-initialize&#34;&gt;How To Initialize?&lt;/h3&gt;
 
-&lt;p&gt;The first mistake may arise when completely ignoring the importance of the neural network
+&lt;p&gt;The first mistake may creep in when you completely ignore the importance of the neural network
 &lt;a href=&#34;https://medium.com/usf-msds/deep-learning-best-practices-1-weight-initialization-14e5c0295b94&#34; target=&#34;_blank&#34;&gt;weight initialization&lt;/a&gt;.
-The most essential is that you want to have neurons that learn different features.
-Therefore, you would like to select neural network weights randomly&lt;/p&gt;
+In essence, you want to create neurons capable of learning different features.
+Therefore, you should select neural network weights randomly.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -158,29 +158,30 @@ Therefore, you would like to select neural network weights randomly&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;Above we see the &lt;a href=&#34;https://en.wikipedia.org/wiki/Decision_boundary&#34; target=&#34;_blank&#34;&gt;decision boundaries&lt;/a&gt;
+&lt;p&gt;Above we can see the &lt;a href=&#34;https://en.wikipedia.org/wiki/Decision_boundary&#34; target=&#34;_blank&#34;&gt;decision boundaries&lt;/a&gt;
 for three cases of initialization.
-First, when the weights are initialized as zeroes, the network is not able to learn anything.
+First, when the weights are initialized as zeroes, the network cannot learn anything.
 In the second case, the weights are initialized as non-zero, but identical values.
-Even though the network is able to learn something, every neuron has no distinction from the others.
-Therefore, the whole network behaves like one big neuron.
-Finally, the neural network initialized with random weights is able to learn.&lt;/p&gt;
+Even though the network becomes able to learn something,
+there is no distinction between individual neurons.
+Therefore, the entire network behaves like one big neuron.
+Finally, when the neural network is initialized with random weights,
+it becomes capable to learn.&lt;/p&gt;
 
 &lt;h3 id=&#34;how-to-train&#34;&gt;How To Train?&lt;/h3&gt;
 
 &lt;p&gt;The &lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34; target=&#34;_blank&#34;&gt;universal approximation theorem&lt;/a&gt;
-says that under certain assumptions, a single hidden layer architecture
+claims that under certain assumptions, a single hidden layer architecture
 should be sufficient to approximate any reasonable function.
-However, it says nothing about how to obtain or how difficult is to obtain those
+However, it indicates nothing about how to obtain or how difficult is to obtain those
 neural network weights&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-0&#34;&gt;&lt;a href=&#34;#fn:fn-0&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
 As we have seen from weights initialization example,
-using simple gradient descent training,
+using simple gradient descent training
 our network was able to distinguish between the two
-circles. How about the more difficult example: spirals,
+circles. Now, how about a more difficult example: spirals,
 which &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;is hard due to its extreme nonlinearity&lt;/em&gt;&lt;/a&gt;.
-As you can see from the
-animation on the left below,
-a naive gradient descent training can be easily stuck in a suboptimal setting.&lt;/p&gt;
+Check out the animation below, on the left, to see how
+a naive gradient descent training can get easily stuck in a suboptimal setting.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -216,7 +217,7 @@ Perhaps, the most popular among the algorithms
 with momentum is &lt;a href=&#34;https://arxiv.org/abs/1412.6980&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt;.
 As we can see from the diagram above, on the right, the &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt; algorithm
 is able to efficiently build the appropriate decision boundary.
-I find that we can be illustrative if we visualize the neural network&amp;rsquo;s output during its training.&lt;/p&gt;
+I find it can be more illustrative if we visualize the neural network&amp;rsquo;s output during its training.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -245,7 +246,7 @@ there is a nice comparison.&lt;/p&gt;
 
 &lt;p&gt;Now, what if by mistake we have provided linear activations.
 What happens?
-If activations $f_i$ were linear, then the formula (2)
+If activations $f_i$ were linear, then the model in formula (2)
 would reduce to a single-layer neural network:&lt;/p&gt;
 
 &lt;p&gt;$$
@@ -282,13 +283,13 @@ To address this question,
 let us animate the decision boundaries during neural network training for three different architectures.
 All the networks have &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34; target=&#34;_blank&#34;&gt;ReLU&lt;/a&gt; activations in non-terminal layers and sigmoid in the final layer.
 As can be seen from the image below, the
-network with three hidden layers with less neurons in
+network with three hidden layers and with fewer neurons in
 each layer, learns faster.
 The reason can be understood intuitively. A neural network
 &lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34; target=&#34;_blank&#34;&gt;performs topological transformations&lt;/a&gt; of the input space.
 Composing several simple transformations leads to a more complex
 one. Therefore, for such non-linearly separated classes as in the spirals problem
-one benefits of adding more layers.&lt;/p&gt;
+one benefits from adding more layers.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -308,34 +309,33 @@ one benefits of adding more layers.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;From the figure we may conclude that
-more neurons are not always the best option.
+&lt;p&gt;From the figure we may conclude that more neurons are not always the best option.
 The most contrasting border indicating the highest confidence in
 the least number of steps is achieved with
 the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
 This number is about 30 percent less than the second architecture with a single hidden layer.
 Indeed, one may need to carefully &lt;a href=&#34;http://proceedings.mlr.press/v70/real17a/real17a.pdf&#34; target=&#34;_blank&#34;&gt;pick&lt;/a&gt;
 &lt;a href=&#34;https://github.com/JasperSnoek/spearmint&#34; target=&#34;_blank&#34;&gt;the&lt;/a&gt; &lt;a href=&#34;https://aip.scitation.org/doi/10.1063/1.5039826&#34; target=&#34;_blank&#34;&gt;architecture&lt;/a&gt;
-taking into consideration different facts
+taking into consideration different factors
 such as dataset size, variance, input dimensionality, kind of the task, and others.
 With more layers, neural network can more efficiently &lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34; target=&#34;_blank&#34;&gt;represent complex relationships&lt;/a&gt;.
 On the other hand, if the number of layers is very large, one may need to apply different
 tricks in order to avoid such problems as fading gradients.&lt;/p&gt;
 
-&lt;p&gt;Given all new information, why not to experiment with
-neural networks. In the rest of this writing we will
+&lt;p&gt;Given all the new information, how about experimenting with
+neural networks? In the rest of this post we will learn how to
 build multilayer networks in Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;implementing-backpropagation&#34;&gt;Implementing Backpropagation&lt;/h2&gt;
 
 &lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
 we have implemented &lt;em&gt;backpropagation&lt;/em&gt; (shortly &lt;em&gt;backprop&lt;/em&gt;)
-in the case of a single-layer (no hidden layer) network.
-The method easily extends towards the case of multiple layers.
+for a single-layer (no hidden layer) network.
+This method easily extends towards the case of multiple layers.
 Here is a nice
 &lt;a href=&#34;https://www.youtube.com/watch?v=d14TUNcbn1k&amp;amp;index=4&amp;amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;
 to provide you with more technical details. Below, we remind
-how does backprop work for each individual neuron.&lt;/p&gt;
+how backprop works for each individual neuron.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -350,14 +350,13 @@ how does backprop work for each individual neuron.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;If you have ever encountered any other tutorial on
-backprop,
-the chances are you will first implement the so-called
+&lt;p&gt;If you have ever found any other tutorial on backprop,
+chances are you will first implement the so-called
 &lt;em&gt;forward pass&lt;/em&gt; and then, as a separate function,
 the &lt;em&gt;backward pass&lt;/em&gt;.
 The forward pass calculates the neural network output,
 whereas the backward pass does the gradients bookkeeping.
-The last time we have provided an example of a forward
+Last time we have provided an example of a forward
 pass in a single-layer architecture:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
@@ -394,13 +393,13 @@ results and may require more mental effort to implement the backprop.
 I also feel that such backprop
 explanation is not very intuitive.
 The whole pattern of forward and backward passes
-may seem strangely familiar. Yes, it is nothing else but &lt;a href=&#34;https://en.wikipedia.org/wiki/Recursion_(computer_science)&#34; target=&#34;_blank&#34;&gt;recursion&lt;/a&gt;!
+may seem strangely familiar. Hey, that is actually &lt;a href=&#34;https://en.wikipedia.org/wiki/Recursion_(computer_science)&#34; target=&#34;_blank&#34;&gt;recursion&lt;/a&gt;!
 Recursion is bread and butter of functional languages,
-so why not to apply it for the backprop?
+so why not apply it to the backprop?
 Instead of defining two separate methods and manually managing all the intermediate results,
 we will define both in one place.&lt;/p&gt;
 
-&lt;p&gt;To begin our new project on multilayer neural networks,
+&lt;p&gt;To begin our new multilayer networks project,
 we start with data structures. First, we define a data type
 that will represent a single layer.&lt;/p&gt;
 
@@ -451,7 +450,7 @@ We also have to define the &lt;code&gt;Gradients&lt;/code&gt; data type:&lt;/p&g
 
 &lt;p&gt;To update all layers in functional programming we would need
 an analog to the &lt;code&gt;for&lt;/code&gt; loop construct known from imperative programming languages.
-Great news: there exist different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
+Great news: there are different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=map&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;map&lt;/code&gt;&lt;/a&gt;,
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zip&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zip&lt;/code&gt;&lt;/a&gt;,
 &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;,
@@ -498,7 +497,7 @@ Now, the complete gradient descent implementation is&lt;/p&gt;
     &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
       &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;We now see how well fits the previously defined &lt;code&gt;f&lt;/code&gt;.
+&lt;p&gt;We now see how well previously defined &lt;code&gt;f&lt;/code&gt; fits in.
 The resulting function &lt;code&gt;optimize&lt;/code&gt; should look familiar from the
 &lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous post&lt;/a&gt;.
 Back then, it was called &lt;code&gt;descend&lt;/code&gt;.
@@ -562,8 +561,8 @@ This last interface change is a matter of convenience.&lt;/p&gt;
 &lt;/div&gt;
 
 &lt;p&gt;Let us break down what the code above does.
-First, we get as inputs our neural network &lt;code&gt;net&lt;/code&gt;
-and training data with desired outputs &lt;code&gt;(x, tgt)&lt;/code&gt;.
+First, the inputs are an initial neural network &lt;code&gt;net&lt;/code&gt;
+and training data with corresponding targets &lt;code&gt;(x, tgt)&lt;/code&gt;.
 The function will provide inference result and gradients
 &lt;code&gt;(pred, grads)&lt;/code&gt; as the computation result.
 Line 82 launches the &lt;code&gt;_pass&lt;/code&gt; function which accepts
@@ -609,15 +608,15 @@ pass, i.e. the $f (\mathbf{W} \mathbf{x} + \mathbf{b})$ operation.
 Line 96 (highlighted) launches a recursive call
 to &lt;code&gt;_pass&lt;/code&gt; providing the arguments of current layer computation
 &lt;code&gt;y&lt;/code&gt; and the rest of the tail of the network &lt;code&gt;layers&lt;/code&gt;.
-The result of the recursive call we obtain
-gradient the subsequent layer &lt;code&gt;dZ&lt;/code&gt;, prediction result &lt;code&gt;pred&lt;/code&gt;, and
+As a result of the recursive call we obtain
+gradient coming back from the layer &lt;code&gt;dZ&lt;/code&gt;, prediction result &lt;code&gt;pred&lt;/code&gt;, and
 partially computed weights gradients list &lt;code&gt;t&lt;/code&gt;.
 Lines 98-101 compute new gradients, which &lt;code&gt;_pass&lt;/code&gt; returns
 to its previous caller.&lt;/p&gt;
 
 &lt;p&gt;Now, what happens when we finish our forward propagation?
 Lines 84-89 below contain the stop condition
-of the recursive call. The empty list &lt;code&gt;[]&lt;/code&gt;
+for the recursive call. The empty list &lt;code&gt;[]&lt;/code&gt;
 on line 84 signifies that we have reached
 the end of the layers list. Now, we compute the network prediction:
 We apply sigmoid to squash the outputs between 0 and 1 on line 86.
@@ -754,7 +753,7 @@ i.e. gets more and more layers.&lt;/p&gt;
 &lt;p&gt;Previously we have seen that naive gradient descent may
 easily get stuck in a suboptimal setting.
 Let us implement Adam optimization strategy,
-which is explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;
+explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;adam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
@@ -840,7 +839,8 @@ Training accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0
 Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;I would like to dedicate this article to Maxence Ernoult for
-his early feedback and constructive criticism.&lt;/p&gt;
+his early feedback and constructive criticism. I would also
+like to thank Elena Prokopets for proofreading the article.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -857,12 +857,12 @@ Reduce the number of layers in the opposite case.&lt;/li&gt;
 &lt;li&gt;Apply training strategies with momentum instead of naive gradient descent.&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;In future posts we will take a look on automatic differentiation and
+&lt;p&gt;In the next posts we will take a look on automatic differentiation and
 regularization techniques.
-We will also discuss how Haskell compiler can help to make sure
+We will also discuss how Haskell compiler can help ensure
 that our neural network is correct.
-This will eventually lead us to convolutional networks
-allowing to solve some interesting challenges.
+And we will ramp it up to convolutional networks
+allowing us to solve some interesting challenges.
 Stay tuned.&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
@@ -885,6 +885,7 @@ Stay tuned.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/handouts/derivatives.pdf&#34; target=&#34;_blank&#34;&gt;Another tutorial on derivatives&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34; target=&#34;_blank&#34;&gt;Notes on softmax and crossentropy&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/&#34; target=&#34;_blank&#34;&gt;A more or less complete introduction to deep learning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://web.archive.org/web/20160706105446/http://benmargolis.com/compsci/ai/two_spirals_problem.htm&#34; target=&#34;_blank&#34;&gt;More about the spirals challenge&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
@@ -897,7 +898,7 @@ MathJax.Hub.Config({
 &lt;hr /&gt;
 
 &lt;ol&gt;
-&lt;li id=&#34;fn:fn-0&#34;&gt;Such a useless theorem!
+&lt;li id=&#34;fn:fn-0&#34;&gt;Such a cheeky theorem!
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-0&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-1&#34;&gt;The attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
