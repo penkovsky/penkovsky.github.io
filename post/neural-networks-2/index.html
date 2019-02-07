@@ -808,6 +808,7 @@ in practice denotes known activation functions in a symbolic fashion:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Activation function:</span>
 <span style="color:#75715e">-- * Rectified linear unit (ReLU)</span>
 <span style="color:#75715e">-- * Sigmoid</span>
+<span style="color:#75715e">-- * Hyperbolic tangent</span>
 <span style="color:#75715e">-- * Identity (no activation)</span>
 <span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Activation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Relu</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Sigmoid</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Tanh</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Id</span></code></pre></div>
 
@@ -1231,9 +1232,14 @@ Validation accuracy <span style="color:#ae81ff">97</span>.0
 Training accuracy <span style="color:#ae81ff">100</span>.0
 Validation accuracy <span style="color:#ae81ff">100</span>.0</code></pre></div>
 
-<p>I would like to dedicate this article to Maxence Ernoult for
-his early feedback and constructive criticism. I would also
-like to thank Elena Prokopets for proofreading the article.</p>
+<p>The first experiment shows the advantage of
+Adam over a naive gradient descent training
+algorithm on a simple circles dataset.
+The second experiment compares three
+architectures solving the spirals challenge.
+I had to reduce the number of training
+epochs to 700 to show which architecture
+will converge first.</p>
 
 <h2 id="summary">Summary</h2>
 
@@ -1250,6 +1256,18 @@ Reduce the number of layers in the opposite case.</li>
 <li>Apply training strategies with momentum instead of naive gradient descent.</li>
 </ul>
 
+<p>The universal approximation theorem claims that
+a single hidden layer neural network architecture
+should be sufficient to approximate any reasonable map.
+However, how to obtain the weights is a much harder question.
+One of the <a href="https://www.gwern.net/docs/ai/1988-lang.pdf" target="_blank">first networks</a>
+solving the tough spirals challenge
+with backpropagation had not one, but three hidden layers.
+Indeed, we have seen that due to the highly nonlinear
+relationships in the dataset,
+a three-layer network with fewer parameters converges faster than
+the one with a single hidden layer.</p>
+
 <p>In the next posts we will take a look on automatic differentiation and
 regularization techniques.
 We will also discuss how Haskell compiler can help ensure
@@ -1257,6 +1275,12 @@ that our neural network is correct.
 And we will ramp it up to convolutional networks
 allowing us to solve some interesting challenges.
 Stay tuned.</p>
+
+<hr />
+
+<p>I would like to dedicate this article to Maxence Ernoult for
+his early feedback and constructive criticism. I would also
+like to thank Elena Prokopets for proofreading the article.</p>
 
 <h2 id="further-reading">Further Reading</h2>
 

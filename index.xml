@@ -415,6 +415,7 @@ in practice denotes known activation functions in a symbolic fashion:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Activation function:&lt;/span&gt;
 &lt;span style=&#34;color:#75715e&#34;&gt;-- * Rectified linear unit (ReLU)&lt;/span&gt;
 &lt;span style=&#34;color:#75715e&#34;&gt;-- * Sigmoid&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;-- * Hyperbolic tangent&lt;/span&gt;
 &lt;span style=&#34;color:#75715e&#34;&gt;-- * Identity (no activation)&lt;/span&gt;
 &lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sigmoid&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Tanh&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Id&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -838,9 +839,14 @@ Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;97&lt;/span&gt;.0
 Training accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0
 Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;I would like to dedicate this article to Maxence Ernoult for
-his early feedback and constructive criticism. I would also
-like to thank Elena Prokopets for proofreading the article.&lt;/p&gt;
+&lt;p&gt;The first experiment shows the advantage of
+Adam over a naive gradient descent training
+algorithm on a simple circles dataset.
+The second experiment compares three
+architectures solving the spirals challenge.
+I had to reduce the number of training
+epochs to 700 to show which architecture
+will converge first.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -857,6 +863,18 @@ Reduce the number of layers in the opposite case.&lt;/li&gt;
 &lt;li&gt;Apply training strategies with momentum instead of naive gradient descent.&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;p&gt;The universal approximation theorem claims that
+a single hidden layer neural network architecture
+should be sufficient to approximate any reasonable map.
+However, how to obtain the weights is a much harder question.
+One of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;first networks&lt;/a&gt;
+solving the tough spirals challenge
+with backpropagation had not one, but three hidden layers.
+Indeed, we have seen that due to the highly nonlinear
+relationships in the dataset,
+a three-layer network with fewer parameters converges faster than
+the one with a single hidden layer.&lt;/p&gt;
+
 &lt;p&gt;In the next posts we will take a look on automatic differentiation and
 regularization techniques.
 We will also discuss how Haskell compiler can help ensure
@@ -864,6 +882,12 @@ that our neural network is correct.
 And we will ramp it up to convolutional networks
 allowing us to solve some interesting challenges.
 Stay tuned.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;I would like to dedicate this article to Maxence Ernoult for
+his early feedback and constructive criticism. I would also
+like to thank Elena Prokopets for proofreading the article.&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
 
