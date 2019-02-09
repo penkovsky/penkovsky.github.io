@@ -807,7 +807,7 @@ two new functions:
       &lt;span style=&#34;color:#a6e22e&#34;&gt;netA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;optimizeAdam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;adamParams&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochs&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainSet&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;It is time to compile and run our networks. Please check the output below.
-The &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;complete project&lt;/a&gt; is available &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+The &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;complete project&lt;/a&gt; is available on &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
 Feel free to play with neural network architecture and initialization strategies.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ stack --resolver lts-10.6 --install-ghc ghc &lt;span style=&#34;color:#ae81ff&#34;&gt;\
@@ -867,7 +867,7 @@ Reduce the number of layers in the opposite case.&lt;/li&gt;
 a single hidden layer neural network architecture
 should be sufficient to approximate any reasonable map.
 However, how to obtain the weights is a much harder question.
-One of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;first networks&lt;/a&gt;
+For instance, one of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;first networks&lt;/a&gt;
 solving the tough spirals challenge
 with backpropagation had not one, but three hidden layers.
 Indeed, we have seen that due to the highly nonlinear
@@ -1343,7 +1343,7 @@ Targets
 data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
 the code to avoid this redundancy.&lt;/p&gt;
 
-&lt;p&gt;In the future posts we will highlight the advantages of multilayer neural
+&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; we will highlight the advantages of multilayer neural
 networks. We will also show that nonlinear activations are crucial.
 Finally, we will spend some time discussing
 neural network weights initialization.&lt;/p&gt;
