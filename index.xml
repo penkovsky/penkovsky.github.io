@@ -99,7 +99,7 @@ the value by multiplying by 2 and subtracting 1:&lt;/p&gt;
 &lt;p&gt;The &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; function is a synonym to &lt;code&gt;fmap&lt;/code&gt;.  What it essentially does is
 attaching the pure function &lt;code&gt;subtract 1. (*2)&lt;/code&gt; which has type &lt;code&gt;Double -&amp;gt;
 Double&lt;/code&gt;, to the &amp;quot;external world&amp;quot; action &lt;code&gt;randomIO&lt;/code&gt;, which has type &lt;code&gt;IO Double&lt;/code&gt;
-(yes, IO = input/output).&lt;/p&gt;
+(yes, IO = input/output)&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;p&gt;A hack for a numerical minus infinity:&lt;/p&gt;
 
@@ -254,6 +254,15 @@ Stay tuned.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;https://backprop.jle.im/01-getting-started.html&#34; target=&#34;_blank&#34;&gt;Backprop documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;Article on backpropagation by Dominic Steinitz&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;In fact, 64 bit double precision is not necessary for neural networks, if not an overkill. In practice you would prefer to use a 32 bit &lt;code&gt;Float&lt;/code&gt; type.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
 </description>
     </item>
     
@@ -1122,13 +1131,10 @@ relationships in the dataset,
 a three-layer network with fewer parameters converges faster than
 the one with a single hidden layer.&lt;/p&gt;
 
-&lt;p&gt;In the next posts we will take a look on automatic differentiation and
-regularization techniques.
-We will also discuss how Haskell compiler can help ensure
-that our neural network is correct.
-And we will ramp it up to convolutional networks
-allowing us to solve some interesting challenges.
-Stay tuned.&lt;/p&gt;
+&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
+discuss how Haskell compiler can help ensure that our neural network is
+correct.  And we will ramp it up to convolutional networks allowing us to
+solve some interesting challenges.  Stay tuned.&lt;/p&gt;
 
 &lt;hr /&gt;
 

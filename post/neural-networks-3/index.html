@@ -479,7 +479,7 @@ the value by multiplying by 2 and subtracting 1:</p>
 <p>The <code>&lt;$&gt;</code> function is a synonym to <code>fmap</code>.  What it essentially does is
 attaching the pure function <code>subtract 1. (*2)</code> which has type <code>Double -&gt;
 Double</code>, to the &quot;external world&quot; action <code>randomIO</code>, which has type <code>IO Double</code>
-(yes, IO = input/output).</p>
+(yes, IO = input/output)<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.</p>
 
 <p>A hack for a numerical minus infinity:</p>
 
@@ -634,6 +634,15 @@ Stay tuned.</p>
 <li><a href="https://backprop.jle.im/01-getting-started.html" target="_blank">Backprop documentation</a></li>
 <li><a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">Article on backpropagation by Dominic Steinitz</a></li>
 </ul>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-1">In fact, 64 bit double precision is not necessary for neural networks, if not an overkill. In practice you would prefer to use a 32 bit <code>Float</code> type.
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+</ol>
+</div>
 
     </div>
 
