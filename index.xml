@@ -196,7 +196,7 @@ and the second one is the gradient of &lt;code&gt;a&lt;/code&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;introducing-backprop-library&#34;&gt;Introducing backprop library&lt;/h2&gt;
 
-&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34; target=&#34;_blank&#34;&gt;backprop library&lt;/a&gt; specifically designed for
+&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34; target=&#34;_blank&#34;&gt;backprop library&lt;/a&gt; was specifically designed for
 &lt;a href=&#34;https://www.quora.com/What-is-Differentiable-Programming&#34; target=&#34;_blank&#34;&gt;differentiable
 programming&lt;/a&gt;.  It
 provides combinators to reduce our mental overhead.  In addition, the most
