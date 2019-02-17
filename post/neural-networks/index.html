@@ -24,7 +24,7 @@
   
     
   
-  <meta name="description" content="10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &ldquo;intelligent&rdquo; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&rsquo;s writings2. As a result, I came across neural networks idea.">
+  <meta name="description" content="10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across neural networks idea.">
 
   
   <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/post/neural-networks/">
@@ -99,7 +99,7 @@
   <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
   <meta property="og:url" content="http://penkovsky.com/post/neural-networks/">
   <meta property="og:title" content="Day 1: Learning Neural Networks The Hard Way | Bogdan Penkovsky, PhD">
-  <meta property="og:description" content="10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &ldquo;intelligent&rdquo; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&rsquo;s writings2. As a result, I came across neural networks idea."><meta property="og:image" content="http://penkovsky.com/img/posts/GoogLeNet_iterative_places.jpg">
+  <meta property="og:description" content="10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across neural networks idea."><meta property="og:image" content="http://penkovsky.com/img/posts/GoogLeNet_iterative_places.jpg">
   <meta property="og:locale" content="en-us">
   
   <meta property="article:published_time" content="2018-12-11T16:22:28&#43;02:00">
@@ -411,10 +411,10 @@
 
 <p>Neural networks is a topic that recurrently appears throughout my life.
 Once, when I was a BSc student,
-I got obsessed with the idea to build an &ldquo;intelligent&rdquo; machine<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.
+I got obsessed with the idea to build an &quot;intelligent&quot; machine<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.
 I spent a couple of sleepless nights thinking. I read a few essays
 shedding some light on this philosophical subject,
-among which the most prominent, perhaps, stand Marvin Minsky&rsquo;s writings<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup>.
+among which the most prominent, perhaps, stand Marvin Minsky's writings<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup>.
 As a result, I came across neural networks idea.
 It was 2010, and <em>deep learning</em> was not nearly as popular as
 it is now<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>.
@@ -426,7 +426,7 @@ Some year later, I have implemented
 a <a href="https://bitbucket.org/masterdezign/labNN" target="_blank">simple neural net</a> with sigmoid
 activations as a part of a decision-making course.
 At the time I realized that existing state of our knowledge
-was still lacking to really build &ldquo;thinking computers&rdquo;<sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup>.</p>
+was still lacking to really build &quot;thinking computers&quot;<sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup>.</p>
 
 <p>It was 2012, the conference in Crimea, Ukraine where
 I attended a brilliant talk by Prof. Laurent Larger.
@@ -483,7 +483,7 @@ To motivate you, here are some Q &amp; A you always wanted to know.</p>
 Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?</strong></p>
 
 <p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t" target="_blank">A:</a></strong>
-Neural networks are very &ldquo;function objects&rdquo;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.</p>
+Neural networks are very &quot;function objects&quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.</p>
 
 <p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx" target="_blank">Q:</a>
 As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?</strong></p>
@@ -528,7 +528,7 @@ explaining the idea.</p>
 
 <p>How does a concept as simple as gradient descent work for a neural network?
 Well, a neural network is only a function<sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup>, mapping an input to some output.
-By comparing the neural network&rsquo;s output to some desired output, one can obtain
+By comparing the neural network's output to some desired output, one can obtain
 another function known as an <em>error function</em>. This error function
 has a certain <em>error landscape</em>, like in the mountains.
 By using gradient descent, we modify our neural network
@@ -604,7 +604,7 @@ rather than scalars.</p>
 </figure>
 
 <p>Now that we realize how the gradient descent works, we may want to
-train a moderately useful network. Let&rsquo;s say we want to perform
+train a moderately useful network. Let's say we want to perform
 <em>Iris</em> flower classification using four distinctive features<sup class="footnote-ref" id="fnref:fn-7"><a href="#fn:fn-7">7</a></sup>:
 sepal length, sepal width, petal length, petal width.
 There are three classes of flowers we want to be able to recognize:
@@ -622,7 +622,7 @@ There is, however, a problem with this kind of encoding:
 we impose a <em>bias</em>. First, by encoding those classes
 as numbers, we impose a <em>linear order</em> over those three
 classes. It means, we start our count with <em>Setosa</em>, then, <em>Versicolour</em>,
-and then we arrive at <em>Virginica</em>. However, in reality it doesn&rsquo;t really matter
+and then we arrive at <em>Virginica</em>. However, in reality it doesn't really matter
 if we end with <em>Virginica</em> or <em>Vernicolour</em>.
 Second, we also assume that the distance between
 <em>Virginica</em> and <em>Setosa</em> <code>3 - 1 = 2</code> is larger than between
@@ -691,14 +691,14 @@ but also an intermediate step <code>h</code> since it will be later
 reused for <code>w</code> gradient computation.</p>
 
 <p>Each neuron $y_i$
-is supposed to fire when it &lsquo;thinks&rsquo; that it has detected one of the three
+is supposed to fire when it 'thinks' that it has detected one of the three
 species. E.g. when we have an output [0.89, 0.1, 0.2], we would
-assume that the fist neuron is the most &lsquo;confident&rsquo;,
+assume that the fist neuron is the most 'confident',
 i.e. we interpret the result as <em>Setosa</em>.
 In other words, this output is treated as similar to [1, 0, 0].
 As you can see, the maximal
 element was set to one and others, to zero.
-This is a so-called &lsquo;winner takes all&rsquo; rule.</p>
+This is a so-called 'winner takes all' rule.</p>
 
 <p>Before training the neural network, we need some
 measure of error or <em>loss function</em> to minimize.
@@ -717,9 +717,10 @@ we will reuse the <code>descend</code> function defined above.
 Now, we have to specify the gradient function for our neural
 network equation (4).
 We use what is called a <em>backpropagation</em>
-or shortly <em>backprop</em> method, which is essentially a result of the
-<a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> and is illustrated
-for an individual neuron in the figure below.</p>
+or shortly <em>backprop</em> method, which is essentially a
+<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">result</a>
+of the <a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> and is illustrated
+for an individual neuron in the figure below<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">9</a></sup>.</p>
 
 <figure>
 
@@ -755,8 +756,8 @@ and the loss function.
 Note that by operating on matrices rather than scalar values
 we calculate the gradients vector <code>dW</code>
 denoting every synaptic weight gradient $dw_i$.
-Below are those &ldquo;<a href="https://en.wikipedia.org/wiki/Array_programming" target="_blank"><em>vectorized</em></a>&ldquo;
-functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">9</a></sup>:</p>
+Below are those &quot;<a href="https://en.wikipedia.org/wiki/Array_programming" target="_blank"><em>vectorized</em></a>&quot;
+functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">10</a></sup>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">/</span> <span style="color:#a6e22e">m</span>) (<span style="color:#a6e22e">tr&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">dy</span>)
   <span style="color:#66d9ef">where</span>
@@ -802,7 +803,7 @@ Targets
 , <span style="color:#ae81ff">1</span>.0, <span style="color:#ae81ff">0</span>.0, <span style="color:#ae81ff">0</span>.0
 , <span style="color:#ae81ff">1</span>.0, <span style="color:#ae81ff">0</span>.0, <span style="color:#ae81ff">0</span>.0 <span style="color:#f92672">]</span></code></pre></div>
 
-<p>That&rsquo;s all for today. Please feel free to play with the <a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e" target="_blank">code</a>.
+<p>That's all for today. Please feel free to play with the <a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e" target="_blank">code</a>.
 <strong>Hint</strong>: you may have noticed that <code>grad</code> calls <code>sigmoid</code> twice on the same
 data: once in <code>forward</code> and once in <code>sigmoid'</code>. Try optimizing
 the code to avoid this redundancy.</p>
@@ -824,7 +825,7 @@ MathJax.Hub.Config({
 <ol>
 <li id="fn:fn-1">There exists even a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" target="_blank">term</a> describing exactly what I dreamed to achieve.
  <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
-<li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt" target="_blank">Why people think computers can&rsquo;t</a>.
+<li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt" target="_blank">Why people think computers can't</a>.
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
 <li id="fn:fn-3">With Google Trends in hand, we can witness the raise of global <a href="https://trends.google.com/trends/explore?date=all&amp;q=deep%20learning" target="_blank">deep learning</a> interest.
  <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
@@ -838,6 +839,8 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
 <li id="fn:fn-8">In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
+<li id="fn:fn-10">We look closer at the backpropagation mechanics <a href="http://penkovsky.com/post/neural-networks-3/" target="_blank">here</a>.
+ <a class="footnote-return" href="#fnref:fn-10"><sup>^</sup></a></li>
 <li id="fn:fn-9">And <a href="http://arunmallya.github.io/writeups/nn/backprop.html" target="_blank">here</a> are their mathematical derivations.
  <a class="footnote-return" href="#fnref:fn-9"><sup>^</sup></a></li>
 </ol>

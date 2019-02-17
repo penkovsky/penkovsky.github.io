@@ -26,7 +26,7 @@
   
   <meta name="description" content="10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
-&ldquo;I have built a handwritten digits recognition network. But my accuracy is only Y.">
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.">
 
   
   <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/post/neural-networks-2/">
@@ -103,7 +103,7 @@ Sometimes I discuss neural networks with students who have just started discover
   <meta property="og:title" content="Day 2: Why My Network Does Not Work? | Bogdan Penkovsky, PhD">
   <meta property="og:description" content="10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
-&ldquo;I have built a handwritten digits recognition network. But my accuracy is only Y."><meta property="og:image" content="http://penkovsky.com/img/posts/neural-networks/spirals-512.png">
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y."><meta property="og:image" content="http://penkovsky.com/img/posts/neural-networks/spirals-512.png">
   <meta property="og:locale" content="en-us">
   
   <meta property="article:published_time" content="2019-02-04T17:15:00&#43;02:00">
@@ -422,14 +422,14 @@ how to properly design and train them.</p>
 <p>Sometimes I discuss neural networks with students who
 have just started discovering machine learning techniques:</p>
 
-<p>&ldquo;I have built a
+<p>&quot;I have built a
 <a href="https://en.wikipedia.org/wiki/MNIST_database" target="_blank">handwritten digits</a>
 recognition network.
-But my accuracy is only <strong>Y</strong>.&rdquo;</p>
+But my accuracy is only <strong>Y</strong>.&quot;</p>
 
-<p>&ldquo;<em>It seems to be much less than state-of-the-art</em>&rdquo;, I contemplate.</p>
+<p>&quot;<em>It seems to be much less than state-of-the-art</em>&quot;, I contemplate.</p>
 
-<p>&ldquo;Indeed. Maybe the reason is <strong>X</strong>?&rdquo;</p>
+<p>&quot;Indeed. Maybe the reason is <strong>X</strong>?&quot;</p>
 
 <p>Usually <strong>X</strong> is not the reason.
 The real cause appears to be much more trivial:
@@ -518,7 +518,7 @@ we will use <em>binary cross-entropy</em>:</p>
 L(y, \hat y) = - \frac 1 m \sum_{i=1}^m \left[ y_i \ln(\hat y_i) + (1 - y_i) \ln(1 - \hat y_i) \right],
 $$</p>
 
-<p>where $y$ is the target output and $\hat y$ is neural network&rsquo;s prediction.
+<p>where $y$ is the target output and $\hat y$ is neural network's prediction.
 This loss function was
 <a href="http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function" target="_blank">specifically designed</a> to efficiently train
 neural networks.
@@ -610,7 +610,7 @@ Perhaps, the most popular among the algorithms
 with momentum is <a href="https://arxiv.org/abs/1412.6980" target="_blank">Adam</a>.
 As we can see from the diagram above, on the right, the <a href="https://www.youtube.com/watch?v=JXQT_vxqwIs" target="_blank">Adam</a> algorithm
 is able to efficiently build the appropriate decision boundary.
-I find it can be more illustrative if we visualize the neural network&rsquo;s output during its training.</p>
+I find it can be more illustrative if we visualize the neural network's output during its training.</p>
 
 <figure>
 
@@ -737,7 +737,7 @@ how backprop works for each individual neuron.</p>
 
 
 <figcaption data-pre="Figure " data-post=":" >
-  <h4>Backprop for a neuron. A neuron&rsquo;s computation $y = f(\sum_i w_i \cdot x_i)$ known as the <em>forward pass</em> is illustrated in black using a computational graph. The <em>backward pass</em> propagating the gradients in the opposite direction is depicted in red.</h4>
+  <h4>Backprop for a neuron. A neuron's computation $y = f(\sum_i w_i \cdot x_i)$ known as the <em>forward pass</em> is illustrated in black using a computational graph. The <em>backward pass</em> propagating the gradients in the opposite direction is depicted in red.</h4>
   
 </figcaption>
 
@@ -1139,7 +1139,7 @@ from this <a href="https://arxiv.org/pdf/1502.01852.pdf" target="_blank">paper</
           <span style="color:#a6e22e">w</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randn</span> <span style="color:#a6e22e">nin</span> <span style="color:#a6e22e">nout</span>
           <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">k</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">w</span>)</code></pre></div>
 
-<p>This strategy becomes more useful as soon as your neural network becomes &ldquo;deeper&rdquo;,
+<p>This strategy becomes more useful as soon as your neural network becomes &quot;deeper&quot;,
 i.e. gets more and more layers.</p>
 
 <h4 id="adam">Adam</h4>
@@ -1185,7 +1185,7 @@ explained in this <a href="https://www.youtube.com/watch?v=JXQT_vxqwIs" target="
           , <span style="color:#a6e22e">beta1</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">vB</span> <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">beta1</span>) `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dB</span>)</code></pre></div>
 
 <p>The Adam implementation is a derived from <code>optimize</code>.
-The most prominent change is additional &ldquo;zipping&rdquo; with
+The most prominent change is additional &quot;zipping&quot; with
 two new functions:
 <code>f2</code> embodies the <a href="https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf" target="_blank">RMSprop</a> strategy and
 <code>f3</code> performs momentum estimation.</p>
@@ -1342,6 +1342,10 @@ MathJax.Hub.Config({
 
 
 
+    
+    <div class="article-widget">
+      Next: <a href="http://penkovsky.com/post/neural-networks-3/">Day 3: Haskell Guide To Neural Networks</a>
+    </div>
     
 
     

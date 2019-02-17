@@ -13,6 +13,15 @@
     
     
     <item>
+      <title>Day 3: Haskell Guide To Neural Networks</title>
+      <link>http://penkovsky.com/post/neural-networks-3/</link>
+      <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks-3/</guid>
+      <description>10 Days Of Grad: Deep Learning From The First Principles. Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.</description>
+    </item>
+    
+    <item>
       <title>Day 2: Why My Network Does Not Work?</title>
       <link>http://penkovsky.com/post/neural-networks-2/</link>
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
@@ -20,7 +29,7 @@
       <guid>http://penkovsky.com/post/neural-networks-2/</guid>
       <description>10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
-&amp;ldquo;I have built a handwritten digits recognition network. But my accuracy is only Y.</description>
+&amp;quot;I have built a handwritten digits recognition network. But my accuracy is only Y.</description>
     </item>
     
     <item>
@@ -29,7 +38,7 @@ Sometimes I discuss neural networks with students who have just started discover
       <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
       
       <guid>http://penkovsky.com/post/neural-networks/</guid>
-      <description>10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &amp;ldquo;intelligent&amp;rdquo; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&amp;rsquo;s writings2. As a result, I came across neural networks idea.</description>
+      <description>10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &amp;quot;intelligent&amp;quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across neural networks idea.</description>
     </item>
     
   </channel>

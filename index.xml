@@ -11,6 +11,252 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Day 3: Haskell Guide To Neural Networks</title>
+      <link>http://penkovsky.com/post/neural-networks-3/</link>
+      <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks-3/</guid>
+      <description>
+
+&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
+
+&lt;p&gt;Now that we have seen how neural networks work, we realize that understanding
+of the gradients flow is essential for survival.  Therefore, we will revise
+our strategy on the lowest level. However, as neural networks become more complicated,
+calculation of gradients by hand becomes a murky business. Yet, fear not young
+&lt;em&gt;padawan&lt;/em&gt;, there is a way out! I am very excited that today we will finally get
+acquainted with automatic differentiation, an essential tool in your deep
+learning arsenal.  This post was largely inspired by &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34; target=&#34;_blank&#34;&gt;Hacker&#39;s guide to Neural
+Networks&lt;/a&gt;. For comparison, see also
+&lt;a href=&#34;https://github.com/urwithajit9/HG_NeuralNetwork&#34; target=&#34;_blank&#34;&gt;Python version&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;Before jumping ahead, you may also want to check the previous posts:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2&#34; target=&#34;_blank&#34;&gt;Day 2: Why My Network Does Not Work?&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34; target=&#34;_blank&#34;&gt;on
+Github&lt;/a&gt;. The
+guide is written in literate Haskell, so it can be safely compiled.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-random-local-search-fails&#34;&gt;Why Random Local Search Fails&lt;/h2&gt;
+
+&lt;p&gt;Following Karpathy&#39;s &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34; target=&#34;_blank&#34;&gt;guide&lt;/a&gt;, we
+first consider a simple multiplication circuit.  Well, Haskell is not JavaScript,
+so the definition is pretty straightforward:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Or we could have written&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;to make the function look more intuitively $f(x,y) = x \cdot y$. Anyway,&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;returns -6. Exciting.&lt;/p&gt;
+
+&lt;p&gt;Now, the question: is it possible to change the input $(x,y)$ slightly in order
+to increase the output?  One way would be to perform local random search.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;_search&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; )&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; )&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;
+               &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;)
+               &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Not surprisingly, the function above represents a single iteration of a
+&amp;quot;for&amp;quot;-loop. What it does, it randomly selects points around initial $(x, y)$
+and checks if the output has increased.  If yes, then it updates the best known
+inputs and the maximal output. To iterate, we can use &lt;code&gt;foldM :: (b -&amp;gt; a -&amp;gt; IO
+b) -&amp;gt; b -&amp;gt; [a] -&amp;gt; IO b&lt;/code&gt;. This function is convenient since we anticipate some
+interaction with the &amp;quot;external world&amp;quot; in the form of random numbers generation:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;localSearch&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+ &lt;span style=&#34;color:#a6e22e&#34;&gt;foldM&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;searchStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt;) [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;What the code essentially tells us is that we seed the algorithm with some
+initial values of &lt;code&gt;x0&lt;/code&gt;, &lt;code&gt;y0&lt;/code&gt;, and &lt;code&gt;out0&lt;/code&gt; and iterate from 1 till 100.  The core
+of the algorithm is &lt;code&gt;searchStep&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;searchStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ta&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xyz&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_search&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ta&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xyz&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;which is a convenience function that glues those two pieces together.  It
+simply ignores the iteration number and calls &lt;code&gt;_search&lt;/code&gt;. Now, we would like to
+have a random number generator within the range of [-1; 1). From the
+&lt;a href=&#34;http://hackage.haskell.org/package/random-1.1/docs/System-Random.html&#34; target=&#34;_blank&#34;&gt;documentation&lt;/a&gt;,
+we know that &lt;code&gt;randomIO&lt;/code&gt; produces a number between 0 and 1.  Therefore, we scale
+the value by multiplying by 2 and subtracting 1:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;subtract&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomIO&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; function is a synonym to &lt;code&gt;fmap&lt;/code&gt;.  What it essentially does is
+attaching the pure function &lt;code&gt;subtract 1. (*2)&lt;/code&gt; which has type &lt;code&gt;Double -&amp;gt;
+Double&lt;/code&gt;, to the &amp;quot;external world&amp;quot; action &lt;code&gt;randomIO&lt;/code&gt;, which has type &lt;code&gt;IO Double&lt;/code&gt;
+(yes, IO = input/output).&lt;/p&gt;
+
+&lt;p&gt;A hack for a numerical minus infinity:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;inf_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we run &lt;code&gt;localSearch 0.01 (-2, 3, inf_)&lt;/code&gt; several times:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.7887454910045664&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.910160042416705&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.205535653974539&lt;/span&gt;)
+(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.7912166830200635&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.89808308735154&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.19109477484237&lt;/span&gt;)
+(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.8216809458018006&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.8372869694452523&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.168631610010152&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In fact, we see that the outputs have increased from -6 to about -5.2.
+But the improvement is only about 0.8/100 = 0.008 units per iteration.
+That is an extremely inefficient method. The problem with random
+search is that each time it attempts to change the inputs in random
+directions. If the algorithm makes a mistake, it has to discard
+the result and start again from the previously known best position.
+Wouldn&#39;t it be nice if instead each iteration would improve the result
+at least by a little bit?&lt;/p&gt;
+
+&lt;h2 id=&#34;backpropagation&#34;&gt;Backpropagation&lt;/h2&gt;
+
+&lt;p&gt;Instead of random search in random direction, we can use the precise direction
+and amount to change the input so that the output would improve. And that tells
+us the &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient&#34; target=&#34;_blank&#34;&gt;gradient&lt;/a&gt;.  In his
+&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;article&lt;/a&gt;,
+Dominic Steinitz explains the differences between the numerical, symbolic, and
+automatic differentiation. Here, we will directly explain the last approach,
+invaluable for neural networks training.&lt;/p&gt;
+
+&lt;p&gt;The idea is that first we will explicitly define the gradient for our elementary
+operators. Then, we will exploit the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain
+rule&lt;/a&gt; when combining those into neural
+networks or whatever we like. That strategy will provide the necessary
+gradients. Let us illustrate the concept.&lt;/p&gt;
+
+&lt;p&gt;Below we define both multiplication operator and its gradient using the chain
+rule, i.e. $\frac {d} {dt} x(t) y(t) = x(t) y&#39;(t) + x&#39;(t) y(t)$:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The same can be done with addition, subtraction, division, and exponent:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;)
+
+(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;/.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;exp1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We also have &lt;code&gt;constOp&lt;/code&gt; for constants:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we can define our favourite sigmoid $\sigma(x)$
+combining the operators above:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, let us compute a neuron $f(x, y) = \sigma(a x + b y + c)$, where $x$
+and $y$ are inputs and $a$, $b$, and $c$ are parameters&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid1&lt;/span&gt; ((&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we can obtain the gradient of &lt;code&gt;a&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; [(&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt;
+(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, the first number is the result of the neuron&#39;s output
+and the second one is the gradient of &lt;code&gt;a&lt;/code&gt;.&lt;/p&gt;
+
+&lt;p&gt;In a similar way, we can obtain the rest of the gradients:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
+(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3149807562105195&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
+(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
+(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]
+(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.209987170807013&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h2 id=&#34;introducing-backprop-library&#34;&gt;Introducing backprop library&lt;/h2&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34; target=&#34;_blank&#34;&gt;backprop library&lt;/a&gt; specifically designed for
+&lt;a href=&#34;https://www.quora.com/What-is-Differentiable-Programming&#34; target=&#34;_blank&#34;&gt;differentiable
+programming&lt;/a&gt;.  It
+provides combinators to reduce our mental overhead.  In addition, the most
+useful operations such as arithmetics and trigonometry, have already been
+defined in the library. See also
+&lt;a href=&#34;http://hackage.haskell.org/package/hmatrix-backprop&#34; target=&#34;_blank&#34;&gt;hmatrix-backprop&lt;/a&gt; for
+linear algebra.  So all you need for differentiable programming now is to
+define some functions:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code&gt;BVar s&lt;/code&gt; wrapper signifies that our function is
+differentiable. Now, the forward pass is:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;evalBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sequenceVar&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We use &lt;code&gt;sequenceVar&lt;/code&gt; isomorphism to convert a &lt;code&gt;BVar&lt;/code&gt; of a list into a list of
+&lt;code&gt;BVar&lt;/code&gt;s, as required by our &lt;code&gt;neuron&lt;/code&gt; equation. And the backward pass is&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;backwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;gradBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sequenceVar&lt;/span&gt;)
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;]
+&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;]
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;-- 0.8807970779778823&lt;/span&gt;
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;backwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;-- [-0.1049935854035065,0.3149807562105195,0.1049935854035065,0.1049935854035065,0.209987170807013]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that all gradients are in one list, the type of the first &lt;code&gt;neuron&lt;/code&gt;
+argument.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Modern neural networks tend to be complex beasts.  Writing backpropagation
+gradients by hand can easily become a tedious task.  In this post we have seen
+how automatic differentiation can face this problem.&lt;/p&gt;
+
+&lt;p&gt;In the next posts we will apply automatic differentiation to real neural networks.
+We will talk about batch normalization, another crucial method in modern deep learning.
+And we will ramp it up to convolutional networks
+allowing us to solve some interesting challenges.
+Stay tuned.&lt;/p&gt;
+
+&lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/&#34; target=&#34;_blank&#34;&gt;Visual guide to neural networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://backprop.jle.im/01-getting-started.html&#34; target=&#34;_blank&#34;&gt;Backprop documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;Article on backpropagation by Dominic Steinitz&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Day 2: Why My Network Does Not Work?</title>
       <link>http://penkovsky.com/post/neural-networks-2/</link>
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
@@ -29,14 +275,14 @@ how to properly design and train them.&lt;/p&gt;
 &lt;p&gt;Sometimes I discuss neural networks with students who
 have just started discovering machine learning techniques:&lt;/p&gt;
 
-&lt;p&gt;&amp;ldquo;I have built a
+&lt;p&gt;&amp;quot;I have built a
 &lt;a href=&#34;https://en.wikipedia.org/wiki/MNIST_database&#34; target=&#34;_blank&#34;&gt;handwritten digits&lt;/a&gt;
 recognition network.
-But my accuracy is only &lt;strong&gt;Y&lt;/strong&gt;.&amp;rdquo;&lt;/p&gt;
+But my accuracy is only &lt;strong&gt;Y&lt;/strong&gt;.&amp;quot;&lt;/p&gt;
 
-&lt;p&gt;&amp;ldquo;&lt;em&gt;It seems to be much less than state-of-the-art&lt;/em&gt;&amp;rdquo;, I contemplate.&lt;/p&gt;
+&lt;p&gt;&amp;quot;&lt;em&gt;It seems to be much less than state-of-the-art&lt;/em&gt;&amp;quot;, I contemplate.&lt;/p&gt;
 
-&lt;p&gt;&amp;ldquo;Indeed. Maybe the reason is &lt;strong&gt;X&lt;/strong&gt;?&amp;rdquo;&lt;/p&gt;
+&lt;p&gt;&amp;quot;Indeed. Maybe the reason is &lt;strong&gt;X&lt;/strong&gt;?&amp;quot;&lt;/p&gt;
 
 &lt;p&gt;Usually &lt;strong&gt;X&lt;/strong&gt; is not the reason.
 The real cause appears to be much more trivial:
@@ -125,7 +371,7 @@ we will use &lt;em&gt;binary cross-entropy&lt;/em&gt;:&lt;/p&gt;
 L(y, \hat y) = - \frac 1 m \sum_{i=1}^m \left[ y_i \ln(\hat y_i) + (1 - y_i) \ln(1 - \hat y_i) \right],
 $$&lt;/p&gt;
 
-&lt;p&gt;where $y$ is the target output and $\hat y$ is neural network&amp;rsquo;s prediction.
+&lt;p&gt;where $y$ is the target output and $\hat y$ is neural network&#39;s prediction.
 This loss function was
 &lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function&#34; target=&#34;_blank&#34;&gt;specifically designed&lt;/a&gt; to efficiently train
 neural networks.
@@ -217,7 +463,7 @@ Perhaps, the most popular among the algorithms
 with momentum is &lt;a href=&#34;https://arxiv.org/abs/1412.6980&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt;.
 As we can see from the diagram above, on the right, the &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt; algorithm
 is able to efficiently build the appropriate decision boundary.
-I find it can be more illustrative if we visualize the neural network&amp;rsquo;s output during its training.&lt;/p&gt;
+I find it can be more illustrative if we visualize the neural network&#39;s output during its training.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -344,7 +590,7 @@ how backprop works for each individual neuron.&lt;/p&gt;
 
 
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Backprop for a neuron. A neuron&amp;rsquo;s computation $y = f(\sum_i w_i \cdot x_i)$ known as the &lt;em&gt;forward pass&lt;/em&gt; is illustrated in black using a computational graph. The &lt;em&gt;backward pass&lt;/em&gt; propagating the gradients in the opposite direction is depicted in red.&lt;/h4&gt;
+  &lt;h4&gt;Backprop for a neuron. A neuron&#39;s computation $y = f(\sum_i w_i \cdot x_i)$ known as the &lt;em&gt;forward pass&lt;/em&gt; is illustrated in black using a computational graph. The &lt;em&gt;backward pass&lt;/em&gt; propagating the gradients in the opposite direction is depicted in red.&lt;/h4&gt;
   
 &lt;/figcaption&gt;
 
@@ -746,7 +992,7 @@ from this &lt;a href=&#34;https://arxiv.org/pdf/1502.01852.pdf&#34; target=&#34;
           &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;
           &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;This strategy becomes more useful as soon as your neural network becomes &amp;ldquo;deeper&amp;rdquo;,
+&lt;p&gt;This strategy becomes more useful as soon as your neural network becomes &amp;quot;deeper&amp;quot;,
 i.e. gets more and more layers.&lt;/p&gt;
 
 &lt;h4 id=&#34;adam&#34;&gt;Adam&lt;/h4&gt;
@@ -792,7 +1038,7 @@ explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#3
           , &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;vB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The Adam implementation is a derived from &lt;code&gt;optimize&lt;/code&gt;.
-The most prominent change is additional &amp;ldquo;zipping&amp;rdquo; with
+The most prominent change is additional &amp;quot;zipping&amp;quot; with
 two new functions:
 &lt;code&gt;f2&lt;/code&gt; embodies the &lt;a href=&#34;https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf&#34; target=&#34;_blank&#34;&gt;RMSprop&lt;/a&gt; strategy and
 &lt;code&gt;f3&lt;/code&gt; performs momentum estimation.&lt;/p&gt;
@@ -947,10 +1193,10 @@ MathJax.Hub.Config({
 
 &lt;p&gt;Neural networks is a topic that recurrently appears throughout my life.
 Once, when I was a BSc student,
-I got obsessed with the idea to build an &amp;ldquo;intelligent&amp;rdquo; machine&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
+I got obsessed with the idea to build an &amp;quot;intelligent&amp;quot; machine&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
 I spent a couple of sleepless nights thinking. I read a few essays
 shedding some light on this philosophical subject,
-among which the most prominent, perhaps, stand Marvin Minsky&amp;rsquo;s writings&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
 As a result, I came across neural networks idea.
 It was 2010, and &lt;em&gt;deep learning&lt;/em&gt; was not nearly as popular as
 it is now&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
@@ -962,7 +1208,7 @@ Some year later, I have implemented
 a &lt;a href=&#34;https://bitbucket.org/masterdezign/labNN&#34; target=&#34;_blank&#34;&gt;simple neural net&lt;/a&gt; with sigmoid
 activations as a part of a decision-making course.
 At the time I realized that existing state of our knowledge
-was still lacking to really build &amp;ldquo;thinking computers&amp;rdquo;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+was still lacking to really build &amp;quot;thinking computers&amp;quot;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;p&gt;It was 2012, the conference in Crimea, Ukraine where
 I attended a brilliant talk by Prof. Laurent Larger.
@@ -1019,7 +1265,7 @@ To motivate you, here are some Q &amp;amp; A you always wanted to know.&lt;/p&gt
 Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t&#34; target=&#34;_blank&#34;&gt;A:&lt;/a&gt;&lt;/strong&gt;
-Neural networks are very &amp;ldquo;function objects&amp;rdquo;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.&lt;/p&gt;
+Neural networks are very &amp;quot;function objects&amp;quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx&#34; target=&#34;_blank&#34;&gt;Q:&lt;/a&gt;
 As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?&lt;/strong&gt;&lt;/p&gt;
@@ -1064,7 +1310,7 @@ explaining the idea.&lt;/p&gt;
 
 &lt;p&gt;How does a concept as simple as gradient descent work for a neural network?
 Well, a neural network is only a function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;, mapping an input to some output.
-By comparing the neural network&amp;rsquo;s output to some desired output, one can obtain
+By comparing the neural network&#39;s output to some desired output, one can obtain
 another function known as an &lt;em&gt;error function&lt;/em&gt;. This error function
 has a certain &lt;em&gt;error landscape&lt;/em&gt;, like in the mountains.
 By using gradient descent, we modify our neural network
@@ -1140,7 +1386,7 @@ rather than scalars.&lt;/p&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;Now that we realize how the gradient descent works, we may want to
-train a moderately useful network. Let&amp;rsquo;s say we want to perform
+train a moderately useful network. Let&#39;s say we want to perform
 &lt;em&gt;Iris&lt;/em&gt; flower classification using four distinctive features&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;:
 sepal length, sepal width, petal length, petal width.
 There are three classes of flowers we want to be able to recognize:
@@ -1158,7 +1404,7 @@ There is, however, a problem with this kind of encoding:
 we impose a &lt;em&gt;bias&lt;/em&gt;. First, by encoding those classes
 as numbers, we impose a &lt;em&gt;linear order&lt;/em&gt; over those three
 classes. It means, we start our count with &lt;em&gt;Setosa&lt;/em&gt;, then, &lt;em&gt;Versicolour&lt;/em&gt;,
-and then we arrive at &lt;em&gt;Virginica&lt;/em&gt;. However, in reality it doesn&amp;rsquo;t really matter
+and then we arrive at &lt;em&gt;Virginica&lt;/em&gt;. However, in reality it doesn&#39;t really matter
 if we end with &lt;em&gt;Virginica&lt;/em&gt; or &lt;em&gt;Vernicolour&lt;/em&gt;.
 Second, we also assume that the distance between
 &lt;em&gt;Virginica&lt;/em&gt; and &lt;em&gt;Setosa&lt;/em&gt; &lt;code&gt;3 - 1 = 2&lt;/code&gt; is larger than between
@@ -1227,14 +1473,14 @@ but also an intermediate step &lt;code&gt;h&lt;/code&gt; since it will be later
 reused for &lt;code&gt;w&lt;/code&gt; gradient computation.&lt;/p&gt;
 
 &lt;p&gt;Each neuron $y_i$
-is supposed to fire when it &amp;lsquo;thinks&amp;rsquo; that it has detected one of the three
+is supposed to fire when it &#39;thinks&#39; that it has detected one of the three
 species. E.g. when we have an output [0.89, 0.1, 0.2], we would
-assume that the fist neuron is the most &amp;lsquo;confident&amp;rsquo;,
+assume that the fist neuron is the most &#39;confident&#39;,
 i.e. we interpret the result as &lt;em&gt;Setosa&lt;/em&gt;.
 In other words, this output is treated as similar to [1, 0, 0].
 As you can see, the maximal
 element was set to one and others, to zero.
-This is a so-called &amp;lsquo;winner takes all&amp;rsquo; rule.&lt;/p&gt;
+This is a so-called &#39;winner takes all&#39; rule.&lt;/p&gt;
 
 &lt;p&gt;Before training the neural network, we need some
 measure of error or &lt;em&gt;loss function&lt;/em&gt; to minimize.
@@ -1253,9 +1499,10 @@ we will reuse the &lt;code&gt;descend&lt;/code&gt; function defined above.
 Now, we have to specify the gradient function for our neural
 network equation (4).
 We use what is called a &lt;em&gt;backpropagation&lt;/em&gt;
-or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a result of the
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt; and is illustrated
-for an individual neuron in the figure below.&lt;/p&gt;
+or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a
+&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;result&lt;/a&gt;
+of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt; and is illustrated
+for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -1291,8 +1538,8 @@ and the loss function.
 Note that by operating on matrices rather than scalar values
 we calculate the gradients vector &lt;code&gt;dW&lt;/code&gt;
 denoting every synaptic weight gradient $dw_i$.
-Below are those &amp;ldquo;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;ldquo;
-functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+Below are those &amp;quot;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;quot;
+functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;tr&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt;)
   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
@@ -1338,7 +1585,7 @@ Targets
 , &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
 , &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;That&amp;rsquo;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;code&lt;/a&gt;.
+&lt;p&gt;That&#39;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;code&lt;/a&gt;.
 &lt;strong&gt;Hint&lt;/strong&gt;: you may have noticed that &lt;code&gt;grad&lt;/code&gt; calls &lt;code&gt;sigmoid&lt;/code&gt; twice on the same
 data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
 the code to avoid this redundancy.&lt;/p&gt;
@@ -1360,7 +1607,7 @@ MathJax.Hub.Config({
 &lt;ol&gt;
 &lt;li id=&#34;fn:fn-1&#34;&gt;There exists even a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34; target=&#34;_blank&#34;&gt;Why people think computers can&amp;rsquo;t&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34; target=&#34;_blank&#34;&gt;Why people think computers can&#39;t&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-3&#34;&gt;With Google Trends in hand, we can witness the raise of global &lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;q=deep%20learning&#34; target=&#34;_blank&#34;&gt;deep learning&lt;/a&gt; interest.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1374,6 +1621,8 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
