@@ -177,10 +177,29 @@ where $a = 1$, $b = 2$, $c = -3$, $x = -1$, and $y = 3$:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt;
 (&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Here, the first number is the result of the neuron&#39;s output
-and the second one is the gradient of &lt;code&gt;a&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Here, the first number is the result of the neuron&#39;s output and the second
+one is the gradient with respect to &lt;code&gt;a&lt;/code&gt; ($\frac d {da}$). Let us verify the
+math behind the result:&lt;/p&gt;
 
-&lt;p&gt;In a similar way, we can obtain the rest of the gradients:&lt;/p&gt;
+&lt;p&gt;$$
+\begin{equation}
+\sigma(ax + by + c) | _{a=(a,1), b=(b,0), c=(c,0), x=(x,0), y=(y,0)} = \\&lt;br /&gt;
+\sigma[(a, 1) (x, 0) + (b, 0) (y, 0) + (c, 0)] = \\&lt;br /&gt;
+\sigma[(ax, a \cdot 0 + 1 \cdot x) + (by, 0 \cdot b + 0 \cdot y) + (c, 0)] = \\&lt;br /&gt;
+\sigma[(ax + by + c, x)] = \\&lt;br /&gt;
+\frac {(1, 0)} {(1, 0) + \exp \left[ -(ax + by + c, x) \right]} = \\&lt;br /&gt;
+\frac {(1, 0)} {(1, 0) + \exp \left[ -ax - by - c, -x) \right]} = \\&lt;br /&gt;
+\frac {(1, 0)} {(1, 0) + (\exp (-ax - by - c), -x \exp (-ax - by - c))} = \\&lt;br /&gt;
+\frac {(1, 0)} {(1 + \exp(-ax - by - c), -x \exp(-ax - by - c))} = \\&lt;br /&gt;
+\left( \sigma(ax + by + c), \frac {x \exp(-ax - by -c)} {(1 + \exp(-ax - by -c))^2} \right).
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;The first expression is the result of neuron&#39;s computation
+and the second one is the exact analytic expression
+for $\frac d {da}$. That is all the magic behind
+automatic differentiation!
+In a similar way, we can obtain the rest of the gradients:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
 (&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3149807562105195&lt;/span&gt;)

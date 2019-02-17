@@ -325,7 +325,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    7 min read
+    8 min read
   </span>
   
 
@@ -557,10 +557,29 @@ where $a = 1$, $b = 2$, $c = -3$, $x = -1$, and $y = 3$:</p>
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">neuron1</span> <span style="color:#a6e22e">abcxy1</span>
 (<span style="color:#ae81ff">0.8807970779778823</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">0.1049935854035065</span>)</code></pre></div>
 
-<p>Here, the first number is the result of the neuron's output
-and the second one is the gradient of <code>a</code>.</p>
+<p>Here, the first number is the result of the neuron's output and the second
+one is the gradient with respect to <code>a</code> ($\frac d {da}$). Let us verify the
+math behind the result:</p>
 
-<p>In a similar way, we can obtain the rest of the gradients:</p>
+<p>$$
+\begin{equation}
+\sigma(ax + by + c) | _{a=(a,1), b=(b,0), c=(c,0), x=(x,0), y=(y,0)} = \\<br />
+\sigma[(a, 1) (x, 0) + (b, 0) (y, 0) + (c, 0)] = \\<br />
+\sigma[(ax, a \cdot 0 + 1 \cdot x) + (by, 0 \cdot b + 0 \cdot y) + (c, 0)] = \\<br />
+\sigma[(ax + by + c, x)] = \\<br />
+\frac {(1, 0)} {(1, 0) + \exp \left[ -(ax + by + c, x) \right]} = \\<br />
+\frac {(1, 0)} {(1, 0) + \exp \left[ -ax - by - c, -x) \right]} = \\<br />
+\frac {(1, 0)} {(1, 0) + (\exp (-ax - by - c), -x \exp (-ax - by - c))} = \\<br />
+\frac {(1, 0)} {(1 + \exp(-ax - by - c), -x \exp(-ax - by - c))} = \\<br />
+\left( \sigma(ax + by + c), \frac {x \exp(-ax - by -c)} {(1 + \exp(-ax - by -c))^2} \right).
+\end{equation}
+$$</p>
+
+<p>The first expression is the result of neuron's computation
+and the second one is the exact analytic expression
+for $\frac d {da}$. That is all the magic behind
+automatic differentiation!
+In a similar way, we can obtain the rest of the gradients:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">neuron1</span> [(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>), (<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0</span>), (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">0</span>)]
 (<span style="color:#ae81ff">0.8807970779778823</span>,<span style="color:#ae81ff">0.3149807562105195</span>)
