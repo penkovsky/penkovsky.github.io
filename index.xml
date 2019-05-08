@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Coupled Delay Systems For Brain-Inspired Computing</title>
+      <link>http://penkovsky.com/talk/ictp2019/</link>
+      <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/talk/ictp2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Day 3: Haskell Guide To Neural Networks</title>
       <link>http://penkovsky.com/post/neural-networks-3/</link>
       <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
@@ -251,7 +260,7 @@ differentiable. Now, the forward pass is:&lt;/p&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;backwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt;
 &lt;span style=&#34;color:#75715e&#34;&gt;-- [-0.1049935854035065,0.3149807562105195,0.1049935854035065,0.1049935854035065,0.209987170807013]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;Note that all gradients are in one list, the type of the first &lt;code&gt;neuron&lt;/code&gt;
+&lt;p&gt;Note that all the gradients are in one list, the type of the first &lt;code&gt;neuron&lt;/code&gt;
 argument.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
