@@ -1625,10 +1625,13 @@ Targets
 data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
 the code to avoid this redundancy.&lt;/p&gt;
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; we will highlight the advantages of multilayer neural
-networks. We will also show that nonlinear activations are crucial.
-Finally, we will spend some time discussing
-neural network weights initialization.&lt;/p&gt;
+&lt;p&gt;As soon as you understand the basics of neural networks,
+make sure you continue to &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;.
+In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
+First of all, we will highlight the importance of multilayer structure.
+We will also show that nonlinear activations are crucial.
+Finally, we will improve neural network training
+and discuss weights initialization.&lt;/p&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
 MathJax.Hub.Config({
