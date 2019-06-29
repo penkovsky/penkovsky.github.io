@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Tue, 07 May 2019 13:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 29 Jun 2019 15:01:00 +0200</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Day 4: The Importance Of Batch Normalization</title>
+      <link>http://penkovsky.com/post/neural-networks-4/</link>
+      <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks-4/</guid>
+      <description>10 Days Of Grad: Deep Learning From The First Principles. Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, &#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches.</description>
+    </item>
     
     <item>
       <title>Coupled Delay Systems For Brain-Inspired Computing</title>

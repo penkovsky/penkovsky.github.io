@@ -25,7 +25,7 @@ Networks](http://karpathy.github.io/neuralnets/). For comparison, see also
 Before going ahead, you may also want to check the previous posts:
 
 * [Day 1: Learning Neural Networks The Hard Way](http://penkovsky.com/post/neural-networks)
-* [Day 2: Why My Network Does Not Work?](http://penkovsky.com/post/neural-networks-2)
+* [Day 2: What Do Hidden Layers Do?](http://penkovsky.com/post/neural-networks-2)
 
 
 

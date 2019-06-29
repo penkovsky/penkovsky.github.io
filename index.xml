@@ -11,6 +11,500 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Day 4: The Importance Of Batch Normalization</title>
+      <link>http://penkovsky.com/post/neural-networks-4/</link>
+      <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/post/neural-networks-4/</guid>
+      <description>
+
+&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
+
+&lt;p&gt;Which purpose do neural networks serve for? Neural networks are learnable
+models. Their ultimate goal is to approach or even surpass human
+cognitive abilities. As Richard Sutton puts it,
+&lt;em&gt;&#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;&lt;/em&gt;.
+In &lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34; target=&#34;_blank&#34;&gt;his essay&lt;/a&gt;, Sutton argues that only models without encoded
+human-knowledge can outperform human-centeric approaches. Indeed, neural
+networks are general enough and they leverage computation. Then, it is not
+surprising how they can exhibit millions of learnable degrees of freedom.&lt;/p&gt;
+
+&lt;p&gt;The biggest problem with neural networks is two-fold: (1) how to train those
+millions of parameters, and (2) how to interpret them. Batch normalization
+(shortly &lt;em&gt;batchnorm&lt;/em&gt;) was &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;introduced&lt;/a&gt; as an attempt to
+make training more efficient. The method can dramatically reduce the number of
+training epochs. Moreover, batchnorm is perhaps the key ingredient that made
+possible training of certain architectures such as
+&lt;a href=&#34;https://papers.nips.cc/paper/6573-binarized-neural-networks.pdf&#34; target=&#34;_blank&#34;&gt;binarized neural networks&lt;/a&gt;. Finally, batchnorm is one of the most
+recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;batch-normalization-in-short&#34;&gt;Batch Normalization In Short&lt;/h2&gt;
+
+&lt;h3 id=&#34;what-is-a-batch&#34;&gt;What Is A Batch?&lt;/h3&gt;
+
+&lt;p&gt;Until now, we have looked on toy datasets. They were so small that they could
+completely fit into the memory. However, in the real world exist huge databases
+occupying hundreds of gigabytes of memory, such as
+&lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34;&gt;Imagenet&lt;/a&gt; for example. Those often would not fit
+into the memory. In that case, it makes more sense to split a dataset into
+smaller &lt;em&gt;mini-batches&lt;/em&gt;. During a forward/backward pass, only one batch is
+typically processed.&lt;/p&gt;
+
+&lt;p&gt;As the name suggests, batchnorm transformation is acting on individual batches
+of data. The linear outputs of linear layers may cause activation function
+saturation. In case of ReLU (rectified linear unit) activation $f(x)=\max(0,
+x)$, for instance, all negative values will result in zero activations.
+Therefore, it is good idea to normalize those values by subtracting the batch
+mean $\mu$. Similarly, division by standard deviation $\sqrt{\text{var}}$
+scales the amplitudes, which is especially beneficial for
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Sigmoid_function&#34; target=&#34;_blank&#34;&gt;sigmoid&lt;/a&gt;-like activations.&lt;/p&gt;
+
+&lt;h3 id=&#34;training-and-batchnorm&#34;&gt;Training And Batchnorm&lt;/h3&gt;
+
+&lt;p&gt;The batch normalization procedure differs between the training and inference
+phases.  During the training, for each layer where we want to apply batchnorm
+we first compute the mini-batch mean:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{equation}
+\mu = \langle \mathbf{X} \rangle = \frac{1}{m} \sum_{i=1}^m \mathbf{X}_i,
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;where $\mathbf{X}_i$ is the $i$th feature-vector coming from the previous
+layer; $i = 1 \dots m$, where $m &amp;gt; 1$ is the batch size. We also obtain the
+mini-batch variance:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{equation}
+\text{var} = \frac{1}{m} \sum_{i=1}^m (\mathbf{X}_i - \mu)^2.
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;Now, the batchnorm&#39;s heart, normalization itself:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{equation}
+\hat {\mathbf{X}_i} = \frac{\mathbf{X}_i - \mu}{\sqrt{\text{var} + \epsilon}},
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;where a small constant $\epsilon$ is added for numerical stability.
+What if normalization of given layer was harmful? The algorithm
+provides two learnable parameters that can &#39;unroll&#39; the effect of
+batch normalization: scaling parameter $\gamma$ and shift $\beta.$
+After (optionally) applying those, we obtain the output
+of the batchnorm layer:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{equation}
+\mathbf{Y}_i = \gamma * \hat {\mathbf{X}_i} + \beta.
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;Please note that both mean $\mu$ and variance $\text{var}$ are vectors
+of as many elements as neurons in a given hidden layer.
+Operator $*$ denotes element-wise multiplication.&lt;/p&gt;
+
+&lt;h3 id=&#34;inference&#34;&gt;Inference&lt;/h3&gt;
+
+&lt;p&gt;In the inference phase it is perfectly normal to have one data sample at a
+time. So how to calculate batch mean if the whole batch is a single sample? To
+properly handle this, during training we also estimate batch mean and variance
+expectations ($E[\mathbf{X}]$ and $\text{Var}[\mathbf{X}]$) over all training
+set. Those vectors will replace $\mu$ and $\text{var}$ during inference,
+avoiding thus the problem of normalizing a singleton batch.&lt;/p&gt;
+
+&lt;h2 id=&#34;how-efficient-is-batchnorm&#34;&gt;How Efficient Is Batchnorm&lt;/h2&gt;
+
+&lt;p&gt;&lt;img src=&#34;http://penkovsky.com/img/posts/mnist/mnist-five.png&#34; alt=&#34;Handwritten digit&#34; /&gt;&lt;/p&gt;
+
+&lt;p&gt;So far we have played with tasks that provided low-dimensional input features.
+Now, we are going to test neural networks on a bit more interesting problem. We
+will apply our skills to automatically recognize human-written digits on a
+famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34; target=&#34;_blank&#34;&gt;MNIST dataset&lt;/a&gt;. This problem came from the need to have
+&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf&#34; target=&#34;_blank&#34;&gt;zip-code machine reading&lt;/a&gt;
+for more efficient postal services.&lt;/p&gt;
+
+&lt;p&gt;We construct two neural networks having two fully-connected hidden layers (300
+and 50 neurons). Both networks receive $28 \times 28 = 784$ inputs, the number
+of image pixels, and give back 10 outputs, the number of recognized classes
+(digits).  As in-between layer activations we apply ReLU $f(x) = \max(0,x)$.
+To obtain the classification probabilities vector in the result, we use
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation $\sigma(\mathbf{x})_i =
+\frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}.$ One of the networks in addition
+performs batch normalization before ReLUs.  Then, we train those using
+stochastic gradient descent&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; with learning rate $\alpha = 0.01$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
+and batch size $m = 100$.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/mnist/mnist-training.png&#34; alt=&#34;Training with batchnorm (blue) leads to high accuracies faster than without batchnorm (orange).&#34; width=&#34;450px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Neural network training on MNIST data.&lt;/h4&gt;
+  &lt;p&gt;
+    Training with batchnorm (blue) leads to high accuracies faster than without batchnorm (orange).
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;From the figure above we see that the neural network with batch
+normalization reaches about $98\%$ accuracy in ten epochs, whereas the other
+one is struggling to reach comparable performance in fifty epochs!
+Similar results can be obtained for other architectures.&lt;/p&gt;
+
+&lt;p&gt;It is worth mentioning that we still may lack understanding how exactly does
+batchnorm help. In its &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;original paper&lt;/a&gt;, it was hypothesized that
+batchnorm is reducing internal covariate shift.  Recently, &lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;it was
+shown&lt;/a&gt; that that is not necessary true. The best up-to-date
+explanation is that batchnorm makes optimization landscape smooth, thus making
+gradient descent training more efficient.&lt;/p&gt;
+
+&lt;h2 id=&#34;implementing-batchnorm&#34;&gt;Implementing batchnorm&lt;/h2&gt;
+
+&lt;p&gt;We will base our effort on the code previously introduced on Day 2&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.
+First, we will redefined the &lt;code&gt;Layer&lt;/code&gt; data structure making it more granular:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;-- Linear layer with weights and biases&lt;/span&gt;
+               &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- Same as Linear, but without biases&lt;/span&gt;
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- Batchnorm with running mean, variance, and two&lt;/span&gt;
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- learnable affine parameters&lt;/span&gt;
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- Usually non-linear element-wise activation&lt;/span&gt;
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;FActivation&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Amazing! Now we can distinguish between several kinds of layers: affine
+(linear), activation, and batchnorm. Since batchnorm already compensates for a
+bias, we do not actually need biases in the subsequent linear layers. That is
+why we define a &lt;code&gt;Linear&#39;&lt;/code&gt; layer without biases. We also extend
+&lt;code&gt;Gradients&lt;/code&gt; to accommodate our new layers structure:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;-- Weight and bias gradients&lt;/span&gt;
+                   &lt;span style=&#34;color:#66d9ef&#34;&gt;LinearGradients&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+                   &lt;span style=&#34;color:#75715e&#34;&gt;-- Weight gradients&lt;/span&gt;
+                   &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&amp;#39;Gradients&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+                   &lt;span style=&#34;color:#75715e&#34;&gt;-- Batchnorm parameters and gradients&lt;/span&gt;
+                   &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BN1&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+                   &lt;span style=&#34;color:#75715e&#34;&gt;-- No learnable parameters&lt;/span&gt;
+                   &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;NoGrad&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Next, we want to extend the neural network propagation function &lt;code&gt;_pass&lt;/code&gt;,
+depending on the layer.  That is easy with &lt;a href=&#34;http://learnyouahaskell.com/syntax-in-functions&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;pattern
+matching&lt;/em&gt;&lt;/a&gt;.
+Here is how we match the &lt;code&gt;Batchnorm1d&lt;/code&gt; layer and its parameters:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mu&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;variance&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gamma&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;)
+        &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;BN1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;batchMu&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;batchVariance&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dGamma&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dBeta&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;)
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As previously, the &lt;code&gt;_pass&lt;/code&gt; function receives an input &lt;code&gt;inp&lt;/code&gt; and layer
+parameters. The second argument is the pattern we are matching against, making
+our algorithm specific in this case for &lt;code&gt;(Batchnorm1D ...)&lt;/code&gt;.  We will also
+specify &lt;code&gt;_pass&lt;/code&gt; for other kinds of &lt;code&gt;Layer&lt;/code&gt;.  Thus, we have obtained a
+&lt;em&gt;polymorphic&lt;/em&gt; &lt;code&gt;_pass&lt;/code&gt; function with respect to the layers.  Finally, the
+equation results in a tuple of three: gradients to back propagate &lt;code&gt;dX&lt;/code&gt;,
+predictions &lt;code&gt;pred&lt;/code&gt;, and prepended list &lt;code&gt;t&lt;/code&gt; with values &lt;code&gt;BN1&lt;/code&gt; computed in this
+layer (batch mean &lt;code&gt;batchMu&lt;/code&gt;, variance &lt;code&gt;batchVariance&lt;/code&gt;, and learnable parameters
+gradients).&lt;/p&gt;
+
+&lt;p&gt;The forward pass as illustrated in &lt;a href=&#34;https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html&#34; target=&#34;_blank&#34;&gt;this post&lt;/a&gt;:
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;-- Forward&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;eps&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1e-12&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;br&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;-- Broadcast (replicate) rows from 1 to batch size&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;recip&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;fromIntegral&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;)
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 1: mean from Equation (1)&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;batchMu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;batchMu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` (&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;)
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 2: mean subtraction&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;batchMu&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 3&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;sq&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.^&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 4: variance, Equation (2)&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;batchVariance&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;batchVariance&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` (&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sq&lt;/span&gt;)
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 5&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;sqrtvar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sqrtA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;batchVariance&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;addC&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;eps&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 6&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;ivar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;map&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;recip&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sqrtvar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 7: normalize, Equation (3)&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;xhat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ivar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 8: rescale&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;gammax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gamma&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xhat&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 9: translate, Equation (4)&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gammax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
+
+&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;,
+there is a recurrent call obtaining gradients from the next layer,
+neural network prediction &lt;code&gt;pred&lt;/code&gt; and computed values tail &lt;code&gt;t&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;        (&lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I prefer to keep the backward pass without any simplifications.
+That makes clear which step corresponds to which:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;-- Backward&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 9&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dBeta&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 8&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dGamma&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xhat&lt;/span&gt;)
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dxhat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dxhat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gamma&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 7&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;divar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dxhat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dxmu1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dxhat&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ivar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 6&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dsqrtvar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;map&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;recip&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;sqrtvar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.^&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;divar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 5&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dvar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;ivar&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dsqrtvar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 4&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dsq&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dvar&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 3&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dxmu2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;xmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dsq&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 2&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dx1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dxmu1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dxmu2&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dmu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;map&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dx1&lt;/span&gt;
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- Step 1&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dx2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;_scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dmu&lt;/span&gt;)
+
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dx1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dx2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that often we need to perform operations like mean subtraction
+$\mathbf{X} - \mathbf{\mu}$, where in practice we have a matrix
+$\mathbf{X}$ and a vector $\mathbf{\mu}$.
+How do you subtract a vector from a matrix?  Right,
+&lt;em&gt;you don&#39;t&lt;/em&gt;.  You can subtract only two matrices. Libraries like &lt;code&gt;Numpy&lt;/code&gt; may
+have a &lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;broadcasting&lt;/em&gt;&lt;/a&gt; magic that would implicitly convert a
+vector to a matrix&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;. This broadcasting might be useful, but might also
+obscure different kinds of bugs. We instead perform explicit vector to matrix
+transformations. For our convenience, we have a shortcut &lt;code&gt;b = br (rows inp)&lt;/code&gt;
+that will expand a vector to the same number of rows as in &lt;code&gt;inp&lt;/code&gt;. Function
+&lt;code&gt;br&lt;/code&gt; (&#39;broadcast&#39;), in its turn, is expanding a vector as matrix rows:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;br&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;expandWithin&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Dim2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is an example how &lt;code&gt;br&lt;/code&gt; works. First, we start
+an interactive Haskell session and load &lt;code&gt;NeuralNetwork.hs&lt;/code&gt; module:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;$ stack exec ghci
+GHCi, version 8.2.2: http://www.haskell.org/ghc/  :? for help
+Prelude&amp;gt; :l src/NeuralNetwork.hs&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, we test &lt;code&gt;br&lt;/code&gt; function on a vector &lt;code&gt;[1, 2, 3, 4]&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;fromList&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;)
+  [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+
+&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;br&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;D&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Seq&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;))
+  [ [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  , [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  , [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As we can see, a new matrix with three identical rows has been obtained.
+Note that &lt;code&gt;a&lt;/code&gt; has type &lt;code&gt;Array U Seq&lt;/code&gt;, meaning that
+data are stored in an unboxed array. Whereas the result is of type &lt;code&gt;Array D Seq&lt;/code&gt;,
+a so-called &lt;em&gt;delayed array&lt;/em&gt;. This delayed array is not an actual
+array, but rather a promise to compute&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; an array.
+In order to obtain an actual array residing in memory, use &lt;code&gt;compute&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Seq&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;))
+  [ [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  , [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  , [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;4.0&lt;/span&gt; ]
+  ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You will find more information about manipulating arrays in
+&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;. Similarly to &lt;code&gt;br&lt;/code&gt;, there exist several more convenience
+functions, &lt;code&gt;rowsLike&lt;/code&gt; and &lt;code&gt;colsLike&lt;/code&gt;. Those are useful in conjunction with
+&lt;code&gt;_sumRows&lt;/code&gt; and &lt;code&gt;_sumCols&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- | Sum values in each column and produce a delayed 1D Array&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;D&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumRows&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foldlWithin&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Dim2&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;-- | Sum values in each row and produce a delayed 1D Array&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumCols&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;D&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumCols&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foldlWithin&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Dim1&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is an example of &lt;code&gt;_sumCols&lt;/code&gt; and &lt;code&gt;colsLike&lt;/code&gt; when computing
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation
+$\sigma(\mathbf{x})_i = \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}$:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;softmax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;softmax&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;expA&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;x1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;_sumCols&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x1&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;colsLike&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;./&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x2&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we define our neural network with two hidden linear layers and batch
+normalization as:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [ &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;)
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;)
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;
+            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;
+            ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The number of inputs is the total number of $28 \times 28 = 784$
+image pixels and the number of outputs is the number of classes (ten digits).
+We randomly generate the initial weights &lt;code&gt;w1&lt;/code&gt;, &lt;code&gt;w2&lt;/code&gt;, and &lt;code&gt;w3&lt;/code&gt;.
+And set initial batchnorm layer parameters as follows:
+means to zeroes,
+variances to ones,
+scaling parameters to ones,
+and translation parameters to zeroes:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;784&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;300&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;]
+  (&lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;replicate&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;replicate&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+  (&lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b2&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;)
+  (&lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b3&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Remember that the number of batchnorm parameters equals to the number of neurons.
+It is a common practice to put batch normalization before activations, however
+this sequence is not strict: one can put batch normalization after activations too.
+For comparison, we also specify a neural network with two hidden layers without
+batch normalization.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [ &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b1&lt;/span&gt;
+             , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;
+             , &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b2&lt;/span&gt;
+             , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;
+             , &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b3&lt;/span&gt;
+             ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In both cases the output softmax activation is omitted as it is computed
+together with loss gradients in the final recursive call in &lt;code&gt;_pass&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt;)
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;softmax&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;
+        &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here, &lt;code&gt;[]&lt;/code&gt; on the left-hand side signifies an empty list of input layers,
+and &lt;code&gt;[]&lt;/code&gt; on the right-hand side is the empty tail of computed values in the
+beginning of the backward pass.&lt;/p&gt;
+
+&lt;p&gt;The complete project is available on &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
+I recommend playing with different neuron networks architectures
+and parameters. Have fun!&lt;/p&gt;
+
+&lt;h2 id=&#34;batchnorm-pitfalls&#34;&gt;Batchnorm pitfalls&lt;/h2&gt;
+
+&lt;p&gt;There are several potential traps when using batchnorm.  To avoid them, it is
+essential to ensure that every batch represents the whole dataset, i.e. it has
+data coming from the same distribution as the problem you are trying to solve.
+&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; more about that.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Despite its pitfalls, batchnorm is an important concept and remains a popular
+method in the context of deep neural networks. Batchnorm&#39;s power is that it can
+substantially reduce the number of training epochs or even help achieving
+better neural network accuracy. After discussing this, we are prepared for such
+hot subjects as convolutional neural networks and reinforcement learning. Stay
+tuned!&lt;/p&gt;
+
+&lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
+
+&lt;h3 id=&#34;ai-and-neural-networks&#34;&gt;AI And Neural Networks&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34; target=&#34;_blank&#34;&gt;Richard Sutton. The Bitter Lesson&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;Batch normalization paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;How Does Batch Normalization Help Optimization?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;On The Perils of Batch Norm&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h3 id=&#34;haskell&#34;&gt;Haskell&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/&#34; target=&#34;_blank&#34;&gt;Why I think Haskell is the best general purpose language&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md&#34; target=&#34;_blank&#34;&gt;An opinionated beginner&#39;s guide to Haskell in mid 2019&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;Massiv Array Library&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
+});
+&lt;/script&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;Most of the currently used neural network techniques date back to 80s. They became widely popular only now because of faster hardware and large datasets availability. The distinctively new methods are few: long short-term memory (1997), generative adversarial networks (2014), batchnorm (2015).
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-2&#34;&gt;The difference of stochastic gradient descent is that it approximates the true gradient by a gradient over a mini-batch.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-3&#34;&gt;We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batch normalization paper&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-4&#34;&gt;There are some technical differences, though. Namely, we use &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;massiv&lt;/a&gt; library supporting multidimensional arrays and parallelism. For the reference, &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/massiv&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are the first two days reimplemented with &lt;code&gt;massiv&lt;/code&gt;. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-5&#34;&gt;In general, broadcasting is about making multidimensional arrays with different shapes compatible, not only vector to matrix translation.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-6&#34;&gt;These delayed arrays are useful for computing optimizations such as &lt;em&gt;fusion&lt;/em&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Coupled Delay Systems For Brain-Inspired Computing</title>
       <link>http://penkovsky.com/talk/ictp2019/</link>
       <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
@@ -43,7 +537,7 @@ Networks&lt;/a&gt;. For comparison, see also
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2&#34; target=&#34;_blank&#34;&gt;Day 2: Why My Network Does Not Work?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34; target=&#34;_blank&#34;&gt;on
@@ -269,11 +763,12 @@ argument.&lt;/p&gt;
 gradients by hand can easily become a tedious task.  In this post we have seen
 how automatic differentiation can face this problem.&lt;/p&gt;
 
-&lt;p&gt;In the next posts we will apply automatic differentiation to real neural networks.
-We will talk about batch normalization, another crucial method in modern deep learning.
-And we will ramp it up to convolutional networks
-allowing us to solve some interesting challenges.
-Stay tuned.&lt;/p&gt;
+&lt;p&gt;In the next posts we will apply automatic differentiation to real neural
+networks. We will talk about
+&lt;a href=&#34;http://penkovsky.com/post/neural-networks-4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;,
+another crucial method in modern deep learning.  And we will ramp it up to
+convolutional networks allowing us to solve some interesting challenges.
+Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
 
