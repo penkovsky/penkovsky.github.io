@@ -320,8 +320,8 @@ have a &lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/theory.broadcasting
 vector to a matrix&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;. This broadcasting might be useful, but might also
 obscure different kinds of bugs. We instead perform explicit vector to matrix
 transformations. For our convenience, we have a shortcut &lt;code&gt;b = br (rows inp)&lt;/code&gt;
-that will expand a vector to the same number of rows as in &lt;code&gt;inp&lt;/code&gt;. Function
-&lt;code&gt;br&lt;/code&gt; (&#39;broadcast&#39;), in its turn, is expanding a vector as matrix rows:&lt;/p&gt;
+that will expand a vector to the same number of rows as in &lt;code&gt;inp&lt;/code&gt;.
+Where function &lt;code&gt;br&lt;/code&gt; (&#39;broadcast&#39;) is:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;br&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;expandWithin&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Dim2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -351,7 +351,7 @@ Prelude&amp;gt; :l src/NeuralNetwork.hs&lt;/pre&gt;&lt;/div&gt;
 Note that &lt;code&gt;a&lt;/code&gt; has type &lt;code&gt;Array U Seq&lt;/code&gt;, meaning that
 data are stored in an unboxed array. Whereas the result is of type &lt;code&gt;Array D Seq&lt;/code&gt;,
 a so-called &lt;em&gt;delayed array&lt;/em&gt;. This delayed array is not an actual
-array, but rather a promise to compute&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; an array.
+array, but rather a &lt;em&gt;promise to compute&lt;/em&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt; an array in the future.
 In order to obtain an actual array residing in memory, use &lt;code&gt;compute&lt;/code&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;NeuralNetwork&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
@@ -477,6 +477,7 @@ tuned!&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/&#34; target=&#34;_blank&#34;&gt;Why I think Haskell is the best general purpose language&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md&#34; target=&#34;_blank&#34;&gt;An opinionated beginner&#39;s guide to Haskell in mid 2019&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;Massiv Array Library&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=AAx2a0bUsxA&#34; target=&#34;_blank&#34;&gt;Alexey&#39;s presentation about massiv&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;

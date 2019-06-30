@@ -709,8 +709,8 @@ have a <a href="https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html" 
 vector to a matrix<sup class="footnote-ref" id="fnref:fn-5"><a href="#fn:fn-5">5</a></sup>. This broadcasting might be useful, but might also
 obscure different kinds of bugs. We instead perform explicit vector to matrix
 transformations. For our convenience, we have a shortcut <code>b = br (rows inp)</code>
-that will expand a vector to the same number of rows as in <code>inp</code>. Function
-<code>br</code> ('broadcast'), in its turn, is expanding a vector as matrix rows:</p>
+that will expand a vector to the same number of rows as in <code>inp</code>.
+Where function <code>br</code> ('broadcast') is:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">br</span> <span style="color:#a6e22e">rows&#39;</span> <span style="color:#a6e22e">v</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">expandWithin</span> <span style="color:#66d9ef">Dim2</span> <span style="color:#a6e22e">rows&#39;</span> <span style="color:#a6e22e">const</span> <span style="color:#a6e22e">v</span></code></pre></div>
 
@@ -740,7 +740,7 @@ Prelude&gt; :l src/NeuralNetwork.hs</pre></div>
 Note that <code>a</code> has type <code>Array U Seq</code>, meaning that
 data are stored in an unboxed array. Whereas the result is of type <code>Array D Seq</code>,
 a so-called <em>delayed array</em>. This delayed array is not an actual
-array, but rather a promise to compute<sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup> an array.
+array, but rather a <em>promise to compute</em><sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup> an array in the future.
 In order to obtain an actual array residing in memory, use <code>compute</code>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#f92672">*</span><span style="color:#66d9ef">NeuralNetwork</span><span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">compute</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>
@@ -866,6 +866,7 @@ tuned!</p>
 <li><a href="http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/" target="_blank">Why I think Haskell is the best general purpose language</a></li>
 <li><a href="https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md" target="_blank">An opinionated beginner's guide to Haskell in mid 2019</a></li>
 <li><a href="http://hackage.haskell.org/package/massiv" target="_blank">Massiv Array Library</a></li>
+<li><a href="https://www.youtube.com/watch?v=AAx2a0bUsxA" target="_blank">Alexey's presentation about massiv</a></li>
 </ul>
 
 <script type="text/x-mathjax-config">
