@@ -454,9 +454,9 @@ smaller <em>mini-batches</em>. During a forward/backward pass, only one batch is
 typically processed.</p>
 
 <p>As the name suggests, batchnorm transformation is acting on individual batches
-of data. The linear outputs of linear layers may cause activation function
-saturation. In case of ReLU (rectified linear unit) activation $f(x)=\max(0,
-x)$, for instance, all negative values will result in zero activations.
+of data. The outputs of linear layers may cause activation function
+saturation. In case of ReLU (rectified linear unit)
+$f(x)=\max(0, x)$ activation, for instance, all negative values will result in zero activations.
 Therefore, it is good idea to normalize those values by subtracting the batch
 mean $\mu$. Similarly, division by standard deviation $\sqrt{\text{var}}$
 scales the amplitudes, which is especially beneficial for
@@ -492,12 +492,11 @@ $$</p>
 \end{equation}
 $$</p>
 
-<p>where a small constant $\epsilon$ is added for numerical stability.
-What if normalization of given layer was harmful? The algorithm
-provides two learnable parameters that can 'unroll' the effect of
-batch normalization: scaling parameter $\gamma$ and shift $\beta.$
-After (optionally) applying those, we obtain the output
-of the batchnorm layer:</p>
+<p>where a small constant $\epsilon$ is added for numerical stability.  What if
+normalization of the given layer was harmful? The algorithm provides two
+learnable parameters that in the worst case scenario can undo the effect of
+batch normalization: scaling parameter $\gamma$ and shift $\beta.$ After
+(optionally) applying those, we obtain the output of the batchnorm layer:</p>
 
 <p>$$
 \begin{equation}
@@ -513,8 +512,8 @@ Operator $*$ denotes element-wise multiplication.</p>
 
 <p>In the inference phase it is perfectly normal to have one data sample at a
 time. So how to calculate batch mean if the whole batch is a single sample? To
-properly handle this, during training we also estimate batch mean and variance
-expectations ($E[\mathbf{X}]$ and $\text{Var}[\mathbf{X}]$) over all training
+properly handle this, during training we estimate mean and variance
+($E[\mathbf{X}]$ and $\text{Var}[\mathbf{X}]$) over all training
 set. Those vectors will replace $\mu$ and $\text{var}$ during inference,
 avoiding thus the problem of normalizing a singleton batch.</p>
 
@@ -565,10 +564,11 @@ Similar results can be obtained for other architectures.</p>
 
 <p>It is worth mentioning that we still may lack understanding how exactly does
 batchnorm help. In its <a href="https://arxiv.org/abs/1502.03167" target="_blank">original paper</a>, it was hypothesized that
-batchnorm is reducing internal covariate shift.  Recently, <a href="https://arxiv.org/abs/1805.11604" target="_blank">it was
+batchnorm is reducing internal covariate shift. Recently, <a href="https://arxiv.org/abs/1805.11604" target="_blank">it was
 shown</a> that that is not necessary true. The best up-to-date
-explanation is that batchnorm makes optimization landscape smooth, thus making
-gradient descent training more efficient.</p>
+<a href="https://arxiv.org/abs/1805.11604" target="_blank">explanation</a> is that batchnorm makes optimization landscape
+smooth, thus making gradient descent training more efficient. This, in its
+turn, allows <a href="https://arxiv.org/abs/1502.03167" target="_blank">using higher learning rates</a> than without batchnorm!</p>
 
 <h2 id="implementing-batchnorm">Implementing batchnorm</h2>
 
@@ -774,7 +774,9 @@ $\sigma(\mathbf{x})_i = \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}$:</p>
       <span style="color:#a6e22e">x2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">x1</span> `<span style="color:#a6e22e">colsLike</span>` <span style="color:#a6e22e">x</span>
   <span style="color:#66d9ef">in</span> (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">x0</span> <span style="color:#f92672">./</span> <span style="color:#a6e22e">x2</span>)</code></pre></div>
 
-<p>Finally, we define our neural network with two hidden linear layers and batch
+<p>Note that softmax is different from element-wise activations. Instead, softmax
+acts as a fully-connected layer that receives a vector and outputs a vector.
+Finally, we define our neural network with two hidden linear layers and batch
 normalization as:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> [ <span style="color:#66d9ef">Linear&#39;</span> <span style="color:#a6e22e">w1</span>
