@@ -29,7 +29,7 @@ human-knowledge can outperform human-centeric approaches. Indeed, neural
 networks are general enough and they leverage computation. Then, it is not
 surprising how they can exhibit millions of learnable degrees of freedom.&lt;/p&gt;
 
-&lt;p&gt;The biggest problem with neural networks is two-fold: (1) how to train those
+&lt;p&gt;The biggest challenge with neural networks is two-fold: (1) how to train those
 millions of parameters, and (2) how to interpret them. Batch normalization
 (shortly &lt;em&gt;batchnorm&lt;/em&gt;) was &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;introduced&lt;/a&gt; as an attempt to
 make training more efficient. The method can dramatically reduce the number of
@@ -66,11 +66,11 @@ typically processed.&lt;/p&gt;
 
 &lt;p&gt;As the name suggests, batchnorm transformation is acting on individual batches
 of data. The outputs of linear layers may cause activation function
-saturation. In case of ReLU (rectified linear unit)
-$f(x)=\max(0, x)$ activation, for instance, all negative values will result in zero activations.
-Therefore, it is good idea to normalize those values by subtracting the batch
-mean $\mu$. Similarly, division by standard deviation $\sqrt{\text{var}}$
-scales the amplitudes, which is especially beneficial for
+saturation/&#39;dead neurons&#39;. For instance, in case of ReLU (rectified linear
+unit) $f(x)=\max(0, x)$ activation, all negative values will result in zero
+activations.  Therefore, it is a good idea to normalize those values by
+subtracting the batch mean $\mu$. Similarly, division by standard deviation
+$\sqrt{\text{var}}$ scales the amplitudes, which is especially beneficial for
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Sigmoid_function&#34; target=&#34;_blank&#34;&gt;sigmoid&lt;/a&gt;-like activations.&lt;/p&gt;
 
 &lt;h3 id=&#34;training-and-batchnorm&#34;&gt;Training And Batchnorm&lt;/h3&gt;
@@ -133,9 +133,9 @@ avoiding thus the problem of normalizing a singleton batch.&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;http://penkovsky.com/img/posts/mnist/mnist-five.png&#34; alt=&#34;Handwritten digit&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So far we have played with tasks that provided low-dimensional input features.
-Now, we are going to test neural networks on a bit more interesting problem. We
-will apply our skills to automatically recognize human-written digits on a
-famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34; target=&#34;_blank&#34;&gt;MNIST dataset&lt;/a&gt;. This problem came from the need to have
+Now, we are going to test neural networks on a bit more interesting challenge.
+We will apply our skills to automatically recognize human-written digits on a
+famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34; target=&#34;_blank&#34;&gt;MNIST dataset&lt;/a&gt;. This challenge came from the need to have
 &lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf&#34; target=&#34;_blank&#34;&gt;zip-code machine reading&lt;/a&gt;
 for more efficient postal services.&lt;/p&gt;
 
@@ -448,8 +448,8 @@ and parameters. Have fun!&lt;/p&gt;
 
 &lt;p&gt;There are several potential traps when using batchnorm.  To avoid them, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
-data coming from the same distribution as the problem you are trying to solve.
-&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; more about that.&lt;/p&gt;
+data coming from the same distribution as the machine learning task you are
+trying to solve.  &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; more about that.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
