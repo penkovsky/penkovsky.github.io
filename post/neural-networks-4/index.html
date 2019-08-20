@@ -171,7 +171,7 @@
         
 
         <li class="nav-item">
-          <a href="http://goo.gl/Vf0P9X" target="_blank" rel="noopener">
+          <a href="http://bit.ly/penkovsky" target="_blank" rel="noopener">
             
             <span>CV</span>
             
@@ -528,12 +528,12 @@ famous <a href="http://yann.lecun.com/exdb/mnist/" target="_blank">MNIST dataset
 <a href="http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf" target="_blank">zip-code machine reading</a>
 for more efficient postal services.</p>
 
-<p>We construct two neural networks having two fully-connected hidden layers (300
-and 50 neurons). Both networks receive $28 \times 28 = 784$ inputs, the number
-of image pixels, and give back 10 outputs, the number of recognized classes
-(digits).  As in-between layer activations we apply ReLU $f(x) = \max(0,x)$.
-To obtain the classification probabilities vector in the result, we use
-<a href="https://en.wikipedia.org/wiki/Softmax_function" target="_blank">softmax</a> activation $\sigma(\mathbf{x})_i =
+<p>We construct two neural networks, each having two fully-connected hidden layers
+(300 and 50 neurons). Both networks receive $28 \times 28 = 784$ inputs, the
+number of image pixels, and give back 10 outputs, the number of recognized
+classes (digits).  As in-between layer activations we apply ReLU $f(x) =
+\max(0,x)$.  To obtain the classification probabilities vector in the result,
+we use <a href="https://en.wikipedia.org/wiki/Softmax_function" target="_blank">softmax</a> activation $\sigma(\mathbf{x})_i =
 \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}.$ One of the networks in addition
 performs batch normalization before ReLUs.  Then, we train those using
 stochastic gradient descent<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup> with learning rate $\alpha = 0.01$<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>
@@ -838,7 +838,7 @@ and parameters. Have fun!</p>
 <p>There are several potential traps when using batchnorm.  To avoid them, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve.  <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> more about that.</p>
+trying to solve.  <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> about that.</p>
 
 <h2 id="summary">Summary</h2>
 
@@ -855,6 +855,7 @@ tuned!</p>
 
 <ul>
 <li><a href="http://incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank">Richard Sutton. The Bitter Lesson</a></li>
+<li><a href="http://neuralnetworksanddeeplearning.com/chap1.html" target="_blank">Using neural nets to recognize handwritten digits</a></li>
 <li><a href="https://arxiv.org/abs/1502.03167" target="_blank">Batch normalization paper</a></li>
 <li><a href="https://arxiv.org/abs/1805.11604" target="_blank">How Does Batch Normalization Help Optimization?</a></li>
 <li><a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">On The Perils of Batch Norm</a></li>

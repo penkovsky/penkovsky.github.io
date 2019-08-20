@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Coupled Nonlinear Delay Systems As Deep Convolutional Neural Networks</title>
+      <link>http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Day 4: The Importance Of Batch Normalization</title>
       <link>http://penkovsky.com/post/neural-networks-4/</link>
       <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
@@ -139,12 +148,12 @@ famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34; target=&#34;_blank
 &lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf&#34; target=&#34;_blank&#34;&gt;zip-code machine reading&lt;/a&gt;
 for more efficient postal services.&lt;/p&gt;
 
-&lt;p&gt;We construct two neural networks having two fully-connected hidden layers (300
-and 50 neurons). Both networks receive $28 \times 28 = 784$ inputs, the number
-of image pixels, and give back 10 outputs, the number of recognized classes
-(digits).  As in-between layer activations we apply ReLU $f(x) = \max(0,x)$.
-To obtain the classification probabilities vector in the result, we use
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation $\sigma(\mathbf{x})_i =
+&lt;p&gt;We construct two neural networks, each having two fully-connected hidden layers
+(300 and 50 neurons). Both networks receive $28 \times 28 = 784$ inputs, the
+number of image pixels, and give back 10 outputs, the number of recognized
+classes (digits).  As in-between layer activations we apply ReLU $f(x) =
+\max(0,x)$.  To obtain the classification probabilities vector in the result,
+we use &lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation $\sigma(\mathbf{x})_i =
 \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}.$ One of the networks in addition
 performs batch normalization before ReLUs.  Then, we train those using
 stochastic gradient descent&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; with learning rate $\alpha = 0.01$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
@@ -449,7 +458,7 @@ and parameters. Have fun!&lt;/p&gt;
 &lt;p&gt;There are several potential traps when using batchnorm.  To avoid them, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve.  &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; more about that.&lt;/p&gt;
+trying to solve.  &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -466,6 +475,7 @@ tuned!&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34; target=&#34;_blank&#34;&gt;Richard Sutton. The Bitter Lesson&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap1.html&#34; target=&#34;_blank&#34;&gt;Using neural nets to recognize handwritten digits&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;Batch normalization paper&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;How Does Batch Normalization Help Optimization?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;On The Perils of Batch Norm&lt;/a&gt;&lt;/li&gt;
@@ -2311,15 +2321,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
       <guid>http://penkovsky.com/project/hmep/</guid>
       <description>&lt;p&gt;&lt;a href=&#34;https://github.com/masterdezign/hmep&#34;&gt;Multi Expression Programming&lt;/a&gt; is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.&lt;/p&gt;
 </description>
-    </item>
-    
-    <item>
-      <title>Laser chimeras as a paradigm for multistable patterns in complex systems</title>
-      <link>http://penkovsky.com/publication/laser-chimeras/</link>
-      <pubDate>Tue, 14 Jul 2015 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/laser-chimeras/</guid>
-      <description></description>
     </item>
     
   </channel>
