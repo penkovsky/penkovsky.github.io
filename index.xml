@@ -518,6 +518,28 @@ MathJax.Hub.Config({
     </item>
     
     <item>
+      <title>Energy-efficient AI</title>
+      <link>http://penkovsky.com/project/edge-ai/</link>
+      <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <description>&lt;p&gt;We aim at bringing AI from the data centers to the edge.
+Lower energy consumption will improve battery-powered devices autonomy.
+Moreover, no need for data transfer over the network will ultimately enhance privacy
+and provide better data security.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
+      <link>http://penkovsky.com/publication/stochastic-bnn/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/stochastic-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Coupled Delay Systems For Brain-Inspired Computing</title>
       <link>http://penkovsky.com/talk/ictp2019/</link>
       <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
@@ -2301,25 +2323,6 @@ $f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follo
     beta = 1.6&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The complete model is available &lt;a href=&#34;https://gist.github.com/pkvk/18aca8694da3cf16fbf14eacd154cbdd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>On Theory and Modeling of Complex Nonlinear Delay Dynamics</title>
-      <link>http://penkovsky.com/talk/juelich2018/</link>
-      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/talk/juelich2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>HMEP</title>
-      <link>http://penkovsky.com/project/hmep/</link>
-      <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/hmep/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://github.com/masterdezign/hmep&#34;&gt;Multi Expression Programming&lt;/a&gt; is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.&lt;/p&gt;
 </description>
     </item>
     

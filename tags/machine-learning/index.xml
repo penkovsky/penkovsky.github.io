@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Mon, 20 Aug 2018 10:01:19 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 20 Jun 2019 10:00:00 +0200</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/machine-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Energy-efficient AI</title>
+      <link>http://penkovsky.com/project/edge-ai/</link>
+      <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <description>We aim at bringing AI from the data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.</description>
+    </item>
     
     <item>
       <title>Bioinspired computing</title>

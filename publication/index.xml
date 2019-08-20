@@ -22,6 +22,15 @@
     </item>
     
     <item>
+      <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
+      <link>http://penkovsky.com/publication/stochastic-bnn/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/stochastic-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
       <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
       <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>

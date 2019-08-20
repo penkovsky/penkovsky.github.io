@@ -31,6 +31,24 @@
     </item>
     
     <item>
+      <title>Energy-efficient AI</title>
+      <link>http://penkovsky.com/project/edge-ai/</link>
+      <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <description>We aim at bringing AI from the data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.</description>
+    </item>
+    
+    <item>
+      <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
+      <link>http://penkovsky.com/publication/stochastic-bnn/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/stochastic-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Coupled Delay Systems For Brain-Inspired Computing</title>
       <link>http://penkovsky.com/talk/ictp2019/</link>
       <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
