@@ -500,21 +500,25 @@ the result and start again from the previously known best position.
 Wouldn't it be nice if instead each iteration would improve the result
 at least by a little bit?</p>
 
-<h2 id="backpropagation">Backpropagation</h2>
+<h2 id="automatic-differentiation">Automatic Differentiation</h2>
 
-<p>Instead of random search in random direction, we can use the precise direction
-and amount to change the input so that the output would improve. And that tells
-us the <a href="https://en.wikipedia.org/wiki/Gradient" target="_blank">gradient</a>.  In his
+<p>Instead of random search in random direction, we can make use of the precise
+direction and amount to change the input so that the output would improve. And
+that is exactly what the <a href="https://en.wikipedia.org/wiki/Gradient" target="_blank">gradient</a>
+tells us.  Instead of manually computing the gradient every time, we can employ
+some clever algorithm. There exist multiple approaches: numerical, symbolic,
+and automatic differentiation.  In his
 <a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">article</a>,
-Dominic Steinitz explains the differences between the numerical, symbolic, and
-automatic differentiation. Here, we will directly explain the last approach,
-invaluable for neural networks training.</p>
+Dominic Steinitz explains the differences between them.  The last approach,
+automatic differentiation is exactly what we need: accurate gradients with
+minimal overhead.  Here, we will briefly explain the concept.</p>
 
-<p>The idea is that first we will explicitly define the gradient for our elementary
-operators. Then, we will exploit the <a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain
-rule</a> when combining those into neural
-networks or whatever we like. That strategy will provide the necessary
-gradients. Let us illustrate the concept.</p>
+<p>The idea behind automatic differentiation is that we explicitly define
+gradients only for elementary, basic operators. Then, we exploit the
+<a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> combining those
+operators into neural networks or whatever we like. That strategy will infer
+the necessary gradients by itself. Let us illustrate the method with an
+example.</p>
 
 <p>Below we define both multiplication operator and its gradient using the chain
 rule, i.e. $\frac {d} {dt} x(t) y(t) = x(t) y'(t) + x'(t) y(t)$:</p>
