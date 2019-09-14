@@ -334,7 +334,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    13 min read
+    14 min read
   </span>
   
 
@@ -437,7 +437,7 @@ recent neural network advances<sup class="footnote-ref" id="fnref:fn-1"><a href=
 <li><a href="/post/neural-networks-3/" target="_blank">Day 3: Haskell Guide To Neural Networks</a></li>
 </ul>
 
-<p>The source code from this post is available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day4" target="_blank">on Github</a>.</p>
+<p>The source code from this post is available <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4" target="_blank">on Github</a>.</p>
 
 <hr />
 
@@ -445,7 +445,7 @@ recent neural network advances<sup class="footnote-ref" id="fnref:fn-1"><a href=
 
 <h3 id="what-is-a-batch">What Is A Batch?</h3>
 
-<p>Until now, we have looked on toy datasets. They were so small that they could
+<p>Until now, we have looked on toy datasets. These were so small that they could
 completely fit into the memory. However, in the real world exist huge databases
 occupying hundreds of gigabytes of memory, such as
 <a href="http://www.image-net.org/" target="_blank">Imagenet</a> for example. Those often would not fit
@@ -829,13 +829,20 @@ together with loss gradients in the final recursive call in <code>_pass</code>:<
 and <code>[]</code> on the right-hand side is the empty tail of computed values in the
 beginning of the backward pass.</p>
 
-<p>The complete project is available on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day4" target="_blank">Github</a>.
+<p>The complete project is available on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4" target="_blank">Github</a>.
 I recommend playing with different neuron networks architectures
 and parameters. Have fun!</p>
 
-<h2 id="batchnorm-pitfalls">Batchnorm pitfalls</h2>
+<h2 id="batchnorm-pitfalls">Batchnorm Pitfalls</h2>
 
-<p>There are several potential traps when using batchnorm.  To avoid them, it is
+<p>There are several potential traps when using batchnorm. First,
+batchnorm is different
+<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305" target="_blank">during training</a>
+and
+<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355" target="_blank">during inference</a>.
+That makes your implementation more complicated.
+Second, batchnorm may <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">fail</a> when training data come from different datasets.
+To avoid them, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
 trying to solve.  <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> about that.</p>
@@ -886,7 +893,7 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
 <li id="fn:fn-3">We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original <a href="https://arxiv.org/abs/1502.03167" target="_blank">batch normalization paper</a>.
  <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
-<li id="fn:fn-4">There are some technical differences, though. Namely, we use <a href="http://hackage.haskell.org/package/massiv" target="_blank">massiv</a> library supporting multidimensional arrays and parallelism. For the reference, <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/massiv" target="_blank">here</a> are the first two days reimplemented with <code>massiv</code>. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
+<li id="fn:fn-4">There are some technical differences, though. Namely, we use <a href="http://hackage.haskell.org/package/massiv" target="_blank">massiv</a> library supporting multidimensional arrays and parallelism. For the reference, <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/massiv" target="_blank">here</a> are the first two days reimplemented with <code>massiv</code>. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
  <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
 <li id="fn:fn-5">In general, broadcasting is about making multidimensional arrays with different shapes compatible, not only vector to matrix translation.
  <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>

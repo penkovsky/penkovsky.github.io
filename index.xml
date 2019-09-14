@@ -57,7 +57,7 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 &lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -65,7 +65,7 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 
 &lt;h3 id=&#34;what-is-a-batch&#34;&gt;What Is A Batch?&lt;/h3&gt;
 
-&lt;p&gt;Until now, we have looked on toy datasets. They were so small that they could
+&lt;p&gt;Until now, we have looked on toy datasets. These were so small that they could
 completely fit into the memory. However, in the real world exist huge databases
 occupying hundreds of gigabytes of memory, such as
 &lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34;&gt;Imagenet&lt;/a&gt; for example. Those often would not fit
@@ -449,13 +449,20 @@ together with loss gradients in the final recursive call in &lt;code&gt;_pass&lt
 and &lt;code&gt;[]&lt;/code&gt; on the right-hand side is the empty tail of computed values in the
 beginning of the backward pass.&lt;/p&gt;
 
-&lt;p&gt;The complete project is available on &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
+&lt;p&gt;The complete project is available on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
 I recommend playing with different neuron networks architectures
 and parameters. Have fun!&lt;/p&gt;
 
-&lt;h2 id=&#34;batchnorm-pitfalls&#34;&gt;Batchnorm pitfalls&lt;/h2&gt;
+&lt;h2 id=&#34;batchnorm-pitfalls&#34;&gt;Batchnorm Pitfalls&lt;/h2&gt;
 
-&lt;p&gt;There are several potential traps when using batchnorm.  To avoid them, it is
+&lt;p&gt;There are several potential traps when using batchnorm. First,
+batchnorm is different
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305&#34; target=&#34;_blank&#34;&gt;during training&lt;/a&gt;
+and
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355&#34; target=&#34;_blank&#34;&gt;during inference&lt;/a&gt;.
+That makes your implementation more complicated.
+Second, batchnorm may &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;fail&lt;/a&gt; when training data come from different datasets.
+To avoid them, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
 trying to solve.  &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
@@ -506,7 +513,7 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-3&#34;&gt;We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batch normalization paper&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-4&#34;&gt;There are some technical differences, though. Namely, we use &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;massiv&lt;/a&gt; library supporting multidimensional arrays and parallelism. For the reference, &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/massiv&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are the first two days reimplemented with &lt;code&gt;massiv&lt;/code&gt;. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
+&lt;li id=&#34;fn:fn-4&#34;&gt;There are some technical differences, though. Namely, we use &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;massiv&lt;/a&gt; library supporting multidimensional arrays and parallelism. For the reference, &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/massiv&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are the first two days reimplemented with &lt;code&gt;massiv&lt;/code&gt;. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-5&#34;&gt;In general, broadcasting is about making multidimensional arrays with different shapes compatible, not only vector to matrix translation.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
