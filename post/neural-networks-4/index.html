@@ -842,10 +842,10 @@ and
 <a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355" target="_blank">during inference</a>.
 That makes your implementation more complicated.
 Second, batchnorm may <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">fail</a> when training data come from different datasets.
-To avoid them, it is
+To avoid the second pitfall, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve.  <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> about that.</p>
+trying to solve. <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> about that.</p>
 
 <h2 id="summary">Summary</h2>
 

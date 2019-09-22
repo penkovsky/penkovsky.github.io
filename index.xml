@@ -11,6 +11,16 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Medical Applications of Low Precision Neuromorphic Systems</title>
+      <link>http://penkovsky.com/talk/us-french-symposium2019/</link>
+      <pubDate>Sun, 22 Sep 2019 15:40:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/talk/us-french-symposium2019/</guid>
+      <description>&lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade impacting computer vision, natural language processing, and other domains. However, those deep learning implementations require almost two orders of magnitude more power compared to the human brain, requiring thus constant connection to dedicated data centers. With new memories available, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation, enabling machine learning on the edge devices and avoiding data transfer over the network. In the talk we will discuss strategies to apply BNNs to biomedical signals such as electrocardiography and electroencephalography, without sacrificing accuracy and improving energy use. The ultimate goal of this research is to enable smart autonomous healthcare devices.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Coupled Nonlinear Delay Systems As Deep Convolutional Neural Networks</title>
       <link>http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
@@ -462,10 +472,10 @@ and
 &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355&#34; target=&#34;_blank&#34;&gt;during inference&lt;/a&gt;.
 That makes your implementation more complicated.
 Second, batchnorm may &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;fail&lt;/a&gt; when training data come from different datasets.
-To avoid them, it is
+To avoid the second pitfall, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve.  &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
+trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -2264,77 +2274,6 @@ MathJax.Hub.Config({
       
       <guid>http://penkovsky.com/talk/ddays2018/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Delay Differential Equations</title>
-      <link>http://penkovsky.com/project/dde/</link>
-      <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/dde/</guid>
-      <description>&lt;p&gt;&lt;a href=&#34;https://hackage.haskell.org/package/dde&#34;&gt;DDE package&lt;/a&gt; is a fast library written in Haskell that I have extracted after my PhD. Previously, my work involved a lot dynamical systems
-described by DDEs. I kept switching
-&lt;a href=&#34;https://github.com/masterdezign/aivika-experiment-dde-test&#34;&gt;between&lt;/a&gt;
-&lt;a href=&#34;http://pydelay.sourceforge.net&#34;&gt;several&lt;/a&gt;
-&lt;a href=&#34;http://www.math.pitt.edu/~bard/xpp/xpp.html&#34;&gt;tools&lt;/a&gt;,
-still I had no fast and flexible library.
-So &lt;a href=&#34;http://github.com/masterdezign/dde&#34;&gt;here&lt;/a&gt; is one now.&lt;/p&gt;
-
-&lt;p&gt;Below is an example of a dual-delay model taken
-from a &lt;a href=&#34;http://penkovsky.com/publication/chimeras-and-dissipative-solitons/&#34;&gt;recent publication&lt;/a&gt;.
-It is given by the following delay differential equation:&lt;/p&gt;
-
-&lt;p&gt;$$
-\varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi =
-(1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right),
-$$&lt;/p&gt;
-
-&lt;p&gt;where $ \tau_2 = 100 \tau_1$ are delay times and
-$\Phi_0$ is a control parameter.
-Let us fix dynamics parameters $\varepsilon = 0.01$,
-$\delta = 0.009$, and $\gamma = 0.5$.&lt;/p&gt;
-
-&lt;p&gt;We transform the integro-differential equation
-into an equivalent system of equations:&lt;/p&gt;
-
-&lt;p&gt;$$\begin{aligned}
-\varepsilon \dot x &amp;amp;= -x -\delta\cdot y + (1-\gamma)f \left( x_{\tau_1} \right) + \gamma f \left( x_{\tau_2} \right),\\&lt;br /&gt;
-\dot y &amp;amp;= x.
-\end{aligned}
-$$&lt;/p&gt;
-
-&lt;p&gt;Now, this system can be simply written in a vectorial
-(V2) form:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;-- Equation right-hand side
-rhs phi0 = DDE.RHS derivative
-  where
-    derivative ((V2 x y), (DDE.Hist histSnapshots), _) = V2 x&amp;#39; y&amp;#39;
-      where
-        -- DDE Eq. (4) from arXiv:1712.03283
-        x&amp;#39; = (-x - delta * y + (1 - gamma) * f x_tau1 + gamma * f x_tau2) / epsilon
-        y&amp;#39; = x
-
-        f = airy phi0
-
-        -- Delay terms where tau2 / tau1 = 100
-        (V2 x_tau1 _):(V2 x_tau2 _):_ = histSnapshots
-
-        -- Constants
-        epsilon = 0.01
-        gamma = 0.5
-        delta = 0.009&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We define the nonlinear Airy function
-$f(x) = \beta [1 + m \sin^2(x + \Phi_0)]^{-1}$, $\beta = 1.6$, $m = 50$ as follows:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-hashell&#34; data-lang=&#34;hashell&#34;&gt;airy phi0 x = beta / (1 + m * (sin (x + phi0))^2)
-  where
-    m = 50
-    beta = 1.6&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The complete model is available &lt;a href=&#34;https://gist.github.com/pkvk/18aca8694da3cf16fbf14eacd154cbdd&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-</description>
     </item>
     
   </channel>
