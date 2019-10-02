@@ -110,6 +110,23 @@
 
   <title>Bogdan Penkovsky, PhD</title>
 
+  <script type="text/javascript">
+  
+  var owa_baseUrl = 'http://7.0x7.top/';
+  var owa_cmds = owa_cmds || [];
+  owa_cmds.push(['setSiteId', '4c4112b0cbd9956ae6b062a3fcf59512']);
+  owa_cmds.push(['trackPageView']);
+  owa_cmds.push(['trackClicks']);
+
+  (function() {
+    var _owa = document.createElement('script'); _owa.type = 'text/javascript'; _owa.async = true;
+    owa_baseUrl = ('https:' == document.location.protocol ? window.owa_baseSecUrl || owa_baseUrl.replace(/http:/, 'https:') : owa_baseUrl );
+    _owa.src = owa_baseUrl + 'modules/base/js/owa.tracker-combined-min.js';
+    var _owa_s = document.getElementsByTagName('script')[0]; _owa_s.parentNode.insertBefore(_owa, _owa_s);
+  }());
+  
+  </script>
+
 </head>
 <body id="top" data-spy="scroll" data-target="#navbar-main" data-offset="71" >
 
@@ -184,14 +201,12 @@
         
         
           
-            
-          
         
 
         <li class="nav-item">
-          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" data-target="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+          <a href="/post" data-target="/post">
             
-            <span>Publications</span>
+            <span>Posts</span>
             
           </a>
         </li>
@@ -205,12 +220,14 @@
         
         
           
+            
+          
         
 
         <li class="nav-item">
-          <a href="/post" data-target="/post">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" data-target="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
             
-            <span>Posts</span>
+            <span>Publications</span>
             
           </a>
         </li>
@@ -322,7 +339,7 @@
       
       
       background-image:
-      linear-gradient(rgba(255, 200, 255, 0.5), rgba(255, 255, 210, 0.5)), 
+      linear-gradient(rgba(220, 200, 200, 0.5), rgba(240, 240, 220, 0.5)), 
       url('http://penkovsky.com/img/headers/creature.jpg');
       
       ;">
@@ -351,19 +368,15 @@
       background-color: #0095eb;
       
       
-      background-image:
-      linear-gradient(rgba(255, 200, 255, 0.8), rgba(255, 255, 210, 0.8)), 
-      url('http://penkovsky.com/img/publications/coupled-oscillators.png');
-      
       ;">
       <div class="container" style="text-align: left;">
           <h1 class="hero-title" itemprop="headline">
-            Brain-inspired Computing
+            Bringing AI to the edge
           </h1>
 
           
           <p class="hero-lead" style="">
-            Rethinking deep learning from the very <a href="/publication/coupled-delay-systems-as-deep-convolutional-networks">hardware level</a>.<br><br><br><br><br><br><br>
+            Hardware for <a href="/project/edge-ai">energy-efficient deep learning</a>.<br><br><br><br><br><br><br>
           </p>
           
 
@@ -381,15 +394,19 @@
       background-color: #0095eb;
       
       
+      background-image:
+      linear-gradient(rgba(220, 200, 200, 0.8), rgba(240, 240, 220, 0.8)), 
+      url('http://penkovsky.com/img/publications/coupled-oscillators.png');
+      
       ;">
       <div class="container" style="text-align: left;">
           <h1 class="hero-title" itemprop="headline">
-            Bringing AI to the edge
+            Brain-inspired Computing
           </h1>
 
           
           <p class="hero-lead" style="">
-            Hardware for <a href="/project/edge-ai">energy-efficient deep learning</a>.<br><br><br><br><br><br><br>
+            Rethinking deep learning from the very <a href="/publication/coupled-delay-systems-as-deep-convolutional-networks">hardware level</a>.<br><br><br><br><br><br><br>
           </p>
           
 
@@ -619,6 +636,83 @@ popular in the
   
   
   
+  <section id="search" class="home-section">
+    <div class="container">
+      
+
+
+<div class="row">
+  <div class="col-xs-12 col-md-4 section-heading">
+    <h1>Quick Search</h1>
+    
+  </div>
+  <div class="col-xs-12 col-md-8">
+    
+
+    <div id="search-box">
+      
+      <input name="q" id="search-query" placeholder="Search..." autocapitalize="off" autocomplete="off" autocorrect="off" role="textbox" spellcheck="false" type="search">
+      
+    </div>
+
+    <div id="search-hits">
+      
+    </div>
+
+  </div>
+</div>
+
+
+
+<script id="search-hit-fuse-template" type="text/x-template">
+  <div class="search-hit" id="summary-{{key}}">
+    <div class="search-hit-content">
+      <div class="search-hit-name">
+        <a href="{{relpermalink}}">{{title}}</a>
+        <div class="article-metadata search-hit-type">{{type}}</div>
+        <p class="search-hit-description">{{snippet}}</p>
+      </div>
+    </div>
+  </div>
+</script>
+
+
+    </div>
+  </section>
+  
+
+  
+  
+  
+  <section id="myphd" class="home-section">
+    <div class="container">
+      
+
+
+<div class="row">
+  
+  <div class="col-xs-12 col-md-4 section-heading">
+    <h1>My PhD</h1>
+    <p>In three minutes</p>
+  </div>
+  <div class="col-xs-12 col-md-8">
+    <p>PhD thesis promo recorded on the regional
+final of &quot;Ma thèse en 180&quot; contest.
+The speech is in French, but it will take less than 180 seconds :)</p>
+
+<p><p><iframe width="560" height="315" src="http://www.youtube.com/embed/0ANPMa6Pyaw?rel=0" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+
+  </div>
+  
+</div>
+
+    </div>
+  </section>
+  
+
+  
+  
+  
   <section id="posts" class="home-section">
     <div class="container">
       
@@ -698,9 +792,6 @@ popular in the
   
 
   
-  
-  <span class="middot-divider"></span>
-  <a href="http://penkovsky.com/post/neural-networks-4/#disqus_thread"></a>
   
 
   
@@ -805,9 +896,6 @@ popular in the
 
   
   
-  <span class="middot-divider"></span>
-  <a href="http://penkovsky.com/post/neural-networks-3/#disqus_thread"></a>
-  
 
   
   
@@ -903,9 +991,6 @@ popular in the
   
 
   
-  
-  <span class="middot-divider"></span>
-  <a href="http://penkovsky.com/post/neural-networks-2/#disqus_thread"></a>
   
 
   
@@ -1012,9 +1097,6 @@ Sometimes I discuss neural networks with students who have just started discover
 
   
   
-  <span class="middot-divider"></span>
-  <a href="http://penkovsky.com/post/neural-networks/#disqus_thread"></a>
-  
 
   
   
@@ -1065,35 +1147,6 @@ Sometimes I discuss neural networks with students who have just started discover
     
 
   </div>
-</div>
-
-    </div>
-  </section>
-  
-
-  
-  
-  
-  <section id="myphd" class="home-section">
-    <div class="container">
-      
-
-
-<div class="row">
-  
-  <div class="col-xs-12 col-md-4 section-heading">
-    <h1>My PhD</h1>
-    <p>In three minutes</p>
-  </div>
-  <div class="col-xs-12 col-md-8">
-    <p>PhD thesis promo recorded on the regional
-final of &quot;Ma thèse en 180&quot; contest.
-The speech is in French, but it will take less than 180 seconds :)</p>
-
-<p><p><iframe width="560" height="315" src="http://www.youtube.com/embed/0ANPMa6Pyaw?rel=0" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
-
-  </div>
-  
 </div>
 
     </div>
@@ -2120,8 +2173,6 @@ The speech is in French, but it will take less than 180 seconds :)</p>
 
     
     
-    
-    <script id="dsq-count-scr" src="//penkovsky.disqus.com/count.js" async></script>
     
 
     

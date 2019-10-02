@@ -40,11 +40,11 @@
     </item>
     
     <item>
-      <title>Recent Posts</title>
-      <link>http://penkovsky.com/home/posts/</link>
-      <pubDate>Sat, 01 Dec 2018 00:00:00 +0100</pubDate>
+      <title>Quick Search</title>
+      <link>http://penkovsky.com/home/search/</link>
+      <pubDate>Tue, 01 Oct 2019 00:00:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/home/posts/</guid>
+      <guid>http://penkovsky.com/home/search/</guid>
       <description></description>
     </item>
     
@@ -55,6 +55,15 @@
       
       <guid>http://penkovsky.com/home/myphd/</guid>
       <description>PhD thesis promo recorded on the regional final of &amp;quot;Ma thèse en 180&amp;quot; contest. The speech is in French, but it will take less than 180 seconds :)</description>
+    </item>
+    
+    <item>
+      <title>Recent Posts</title>
+      <link>http://penkovsky.com/home/posts/</link>
+      <pubDate>Sat, 01 Dec 2018 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/home/posts/</guid>
+      <description></description>
     </item>
     
     <item>
@@ -117,15 +126,6 @@
       <pubDate>Wed, 20 Sep 2017 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/home/tags/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Search</title>
-      <link>http://penkovsky.com/home/search/</link>
-      <pubDate>Mon, 23 Jul 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/home/search/</guid>
       <description></description>
     </item>
     
