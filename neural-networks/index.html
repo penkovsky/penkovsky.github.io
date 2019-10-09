@@ -27,7 +27,7 @@
   <meta name="description" content="Researcher in Brain-inspired Computing. Artist. Adventurer">
 
   
-  <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/publication_types/2/">
+  <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/neural-networks/">
 
   
 
@@ -56,11 +56,6 @@
       
     
     
-      
-      
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
-      
-    
 
     
 
@@ -81,15 +76,15 @@
   
 
   
-  <link rel="alternate" href="http://penkovsky.com/publication_types/2/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
-  <link rel="feed" href="http://penkovsky.com/publication_types/2/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="alternate" href="http://penkovsky.com/neural-networks/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="http://penkovsky.com/neural-networks/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
   
 
   <link rel="manifest" href="/site.webmanifest">
   <link rel="icon" type="image/png" href="/img/icon.png">
   <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
 
-  <link rel="canonical" href="http://penkovsky.com/publication_types/2/">
+  <link rel="canonical" href="http://penkovsky.com/neural-networks/">
 
   <meta property="twitter:card" content="summary_large_image">
   
@@ -97,19 +92,19 @@
   <meta property="twitter:creator" content="@penkovsky">
   
   <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
-  <meta property="og:url" content="http://penkovsky.com/publication_types/2/">
-  <meta property="og:title" content="2 | Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="http://penkovsky.com/neural-networks/">
+  <meta property="og:title" content="10 Days Of Grad: Deep Learning From The First Principles | Bogdan Penkovsky, PhD">
   <meta property="og:description" content="Researcher in Brain-inspired Computing. Artist. Adventurer">
   <meta property="og:locale" content="en-us">
   
-  <meta property="og:updated_time" content="2019-08-01T00:00:00&#43;02:00">
+  <meta property="og:updated_time" content="2018-12-11T01:00:00&#43;01:00">
   
 
   
 
   
 
-  <title>2 | Bogdan Penkovsky, PhD</title>
+  <title>10 Days Of Grad: Deep Learning From The First Principles | Bogdan Penkovsky, PhD</title>
 
   <script type="text/javascript">
   
@@ -307,63 +302,58 @@
 
 <div class="article-container">
 
-  
-  
-  <h1>2</h1>
+  <h1>10 Days Of Grad: Deep Learning From The First Principles</h1>
+
   
 
   
   
   <div>
-    <h2><a href="http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/">Coupled Nonlinear Delay Systems As Deep Convolutional Neural Networks</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></h2>
     <div class="article-style">
       
-      Neural networks are currently transforming the field of computer algorithms, yet their emulation on current computing substrates is highly inefficient. Reservoir computing was successfully implemented on a large variety of substrates and gave new …
+      Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet calls convolutional neural networks (CNNs). First, we are going to build an intuition behind those algorithms. Then, we are taking a look with basic CNN architecture. After discussing the differences between convolutional layer types, we are going to implement them in Haskell.
+Previous posts
+ Day 1: Learning Neural Networks The Hard Way Day 2: What Do Hidden Layers Do?
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/publication/stochastic-bnn/">Stochastic Computing for Hardware Implementation of Binarized Neural Networks</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></h2>
     <div class="article-style">
       
-      Binarized Neural Networks, a recently discovered class of neural networks with minimal memory requirements and no reliance on multiplication, are a fantastic opportunity for the realization of compact and energy efficient inference hardware. However, …
+      Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, 'The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective'. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches. Indeed, neural networks are general enough and they leverage computation.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/publication/hardware-enabled-reservoir-computing/">Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></h2>
     <div class="article-style">
       
-      In this work, we propose a new approach towards the efficient optimization and implementation of reservoir computing hardware reducing the required domain expert knowledge and optimization effort. First, we adapt the reservoir input mask to the …
+      Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/publication/photonic-neural-networks/">Tutorial: Photonic Neural Networks in Delay Systems</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></h2>
     <div class="article-style">
       
-      Photonic delay systems have revolutionized the hardware implementation of Recurrent Neural Networks and Reservoir Computing in particular. The fundamental principles of Reservoir Computing strongly benefit a realization in such complex analog …
+      In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&quot;
+&quot;It seems to be much less than state-of-the-art&quot;, I contemplate.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/publication/chimeras-and-dissipative-solitons/">Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></h2>
     <div class="article-style">
       
-      We demonstrate for a nonlinear photonic system that two highly asymmetric feedback delays can induce a variety of emergent patterns which are highly robust during the system's global evolution. Explicitly, two-dimensional chimeras and dissipative …
-      
-    </div>
-  </div>
-  
-  <div>
-    <h2><a href="http://penkovsky.com/publication/laser-chimeras/">Laser chimeras as a paradigm for multistable patterns in complex systems</a></h2>
-    <div class="article-style">
-      
-      A chimera state is a rich and fascinating class of self-organized solutions developed in high-dimensional networks. Necessary features of the network for the emergence of such complex but structured motions are non-local and symmetry breaking …
+      Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky's writings2. As a result, I came across neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3.
       
     </div>
   </div>
@@ -436,12 +426,6 @@
       <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
 
       
-        
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
-        
-        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
-        
-      
 
       
       
@@ -458,8 +442,6 @@
     
 
     
-    
-    <script>hljs.initHighlightingOnLoad();</script>
     
 
     

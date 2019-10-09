@@ -11,6 +11,502 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Day 5: Convolutional Neural Networks Tutorial</title>
+      <link>http://penkovsky.com/neural-networks/day5/</link>
+      <pubDate>Wed, 09 Oct 2019 14:40:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/neural-networks/day5/</guid>
+      <description>
+
+&lt;p&gt;Today we have finally arrived at the &amp;quot;master algorithm&amp;quot; in computer vision.
+That is how &lt;a href=&#34;https://fchollet.com&#34; target=&#34;_blank&#34;&gt;François Chollet&lt;/a&gt; calls convolutional neural
+networks (CNNs). First, we are going to build an intuition behind those
+algorithms. Then, we are taking a look with basic CNN architecture. After
+discussing the differences between convolutional layer types,
+we are going to implement them in Haskell.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;convolution-operator&#34;&gt;Convolution operator&lt;/h2&gt;
+
+&lt;p&gt;Previously, we have learned about fully-connected neural networks.
+Although, theoretically those can approximate any reasonable
+function, they have certain limitations.
+One of the challenges is to address the translation symmetry.
+To explain this, let us take a look at the two cat pictures below.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/translation-symmetry.png&#34; alt=&#34;Translation symmetry: Same object in different locations.&#34; width=&#34;590px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Translation symmetry: Same object in different locations.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;For us, humans,
+it does not matter if a cat is in the right lower corner of it is
+somewhere in the top part of an image. In both cases we find a cat.
+So we can say that our human cat detector is &lt;em&gt;translation invariant&lt;/em&gt;.&lt;/p&gt;
+
+&lt;p&gt;However, if we look at the architecture of a typical fully-connected network,
+we may realize that there is actually nothing that prevents this network
+to work correctly only on some part of an image. The question here:
+Is there any way to make a neural network translation invariant?&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/fully-connected.png&#34; alt=&#34;Fully-connected neural network with two hidden layers. Image credit: Wikimedia.&#34; width=&#34;300px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Fully-connected neural network with two hidden layers. Image credit: Wikimedia.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Let us take a closer look at the cat image.
+Soon we realize that pixels representing cat&#39;s head are more contextually related to each other
+than they are related to pixels representing cats tail. Therefore, we also would make
+our neural network &lt;em&gt;sparse&lt;/em&gt; so that neurons in the next layer are
+connected only to the relevant neighboring pixels. This way, each neuron
+in the next layer would be responsible for a small &lt;em&gt;feature&lt;/em&gt; in the original image.
+The area that a neuron &amp;quot;sees&amp;quot; is called a &lt;em&gt;receptive field&lt;/em&gt;.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/cat-head-pixels.png&#34; alt=&#34;Zoom into the cats figure.&#34; width=&#34;400px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Neighboring pixels give more relevant information than distant ones.&lt;/h4&gt;
+  &lt;p&gt;
+    Zoom into the cats figure.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Convolutional neural networks (CNNs) or simply &lt;em&gt;ConvNets&lt;/em&gt; were
+designed to address those two issues: translation symmetry
+and image locality. First, let us give an intuitive explanation
+of a convolution operator&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;You have very likely encountered convolution filters before.
+Recall when you have first played with a (raster) graphics editor like GIMP or Photoshop.
+You have probably been delighted obtaining effects such as sharpening, blur, or
+edge detection. If you haven&#39;t, then you probably should :).
+The secret of all those filters is the convolutional application of an &lt;em&gt;image kernel&lt;/em&gt;.
+The image kernel is typically a $3 \times 3$ matrix such as below.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/kernel-dot-product.png&#34; alt=&#34;Dot product between pixel values and a kernel. Image credit: [GIMP](https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png).&#34; width=&#34;475px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;A single convolution step:&lt;/h4&gt;
+  &lt;p&gt;
+    Dot product between pixel values and a kernel. Image credit: &lt;a href=&#34;https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png&#34; target=&#34;_blank&#34;&gt;GIMP&lt;/a&gt;.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Here is shown a single convolution step. This step is a dot product
+between the kernel and pixel values. Since all the kernel values except
+the second one in the first row are zeros, the result is equal
+to the second value in the first row of the green frame, i.e.
+$40 \cdot 0 + 42 \cdot 1 + 46 \cdot 0 + \dotsc + 58 \cdot 0 = 42$.
+The convolution operator takes an image and acts within the green &amp;quot;sliding
+window&amp;quot; to perform dot product over every part of that image.
+The result is a new, filtered image.
+Mathematically, the (discrete) convolution operator $(*)$ between
+an image $A \in \mathbb{R}^{D_{F_1} \times D_{F_2}}$
+and a kernel $K \in \mathbb{R}^{D_{K_1} \times D_{K_2}}$
+can be formalized as
+$$A * K = \sum_{m=0}^{D_{K_1} - 1} \sum_{n=0}^{D_{K_2} - 1} K_{m, n} \cdot A_{i-m, j-n},$$
+where
+$0 \le i &amp;lt; D_{K_1} + D_{F_1} - 1$
+and $0 \le i &amp;lt; D_{K_2} + D_{F_2} - 1$.
+To better understand how convolution with a kernel
+changes the original image, you can play with different &lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;image kernels&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;What is the motivation behind this sliding window/convolution operator approach?
+It has biological background.
+In fact, human eye has a relatively narrow &lt;a href=&#34;https://en.wikipedia.org/wiki/Visual_field&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;visual field&lt;/em&gt;&lt;/a&gt;.
+We perceive objects as a whole by constantly moving eyes around them.
+These rapid &lt;a href=&#34;https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm&#34; target=&#34;_blank&#34;&gt;eye movements&lt;/a&gt;
+are called &lt;a href=&#34;https://en.wikipedia.org/wiki/Saccade&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;saccades&lt;/em&gt;&lt;/a&gt;.
+Therefore, convolution operator may be regarded as a simplified model of
+image scanning that occurs naturally. The important point
+is thanks to the sliding window convolutions achieve translation invariance. Moreover,
+since every dot product result is connected - through the kernel - only to a very
+limited number of pixels in the initial image, convolution connections
+are very sparse. Therefore, by using convolutions
+in neural networks we achieve both translation invariance and connection sparsity.&lt;/p&gt;
+
+&lt;h2 id=&#34;convolutional-neural-network-architecture&#34;&gt;Convolutional Neural Network Architecture&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;An interesting property of convolutional layers is that if the input image is shifted, the feature map output will be shifted by the same amount, but it will be left unchanged otherwise. This property is at the basis of the robustness of convolutional networks to shifts and distortions of the input.&lt;/p&gt;
+
+&lt;p&gt;Once a feature has been detected, its exact location becomes less important. Only its approximate position relative to other features is relevant.&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition (1998)&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;prototype&lt;/a&gt; of what we call today convolutional neural
+networks has been first proposed back &lt;a href=&#34;https://en.wikipedia.org/wiki/Convolutional_neural_network#History&#34; target=&#34;_blank&#34;&gt;in
+1980s&lt;/a&gt; &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;by
+Fukushima&lt;/a&gt;. There were proposed many unsupervised and supervised training
+methods, but today CNNs are trained with backpropagation.
+Let us take a look at one of the famous ConvNet architectures known as LeNet-5.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/LeNet.png&#34; alt=&#34;LeNet-5 architecture from [Lecun _et al._ Gradient-based learning applied to document recognition](http://doi.org/10.1109/5.726791).&#34; width=&#34;760px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    LeNet-5 architecture from &lt;a href=&#34;http://doi.org/10.1109/5.726791&#34; target=&#34;_blank&#34;&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition&lt;/a&gt;.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;The architecture is very close to modern CNNs.
+LeNet-5 was designed to perform handwritten digit recognition
+from $32 \times 32$ black and white images.
+The two main building blocks, as we call them now,
+are a &lt;em&gt;feature extractor&lt;/em&gt; and a &lt;em&gt;classifier&lt;/em&gt;.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;big&gt;With local receptive fields neurons can extract elementary visual features such as oriented edges, endpoints, corners...&lt;/big&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition (1998)&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The &lt;em&gt;feature extractor&lt;/em&gt; consists of
+two convolutional layers. The first convolutional
+layer has six convolutional filters with $5 \times 5$ kernels.
+Application of those filters with subsequent bias additions and
+hyperbolic tangent activations&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; produces &lt;em&gt;feature maps&lt;/em&gt;,
+essentially new, slightly smaller ($28 \times 28$) images.
+By convention, we describe the result as a volume of
+$28 \times 28 \times 6$.
+To reduce the spatial resolution,
+a &lt;em&gt;subsampling&lt;/em&gt; is then performed&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+That outputs $14 \times 14 \times 6$ feature maps.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;big&gt;All the units in a feature map share the same set of 25 weights and the same bias, so they detect the same feature at all possible locations on the input.&lt;/big&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition (1998)&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The next convolutions round results already in
+$10 \times 10 \times 16$ feature maps.
+Note that unlike the first convolutional layer,
+we apply $5 \times 5 \times 6$ kernels.
+That means that each of sixteen convolutions simultaneously processes
+all six feature maps obtained from the previous step.
+After subsampling we obtain
+a resulting volume of $5 \times 5 \times 16$.&lt;/p&gt;
+
+&lt;p&gt;The &lt;em&gt;classifier&lt;/em&gt; consists of three densely connected layers
+with 120, 84, and 10 neurons each. The last layer
+provides a one-hot-encoded&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt; answer. The slight difference
+from modern archictures is in the
+final layer, which consists of ten Euclidean radial basis function
+units, whereas today this would be a normal
+fully-connected layer followed by a softmax layer.&lt;/p&gt;
+
+&lt;p&gt;It is important to understand that a single convolution filter
+is able to detect only a single feature.
+For instance, it may be able to detect
+horizontal edges.
+Therefore, we use several more filters with different kernels
+to have get features such as vertical edges, simple textures, or corners.
+As you have seen, the number of filters is typically represented in ConvNet diagrams
+as volume.
+Interestingly, layers deeper in the network will combine the most basic
+features detected in the first layers into more abstract representations such
+as eyes, ears, or even complete figures. To better understand this mechanism
+let us inspect receptive fields visualization below.&lt;/p&gt;
+
+&lt;canvas id=&#34;myCanvas&#34; width=&#34;400&#34; height=&#34;400&#34; style=&#34;border:0;&#34;&gt;
+  Your browser does not support HTML5 canvas.
+&lt;/canvas&gt;
+
+&lt;p&gt;Receptive field visualization derived from &lt;a href=&#34;http://arunmallya.github.io&#34; target=&#34;_blank&#34;&gt;Arun Mallya&lt;/a&gt;.
+Hover the mouse cursor over any neuron in top layers to see
+how extends its receptive field in previous (bottom) layers.
+&lt;!-- TODO: make it horizontal left-to-right. --&gt;&lt;/p&gt;
+
+&lt;p&gt;As we can see by checking neurons in
+last layers, even a small $3 \times 3$ receptive field
+grows as one moves towards first layers.
+Indeed, we may anticipate that &amp;quot;deeper&amp;quot; neurons
+will have better overall view on what happens in the image.&lt;/p&gt;
+
+&lt;p&gt;The beauty and the biggest achievement of deep learning
+is that filter kernels are learned automatically with
+back propagation&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
+A peculiarity of convolutional layers is that
+the result is obtained after repetitive application of
+a small number of weights as defined by a kernel.
+Thanks to this &lt;em&gt;weight sharing&lt;/em&gt;, convolutional layers
+have drastically reduced number of trainable parameters&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;,
+compared to fully-connected layers.&lt;/p&gt;
+
+&lt;!--
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/1/1e/Convolutional_Neural_Network_NeuralNetworkFeatureLayers.gif&#34; alt=&#34;Each pixel in the next layer is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.&#34; width=&#34;520px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Convolutional layer.&lt;/h4&gt;
+  &lt;p&gt;
+    Each pixel in the next layer is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+--&gt;
+
+&lt;h2 id=&#34;convolution-types&#34;&gt;Convolution Types&lt;/h2&gt;
+
+&lt;p&gt;I decided to include this section for curious readers.
+If this is the first time you encounter CNNs, feel
+free to skip the section and revisit it later.&lt;/p&gt;
+
+&lt;p&gt;There is a lot of hype around convolutions nowadays. However, it is not made
+clear that low-level convolutions for computer vision are often different from
+those exploited by ConvNets. Yet, even in ConvNets there is a variety of
+convolutional layers inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception&lt;/a&gt; ConvNet architecture
+and shaped by &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception&lt;/a&gt; and &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet&lt;/a&gt; works. I
+believe that you deserve to know that there exist multiple kinds of
+convolutions applied in different contexts and here I shall provide a general
+roadmap&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;1-computer-vision-style-convolution&#34;&gt;1. Computer Vision-Style Convolution&lt;/h3&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv-cv.png&#34; width=&#34;480px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Low-level computer vision (CV), for instance graphics editors, typically operate
+one, three, or four channels images (e.g.  red, green, blue, and transparency).
+An individual kernel is typically applied to each channel. In this case,
+usually there are as many resulting channels as there are channels in the input
+image. A special case of this style convolution is when &lt;em&gt;the same&lt;/em&gt; convolution
+kernel is applied to each channel (e.g. blurring). Sometimes, resulting
+channels are summed producing a one-channel image (e.g. edge detection).&lt;/p&gt;
+
+&lt;h3 id=&#34;2-lenet-like-convolution&#34;&gt;2. LeNet-like Convolution&lt;/h3&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv.png&#34; width=&#34;500px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;A pure CV-style convolution is different from those in ConvNets due to two
+reasons: (1) in CV kernels are manually defined, whereas the power of neural
+networks comes from training, and (2) in neural networks we build
+a deep structure by stacking multiple convolutions on top of each other.
+Therefore, we need to recombine the information coming from previous
+layers. That allows us to train higher-level feature detections&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;.
+Finally, convolutions in neural networks may contain bias terms, i.e.
+constants added to results of each convolution.&lt;/p&gt;
+
+&lt;p&gt;Recombination of features coming from earlier layers was previously illustrated
+in LeNet-5 example. As you remember, in the second convolutional layer we would
+apply 3D kernels of size $5 \times 5 \times 6$ computing dot products
+simultaneously on all six feature maps from the first layer. There were sixteen
+different kernels thus producing sixteen new channels.&lt;/p&gt;
+
+&lt;p&gt;To summarize, a single LeNet-like convolution operates simultaneously on all
+input channels and produces a single channel. By having an arbitrary number of
+kernels, any number of output channels is obtained. It is not uncommon to operate
+on volumes of 512 channels! The computation cost of such convolution is
+$D_K \times D_K \times M \times N \times D_F \times D_F$
+where $M$ is the number of input channels,
+$N$ is the number of output channels,
+$D_K \times D_K$ is the kernel size and $D_F \times D_F$ is
+the feature map size&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;3-depthwise-separable-convolution&#34;&gt;3. Depthwise Separable Convolution&lt;/h3&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv-depthwise-separable.png&#34; width=&#34;610px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;LeNet-style convolution requires a large number of operations.
+But do we really need all of them? For instance, can spatial and cross-channel
+correlations be somehow decoupled? The &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception
+paper&lt;/a&gt; largely inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception&lt;/a&gt; architecture
+shows that indeed, one can build more efficient convolutions by assuming that
+spatial correlations and cross-channel correlations can be mapped
+independently. This principle was also applied in &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet&lt;/a&gt;
+architectures.&lt;/p&gt;
+
+&lt;p&gt;The depthwise separable convolution works the following way. First, like in
+low-level computer vision, individual kernels are applied to each individual channel.
+Then, after optional activation&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;,
+there is a another convolution, but this time
+exclusively in-between channels. That is typically achieved by applying
+a $1 \times 1$ convolution kernel. Finally, there is a (ReLU) activation.&lt;/p&gt;
+
+&lt;p&gt;This way, depthwise separable convolution has two distinct steps: a space-only
+convolution and a channel recombination. This reduces the number of operations
+to
+$D_K \times D_K \times M \times D_F \times D_F + M \times N \times D_F \times D_F$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;!--
+## Implementing Convolution Operator
+
+Today, we will implement convolutions in Haskell.
+And in the next post, we will implement and train a ConvNet
+inspired by LeNet-5.
+
+### What Are Stencils
+
+...
+
+### Stencils In Massiv
+
+Previously, we have introduced [Massiv][massiv] library
+featuring parallel arrays computation.
+...
+Massiv implements stencils from this [paper][stencil-haskell2011].
+
+TODO: apply different image kernels on the same image and show in the figures.
+--&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;To be continued...&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;Convolutional neural networks &lt;em&gt;aka&lt;/em&gt; ConvNets achieve translation invariance
+and connection sparsity.  Thanks to weight sharing, ConvNets dramatically
+reduce the number of trained parameters.  The power of ConvNet comes from
+training convolution filters, in contrast to manual feature engineering.&lt;/p&gt;
+
+&lt;p&gt;In the next post we will apply CNNs to MNIST and CIFAR-10
+image challenges. Stay tuned!&lt;/p&gt;
+
+&lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
+
+&lt;p&gt;Learned today:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;Interactive Image Kernels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://pjreddie.com/courses/computer-vision/&#34; target=&#34;_blank&#34;&gt;The Ancient Secrets of Computer Vision (online course)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://morgenthum.dev/articles/why-prefer-fp&#34; target=&#34;_blank&#34;&gt;Why I prefer functional programming&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34; target=&#34;_blank&#34;&gt;Efficient Parallel Stencil Convolution in Haskell&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Deeper into neural networks:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf&#34; target=&#34;_blank&#34;&gt;LeNet-5 paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet paper&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
+});
+&lt;/script&gt;
+
+&lt;script src=&#34;http://penkovsky.com/js/receptive-field.js&#34;&gt;&lt;/script&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;In fact, cross-correlation, not convolution. Still, for neural networks that would be practically the same operation.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-2&#34;&gt;The actual &amp;quot;squashing&amp;quot; activation was $f(x) = 1.7159 \tanh(\frac{2}{3} x)$.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-3&#34;&gt;By subsampling LeNet authors mean local averaging in $2 \times 2$ squares with subsequent scaling by a constant, bias addition, and sigmoid activation. In modern CNNs, a simple max-pooling is performed instead.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-4&#34;&gt;We have discussed one-hot encoding on &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-5&#34;&gt;To refresh your memory about backprop algorithm, check out &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;days&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-6&#34;&gt;Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-7&#34;&gt;Whereas I discuss only 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-8&#34;&gt;By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-9&#34;&gt;For the details, see &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet paper&lt;/a&gt;.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>Medical Applications of Low Precision Neuromorphic Systems</title>
       <link>http://penkovsky.com/talk/us-french-symposium2019/</link>
       <pubDate>Sun, 22 Sep 2019 15:40:00 +0200</pubDate>
@@ -31,13 +527,11 @@
     
     <item>
       <title>Day 4: The Importance Of Batch Normalization</title>
-      <link>http://penkovsky.com/post/neural-networks-4/</link>
+      <link>http://penkovsky.com/neural-networks/day4/</link>
       <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/post/neural-networks-4/</guid>
+      <guid>http://penkovsky.com/neural-networks/day4/</guid>
       <description>
-
-&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
 
 &lt;p&gt;Which purpose do neural networks serve for? Neural networks are learnable
 models. Their ultimate goal is to approach or even surpass human
@@ -62,9 +556,9 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
@@ -286,7 +780,7 @@ gradients).&lt;/p&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gammax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
 
-&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;,
+&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;,
 there is a recurrent call obtaining gradients from the next layer,
 neural network prediction &lt;code&gt;pred&lt;/code&gt; and computed values tail &lt;code&gt;t&lt;/code&gt;:&lt;/p&gt;
 
@@ -567,13 +1061,11 @@ and provide better data security.&lt;/p&gt;
     
     <item>
       <title>Day 3: Haskell Guide To Neural Networks</title>
-      <link>http://penkovsky.com/post/neural-networks-3/</link>
+      <link>http://penkovsky.com/neural-networks/day3/</link>
       <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/post/neural-networks-3/</guid>
+      <guid>http://penkovsky.com/neural-networks/day3/</guid>
       <description>
-
-&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
 
 &lt;p&gt;Now that we have seen how neural networks work, we realize that understanding
 of the gradients flow is essential for survival.  Therefore, we will revise
@@ -588,8 +1080,8 @@ Networks&lt;/a&gt;. For comparison, see also
 &lt;p&gt;Before jumping ahead, you may also want to check the previous posts:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/post/neural-networks-2&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34; target=&#34;_blank&#34;&gt;on
@@ -821,7 +1313,7 @@ how automatic differentiation can face this problem.&lt;/p&gt;
 
 &lt;p&gt;In the next posts we will apply automatic differentiation to real neural
 networks. We will talk about
-&lt;a href=&#34;http://penkovsky.com/post/neural-networks-4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;,
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;,
 another crucial method in modern deep learning.  And we will ramp it up to
 convolutional networks allowing us to solve some interesting challenges.
 Stay tuned!&lt;/p&gt;
@@ -847,15 +1339,13 @@ Stay tuned!&lt;/p&gt;
     
     <item>
       <title>Day 2: What Do Hidden Layers Do?</title>
-      <link>http://penkovsky.com/post/neural-networks-2/</link>
+      <link>http://penkovsky.com/neural-networks/day2/</link>
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/post/neural-networks-2/</guid>
+      <guid>http://penkovsky.com/neural-networks/day2/</guid>
       <description>
 
-&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
-
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
 we have introduced the concept of learning in a single-layer neural network.
 Today, we will learn about the
 benefits of multi-layer neural networks,
@@ -1163,7 +1653,7 @@ build multilayer networks in Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;implementing-backpropagation&#34;&gt;Implementing Backpropagation&lt;/h2&gt;
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
 we have implemented &lt;em&gt;backpropagation&lt;/em&gt; (shortly &lt;em&gt;backprop&lt;/em&gt;)
 for a single-layer (no hidden layer) network.
 This method easily extends towards the case of multiple layers.
@@ -1335,7 +1825,7 @@ Now, the complete gradient descent implementation is&lt;/p&gt;
 
 &lt;p&gt;We now see how well previously defined &lt;code&gt;f&lt;/code&gt; fits in.
 The resulting function &lt;code&gt;optimize&lt;/code&gt; should look familiar from the
-&lt;a href=&#34;http://penkovsky.com/post/neural-networks/&#34; target=&#34;_blank&#34;&gt;previous post&lt;/a&gt;.
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous post&lt;/a&gt;.
 Back then, it was called &lt;code&gt;descend&lt;/code&gt;.
 Now, we generalize it to operate on a list of layers,
 instead of a single layer weights. Finally,
@@ -1710,7 +2200,7 @@ relationships in the dataset,
 a three-layer network with fewer parameters converges faster than
 the one with a single hidden layer.&lt;/p&gt;
 
-&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
+&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
 discuss how Haskell compiler can help ensure that our neural network is
 correct.  And we will ramp it up to convolutional networks allowing us to
 solve some interesting challenges.  Stay tuned.&lt;/p&gt;
@@ -1769,13 +2259,11 @@ MathJax.Hub.Config({
     
     <item>
       <title>Day 1: Learning Neural Networks The Hard Way</title>
-      <link>http://penkovsky.com/post/neural-networks/</link>
+      <link>http://penkovsky.com/neural-networks/day1/</link>
       <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
       
-      <guid>http://penkovsky.com/post/neural-networks/</guid>
+      <guid>http://penkovsky.com/neural-networks/day1/</guid>
       <description>
-
-&lt;h1 id=&#34;10-days-of-grad-deep-learning-from-the-first-principles&#34;&gt;10 Days Of Grad: Deep Learning From The First Principles.&lt;/h1&gt;
 
 &lt;p&gt;Neural networks is a topic that recurrently appears throughout my life.
 Once, when I was a BSc student,
@@ -2177,8 +2665,8 @@ data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#
 the code to avoid this redundancy.&lt;/p&gt;
 
 &lt;p&gt;As soon as you understand the basics of neural networks,
-make sure you continue to &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;.
-In the &lt;a href=&#34;http://penkovsky.com/post/neural-networks-2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
+make sure you continue to &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;.
+In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
 First of all, we will highlight the importance of multilayer structure.
 We will also show that nonlinear activations are crucial.
 Finally, we will improve neural network training
@@ -2210,7 +2698,7 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/post/neural-networks-3/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -2264,15 +2752,6 @@ MathJax.Hub.Config({
       <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
       
       <guid>http://penkovsky.com/project/bioinspired/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Chimera States in Nonlinear Systems with Multiple Delayed Feedbacks</title>
-      <link>http://penkovsky.com/talk/ddays2018/</link>
-      <pubDate>Wed, 15 Aug 2018 13:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/talk/ddays2018/</guid>
       <description></description>
     </item>
     

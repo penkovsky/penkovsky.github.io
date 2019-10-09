@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>http://penkovsky.com/neural-networks/day5/</loc>
+      <lastmod>2019-10-09T14:40:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>http://penkovsky.com/talk/us-french-symposium2019/</loc>
       <lastmod>2019-09-22T15:40:00+02:00</lastmod>
     </url>
@@ -20,7 +28,7 @@
     
     <url>
     
-      <loc>http://penkovsky.com/post/neural-networks-4/</loc>
+      <loc>http://penkovsky.com/neural-networks/day4/</loc>
       <lastmod>2019-06-29T15:01:00+02:00</lastmod>
     </url>
     
@@ -52,7 +60,7 @@
     
     <url>
     
-      <loc>http://penkovsky.com/post/neural-networks-3/</loc>
+      <loc>http://penkovsky.com/neural-networks/day3/</loc>
       <lastmod>2019-02-17T01:10:00+02:00</lastmod>
     </url>
     
@@ -60,7 +68,7 @@
     
     <url>
     
-      <loc>http://penkovsky.com/post/neural-networks-2/</loc>
+      <loc>http://penkovsky.com/neural-networks/day2/</loc>
       <lastmod>2019-02-04T17:15:00+02:00</lastmod>
     </url>
     
@@ -68,8 +76,16 @@
     
     <url>
     
-      <loc>http://penkovsky.com/post/neural-networks/</loc>
+      <loc>http://penkovsky.com/neural-networks/day1/</loc>
       <lastmod>2018-12-11T16:22:28+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>http://penkovsky.com/neural-networks/</loc>
+      <lastmod>2018-12-11T01:00:00+01:00</lastmod>
     </url>
     
   
@@ -148,14 +164,6 @@
     
     <url>
     
-      <loc>http://penkovsky.com/post/</loc>
-      <lastmod>2017-01-01T00:00:00+01:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>http://penkovsky.com/publication/</loc>
       <lastmod>2017-01-01T00:00:00+01:00</lastmod>
     </url>
@@ -181,7 +189,7 @@
     <url>
     
       <loc>http://penkovsky.com/categories/10-days-of-grad/</loc>
-      <lastmod>2019-06-29T15:01:00+02:00</lastmod>
+      <lastmod>2019-10-09T14:40:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -217,7 +225,7 @@
     <url>
     
       <loc>http://penkovsky.com/categories/</loc>
-      <lastmod>2019-06-29T15:01:00+02:00</lastmod>
+      <lastmod>2019-10-09T14:40:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -235,7 +243,7 @@
     <url>
     
       <loc>http://penkovsky.com/tags/deep-learning/</loc>
-      <lastmod>2019-09-22T15:40:00+02:00</lastmod>
+      <lastmod>2019-10-09T14:40:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -244,7 +252,7 @@
     <url>
     
       <loc>http://penkovsky.com/tags/haskell/</loc>
-      <lastmod>2019-06-29T15:01:00+02:00</lastmod>
+      <lastmod>2019-10-09T14:40:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     

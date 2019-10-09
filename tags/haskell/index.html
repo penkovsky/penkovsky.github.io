@@ -24,7 +24,7 @@
   
   
   
-  <meta name="description" content="Researcher in Bioinspired Computing. Artist. Adventurer">
+  <meta name="description" content="Researcher in Brain-inspired Computing. Artist. Adventurer">
 
   
   <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/tags/haskell/">
@@ -99,10 +99,10 @@
   <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
   <meta property="og:url" content="http://penkovsky.com/tags/haskell/">
   <meta property="og:title" content="Haskell | Bogdan Penkovsky, PhD">
-  <meta property="og:description" content="Researcher in Bioinspired Computing. Artist. Adventurer">
+  <meta property="og:description" content="Researcher in Brain-inspired Computing. Artist. Adventurer">
   <meta property="og:locale" content="en-us">
   
-  <meta property="og:updated_time" content="2019-06-29T15:01:00&#43;02:00">
+  <meta property="og:updated_time" content="2019-10-09T14:40:00&#43;02:00">
   
 
   
@@ -205,7 +205,7 @@
         
 
         <li class="nav-item">
-          <a href="/post">
+          <a href="/neural-networks">
             
             <span>Posts</span>
             
@@ -307,46 +307,59 @@
 
 <div class="article-container">
 
+  
+  
   <h1>Haskell</h1>
-
   
 
   
   
   <div>
-    <h2><a href="http://penkovsky.com/post/neural-networks-4/">Day 4: The Importance Of Batch Normalization</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></h2>
     <div class="article-style">
       
-      10 Days Of Grad: Deep Learning From The First Principles. Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, 'The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective'. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches.
+      Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet calls convolutional neural networks (CNNs). First, we are going to build an intuition behind those algorithms. Then, we are taking a look with basic CNN architecture. After discussing the differences between convolutional layer types, we are going to implement them in Haskell.
+Previous posts
+ Day 1: Learning Neural Networks The Hard Way Day 2: What Do Hidden Layers Do?
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/post/neural-networks-3/">Day 3: Haskell Guide To Neural Networks</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></h2>
     <div class="article-style">
       
-      10 Days Of Grad: Deep Learning From The First Principles. Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.
+      Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, 'The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective'. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches. Indeed, neural networks are general enough and they leverage computation.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/post/neural-networks-2/">Day 2: What Do Hidden Layers Do?</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></h2>
     <div class="article-style">
       
-      10 Days Of Grad: Deep Learning From The First Principles. In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+      Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.
+      
+    </div>
+  </div>
+  
+  <div>
+    <h2><a href="http://penkovsky.com/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></h2>
+    <div class="article-style">
+      
+      In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
-&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&quot;
+&quot;It seems to be much less than state-of-the-art&quot;, I contemplate.
       
     </div>
   </div>
   
   <div>
-    <h2><a href="http://penkovsky.com/post/neural-networks/">Day 1: Learning Neural Networks The Hard Way</a></h2>
+    <h2><a href="http://penkovsky.com/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></h2>
     <div class="article-style">
       
-      10 Days Of Grad: Deep Learning From The First Principles. Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky's writings2. As a result, I came across neural networks idea.
+      Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky's writings2. As a result, I came across neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3.
       
     </div>
   </div>
