@@ -21,7 +21,7 @@
 &lt;p&gt;Today we have finally arrived at the &amp;quot;master algorithm&amp;quot; in computer vision.
 That is how &lt;a href=&#34;https://fchollet.com&#34; target=&#34;_blank&#34;&gt;François Chollet&lt;/a&gt; calls convolutional neural
 networks (CNNs). First, we are going to build an intuition behind those
-algorithms. Then, we are taking a look with basic CNN architecture. After
+algorithms. Then, we are taking a look at basic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement them in Haskell.&lt;/p&gt;
 
@@ -90,7 +90,7 @@ Is there any way to make a neural network translation invariant?&lt;/p&gt;
 
 &lt;p&gt;Let us take a closer look at the cat image.
 Soon we realize that pixels representing cat&#39;s head are more contextually related to each other
-than they are related to pixels representing cats tail. Therefore, we also would make
+than they are related to pixels representing cat&#39;s tail. Therefore, we also would make
 our neural network &lt;em&gt;sparse&lt;/em&gt; so that neurons in the next layer are
 connected only to the relevant neighboring pixels. This way, each neuron
 in the next layer would be responsible for a small &lt;em&gt;feature&lt;/em&gt; in the original image.
@@ -297,27 +297,6 @@ Thanks to this &lt;em&gt;weight sharing&lt;/em&gt;, convolutional layers
 have drastically reduced number of trainable parameters&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;,
 compared to fully-connected layers.&lt;/p&gt;
 
-&lt;!--
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/1/1e/Convolutional_Neural_Network_NeuralNetworkFeatureLayers.gif&#34; alt=&#34;Each pixel in the next layer is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.&#34; width=&#34;520px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Convolutional layer.&lt;/h4&gt;
-  &lt;p&gt;
-    Each pixel in the next layer is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
---&gt;
-
 &lt;h2 id=&#34;convolution-types&#34;&gt;Convolution Types&lt;/h2&gt;
 
 &lt;p&gt;I decided to include this section for curious readers.
@@ -374,6 +353,24 @@ apply 3D kernels of size $5 \times 5 \times 6$ computing dot products
 simultaneously on all six feature maps from the first layer. There were sixteen
 different kernels thus producing sixteen new channels.&lt;/p&gt;
 
+&lt;figure&gt;
+
+&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/1/1e/Convolutional_Neural_Network_NeuralNetworkFeatureLayers.gif&#34; alt=&#34;Each pixel in the feature map is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.&#34; width=&#34;520px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Convolution filter with three input channels.&lt;/h4&gt;
+  &lt;p&gt;
+    Each pixel in the feature map is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
 &lt;p&gt;To summarize, a single LeNet-like convolution operates simultaneously on all
 input channels and produces a single channel. By having an arbitrary number of
 kernels, any number of output channels is obtained. It is not uncommon to operate
@@ -405,7 +402,7 @@ architectures.&lt;/p&gt;
 &lt;p&gt;The depthwise separable convolution works the following way. First, like in
 low-level computer vision, individual kernels are applied to each individual channel.
 Then, after optional activation&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;,
-there is a another convolution, but this time
+there is another convolution, but this time
 exclusively in-between channels. That is typically achieved by applying
 a $1 \times 1$ convolution kernel. Finally, there is a (ReLU) activation.&lt;/p&gt;
 
