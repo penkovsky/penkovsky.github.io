@@ -19,8 +19,9 @@
       <description>
 
 &lt;p&gt;Today we have finally arrived at the &amp;quot;master algorithm&amp;quot; in computer vision.
-That is how &lt;a href=&#34;https://fchollet.com&#34; target=&#34;_blank&#34;&gt;François Chollet&lt;/a&gt; calls convolutional neural
-networks (CNNs). First, we are going to build an intuition behind those
+That is how François Chollet, author of &lt;a href=&#34;https://github.com/keras-team/keras&#34; target=&#34;_blank&#34;&gt;Keras&lt;/a&gt;,
+calls convolutional neural networks (CNNs).
+First, we are going to build an intuition behind those
 algorithms. Then, we are taking a look at basic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement them in Haskell.&lt;/p&gt;
@@ -974,8 +975,8 @@ trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-bat
 method in the context of deep neural networks. Batchnorm&#39;s power is that it can
 substantially reduce the number of training epochs or even help achieving
 better neural network accuracy. After discussing this, we are prepared for such
-hot subjects as convolutional neural networks and reinforcement learning. Stay
-tuned!&lt;/p&gt;
+hot subjects as &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional neural networks&lt;/a&gt;
+and reinforcement learning. Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
 
