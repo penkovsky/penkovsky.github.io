@@ -24,9 +24,7 @@
   
     
   
-  <meta name="description" content="Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). First, we are going to build an intuition behind those algorithms. Then, we are taking a look at basic CNN architecture. After discussing the differences between convolutional layer types, we are going to implement them in Haskell.
-Previous posts
- Day 1: Learning Neural Networks The Hard Way Day 2: What Do Hidden Layers Do?">
+  <meta name="description" content="Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional neural network is an architecture that, like other artificial neural networks, has a neuron as its core building block and is differentiable, so it is also trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.">
 
   
   <link rel="alternate" hreflang="en-us" href="http://penkovsky.com/neural-networks/day5/">
@@ -101,9 +99,7 @@ Previous posts
   <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
   <meta property="og:url" content="http://penkovsky.com/neural-networks/day5/">
   <meta property="og:title" content="Day 5: Convolutional Neural Networks Tutorial | Bogdan Penkovsky, PhD">
-  <meta property="og:description" content="Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). First, we are going to build an intuition behind those algorithms. Then, we are taking a look at basic CNN architecture. After discussing the differences between convolutional layer types, we are going to implement them in Haskell.
-Previous posts
- Day 1: Learning Neural Networks The Hard Way Day 2: What Do Hidden Layers Do?"><meta property="og:image" content="http://penkovsky.com/img/posts/neural-networks/rural.jpg">
+  <meta property="og:description" content="Today we have finally arrived at the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional neural network is an architecture that, like other artificial neural networks, has a neuron as its core building block and is differentiable, so it is also trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights."><meta property="og:image" content="http://penkovsky.com/img/posts/neural-networks/rural.jpg">
   <meta property="og:locale" content="en-us">
   
   <meta property="article:published_time" content="2019-10-09T14:40:00&#43;02:00">
@@ -391,8 +387,14 @@ Previous posts
 <p>Today we have finally arrived at the &quot;master algorithm&quot; in computer vision.
 That is how François Chollet, author of <a href="https://github.com/keras-team/keras" target="_blank">Keras</a>,
 calls convolutional neural networks (CNNs).
-First, we are going to build an intuition behind those
-algorithms. Then, we are taking a look at basic CNN architecture. After
+Convolutional neural network is an architecture that, like other artificial neural
+networks, has a neuron as its core building block and is differentiable,
+so it is also trained via backpropagation. The distinctive feature
+of CNNs, however, is the connection topology, resulting in sparsely connected
+<em>convolutional</em> layers with neurons sharing their weights.</p>
+
+<p>First, we are going to build an intuition behind CNNs.
+Then, we are taking a look at a basic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement them in Haskell.</p>
 
