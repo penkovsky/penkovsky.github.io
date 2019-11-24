@@ -1440,8 +1440,8 @@ over every channel in every image.
 Therefore, we use <code>computeWithStride</code>
 and the stride is <code>1 :&gt; 1 :&gt; 2 :. 2</code>
 ($\text{batch dim} \times \text{channel dim} \times \text{height} \times \text{width}$). Note that we do not want any padding since
-the goal of pooling is actually to reduce the image
-size: twice in this case.</p>
+the goal of pooling is actually to reduce the number of pixels:
+four times in this case.</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpool_</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>
 <span style="color:#a6e22e">maxpool_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">computeWithStride</span> (<span style="color:#66d9ef">Stride</span> (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>
