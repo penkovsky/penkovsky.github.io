@@ -1081,8 +1081,8 @@ Indeed, every time we multiply the same set of weights
 and the only thing that changes is source data
 (masked with bullets above).
 Therefore, to implement convolutions we only need
-to define a some sort of a fixed pattern that processes given points.
-This pattern applied to array elements is called a <em>stencil</em>.
+to define some sort of pattern that processes given points.
+This fixed pattern applied to array elements is called a <em>stencil</em>.
 The stencil convolution approach can be also used to perform
 subsampling operations, e.g. max pooling.
 Moreover, the method allows for efficient data parallelism.</p>
@@ -1181,6 +1181,12 @@ This is what we get:</p>
 <img src="/img/posts/neural-networks/frog_blurred.png" width="670px" />
 
 
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Original frog (left) and blurred (right). <a href="https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429" target="_blank">Image credit</a>.</h4>
+  
+</figcaption>
+
 </figure>
 
 <p>While in the last example above we have defined stencils manually with
@@ -1193,8 +1199,9 @@ This is what we get:</p>
 
 <h3 id="convolutional-layers-with-stencils">Convolutional Layers With Stencils</h3>
 
-<p>Before actually diving into implementation, we have to mention
-that usually convolution decreases the number of &quot;pixels&quot; in the image.
+<p>Before actually diving into implementation, we have to understand
+that convolution decreases the number of &quot;pixels&quot; in the image,
+similar to the &quot;delayed&quot; 1D kernel above.
 Moreover, some information next to the image border is lost
 due to the fact that the sliding window &quot;visits&quot; bordering pixels
 less than those closer to the center. To avoid the information loss,
@@ -1224,7 +1231,7 @@ forward and backward passes:</p>
        <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>)</code></pre></div>
 
 <p>The signature tells us that it is a differential
-function that takes a padding, a <code>Conv2d</code> parameters,
+function that takes a padding, <code>Conv2d</code> parameters,
 and a batch of images <code>Volume4</code> and produces
 another batch of images.
 The most efficient way to define the function
@@ -1350,9 +1357,9 @@ $\frac{\partial L}{\partial X}$:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d&#39;</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">dz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d_</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">w&#39;</span> <span style="color:#a6e22e">dz</span>
   <span style="color:#66d9ef">where</span>
-    <span style="color:#a6e22e">w&#39;</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">compute</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">rot180</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">compute</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">transposeInner</span>) <span style="color:#a6e22e">w</span>
+    <span style="color:#a6e22e">w&#39;</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">compute</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">rot180</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">transposeInner</span>) <span style="color:#a6e22e">w</span>
 
-    <span style="color:#75715e">-- Rotate images by 180 degrees. This is expressed in terms</span>
+    <span style="color:#75715e">-- Rotate kernels by 180 degrees. This is expressed in terms</span>
     <span style="color:#75715e">-- of tensor reversal along width and height dimensions.</span>
     <span style="color:#a6e22e">rot180</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">reverse&#39;</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">reverse&#39;</span> <span style="color:#ae81ff">2</span></code></pre></div>
 
@@ -1374,25 +1381,27 @@ weights $\frac{\partial L}{\partial W}$:</p>
     <span style="color:#75715e">-- Code omitted</span>
 
     <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">foldl&#39;</span> (<span style="color:#a6e22e">\acc</span> <span style="color:#a6e22e">im</span> <span style="color:#f92672">-&gt;</span>
-      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">cur</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_deconv2d</span> <span style="color:#a6e22e">p</span> (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">dzd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>) (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">xd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>)
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">cur</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_conv2d&#39;&#39;</span> <span style="color:#a6e22e">p</span> (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">dzd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>) (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">xd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>)
        <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">acc</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">cur</span>) <span style="color:#a6e22e">base</span> [<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#a6e22e">bs</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]</code></pre></div>
 
 <p>We simply accumulate gradients from individual images
 in the batch using left strict fold. Finally,
-we generalize Equation (4) to get those transformation:</p>
+we generalize Equation (4) to get those transformations:</p>
 
-<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">_deconv2d</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Padding</span> <span style="color:#66d9ef">Ix2</span> <span style="color:#66d9ef">Float</span>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">_conv2d&#39;&#39;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Padding</span> <span style="color:#66d9ef">Ix2</span> <span style="color:#66d9ef">Float</span>
           <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Gradients \delta (dz)</span>
           <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ X</span>
           <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ dL/dW</span>
-<span style="color:#a6e22e">_deconv2d</span> (<span style="color:#66d9ef">Padding</span> (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp1</span>) (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp2</span>) <span style="color:#a6e22e">pb</span>) <span style="color:#a6e22e">dz</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#f92672">...</span></code></pre></div>
+<span style="color:#a6e22e">_conv2d&#39;&#39;</span> (<span style="color:#66d9ef">Padding</span> (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp1</span>) (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp2</span>) <span style="color:#a6e22e">pb</span>) <span style="color:#a6e22e">dz</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#f92672">...</span></code></pre></div>
 
 <h3 id="more-stencils-max-pooling-layers">More Stencils: Max Pooling Layers</h3>
 
 <p>Stencils are handy not only for convolutional layers.
-Another use case are pooling pooling (subsampling) layers.
+Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
-the corresponding pattern:</p>
+the corresponding stencil pattern
+(or just use <a href="http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil" target="_blank"><code>maxStencil</code></a>
+from the library instead)</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix4</span> <span style="color:#66d9ef">Float</span> <span style="color:#66d9ef">Float</span>
 <span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">makeStencil</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span>) <span style="color:#ae81ff">0</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span> <span style="color:#a6e22e">get</span> <span style="color:#f92672">-&gt;</span>
@@ -1407,7 +1416,7 @@ the maximal one. This function is applied to a patch of
 four neighboring pixels. Do not forget that we operate
 in a 4D space, therefore each point in the
 given patch has four coordinates. Here is how we interpret
-the first coordinate:</p>
+a coordinate:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-none" data-lang="none"> (0 :&gt; 0 :&gt; 0 :. 0)
   ^    ^    ^    ^
@@ -1418,18 +1427,19 @@ the first coordinate:</p>
 4 is the batch dimension.</code></pre></div>
 
 <p>Note the <code>:.</code> and <code>:&gt;</code> operators. The first one <code>:.</code> constructs
-the coordinates (index) &quot;list&quot; with two elements
+a coordinates (index) &quot;list&quot; with two elements
 and <code>:&gt;</code> just adds more coordinates for higher dimensions.
 To learn more about
 <code>&lt;$&gt;</code> and <code>&lt;*&gt;</code> functions, see
-<a href="http://learnyouahaskell.com/functors-applicative-functors-and-monoids" target="_blank">Applicative Functors</a>.
-We would like max pooling sliding windows to be non-overlapping,
+<a href="http://learnyouahaskell.com/functors-applicative-functors-and-monoids" target="_blank">Applicative Functors</a>.</p>
+
+<p>We would like to have non-overlapping sliding windows in max pooling,
 therefore, we want to use $2 \times 2$ stride in the image plane.
 However, we would like to perform the same operation
 over every channel in every image.
 Therefore, we use <code>computeWithStride</code>
-and the stride is <code>1 :&gt; 1 :&gt; 2 :. 2</code>, i.e.
-$\text{image dim} \times \text{channel dim} \times \text{height} \times \text{width}$. Note that we do not want any padding since
+and the stride is <code>1 :&gt; 1 :&gt; 2 :. 2</code>
+($\text{batch dim} \times \text{channel dim} \times \text{height} \times \text{width}$). Note that we do not want any padding since
 the goal of pooling is actually to reduce the image
 size: twice in this case.</p>
 
@@ -1537,7 +1547,7 @@ we had before.</p>
 <span style="color:#a6e22e">trainStep</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">targ</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">n</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">gradBP</span> (<span style="color:#a6e22e">crossEntropyLoss</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">targ</span>) <span style="color:#a6e22e">n</span>)</code></pre></div>
 
 <p>If we ever want to actually use our model to identify
-a handwritten digit, we would call <code>evalBP</code>:</p>
+a handwritten digit, we call <code>evalBP</code>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">forward</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>
 <span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">evalBP</span> (`<span style="color:#a6e22e">lenet</span>` <span style="color:#a6e22e">dta</span>) <span style="color:#a6e22e">net</span></code></pre></div>
@@ -1563,8 +1573,8 @@ a handwritten digit, we would call <code>evalBP</code>:</p>
 
 <p>Thus, after 30 training epochs,
 we have obtained a $\sim 1\%$ validation error, which
-is about twice lower compared to the one
-we had with a fully-connected architecture.
+is about twice as low compared to
+the simple fully-connected architecture.
 See the complete project on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day5" target="_blank">Github</a>.</p>
 
 <!--
@@ -1586,12 +1596,14 @@ today requires only</p>
 $$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$</p>
 
 <p>Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
-convolutional layers parameters, whereas $59,524$ reside in fully-connected
-layers of the classifier.</p>
+convolutional layers parameters, whereas
+the majority of $59,524$ reside in classifier's fully-connected
+layers.</p>
 
-<p>Although, we did not apply batch normalization today, like in the original LeNet,
-feel free to experiment adding batchnorm layers. Please also note that
-there is a difference between batch normalization
+<p>Although, we did not apply batch normalization today,
+like was in the original LeNet,
+feel free to experiment with adding batchnorm layers.
+Please also note that there is a difference between batch normalization
 after convolution and after fully-connected layers (see the <a href="https://arxiv.org/abs/1502.03167" target="_blank">batchnorm article</a>).</p>
 
 <h2 id="summary">Summary</h2>

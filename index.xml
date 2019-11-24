@@ -715,8 +715,8 @@ Indeed, every time we multiply the same set of weights
 and the only thing that changes is source data
 (masked with bullets above).
 Therefore, to implement convolutions we only need
-to define a some sort of a fixed pattern that processes given points.
-This pattern applied to array elements is called a &lt;em&gt;stencil&lt;/em&gt;.
+to define some sort of pattern that processes given points.
+This fixed pattern applied to array elements is called a &lt;em&gt;stencil&lt;/em&gt;.
 The stencil convolution approach can be also used to perform
 subsampling operations, e.g. max pooling.
 Moreover, the method allows for efficient data parallelism.&lt;/p&gt;
@@ -815,6 +815,12 @@ This is what we get:&lt;/p&gt;
 &lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/frog_blurred.png&#34; width=&#34;670px&#34; /&gt;
 
 
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Original frog (left) and blurred (right). &lt;a href=&#34;https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429&#34; target=&#34;_blank&#34;&gt;Image credit&lt;/a&gt;.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
 &lt;/figure&gt;
 
 &lt;p&gt;While in the last example above we have defined stencils manually with
@@ -827,8 +833,9 @@ This is what we get:&lt;/p&gt;
 
 &lt;h3 id=&#34;convolutional-layers-with-stencils&#34;&gt;Convolutional Layers With Stencils&lt;/h3&gt;
 
-&lt;p&gt;Before actually diving into implementation, we have to mention
-that usually convolution decreases the number of &amp;quot;pixels&amp;quot; in the image.
+&lt;p&gt;Before actually diving into implementation, we have to understand
+that convolution decreases the number of &amp;quot;pixels&amp;quot; in the image,
+similar to the &amp;quot;delayed&amp;quot; 1D kernel above.
 Moreover, some information next to the image border is lost
 due to the fact that the sliding window &amp;quot;visits&amp;quot; bordering pixels
 less than those closer to the center. To avoid the information loss,
@@ -858,7 +865,7 @@ forward and backward passes:&lt;/p&gt;
        &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;The signature tells us that it is a differential
-function that takes a padding, a &lt;code&gt;Conv2d&lt;/code&gt; parameters,
+function that takes a padding, &lt;code&gt;Conv2d&lt;/code&gt; parameters,
 and a batch of images &lt;code&gt;Volume4&lt;/code&gt; and produces
 another batch of images.
 The most efficient way to define the function
@@ -984,9 +991,9 @@ $\frac{\partial L}{\partial X}$:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d_&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;w&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rot180&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;transposeInner&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;w&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rot180&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;transposeInner&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
 
-    &lt;span style=&#34;color:#75715e&#34;&gt;-- Rotate images by 180 degrees. This is expressed in terms&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Rotate kernels by 180 degrees. This is expressed in terms&lt;/span&gt;
     &lt;span style=&#34;color:#75715e&#34;&gt;-- of tensor reversal along width and height dimensions.&lt;/span&gt;
     &lt;span style=&#34;color:#a6e22e&#34;&gt;rot180&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reverse&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reverse&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -1008,25 +1015,27 @@ weights $\frac{\partial L}{\partial W}$:&lt;/p&gt;
     &lt;span style=&#34;color:#75715e&#34;&gt;-- Code omitted&lt;/span&gt;
 
     &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foldl&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;\acc&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cur&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dzd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;)
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cur&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2d&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dzd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;)
        &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;acc&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cur&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;base&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;We simply accumulate gradients from individual images
 in the batch using left strict fold. Finally,
-we generalize Equation (4) to get those transformation:&lt;/p&gt;
+we generalize Equation (4) to get those transformations:&lt;/p&gt;
 
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2d&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Gradients \delta (dz)&lt;/span&gt;
           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ X&lt;/span&gt;
           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ dL/dW&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp1&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;pb&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2d&amp;#39;&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp1&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;pb&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;h3 id=&#34;more-stencils-max-pooling-layers&#34;&gt;More Stencils: Max Pooling Layers&lt;/h3&gt;
 
 &lt;p&gt;Stencils are handy not only for convolutional layers.
-Another use case are pooling pooling (subsampling) layers.
+Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
-the corresponding pattern:&lt;/p&gt;
+the corresponding stencil pattern
+(or just use &lt;a href=&#34;http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;maxStencil&lt;/code&gt;&lt;/a&gt;
+from the library instead)&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeStencil&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
@@ -1041,7 +1050,7 @@ the maximal one. This function is applied to a patch of
 four neighboring pixels. Do not forget that we operate
 in a 4D space, therefore each point in the
 given patch has four coordinates. Here is how we interpret
-the first coordinate:&lt;/p&gt;
+a coordinate:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt; (0 :&amp;gt; 0 :&amp;gt; 0 :. 0)
   ^    ^    ^    ^
@@ -1052,18 +1061,19 @@ the first coordinate:&lt;/p&gt;
 4 is the batch dimension.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Note the &lt;code&gt;:.&lt;/code&gt; and &lt;code&gt;:&amp;gt;&lt;/code&gt; operators. The first one &lt;code&gt;:.&lt;/code&gt; constructs
-the coordinates (index) &amp;quot;list&amp;quot; with two elements
+a coordinates (index) &amp;quot;list&amp;quot; with two elements
 and &lt;code&gt;:&amp;gt;&lt;/code&gt; just adds more coordinates for higher dimensions.
 To learn more about
 &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt; functions, see
-&lt;a href=&#34;http://learnyouahaskell.com/functors-applicative-functors-and-monoids&#34; target=&#34;_blank&#34;&gt;Applicative Functors&lt;/a&gt;.
-We would like max pooling sliding windows to be non-overlapping,
+&lt;a href=&#34;http://learnyouahaskell.com/functors-applicative-functors-and-monoids&#34; target=&#34;_blank&#34;&gt;Applicative Functors&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;We would like to have non-overlapping sliding windows in max pooling,
 therefore, we want to use $2 \times 2$ stride in the image plane.
 However, we would like to perform the same operation
 over every channel in every image.
 Therefore, we use &lt;code&gt;computeWithStride&lt;/code&gt;
-and the stride is &lt;code&gt;1 :&amp;gt; 1 :&amp;gt; 2 :. 2&lt;/code&gt;, i.e.
-$\text{image dim} \times \text{channel dim} \times \text{height} \times \text{width}$. Note that we do not want any padding since
+and the stride is &lt;code&gt;1 :&amp;gt; 1 :&amp;gt; 2 :. 2&lt;/code&gt;
+($\text{batch dim} \times \text{channel dim} \times \text{height} \times \text{width}$). Note that we do not want any padding since
 the goal of pooling is actually to reduce the image
 size: twice in this case.&lt;/p&gt;
 
@@ -1171,7 +1181,7 @@ we had before.&lt;/p&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;trainStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;gradBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;crossEntropyLoss&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;If we ever want to actually use our model to identify
-a handwritten digit, we would call &lt;code&gt;evalBP&lt;/code&gt;:&lt;/p&gt;
+a handwritten digit, we call &lt;code&gt;evalBP&lt;/code&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;evalBP&lt;/span&gt; (`&lt;span style=&#34;color:#a6e22e&#34;&gt;lenet&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -1197,8 +1207,8 @@ a handwritten digit, we would call &lt;code&gt;evalBP&lt;/code&gt;:&lt;/p&gt;
 
 &lt;p&gt;Thus, after 30 training epochs,
 we have obtained a $\sim 1\%$ validation error, which
-is about twice lower compared to the one
-we had with a fully-connected architecture.
+is about twice as low compared to
+the simple fully-connected architecture.
 See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;!--
@@ -1220,12 +1230,14 @@ today requires only&lt;/p&gt;
 $$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$&lt;/p&gt;
 
 &lt;p&gt;Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
-convolutional layers parameters, whereas $59,524$ reside in fully-connected
-layers of the classifier.&lt;/p&gt;
+convolutional layers parameters, whereas
+the majority of $59,524$ reside in classifier&#39;s fully-connected
+layers.&lt;/p&gt;
 
-&lt;p&gt;Although, we did not apply batch normalization today, like in the original LeNet,
-feel free to experiment adding batchnorm layers. Please also note that
-there is a difference between batch normalization
+&lt;p&gt;Although, we did not apply batch normalization today,
+like was in the original LeNet,
+feel free to experiment with adding batchnorm layers.
+Please also note that there is a difference between batch normalization
 after convolution and after fully-connected layers (see the &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batchnorm article&lt;/a&gt;).&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
