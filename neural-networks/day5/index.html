@@ -1401,7 +1401,7 @@ Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
 the corresponding stencil pattern
 (or just use <a href="http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil" target="_blank"><code>maxStencil</code></a>
-from the library instead)</p>
+from the library instead).</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix4</span> <span style="color:#66d9ef">Float</span> <span style="color:#66d9ef">Float</span>
 <span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">makeStencil</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span>) <span style="color:#ae81ff">0</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span> <span style="color:#a6e22e">get</span> <span style="color:#f92672">-&gt;</span>
@@ -1597,7 +1597,7 @@ $$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$</p>
 
 <p>Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
 convolutional layers parameters, whereas
-the majority of $59,524$ reside in classifier's fully-connected
+the majority ($59,524$) reside in classifier's fully-connected
 layers.</p>
 
 <p>Although, we did not apply batch normalization today,
@@ -1669,7 +1669,7 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
 <li id="fn:fn-6">Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
  <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
-<li id="fn:fn-7">Whereas I discuss only 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
+<li id="fn:fn-7">Whereas I discuss mostly 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
  <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
 <li id="fn:fn-8">By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
  <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>

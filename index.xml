@@ -1035,7 +1035,7 @@ Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
 the corresponding stencil pattern
 (or just use &lt;a href=&#34;http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;maxStencil&lt;/code&gt;&lt;/a&gt;
-from the library instead)&lt;/p&gt;
+from the library instead).&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeStencil&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
@@ -1231,7 +1231,7 @@ $$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$&lt;/p&gt;
 
 &lt;p&gt;Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
 convolutional layers parameters, whereas
-the majority of $59,524$ reside in classifier&#39;s fully-connected
+the majority ($59,524$) reside in classifier&#39;s fully-connected
 layers.&lt;/p&gt;
 
 &lt;p&gt;Although, we did not apply batch normalization today,
@@ -1303,7 +1303,7 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-6&#34;&gt;Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-7&#34;&gt;Whereas I discuss only 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
+&lt;li id=&#34;fn:fn-7&#34;&gt;Whereas I discuss mostly 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -2131,7 +2131,8 @@ how automatic differentiation can face this problem.&lt;/p&gt;
 networks. We will talk about
 &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;,
 another crucial method in modern deep learning.  And we will ramp it up to
-convolutional networks allowing us to solve some interesting challenges.
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional networks&lt;/a&gt; allowing us
+to solve some interesting challenges.
 Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
@@ -3018,8 +3019,8 @@ the one with a single hidden layer.&lt;/p&gt;
 
 &lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
 discuss how Haskell compiler can help ensure that our neural network is
-correct.  And we will ramp it up to convolutional networks allowing us to
-solve some interesting challenges.  Stay tuned.&lt;/p&gt;
+correct. And we will ramp it up to &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional networks&lt;/a&gt;
+allowing us to solve some interesting challenges.  Stay tuned.&lt;/p&gt;
 
 &lt;hr /&gt;
 
