@@ -13,24 +13,29 @@
     <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>
       <link>http://penkovsky.com/neural-networks/day5/</link>
-      <pubDate>Wed, 09 Oct 2019 14:40:00 +0200</pubDate>
+      <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/neural-networks/day5/</guid>
       <description>
 
-&lt;p&gt;Today we have finally arrived at the &amp;quot;master algorithm&amp;quot; in computer vision.
-That is how François Chollet, author of &lt;a href=&#34;https://github.com/keras-team/keras&#34; target=&#34;_blank&#34;&gt;Keras&lt;/a&gt;,
-calls convolutional neural networks (CNNs).
-Convolutional neural network is an architecture that, like other artificial neural
-networks, has a neuron as its core building block and is differentiable,
-so it is also trained via backpropagation. The distinctive feature
-of CNNs, however, is the connection topology, resulting in sparsely connected
-&lt;em&gt;convolutional&lt;/em&gt; layers with neurons sharing their weights.&lt;/p&gt;
+&lt;p&gt;Today we will talk about one of the most important deep learning architectures,
+the &amp;quot;master algorithm&amp;quot; in computer vision.  That is how François Chollet,
+author of &lt;a href=&#34;https://github.com/keras-team/keras&#34; target=&#34;_blank&#34;&gt;Keras&lt;/a&gt;, calls convolutional
+neural networks (CNNs).  Convolutional network is an architecture that, like
+other artificial neural networks, has a neuron as its core building block.  It
+is also differentiable, so the network is conveniently trained via backpropagation.
+The distinctive feature of CNNs, however, is the connection topology, resulting
+in sparsely connected &lt;em&gt;convolutional&lt;/em&gt; layers with neurons sharing their
+weights.&lt;/p&gt;
 
 &lt;p&gt;First, we are going to build an intuition behind CNNs.
-Then, we are taking a look at a basic CNN architecture. After
+Then, we are taking a close look at a classic CNN architecture. After
 discussing the differences between convolutional layer types,
-we are going to implement them in Haskell.&lt;/p&gt;
+we are going to implement a convolutional network in Haskell.
+We will see that on &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;handwritten digits&lt;/a&gt; our CNN
+achieves a twice lower test error, compared to the fully-connected
+architecture. We will build up on what we have learned during
+the previous days, so do not hesitate to refresh your memory first.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
@@ -46,7 +51,7 @@ we are going to implement them in Haskell.&lt;/p&gt;
 &lt;p&gt;Previously, we have learned about fully-connected neural networks.
 Although, theoretically those can approximate any reasonable
 function, they have certain limitations.
-One of the challenges is to address the translation symmetry.
+One of the challenges is to achieve the &lt;em&gt;translation symmetry&lt;/em&gt;.
 To explain this, let us take a look at the two cat pictures below.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -74,8 +79,8 @@ So we can say that our human cat detector is &lt;em&gt;translation invariant&lt;
 
 &lt;p&gt;However, if we look at the architecture of a typical fully-connected network,
 we may realize that there is actually nothing that prevents this network
-to work correctly only on some part of an image. The question here:
-Is there any way to make a neural network translation invariant?&lt;/p&gt;
+to work correctly only on some part of an image. The question we ask:
+Is there a way to make a neural network translation invariant?&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -97,10 +102,12 @@ Is there any way to make a neural network translation invariant?&lt;/p&gt;
 
 &lt;p&gt;Let us take a closer look at the cat image.
 Soon we realize that pixels representing cat&#39;s head are more contextually related to each other
-than they are related to pixels representing cat&#39;s tail. Therefore, we also would make
+than they are related to pixels representing cat&#39;s tail. Therefore,
+we also want to make
 our neural network &lt;em&gt;sparse&lt;/em&gt; so that neurons in the next layer are
-connected only to the relevant neighboring pixels. This way, each neuron
-in the next layer would be responsible for a small &lt;em&gt;feature&lt;/em&gt; in the original image.
+connected only to the &lt;em&gt;relevant&lt;/em&gt; neighboring pixels. This way, each neuron
+in the next layer would be responsible only for a
+small &lt;em&gt;feature&lt;/em&gt; in the original image.
 The area that a neuron &amp;quot;sees&amp;quot; is called a &lt;em&gt;receptive field&lt;/em&gt;.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -124,11 +131,12 @@ The area that a neuron &amp;quot;sees&amp;quot; is called a &lt;em&gt;receptive 
 &lt;p&gt;Convolutional neural networks (CNNs) or simply &lt;em&gt;ConvNets&lt;/em&gt; were
 designed to address those two issues: translation symmetry
 and image locality. First, let us give an intuitive explanation
-of a convolution operator&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+of a convolution operator.&lt;/p&gt;
 
-&lt;p&gt;You have very likely encountered convolution filters before.
+&lt;p&gt;You may not be aware, but it is very likely you have
+already encountered convolution filters.
 Recall when you have first played with a (raster) graphics editor like GIMP or Photoshop.
-You have probably been delighted obtaining effects such as sharpening, blur, or
+Probably you have been delighted obtaining effects such as sharpening, blur, or
 edge detection. If you haven&#39;t, then you probably should :).
 The secret of all those filters is the convolutional application of an &lt;em&gt;image kernel&lt;/em&gt;.
 The image kernel is typically a $3 \times 3$ matrix such as below.&lt;/p&gt;
@@ -157,32 +165,35 @@ the second one in the first row are zeros, the result is equal
 to the second value in the first row of the green frame, i.e.
 $40 \cdot 0 + 42 \cdot 1 + 46 \cdot 0 + \dotsc + 58 \cdot 0 = 42$.
 The convolution operator takes an image and acts within the green &amp;quot;sliding
-window&amp;quot; to perform dot product over every part of that image.
+window&amp;quot;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; to perform dot product over every part of that image.
 The result is a new, filtered image.
 Mathematically, the (discrete) convolution operator $(*)$ between
 an image $A \in \mathbb{R}^{D_{F_1} \times D_{F_2}}$
 and a kernel $K \in \mathbb{R}^{D_{K_1} \times D_{K_2}}$
 can be formalized as
-$$A * K = \sum_{m=0}^{D_{K_1} - 1} \sum_{n=0}^{D_{K_2} - 1} K_{m, n} \cdot A_{i-m, j-n},$$
+\begin{equation}
+A * K = \sum_{m=0}^{D_{K_1} - 1} \sum_{n=0}^{D_{K_2} - 1} K_{m, n} \cdot A_{i-m, j-n},
+\end{equation}
 where
 $0 \le i &amp;lt; D_{K_1} + D_{F_1} - 1$
 and $0 \le i &amp;lt; D_{K_2} + D_{F_2} - 1$.
 To better understand how convolution with a kernel
 changes the original image, you can play with different &lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;image kernels&lt;/a&gt;.&lt;/p&gt;
 
-&lt;p&gt;What is the motivation behind this sliding window/convolution operator approach?
-It has biological background.
+&lt;p&gt;What is the motivation behind the sliding window/convolution operator approach?
+Actually, it has a biological background.
 In fact, human eye has a relatively narrow &lt;a href=&#34;https://en.wikipedia.org/wiki/Visual_field&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;visual field&lt;/em&gt;&lt;/a&gt;.
 We perceive objects as a whole by constantly moving eyes around them.
 These rapid &lt;a href=&#34;https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm&#34; target=&#34;_blank&#34;&gt;eye movements&lt;/a&gt;
 are called &lt;a href=&#34;https://en.wikipedia.org/wiki/Saccade&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;saccades&lt;/em&gt;&lt;/a&gt;.
 Therefore, convolution operator may be regarded as a simplified model of
 image scanning that occurs naturally. The important point
-is thanks to the sliding window convolutions achieve translation invariance. Moreover,
+is that convolutions achieve translation invariance
+thanks to the sliding window method. Moreover,
 since every dot product result is connected - through the kernel - only to a very
 limited number of pixels in the initial image, convolution connections
 are very sparse. Therefore, by using convolutions
-in neural networks we achieve both translation invariance and connection sparsity.&lt;/p&gt;
+in neural networks we achieve both translation invariance and connection sparsity. Let us see how that works in practice.&lt;/p&gt;
 
 &lt;h2 id=&#34;convolutional-neural-network-architecture&#34;&gt;Convolutional Neural Network Architecture&lt;/h2&gt;
 
@@ -195,10 +206,10 @@ in neural networks we achieve both translation invariance and connection sparsit
 &lt;/blockquote&gt;
 
 &lt;p&gt;The &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;prototype&lt;/a&gt; of what we call today convolutional neural
-networks has been first proposed back &lt;a href=&#34;https://en.wikipedia.org/wiki/Convolutional_neural_network#History&#34; target=&#34;_blank&#34;&gt;in
-1980s&lt;/a&gt; &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;by
+networks has been first proposed back &lt;a href=&#34;https://en.wikipedia.org/wiki/Convolutional_neural_network#History&#34; target=&#34;_blank&#34;&gt;in late
+1970s&lt;/a&gt; &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;by
 Fukushima&lt;/a&gt;. There were proposed many unsupervised and supervised training
-methods, but today CNNs are trained with backpropagation.
+methods, but today CNNs are trained almost exclusively with backpropagation.
 Let us take a look at one of the famous ConvNet architectures known as LeNet-5.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -295,8 +306,8 @@ Indeed, we may anticipate that &amp;quot;deeper&amp;quot; neurons
 will have better overall view on what happens in the image.&lt;/p&gt;
 
 &lt;p&gt;The beauty and the biggest achievement of deep learning
-is that filter kernels are learned automatically with
-back propagation&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.
+is that filter kernels are self-learned by the network&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;,
+achieving even better accuracies compared to human-engineered features.
 A peculiarity of convolutional layers is that
 the result is obtained after repetitive application of
 a small number of weights as defined by a kernel.
@@ -418,40 +429,822 @@ convolution and a channel recombination. This reduces the number of operations
 to
 $D_K \times D_K \times M \times D_F \times D_F + M \times N \times D_F \times D_F$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
-&lt;!--
-## Implementing Convolution Operator
+&lt;p&gt;To summarize, the main difference between low-level image
+processing (Photoshop) and neural networks is that
+image processing operates on lots of pixels,
+but the image depth remains unchanged
+(three-four channels). On the other hand,
+convolutional neural networks
+tend to operate on images of moderate width
+and height (e.g. $230 \times 230$ pixels),
+but can achieve depth of thousands of
+channels, while simultaneously decreasing the number of
+&amp;quot;pixels&amp;quot; in feature maps towards to the end
+of processing pipeline.&lt;/p&gt;
 
-Today, we will implement convolutions in Haskell.
-And in the next post, we will implement and train a ConvNet
-inspired by LeNet-5.
+&lt;h2 id=&#34;implementing-convolutional-networks-in-haskell&#34;&gt;Implementing Convolutional Networks in Haskell&lt;/h2&gt;
 
-### What Are Stencils
+&lt;p&gt;Today, we will implement and train a convolutional
+network inspired by LeNet-5.
+We will witness that indeed this ConvNet
+has about twice lower error on the MNIST
+handwritten digit recognition task,
+while being four times smaller compared to the &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;previous model&lt;/a&gt;!
+The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
 
-...
+&lt;h3 id=&#34;convolutional-layer-gradients&#34;&gt;Convolutional Layer Gradients&lt;/h3&gt;
 
-### Stencils In Massiv
+&lt;p&gt;First of all, we need to know
+how to obtain convolutional layer gradients.
+Although convolution in neural networks is technically
+performed by the cross-correlation operator&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-11&#34;&gt;&lt;a href=&#34;#fn:fn-11&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;,
+this does not matter since kernel parameters are learnable.
+To understand gradient derivation, let us take
+a look at the cross-correlation operation in single dimension:&lt;/p&gt;
 
-Previously, we have introduced [Massiv][massiv] library
+&lt;p&gt;$$
+\begin{equation}
+(X * W)_i = \sum_{j=1}^{k} x_{i+j-1} w_j,
+i=1 \dots n.
+\end{equation}
+$$&lt;/p&gt;
+
+&lt;p&gt;For instance, if we fix 1D kernel $W$ size to be $k=3$,
+equation above would simply mean that vector
+$X \in \mathbb{R}^{n+2}$
+produces an output $Y \in \mathbb{R}^{n}$:
+$$y_1 = x_1 w_1 + x_2 w_2 + x_3 w_3,$$
+$$y_2 = x_2 w_1 + x_3 w_2 + x_4 w_3,$$
+$$y_3 = x_3 w_1 + x_4 w_2 + x_5 w_3,$$
+$$y_4 = x_4 w_1 + x_5 w_2 + x_6 w_3,$$
+$$y_5 = x_5 w_1 + x_6 w_2 + x_7 w_3,$$
+$$\dots$$
+$$y_n = x_n w_1 + x_{n+1} w_2 + x_{n+2} w_3.$$&lt;/p&gt;
+
+&lt;p&gt;Denoting error from the previous layer as $\delta$,
+convolutional layer gradients w.r.t. input $X$ are&lt;/p&gt;
+
+&lt;p&gt;$$ \frac{\partial L}{\partial x_1} = w_1 \delta_1, $$
+$$ \frac{\partial L}{\partial x_2} = w_2 \delta_1 + w_1
+\delta_2, $$
+$$ \frac{\partial L}{\partial x_3} = w_3 \delta_1 + w_2
+\delta_2 + w_1 \delta_3, $$
+$$ \frac{\partial L}{\partial x_4} = w_3 \delta_2 + w_2
+\delta_3 + w_1 \delta_4, $$
+$$\dots$$
+$$ \frac{\partial L}{\partial x_{n}} = w_3 \delta_{n-2} + w_2 \delta_{n-1} + w_1 \delta_{n}. $$
+$$ \frac{\partial L}{\partial x_{n+1}} = w_3 \delta_{n-1} + w_2 \delta_{n}, $$
+$$ \frac{\partial L}{\partial x_{n+2}} = w_3 \delta_n. $$&lt;/p&gt;
+
+&lt;p&gt;So it can be seen that it is a cross-correlation operation again,
+but with flipped kernel. Hence&lt;/p&gt;
+
+&lt;p&gt;\begin{equation}
+\boxed{
+    \frac{\partial L}{\partial X} = \delta * W_{flip}.
+}
+\end{equation}&lt;/p&gt;
+
+&lt;p&gt;Similarly, gradients w.r.t. kernel $W$ are
+computed as&lt;/p&gt;
+
+&lt;p&gt;$$\frac{\partial L}{\partial w_1} = \delta_1 x_1 + \delta_2 x_2 + \dots + \delta_n x_n,$$
+$$
+\frac{\partial L}{\partial w_2} = \delta_1 x_2 + \delta_2 x_3 + \dots + \delta_n x_{n+1},$$
+$$
+\frac{\partial L}{\partial w_3} = \delta_1 x_3 + \delta_2 x_4 + \dots + \delta_n x_{n+2}.$$&lt;/p&gt;
+
+&lt;p&gt;Thus we have yet another cross-correlation&lt;/p&gt;
+
+&lt;p&gt;\begin{equation}
+\boxed{
+    \frac{\partial L}{\partial W} = X * \delta.
+}
+\end{equation}&lt;/p&gt;
+
+&lt;p&gt;These formulas will become handy when implementing
+the backward pass from convolutional layers.&lt;/p&gt;
+
+&lt;h3 id=&#34;convolutions-in-haskell&#34;&gt;Convolutions in Haskell&lt;/h3&gt;
+
+&lt;p&gt;First, let us start with two most relevant imports:
+modules from array library &lt;code&gt;massiv&lt;/code&gt; and
+automatic differentiation tools from &lt;code&gt;backprop&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Multidimensional arrays to store learnable&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;-- parameters and represent image data&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt;           Data.Massiv.Array &lt;span style=&#34;color:#66d9ef&#34;&gt;hiding&lt;/span&gt; ( &lt;span style=&#34;color:#a6e22e&#34;&gt;map&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;zip&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;flatten&lt;/span&gt; )
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;qualified&lt;/span&gt; Data.Massiv.Array &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; A
+&lt;span style=&#34;color:#75715e&#34;&gt;-- Automatic heterogeneous back-propagation library&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt;           Numeric.Backprop&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let us brush up our data structures to match our convolutional needs.
+First, we need to represent a batch of images.
+We will use the following convention:
+$\text{batch size} \times \text{channels} \times \text{height} \times \text{width}$.
+For instance, if we have a batch of 16 RGB images with dimensions $32 \times 32$,
+then we get a volume of $16 \times 3 \times 32 \times 32$.
+Here we have a &lt;code&gt;Volume4&lt;/code&gt; type:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix4&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;It is just an alias to a four-dimensional unboxed Array
+coming from the &lt;code&gt;massiv&lt;/code&gt; package.
+In deep learning frameworks those n-dimensional arrays
+are conventionally called
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Tensor&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;tensors&lt;/em&gt;&lt;/a&gt;.
+Note that during transformation in a neural network,
+the shape of data will change, except the batch dimension that will always remain the same.
+Similarly, we need a way to represent our convolutional filters.
+In LeNet, for instance, we can represent the first convolutional
+layer as a volume of $6 \times 1 \times 5 \times 5$. In order to be
+able to distinguish between parameter and data volumes,
+we will introduce &lt;code&gt;Conv2d&lt;/code&gt; data structure:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_kernels&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that for the sake of simplicity we decided not to implement
+biases.
+As previously, &lt;code&gt;Linear&lt;/code&gt; will represent fully-connected layer parameters:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_weights&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+                       , &lt;span style=&#34;color:#a6e22e&#34;&gt;_biases&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+                       }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As usual, type parameter &lt;code&gt;a&lt;/code&gt; means that we may later decide whether we
+need a &lt;code&gt;Float&lt;/code&gt;, a &lt;code&gt;Double&lt;/code&gt; or some other weights encoding.
+Now, we have everything to describe learnable parameters (weights) in LeNet:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Linear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+          }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, it becomes obvious that with every new layer type
+managing backpropagation data structures
+as we did on Days 2 and 4 quickly becomes tedious.
+Moreover, last time when we introduced a &lt;code&gt;Batchnorm1d&lt;/code&gt; layer,
+our forward-backward &lt;code&gt;pass&lt;/code&gt; function already oversized 100 lines of code.
+Today, we will make use of the &lt;code&gt;backprop&lt;/code&gt; library
+introduced on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3&lt;/a&gt; to better structure
+our project. Thus, LeNet can be represented as a differentiable
+function &lt;code&gt;lenet&lt;/code&gt;, which is nothing more than a composition
+of other functions &lt;em&gt;aka&lt;/em&gt; neural network layers:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lenet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;)
+      &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Batch of images&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;lenet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;constVar&lt;/span&gt;
+
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Feature extractor&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Layer (layer group) #1&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sameConv2d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;^^.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv1&lt;/span&gt;)
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;relu&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Layer #2&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;validConv2d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;^^.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2&lt;/span&gt;)
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;relu&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool&lt;/span&gt;
+
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;flatten&lt;/span&gt;
+
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Classifier&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Layer #3&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linear&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;^^.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fc1&lt;/span&gt;)
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;relu&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Layer #4&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linear&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;^^.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fc2&lt;/span&gt;)
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;relu&lt;/span&gt;
+          &lt;span style=&#34;color:#75715e&#34;&gt;-- Layer #5&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linear&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;l&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;^^.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fc3&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This description pretty much talks for itself. The &lt;code&gt;(~&amp;gt;)&lt;/code&gt; operator
+is a function composition, i.e. &lt;code&gt;f ~&amp;gt; g = \x -&amp;gt; g(f(x))&lt;/code&gt;.
+This could be written in other forms, though. We prefer the
+so-called &lt;a href=&#34;https://wiki.haskell.org/Pointfree&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;pointfree&lt;/em&gt;&lt;/a&gt; notation:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;That simply reverses the order of composition, i.e. first
+is applied &lt;code&gt;f&lt;/code&gt;, and only then &lt;code&gt;g&lt;/code&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-12&#34;&gt;&lt;a href=&#34;#fn:fn-12&#34;&gt;12&lt;/a&gt;&lt;/sup&gt;.
+I find this &amp;quot;backward composition&amp;quot; notation consistent with
+major neural network frameworks. Compare how an
+equivalent network can be represented in &lt;a href=&#34;https://pytorch.org&#34; target=&#34;_blank&#34;&gt;PyTorch&lt;/a&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; torch.nn &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; nn
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;class&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;LeNet&lt;/span&gt;(nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Module):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; __init__(self, num_classes&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;):
+        super(LeNet, self)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;__init__()
+        &lt;span style=&#34;color:#75715e&#34;&gt;# Feature extractor: a (sequential) composition of convolutional,&lt;/span&gt;
+        &lt;span style=&#34;color:#75715e&#34;&gt;# activation, and pooling layers&lt;/span&gt;
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;features &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Sequential(
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Conv2d(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, kernel_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, stride&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, padding&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ReLU(),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;MaxPool2d(kernel_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, stride&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Conv2d(&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt;, kernel_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, stride&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, padding&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;False),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ReLU(),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;MaxPool2d(kernel_size&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, stride&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+        )
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;# Classifier: a composition of linear and activation layers&lt;/span&gt;
+        self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;classifier &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Sequential(
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(&lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;120&lt;/span&gt;, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ReLU(),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(&lt;span style=&#34;color:#ae81ff&#34;&gt;120&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;84&lt;/span&gt;, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;ReLU(),
+            nn&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;Linear(&lt;span style=&#34;color:#ae81ff&#34;&gt;84&lt;/span&gt;, num_classes, bias&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;True)
+        )
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Composition of feature extractor and classifier&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt;(self, x):
+        x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;features(x)
+        &lt;span style=&#34;color:#75715e&#34;&gt;# Flatten&lt;/span&gt;
+        x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;view(x&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;size(&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+        x &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; self&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;classifier(x)
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; x&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Despite some noise in the Python code above&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-13&#34;&gt;&lt;a href=&#34;#fn:fn-13&#34;&gt;13&lt;/a&gt;&lt;/sup&gt;,
+we see that &lt;code&gt;nn.Sequential&lt;/code&gt; object acts simply as a function
+composition with &lt;code&gt;(~&amp;gt;)&lt;/code&gt; combinators.
+Now, let us return back to &lt;code&gt;lenet&lt;/code&gt; signature:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;lenet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;)
+      &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Batch of images&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We have &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;already seen&lt;/a&gt; the &lt;code&gt;BVar s&lt;/code&gt;
+(&amp;quot;backprop variable&amp;quot;) type meaning that we deal with a differentiable
+structure. The first argument has type
+&lt;code&gt;BVar s (LeNet Float)&lt;/code&gt;. That conventionally means that &lt;code&gt;LeNet&lt;/code&gt;
+is the model optimized by backpropagation
+and shortly we will show how to achieve that.
+The second function argument is a batch of images (&lt;code&gt;Volume4&lt;/code&gt;), and finally
+the result is a bunch of vectors (&lt;code&gt;Matrix&lt;/code&gt;)
+containing classification results performed by our model.&lt;/p&gt;
+
+&lt;p&gt;Functions &lt;code&gt;constVar&lt;/code&gt; and &lt;code&gt;(^^.)&lt;/code&gt; are special ones. Both are coming
+from the &lt;code&gt;Numeric.Backprop&lt;/code&gt; import. The first function
+&amp;quot;lifts&amp;quot; a batch to be consumed by the sequence of differentiable functions.
+The second one (&lt;code&gt;^^.&lt;/code&gt;)
+allows us to conveniently access records from
+our &lt;code&gt;LeNet&lt;/code&gt; data type. For instance, &lt;code&gt;sameConv2d (l ^^. conv1)&lt;/code&gt;
+means that &lt;code&gt;sameConv2d&lt;/code&gt; has access to the &lt;code&gt;_conv1&lt;/code&gt; field.&lt;/p&gt;
+
+&lt;p&gt;Layers known from the previous days (linear, ReLU) will be
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352&#34; target=&#34;_blank&#34;&gt;reused&lt;/a&gt;
+in accordance to &lt;a href=&#34;https://backprop.jle.im/06-manual-gradients.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;backprop&lt;/code&gt; conventions&lt;/a&gt;.
+What is left to implement are &lt;code&gt;sameConv2d&lt;/code&gt;, &lt;code&gt;validConv2d&lt;/code&gt;, and &lt;code&gt;maxpool&lt;/code&gt; layers.
+To be able to do that simply and efficiently
+we will learn a neat tool called
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Stencil_code&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;stencils&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h3 id=&#34;fun-with-stencils&#34;&gt;Fun With Stencils&lt;/h3&gt;
+
+&lt;p&gt;Let us come back to 1D convolution from Equation (2).
+If we look closer, we notice a pattern
+in convolution/cross-correlation, i.e.
+$$y = \bullet w_1 + \bullet w_2 + \bullet w_3.$$
+Indeed, every time we multiply the same set of weights
+and the only thing that changes is source data
+(masked with bullets above).
+Therefore, to implement convolutions we only need
+to define a some sort of a fixed pattern that processes given points.
+This pattern applied to array elements is called a &lt;em&gt;stencil&lt;/em&gt;.
+The stencil convolution approach can be also used to perform
+subsampling operations, e.g. max pooling.
+Moreover, the method allows for efficient data parallelism.&lt;/p&gt;
+
+&lt;p&gt;Previously, we have introduced &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;Massiv&lt;/a&gt; library
 featuring parallel arrays computation.
-...
-Massiv implements stencils from this [paper][stencil-haskell2011].
+This library was preferable to &lt;code&gt;hmatrix&lt;/code&gt;
+due to two reasons: multidimensional arrays and
+parallel computation. Today, we have yet one more
+reason: stencils.
+Good news: &lt;code&gt;massiv&lt;/code&gt; already implements them for us!
+Those are based on &lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34; target=&#34;_blank&#34;&gt;this work&lt;/a&gt;.&lt;/p&gt;
 
-TODO: apply different image kernels on the same image and show in the figures.
+&lt;p&gt;First, we warm up with a 1D cross-correlation from Equation (2).
+Suppose, we have a &amp;quot;delay&amp;quot; kernel $[1, 0, 0]$.
+Here is how this can be applied in an interactive shell
+(&lt;em&gt;aka REPL&lt;/em&gt;):&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; Data.Massiv.Array
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;type&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- Convenience alias&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromList&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeCorrelationStencilFromKernel&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromList&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mapStencil&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Fill&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;DW&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+  [ &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that the first value was replaced with zero since we have
+applied &lt;code&gt;mapStencil (Fill 0)&lt;/code&gt;
+that uses zero-filling padding strategy to preserve the size of the array.
+Our array was processed to look internally like this:
+$[0,1,2,5,6,2,-1,3,-2,0]$, with fake zeros inserted.
+Alternatively, we could use &lt;code&gt;applyStencil noPadding&lt;/code&gt; as below:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;applyStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;noPadding&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;DW&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;)
+  [ &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; ]
+
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromList&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;
+&lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;applyStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;noPadding&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&amp;#39;&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;DW&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Par&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;)
+  [ &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is a more interesting computer
+&lt;a href=&#34;https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs&#34; target=&#34;_blank&#34;&gt;vision example&lt;/a&gt;. For comparison, we define an identity
+(no transformation) stencil and a box stencil (blurring effect).
+The identity kernel has one in its center
+(coordinate &lt;code&gt;0 :. 0&lt;/code&gt;) and zeroes everywhere else.
+The box transformation computes
+averaged value over nine neighboring pixels including the center
+pixel itself (see also &lt;a href=&#34;https://github.com/pjreddie/vision-hw1&#34; target=&#34;_blank&#34;&gt;this&lt;/a&gt;
+for more information), therefore the kernel has weights 1/9
+everywhere.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; Data.Massiv.Array
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; Data.Massiv.Array.IO
+&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; Graphics.ColorSpace
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;identity&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Elevator&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Pixel&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;RGB&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Pixel&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;RGB&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;identity&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;makeStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\get&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- `get` is a function that receives a coordinate relative to the&lt;/span&gt;
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- stencil&amp;#39;s center, i.e. (0 :. 0) is the center itself.&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;sz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;-- Kernel size: 3 x 3&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- Center coordinate&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;{-# INLINE identity #-}&lt;/span&gt;
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;box&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Elevator&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Fractional&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Pixel&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;RGB&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Pixel&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;RGB&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;box&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;makeStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\get&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+    ( &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+    &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+    &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt;  (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;9&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;sz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;{-# INLINE box #-}&lt;/span&gt;
+
+&lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; ()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;frog&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;readImageAuto&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;files/frog.jpg&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Image&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;S&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;RGB&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
+
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- Identity transformation&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;writeImageAuto&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;files/frog_clone.png&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;S&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;mapStencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Edge&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;identity&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;frog&lt;/span&gt;)
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- Box filtering (blur)&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;writeImageAuto&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;files/frog_blurred.png&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;S&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;mapStencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Edge&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;box&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;frog&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In &lt;code&gt;main&lt;/code&gt; function, we load an image and apply those two stencils.
+All we need to do is to specify the stencil pattern,
+i.e. convolution kernel, and &lt;code&gt;massiv&lt;/code&gt; takes care to apply it.
+This is what we get:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/frog_blurred.png&#34; width=&#34;670px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;While in the last example above we have defined stencils manually with
+&lt;code&gt;makeStencil&lt;/code&gt;, in practice we may prefer to use&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;makeCorrelationStencilFromKernel&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Manifest&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;e&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Num&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;e&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Array&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;r&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;e&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;e&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;e&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The function has a single argument, stencil&#39;s kernel.&lt;/p&gt;
+
+&lt;h3 id=&#34;convolutional-layers-with-stencils&#34;&gt;Convolutional Layers With Stencils&lt;/h3&gt;
+
+&lt;p&gt;Before actually diving into implementation, we have to mention
+that usually convolution decreases the number of &amp;quot;pixels&amp;quot; in the image.
+Moreover, some information next to the image border is lost
+due to the fact that the sliding window &amp;quot;visits&amp;quot; bordering pixels
+less than those closer to the center. To avoid the information loss,
+often the area around the image is &amp;quot;padded&amp;quot; (filled) with zeros.
+Thus we can perform a &amp;quot;same&amp;quot; convolution, i.e. one that does not change
+the convolved dimensions. As of version 0.4.3,
+&lt;code&gt;Massiv&lt;/code&gt; stencils already support different padding modes.
+In case of LeNet $5 \times 5$ kernels,
+we define padding of 2 pixels on every side (top, right, bottom, and left)
+using top left and bottom right corners:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sameConv2d&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Fill&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;&amp;quot;Valid&amp;quot; convolution is a convolution with no padding:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;validConv2d&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Fill&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In both cases, we will use generic &lt;code&gt;conv2d&lt;/code&gt; function with a padding
+argument.
+Supporting automatic differentiation, our &lt;code&gt;conv2d&lt;/code&gt; combines both
+forward and backward passes:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The signature tells us that it is a differential
+function that takes a padding, a &lt;code&gt;Conv2d&lt;/code&gt; parameters,
+and a batch of images &lt;code&gt;Volume4&lt;/code&gt; and produces
+another batch of images.
+The most efficient way to define the function
+is to manually specify both forward and backward
+passes; although it is also possible
+to specify only the forward pass composing
+smaller functions operating on &lt;code&gt;BVar&lt;/code&gt;s and
+letting &lt;code&gt;backprop&lt;/code&gt; to figure out
+their gradients.
+The general pattern in &lt;code&gt;backprop&lt;/code&gt; is
+to provide the forward pass &lt;code&gt;\(Conv2d w) x -&amp;gt; ...&lt;/code&gt;
+and the backward pass using a lambda expression containing
+previously computed gradients &lt;code&gt;dz&lt;/code&gt; as an argument.
+Those forward and backward passes are glued together
+with &lt;code&gt;liftOp2. op2&lt;/code&gt; (or &lt;code&gt;liftOp1. op1&lt;/code&gt; for layers with no
+learnable parameters) as below:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;liftOp2&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;op2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+  (&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d_&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;\dz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dw&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt;
+                             &lt;span style=&#34;color:#75715e&#34;&gt;-- ... Compute padding p1&lt;/span&gt;
+                             &lt;span style=&#34;color:#a6e22e&#34;&gt;dx&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt;
+                         &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Conv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dw&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dx&lt;/span&gt;) )&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, forward pass is a cross-correlation
+between the input channels and a kernel set from the filter bank.
+Recall that the number of kernel sets defines
+the number of output channels.
+We simultaneously perform cross-correlation operations
+on all images in the batch, therefore we concatenate
+the results over the channel dimension &lt;code&gt;3&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d_&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pad&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Some code omitted for simplicity&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Create a stencil (&amp;#34;sliding window&amp;#34;) from the given set&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- in the filter bank&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeCorrelationStencilFromKernel&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;resize&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;)&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt;)
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- For each kernel set, create and run stencils on all images in the batch.&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Finally, concatenate (append) the results over the channel dimension&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foldl&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;\prev&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ch&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;applyStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pad4&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;sten&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ch&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+                              &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;append&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;prev&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;empty&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;cout&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;To better illustrate how this works on a batch of images,
+here is a visualization what is going on in the first convolutional layer.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv1.png&#34; alt=&#34;Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right.&#34; width=&#34;500px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;In MNIST we have black and white images, thus a single-channel input.
+During each step in &lt;code&gt;foldl&#39;&lt;/code&gt;, a single filter is applied
+to all images. There are six filters hence resulting in
+six new channels in each convolved image on the right.
+A similar operation is performed in the second convolutional
+layer, this time resulting in 16-channel images (see
+also &lt;em&gt;Convolution Types. LeNet-like Convolution&lt;/em&gt; above for
+the illustration on a single image).
+Below is a Python/NumPy equivalent of &lt;code&gt;foldl&#39;&lt;/code&gt;/&lt;code&gt;applyStencil&lt;/code&gt;
+combo from above.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# ... Get current batch, stride, and padding parameters&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# ... Using those parameters, determine&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# output image width, height, and number of channels&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Initialize resulting array&lt;/span&gt;
+res &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;zeros([len(batch), out_channels, out_im_height, out_im_width])
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Iterate over all four dimensions&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(len(batch)):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(out_im_height):
+        &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(out_im_width):
+            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; c &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; range(out_channels):
+                &lt;span style=&#34;color:#75715e&#34;&gt;# Define the sliding window position&lt;/span&gt;
+                y1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; stride
+                y2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; y1 &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; kernel_height
+                x1 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; k &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; stride
+                x2 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; x1 &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; kernel_width
+                im_slice &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; batch[i, :, y1:y2, x1:x2]
+
+                &lt;span style=&#34;color:#75715e&#34;&gt;# Get current channel weights&lt;/span&gt;
+                Wcur &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; W[:,c,:,:]
+
+                &lt;span style=&#34;color:#75715e&#34;&gt;# Out pixel = dot product&lt;/span&gt;
+                res[i, c, j, k] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sum(im_slice &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; Wcur)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; res&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now that we have accomplished convolution in the forward direction,
+we need to compute gradients for the backward pass.&lt;/p&gt;
+
+&lt;h3 id=&#34;gradients-are-also-convolutions&#34;&gt;Gradients Are Also Convolutions&lt;/h3&gt;
+
+&lt;p&gt;The image plane gradients are obtained by formulas (3) and (4).
+However, in practice we also have to take into account
+that we deal with multiple images that have multiple channels.
+In fact, I leave it to you to figure out exact formulas.
+Those can be inferred from Haskell equations below.
+Yes, any Haskell line is already
+written in a mathematical notation.
+That is essentially what Haskell &amp;quot;purity&amp;quot; is about.
+You might have realized by now that programming
+in Haskell is all about finding your own patterns.
+Now, let us compute gradients w.r.t. input
+$\frac{\partial L}{\partial X}$:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d_&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;w&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rot180&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;transposeInner&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Rotate images by 180 degrees. This is expressed in terms&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- of tensor reversal along width and height dimensions.&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;rot180&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reverse&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;reverse&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Let us remind that these &lt;code&gt;compute&lt;/code&gt; functions evaluate
+&lt;em&gt;delayed arrays&lt;/em&gt; into actual representation in memory.
+Please do not hesitate to find &lt;code&gt;reverse&lt;/code&gt; and &lt;code&gt;transposeInner&lt;/code&gt; in
+&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;.
+Finally, here we have gradients w.r.t. convolution kernel
+weights $\frac{\partial L}{\partial W}$:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&amp;#39;&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;-- Iterate over images in a batch&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;conv2d&amp;#39;&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- computeMap (/fromIntegral bs) res&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Batch size&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;size&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Code omitted&lt;/span&gt;
+
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;res&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;foldl&amp;#39;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;\acc&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+      &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cur&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dzd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xd&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;im&lt;/span&gt;)
+       &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;acc&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cur&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;base&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;We simply accumulate gradients from individual images
+in the batch using left strict fold. Finally,
+we generalize Equation (4) to get those transformation:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Gradients \delta (dz)&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ X&lt;/span&gt;
+          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ dL/dW&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;_deconv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Padding&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp1&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;szp2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;pb&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;more-stencils-max-pooling-layers&#34;&gt;More Stencils: Max Pooling Layers&lt;/h3&gt;
+
+&lt;p&gt;Stencils are handy not only for convolutional layers.
+Another use case are pooling pooling (subsampling) layers.
+To be able to perform max pooling, first we have to define
+the corresponding pattern:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeStencil&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;max4&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x4&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;max&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;max&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;max&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;x3&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;x4&lt;/span&gt;
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;max4&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+           &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+           &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+           &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;*&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;get&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code&gt;max4&lt;/code&gt; is a function that receives four values and computes
+the maximal one. This function is applied to a patch of
+four neighboring pixels. Do not forget that we operate
+in a 4D space, therefore each point in the
+given patch has four coordinates. Here is how we interpret
+the first coordinate:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt; (0 :&amp;gt; 0 :&amp;gt; 0 :. 0)
+  ^    ^    ^    ^
+  4    |    |    1
+       3    2
+1 and 2 are coordinates in the image plane,
+3 is the channel dimension, and
+4 is the batch dimension.&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note the &lt;code&gt;:.&lt;/code&gt; and &lt;code&gt;:&amp;gt;&lt;/code&gt; operators. The first one &lt;code&gt;:.&lt;/code&gt; constructs
+the coordinates (index) &amp;quot;list&amp;quot; with two elements
+and &lt;code&gt;:&amp;gt;&lt;/code&gt; just adds more coordinates for higher dimensions.
+To learn more about
+&lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt; functions, see
+&lt;a href=&#34;http://learnyouahaskell.com/functors-applicative-functors-and-monoids&#34; target=&#34;_blank&#34;&gt;Applicative Functors&lt;/a&gt;.
+We would like max pooling sliding windows to be non-overlapping,
+therefore, we want to use $2 \times 2$ stride in the image plane.
+However, we would like to perform the same operation
+over every channel in every image.
+Therefore, we use &lt;code&gt;computeWithStride&lt;/code&gt;
+and the stride is &lt;code&gt;1 :&amp;gt; 1 :&amp;gt; 2 :. 2&lt;/code&gt;, i.e.
+$\text{image dim} \times \text{channel dim} \times \text{height} \times \text{width}$. Note that we do not want any padding since
+the goal of pooling is actually to reduce the image
+size: twice in this case.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeWithStride&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Stride&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;
+             &lt;span style=&#34;color:#a6e22e&#34;&gt;applyStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;noPadding&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we compute
+&lt;a href=&#34;https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers&#34; target=&#34;_blank&#34;&gt;gradients&lt;/a&gt;
+using pixels that had maximal values in the forward pass.
+And we obtain a differentiable &lt;code&gt;maxpool&lt;/code&gt; function
+lifting forward-backward passes with &lt;code&gt;liftOp1. op1&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;
+        &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+        &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;liftOp1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;op1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;\x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpool_&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stride&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:.&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;outUp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zoom&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;
+      &lt;span style=&#34;color:#a6e22e&#34;&gt;maxima&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;\a&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;outUp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;\dz&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dzUp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeAs&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;U&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zoom&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dz&lt;/span&gt;
+                  &lt;span style=&#34;color:#75715e&#34;&gt;-- Elementwise product&lt;/span&gt;
+                  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maybe&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Dimensions problem&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;maxima&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.*.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;delay&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dzUp&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting It All Together&lt;/h3&gt;
+
+&lt;p&gt;First, we fetch the MNIST data and randomly generate the initial model:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; ()
+&lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;trainS&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mnistStream&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;64&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data/train-images-idx3-ubyte&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data/train-labels-idx1-ubyte&amp;#34;&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;testS&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;mnistStream&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data/t10k-images-idx3-ubyte&amp;#34;&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;data/t10k-labels-idx1-ubyte&amp;#34;&lt;/span&gt;
+
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randNetwork&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;As previously, data streams are loaded from
+binary MNIST files; however, the initial model generation
+has to take into account the new structure, &lt;code&gt;LeNet&lt;/code&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;randNetwork&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)
+&lt;span style=&#34;color:#a6e22e&#34;&gt;randNetwork&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- Generate a new conv layer weights:&lt;/span&gt;
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- 6 out channels, 1 input channel, kernel size: 5 x 5&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randConv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;)
+  &lt;span style=&#34;color:#75715e&#34;&gt;-- 16 out channels, 6 input channels, kernel size: 5 x 5&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randConv2d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz4&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;)
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;16&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;120&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;84&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;]
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randLinear&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randLinear&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randLinear&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Sz2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv1&lt;/span&gt;
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_conv2&lt;/span&gt;
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc1&lt;/span&gt;
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc2&lt;/span&gt;
+          , &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_fc3&lt;/span&gt;
+          }&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we train our model&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ... `main` function&lt;/span&gt;
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;net&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;train&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TrainSettings&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_printEpochs&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+                              , &lt;span style=&#34;color:#a6e22e&#34;&gt;_lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.01&lt;/span&gt;
+                              , &lt;span style=&#34;color:#a6e22e&#34;&gt;_totalEpochs&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;30&lt;/span&gt;
+                              } &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;trainS&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;testS&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;The &lt;code&gt;train&lt;/code&gt; function is essentially a wraper
+around the &lt;code&gt;sgd&lt;/code&gt; stochastic gradient descent function.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;train&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;TrainSettings&lt;/span&gt; { &lt;span style=&#34;color:#a6e22e&#34;&gt;_printEpochs&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;printEpochs&lt;/span&gt;
+                    , &lt;span style=&#34;color:#a6e22e&#34;&gt;_lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt;
+                    , &lt;span style=&#34;color:#a6e22e&#34;&gt;_totalEpochs&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;totalEpochs&lt;/span&gt;
+                    } &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;trainS&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;testS&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+  (&lt;span style=&#34;color:#a6e22e&#34;&gt;net&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;totalEpochs&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;div&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;printEpochs&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;\&lt;/span&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;j&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;net1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sgd&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;printEpochs&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainS&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- ... Compute and print accuracies&lt;/span&gt;
+
+    ) (&lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&amp;#39;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In &lt;code&gt;sgd&lt;/code&gt; we compute gradients
+over a mini-batch and subtract them to optimize
+the model parameters.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sgd&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataStream&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Fold over the stream of all batches&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;epochStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;S&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foldl&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_trainStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataStream&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Update gradients based on a single batch&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;_trainStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, the training step is a few lines of code
+thanks to &lt;code&gt;Numeric.Backprop.gradBP&lt;/code&gt; function that applies
+the chain rule, thus replacing the entire &lt;code&gt;pass&lt;/code&gt; function
+we had before.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;trainStep&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Learning rate&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Images batch&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Targets&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Initial network&lt;/span&gt;
+  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;trainStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;!&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;gradBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;crossEntropyLoss&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;targ&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;n&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If we ever want to actually use our model to identify
+a handwritten digit, we would call &lt;code&gt;evalBP&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LeNet&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;evalBP&lt;/span&gt; (`&lt;span style=&#34;color:#a6e22e&#34;&gt;lenet&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, we compile and run our program:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ ./run.sh
+1 Training accuracy 10.4  Validation accuracy 10.3
+2 Training accuracy 85.7  Validation accuracy 86.3
+3 Training accuracy 95.9  Validation accuracy 96.2
+4 Training accuracy 97.6  Validation accuracy 97.4
+5 Training accuracy 98.4  Validation accuracy 98.1
+6 Training accuracy 98.3  Validation accuracy 98.0
+7 Training accuracy 99.0  Validation accuracy 98.8
+8 Training accuracy 99.0  Validation accuracy 98.7
+9 Training accuracy 99.1  Validation accuracy 98.7
+...
+26 Training accuracy 99.8  Validation accuracy 99.0
+27 Training accuracy 99.8  Validation accuracy 98.7
+28 Training accuracy 99.9  Validation accuracy 98.9
+29 Training accuracy 99.7  Validation accuracy 98.6
+30 Training accuracy 99.9  Validation accuracy 98.9&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Thus, after 30 training epochs,
+we have obtained a $\sim 1\%$ validation error, which
+is about twice lower compared to the one
+we had with a fully-connected architecture.
+See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;!--
+* Learned conv filters visualization
 --&gt;
 
-&lt;hr /&gt;
+&lt;h3 id=&#34;model-parameters-comparison&#34;&gt;Model Parameters Comparison&lt;/h3&gt;
 
-&lt;p&gt;To be continued...&lt;/p&gt;
+&lt;p&gt;Our three-layer model from &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;Day 4&lt;/a&gt;
+consumed&lt;/p&gt;
+
+&lt;p&gt;$$784 \cdot (300+1) + 300 \cdot (50+1) + 50 \cdot (10+1) = 251,834$$&lt;/p&gt;
+
+&lt;p&gt;learnable parameters (not counting batchnorm parameters).
+In contrast, the convolutional neural network model that we have implemented
+today requires only&lt;/p&gt;
+
+&lt;p&gt;$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + 400 \cdot (120+1) + 120 \cdot (84 + 1) +  $$
+$$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$&lt;/p&gt;
+
+&lt;p&gt;Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
+convolutional layers parameters, whereas $59,524$ reside in fully-connected
+layers of the classifier.&lt;/p&gt;
+
+&lt;p&gt;Although, we did not apply batch normalization today, like in the original LeNet,
+feel free to experiment adding batchnorm layers. Please also note that
+there is a difference between batch normalization
+after convolution and after fully-connected layers (see the &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batchnorm article&lt;/a&gt;).&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
 &lt;p&gt;Convolutional neural networks &lt;em&gt;aka&lt;/em&gt; ConvNets achieve translation invariance
 and connection sparsity.  Thanks to weight sharing, ConvNets dramatically
 reduce the number of trained parameters.  The power of ConvNet comes from
-training convolution filters, in contrast to manual feature engineering.&lt;/p&gt;
+training convolution filters, in contrast to manual feature engineering.
+In future posts, we will gain power of GPU to face the CIFAR image challenge.
+We will save the planet.
+We will read someone&#39;s mind with convolutional networks.
+And we will finally understand what &lt;em&gt;reservoir computing&lt;/em&gt; is all about.
+Stay tuned!&lt;/p&gt;
 
-&lt;p&gt;In the next post we will apply CNNs to MNIST and CIFAR-10
-image challenges. Stay tuned!&lt;/p&gt;
+&lt;h2 id=&#34;acknowledgment&#34;&gt;Acknowledgment&lt;/h2&gt;
+
+&lt;p&gt;I would like to acknowledge &lt;a href=&#34;https://github.com/lehins/&#34; target=&#34;_blank&#34;&gt;Alexey Kuleshevich&lt;/a&gt;
+for his help with &lt;code&gt;massiv&lt;/code&gt; array library, upon which this
+convolutional neural network was built.&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
 
@@ -459,6 +1252,7 @@ image challenges. Stay tuned!&lt;/p&gt;
 
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;Interactive Image Kernels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/convolutional-networks/&#34; target=&#34;_blank&#34;&gt;Excellent tutorial on ConvNets&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://pjreddie.com/courses/computer-vision/&#34; target=&#34;_blank&#34;&gt;The Ancient Secrets of Computer Vision (online course)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://morgenthum.dev/articles/why-prefer-fp&#34; target=&#34;_blank&#34;&gt;Why I prefer functional programming&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34; target=&#34;_blank&#34;&gt;Efficient Parallel Stencil Convolution in Haskell&lt;/a&gt;&lt;/li&gt;
@@ -485,7 +1279,7 @@ MathJax.Hub.Config({
 &lt;hr /&gt;
 
 &lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;In fact, cross-correlation, not convolution. Still, for neural networks that would be practically the same operation.
+&lt;li id=&#34;fn:fn-1&#34;&gt;A sliding window analogy can be for example a photo scanner.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-2&#34;&gt;The actual &amp;quot;squashing&amp;quot; activation was $f(x) = 1.7159 \tanh(\frac{2}{3} x)$.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -505,6 +1299,12 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-11&#34;&gt;Convolution has flipped kernel whereas cross-correlation operator does not flip the kernel.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-11&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-12&#34;&gt;Yet another equivalent definition you may encounter is &lt;code&gt;(~&amp;gt;) = flip (.)&lt;/code&gt;. While it might look puzzling at first, this line just means that &lt;code&gt;(~&amp;gt;)&lt;/code&gt; is a composition operator &lt;code&gt;(.)&lt;/code&gt; with flipped arguments.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-12&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-13&#34;&gt;And yet you complain about cognitive overhead in Haskell (:
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-13&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </description>

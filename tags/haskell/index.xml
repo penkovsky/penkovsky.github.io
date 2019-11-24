@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Wed, 09 Oct 2019 14:40:00 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 24 Nov 2019 18:20:00 +0200</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
     
@@ -15,10 +15,10 @@
     <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>
       <link>http://penkovsky.com/neural-networks/day5/</link>
-      <pubDate>Wed, 09 Oct 2019 14:40:00 +0200</pubDate>
+      <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/neural-networks/day5/</guid>
-      <description>Today we have finally arrived at the &amp;quot;master algorithm&amp;quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional neural network is an architecture that, like other artificial neural networks, has a neuron as its core building block and is differentiable, so it is also trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.</description>
+      <description>Today we will talk about one of the most important deep learning architectures, the &amp;quot;master algorithm&amp;quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.</description>
     </item>
     
     <item>
