@@ -611,11 +611,16 @@ First, we want not to impose any restriction on ordering and second,
 we want the distances between classes to be equal.
 Therefore, we would prefer encoding each class to be orthogonal,
 i.e. independent from the other two.
-That becomes possible if we use vectors of three dimensions.
-Therefore, now <em>Setosa</em> class is encoded as $[𝟷, 0, 0]$,
+That becomes possible if we use vectors of three dimensions
+(as there are three classes).
+Therefore, now <em>Setosa</em> class is encoded as $[1, 0, 0]$,
 <em>Versicolour</em>, as $[0, 1, 0]$, and <em>Virginica</em> as $[0, 0, 1]$.
 The <a href="https://en.wikipedia.org/wiki/Euclidean_distance" target="_blank">Euclidean distance</a>
-between any two classes is equal to $1$.</p>
+between any pair of classes is equal to $\sqrt 2$.
+<strong>Update<sup class="footnote-ref" id="fnref:fn-6a"><a href="#fn:fn-6a">8</a></sup></strong>: For example, the distance between
+<em>Setosa</em> and <em>Versicolour</em> is computed as</p>
+
+<p>$$\sqrt{(1-0)^2 + (0-1)^2 + (0-0)^2}=\sqrt{2}.$$</p>
 
 <h3 id="putting-it-all-together">Putting It All Together</h3>
 
@@ -640,7 +645,7 @@ with a subsequent element-wise activation:</p>
 \end{equation}
 $$</p>
 
-<p>As a nonlinear activation function $f$ we will use the <em>sigmoid</em> function<sup class="footnote-ref" id="fnref:fn-8"><a href="#fn:fn-8">8</a></sup>
+<p>As a nonlinear activation function $f$ we will use the <em>sigmoid</em> function<sup class="footnote-ref" id="fnref:fn-8"><a href="#fn:fn-8">9</a></sup>
 $\sigma(x) = [1 + e^{-x}]^{-1}$.
 We will exploit <a href="http://hackage.haskell.org/package/hmatrix" target="_blank"><code>hmatrix</code></a>
 Haskell library for linear algebra operations
@@ -678,7 +683,7 @@ This is a so-called 'winner takes all' rule.</p>
 <p>Before training the neural network, we need some
 measure of error or <em>loss function</em> to minimize.
 For instance, we can use
-the <a href="https://en.wikipedia.org/wiki/Euclidean_distance" target="_blank">Euclidean distance</a>
+the <a href="http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer" target="_blank">Euclidean loss</a>
 $\text{loss} = \sum_i (\hat y_i - y_i)^2$
 where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
 dataset:</p>
@@ -695,7 +700,7 @@ We use what is called a <em>backpropagation</em>
 or shortly <em>backprop</em> method, which is essentially a
 <a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">result</a>
 of the <a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> and is illustrated
-for an individual neuron in the figure below<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">9</a></sup>.</p>
+for an individual neuron in the figure below<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">10</a></sup>.</p>
 
 <figure>
 
@@ -732,7 +737,7 @@ Note that by operating on matrices rather than scalar values
 we calculate the gradients vector <code>dW</code>
 denoting every synaptic weight gradient $dw_i$.
 Below are those &quot;<a href="https://en.wikipedia.org/wiki/Array_programming" target="_blank"><em>vectorized</em></a>&quot;
-functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">10</a></sup>:</p>
+functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">11</a></sup>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">/</span> <span style="color:#a6e22e">m</span>) (<span style="color:#a6e22e">tr&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">dy</span>)
   <span style="color:#66d9ef">where</span>
@@ -801,7 +806,7 @@ MathJax.Hub.Config({
 <hr />
 
 <ol>
-<li id="fn:fn-1">There exists even a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" target="_blank">term</a> describing exactly what I dreamed to achieve.
+<li id="fn:fn-1">There even exists a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" target="_blank">term</a> describing exactly what I dreamed to achieve.
  <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
 <li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt" target="_blank">Why people think computers can't</a>.
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
@@ -815,6 +820,8 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
 <li id="fn:fn-7">Here we refer to the classical <a href="https://archive.ics.uci.edu/ml/datasets/iris" target="_blank">Iris dataset</a>. If you prefer another light dataset please let me know.
  <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
+<li id="fn:fn-6a">Kudos to Peter Harpending who spotted a typo in Euclidean distance.
+ <a class="footnote-return" href="#fnref:fn-6a"><sup>^</sup></a></li>
 <li id="fn:fn-8">In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
 <li id="fn:fn-10">We look closer at the backpropagation mechanics <a href="/neural-networks/day3/" target="_blank">here</a>.

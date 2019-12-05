@@ -3309,11 +3309,16 @@ First, we want not to impose any restriction on ordering and second,
 we want the distances between classes to be equal.
 Therefore, we would prefer encoding each class to be orthogonal,
 i.e. independent from the other two.
-That becomes possible if we use vectors of three dimensions.
-Therefore, now &lt;em&gt;Setosa&lt;/em&gt; class is encoded as $[𝟷, 0, 0]$,
+That becomes possible if we use vectors of three dimensions
+(as there are three classes).
+Therefore, now &lt;em&gt;Setosa&lt;/em&gt; class is encoded as $[1, 0, 0]$,
 &lt;em&gt;Versicolour&lt;/em&gt;, as $[0, 1, 0]$, and &lt;em&gt;Virginica&lt;/em&gt; as $[0, 0, 1]$.
 The &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34; target=&#34;_blank&#34;&gt;Euclidean distance&lt;/a&gt;
-between any two classes is equal to $1$.&lt;/p&gt;
+between any pair of classes is equal to $\sqrt 2$.
+&lt;strong&gt;Update&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6a&#34;&gt;&lt;a href=&#34;#fn:fn-6a&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;&lt;/strong&gt;: For example, the distance between
+&lt;em&gt;Setosa&lt;/em&gt; and &lt;em&gt;Versicolour&lt;/em&gt; is computed as&lt;/p&gt;
+
+&lt;p&gt;$$\sqrt{(1-0)^2 + (0-1)^2 + (0-0)^2}=\sqrt{2}.$$&lt;/p&gt;
 
 &lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting It All Together&lt;/h3&gt;
 
@@ -3338,7 +3343,7 @@ with a subsequent element-wise activation:&lt;/p&gt;
 \end{equation}
 $$&lt;/p&gt;
 
-&lt;p&gt;As a nonlinear activation function $f$ we will use the &lt;em&gt;sigmoid&lt;/em&gt; function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;
+&lt;p&gt;As a nonlinear activation function $f$ we will use the &lt;em&gt;sigmoid&lt;/em&gt; function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;
 $\sigma(x) = [1 + e^{-x}]^{-1}$.
 We will exploit &lt;a href=&#34;http://hackage.haskell.org/package/hmatrix&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;hmatrix&lt;/code&gt;&lt;/a&gt;
 Haskell library for linear algebra operations
@@ -3376,7 +3381,7 @@ This is a so-called &#39;winner takes all&#39; rule.&lt;/p&gt;
 &lt;p&gt;Before training the neural network, we need some
 measure of error or &lt;em&gt;loss function&lt;/em&gt; to minimize.
 For instance, we can use
-the &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34; target=&#34;_blank&#34;&gt;Euclidean distance&lt;/a&gt;
+the &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer&#34; target=&#34;_blank&#34;&gt;Euclidean loss&lt;/a&gt;
 $\text{loss} = \sum_i (\hat y_i - y_i)^2$
 where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
 dataset:&lt;/p&gt;
@@ -3393,7 +3398,7 @@ We use what is called a &lt;em&gt;backpropagation&lt;/em&gt;
 or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a
 &lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;result&lt;/a&gt;
 of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt; and is illustrated
-for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -3430,7 +3435,7 @@ Note that by operating on matrices rather than scalar values
 we calculate the gradients vector &lt;code&gt;dW&lt;/code&gt;
 denoting every synaptic weight gradient $dw_i$.
 Below are those &amp;quot;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;quot;
-functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
+functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;tr&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt;)
   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
@@ -3499,7 +3504,7 @@ MathJax.Hub.Config({
 &lt;hr /&gt;
 
 &lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;There exists even a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
+&lt;li id=&#34;fn:fn-1&#34;&gt;There even exists a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34; target=&#34;_blank&#34;&gt;Why people think computers can&#39;t&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -3513,6 +3518,8 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-7&#34;&gt;Here we refer to the classical &lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets/iris&#34; target=&#34;_blank&#34;&gt;Iris dataset&lt;/a&gt;. If you prefer another light dataset please let me know.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-6a&#34;&gt;Kudos to Peter Harpending who spotted a typo in Euclidean distance.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6a&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
