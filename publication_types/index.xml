@@ -7,15 +7,24 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Thu, 01 Aug 2019 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0100</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/publication_types/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>1</title>
+      <link>http://penkovsky.com/publication_types/1/</link>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication_types/1/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>2</title>
       <link>http://penkovsky.com/publication_types/2/</link>
-      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
       
       <guid>http://penkovsky.com/publication_types/2/</guid>
       <description></description>

@@ -313,7 +313,7 @@
     <img src="/img/posts/GoogLeNet_iterative_places.jpg" class="article-banner" itemprop="image">
   
 
-  <span class="article-header-caption"><a href="https://www.flickr.com/photos/55049135@N00/19038712376/" target="_blank">Image credit</a></span>
+  <span class="article-header-caption"><a href="https://www.flickr.com/photos/55049135@N00/19038712376/">Image credit</a></span>
 </div>
 
 
@@ -394,11 +394,11 @@ As a result, I came across neural networks idea.
 It was 2010, and <em>deep learning</em> was not nearly as popular as
 it is now<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>.
 Moreover, no one made much effort linking to neural networks
-in calculus or linear algebra curricula. Even guys doing classical
+in calculus or linear algebra curricula. Even folks doing classical
 optimization and statistics sometimes
 seemed puzzled when hearing about neural nets.
 Some year later, I have implemented
-a <a href="https://bitbucket.org/masterdezign/labNN" target="_blank">simple neural net</a> with sigmoid
+a <a href="https://bitbucket.org/masterdezign/labNN">simple neural net</a> with sigmoid
 activations as a part of a decision-making course.
 At the time I realized that existing state of our knowledge
 was still lacking to really build &quot;thinking computers&quot;<sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup>.</p>
@@ -421,7 +421,7 @@ described many times somewhere else.
 For those who are completely new to
 the subject, instead of introducing neural networks
 all over again I would refer to Chapter 1.2
-of my <a href="https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf" target="_blank">PhD thesis</a>.
+of my <a href="https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf">PhD thesis</a>.
 Here I will only summarize that neural networks are
 to some extent inspired by biological neurons.
 Similarly to its biological counterpart,
@@ -442,7 +442,7 @@ in a modern neural network
 $f$ can be practically any nonlinear function.
 This nonlinear function is often called an <em>activation function</em>.
 Congratulations, we have arrived at a
-<a href="https://en.wikipedia.org/wiki/Perceptron" target="_blank">neural network from 1950-s</a>.</p>
+<a href="https://en.wikipedia.org/wiki/Perceptron">neural network from 1950-s</a>.</p>
 
 <p>To continue reading
 this article, some mathematical background is useful, but not mandatory.
@@ -454,13 +454,13 @@ Anyone can develop an intuition about neural networks!</p>
 in Haskell programming language.
 To motivate you, here are some Q &amp; A you always wanted to know.</p>
 
-<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az" target="_blank">Q:</a>
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az">Q:</a>
 Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?</strong></p>
 
-<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t" target="_blank">A:</a></strong>
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t">A:</a></strong>
 Neural networks are very &quot;function objects&quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.</p>
 
-<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx" target="_blank">Q:</a>
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx">Q:</a>
 As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?</strong></p>
 
 <p><strong>A:</strong> The benefits of using Haskell:</p>
@@ -470,10 +470,10 @@ As I am completely new to Haskell, would like to know what are the benefits of u
 <li>Great when refactoring existing code base.</li>
 <li>Haskell shapes your thinking towards problem solving
 in a pragmatic way.</li>
-<li>Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast" target="_blank">fast</a>.</li>
+<li>Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast">fast</a>.</li>
 </ol>
 
-<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9" target="_blank">Q:</a>
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9">Q:</a>
 I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.</strong></p>
 
 <p><strong>A:</strong> Thank you. I find Haskell to be very intuitive
@@ -488,7 +488,7 @@ when explaining neural nets.</p>
 
 
 <figcaption data-pre="Figure " data-post=":" >
-  <h4>Gradient Descent. <a href="https://commons.wikimedia.org/wiki/File:Gradient_descent.svg" target="_blank">Image credit</a></h4>
+  <h4>Gradient Descent. <a href="https://commons.wikimedia.org/wiki/File:Gradient_descent.svg">Image credit</a></h4>
   
 </figcaption>
 
@@ -496,9 +496,9 @@ when explaining neural nets.</p>
 
 <p>The very basic idea behind neural networks
 training and deep learning is a local optimization method known
-as <a href="https://en.wikipedia.org/wiki/Gradient_descent" target="_blank"><em>gradient descent</em></a>.
+as <a href="https://en.wikipedia.org/wiki/Gradient_descent"><em>gradient descent</em></a>.
 For those who have hard time remembering their freshman year,
-just watch an <a href="https://www.youtube.com/watch?v=jc2IthslyzM" target="_blank">introductory video</a>
+just watch an <a href="https://www.youtube.com/watch?v=jc2IthslyzM">introductory video</a>
 explaining the idea.</p>
 
 <p>How does a concept as simple as gradient descent work for a neural network?
@@ -526,7 +526,7 @@ $$</p>
 the <em>learning rate</em>, i.e. the amount of learning per iteration $n$.
 In the simplest case, $x$ is a scalar variable. The gradient descent
 method can be implemented in few lines of code.
-The Haskell <a href="https://repl.it/@masterdezign/Grad" target="_blank">code snippet</a>
+The Haskell <a href="https://repl.it/@masterdezign/Grad">code snippet</a>
 below is interactive. Press the green triangle
 button to Run the code.</p>
 
@@ -572,7 +572,7 @@ rather than scalars.</p>
 
 
 <figcaption data-pre="Figure " data-post=":" >
-  <h4>Iris plant. Image credit <a href="https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg" target="_blank">David Iliff</a> <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank">(CC-BY-SA 3.0)</a></h4>
+  <h4>Iris plant. Image credit <a href="https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg">David Iliff</a> <a href="https://creativecommons.org/licenses/by-sa/3.0/">(CC-BY-SA 3.0)</a></h4>
   
 </figcaption>
 
@@ -590,7 +590,7 @@ classes so that our neural network can handle them?</p>
 <h3 id="naive-solution-and-why-it-does-not-work">Naive Solution And Why It Does Not Work</h3>
 
 <p>The most simple solution to indicate each species
-would be using <a href="https://en.wikipedia.org/wiki/Natural_number" target="_blank">natural numbers</a>.
+would be using <a href="https://en.wikipedia.org/wiki/Natural_number">natural numbers</a>.
 For instance, <em>Iris Setosa</em> can be encoded as <code>1</code>,
 <em>Versicolour</em>, as <code>2</code>, and <em>Virginica</em>, as <code>3</code>.
 There is, however, a problem with this kind of encoding:
@@ -615,7 +615,7 @@ That becomes possible if we use vectors of three dimensions
 (as there are three classes).
 Therefore, now <em>Setosa</em> class is encoded as $[1, 0, 0]$,
 <em>Versicolour</em>, as $[0, 1, 0]$, and <em>Virginica</em> as $[0, 0, 1]$.
-The <a href="https://en.wikipedia.org/wiki/Euclidean_distance" target="_blank">Euclidean distance</a>
+The <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>
 between any pair of classes is equal to $\sqrt 2$.
 <strong>Update<sup class="footnote-ref" id="fnref:fn-6a"><a href="#fn:fn-6a">8</a></sup></strong>: For example, the distance between
 <em>Setosa</em> and <em>Versicolour</em> is computed as</p>
@@ -647,7 +647,7 @@ $$</p>
 
 <p>As a nonlinear activation function $f$ we will use the <em>sigmoid</em> function<sup class="footnote-ref" id="fnref:fn-8"><a href="#fn:fn-8">9</a></sup>
 $\sigma(x) = [1 + e^{-x}]^{-1}$.
-We will exploit <a href="http://hackage.haskell.org/package/hmatrix" target="_blank"><code>hmatrix</code></a>
+We will exploit <a href="http://hackage.haskell.org/package/hmatrix"><code>hmatrix</code></a>
 Haskell library for linear algebra operations
 such as matrix multiplication. With <code>hmatrix</code>,
 Equation (4) can be written as:</p>
@@ -683,7 +683,7 @@ This is a so-called 'winner takes all' rule.</p>
 <p>Before training the neural network, we need some
 measure of error or <em>loss function</em> to minimize.
 For instance, we can use
-the <a href="http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer" target="_blank">Euclidean loss</a>
+the <a href="http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer">Euclidean loss</a>
 $\text{loss} = \sum_i (\hat y_i - y_i)^2$
 where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
 dataset:</p>
@@ -698,8 +698,8 @@ Now, we have to specify the gradient function for our neural
 network equation (4).
 We use what is called a <em>backpropagation</em>
 or shortly <em>backprop</em> method, which is essentially a
-<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">result</a>
-of the <a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> and is illustrated
+<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/">result</a>
+of the <a href="https://en.wikipedia.org/wiki/Chain_rule">chain rule</a> and is illustrated
 for an individual neuron in the figure below<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">10</a></sup>.</p>
 
 <figure>
@@ -736,7 +736,7 @@ and the loss function.
 Note that by operating on matrices rather than scalar values
 we calculate the gradients vector <code>dW</code>
 denoting every synaptic weight gradient $dw_i$.
-Below are those &quot;<a href="https://en.wikipedia.org/wiki/Array_programming" target="_blank"><em>vectorized</em></a>&quot;
+Below are those &quot;<a href="https://en.wikipedia.org/wiki/Array_programming"><em>vectorized</em></a>&quot;
 functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">11</a></sup>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">/</span> <span style="color:#a6e22e">m</span>) (<span style="color:#a6e22e">tr&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">dy</span>)
@@ -752,9 +752,9 @@ functions definitions in Haskell using <code>hmatrix</code> library<sup class="f
   <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">diff</span></code></pre></div>
 
-<p>To test our network, we download the dataset <a href="https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets" target="_blank">here</a>
+<p>To test our network, we download the dataset <a href="https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets">here</a>
 (there are two files: x.dat and y.dat) and the code
-<a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e" target="_blank">here</a>.
+<a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e">here</a>.
 As instructed in the comments,
 we run our program:</p>
 
@@ -783,14 +783,14 @@ Targets
 , <span style="color:#ae81ff">1</span>.0, <span style="color:#ae81ff">0</span>.0, <span style="color:#ae81ff">0</span>.0
 , <span style="color:#ae81ff">1</span>.0, <span style="color:#ae81ff">0</span>.0, <span style="color:#ae81ff">0</span>.0 <span style="color:#f92672">]</span></code></pre></div>
 
-<p>That's all for today. Please feel free to play with the <a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e" target="_blank">code</a>.
+<p>That's all for today. Please feel free to play with the <a href="https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e">code</a>.
 <strong>Hint</strong>: you may have noticed that <code>grad</code> calls <code>sigmoid</code> twice on the same
 data: once in <code>forward</code> and once in <code>sigmoid'</code>. Try optimizing
 the code to avoid this redundancy.</p>
 
 <p>As soon as you understand the basics of neural networks,
-make sure you continue to <a href="/neural-networks/day2/" target="_blank">Day 2</a>.
-In the <a href="/neural-networks/day2/" target="_blank">next post</a> you will learn how to make your neural network operational.
+make sure you continue to <a href="/neural-networks/day2/">Day 2</a>.
+In the <a href="/neural-networks/day2/">next post</a> you will learn how to make your neural network operational.
 First of all, we will highlight the importance of multilayer structure.
 We will also show that nonlinear activations are crucial.
 Finally, we will improve neural network training
@@ -806,11 +806,11 @@ MathJax.Hub.Config({
 <hr />
 
 <ol>
-<li id="fn:fn-1">There even exists a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence" target="_blank">term</a> describing exactly what I dreamed to achieve.
+<li id="fn:fn-1">There even exists a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence">term</a> describing exactly what I dreamed to achieve.
  <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
-<li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt" target="_blank">Why people think computers can't</a>.
+<li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt">Why people think computers can't</a>.
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
-<li id="fn:fn-3">With Google Trends in hand, we can witness the raise of global <a href="https://trends.google.com/trends/explore?date=all&amp;q=deep%20learning" target="_blank">deep learning</a> interest.
+<li id="fn:fn-3">With Google Trends in hand, we can witness the raise of global <a href="https://trends.google.com/trends/explore?date=all&amp;q=deep%20learning">deep learning</a> interest.
  <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
 <li id="fn:fn-4">Despite people have fantasized about it long before Alan Turing.
  <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
@@ -818,15 +818,15 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
 <li id="fn:fn-6">With recurrent neural networks it is not true. Those have an internal state, making such networks equivalent to computer programs, i.e. potentially more complex than maps.
  <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
-<li id="fn:fn-7">Here we refer to the classical <a href="https://archive.ics.uci.edu/ml/datasets/iris" target="_blank">Iris dataset</a>. If you prefer another light dataset please let me know.
+<li id="fn:fn-7">Here we refer to the classical <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris dataset</a>. If you prefer another light dataset please let me know.
  <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
 <li id="fn:fn-6a">Kudos to Peter Harpending who spotted a typo in Euclidean distance.
  <a class="footnote-return" href="#fnref:fn-6a"><sup>^</sup></a></li>
 <li id="fn:fn-8">In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
-<li id="fn:fn-10">We look closer at the backpropagation mechanics <a href="/neural-networks/day3/" target="_blank">here</a>.
+<li id="fn:fn-10">We look closer at the backpropagation mechanics <a href="/neural-networks/day3/">here</a>.
  <a class="footnote-return" href="#fnref:fn-10"><sup>^</sup></a></li>
-<li id="fn:fn-9">And <a href="http://arunmallya.github.io/writeups/nn/backprop.html" target="_blank">here</a> are their mathematical derivations.
+<li id="fn:fn-9">And <a href="http://arunmallya.github.io/writeups/nn/backprop.html">here</a> are their mathematical derivations.
  <a class="footnote-return" href="#fnref:fn-9"><sup>^</sup></a></li>
 </ol>
 </div>

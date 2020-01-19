@@ -386,7 +386,7 @@
 
 <p>Today we will talk about one of the most important deep learning architectures,
 the &quot;master algorithm&quot; in computer vision.  That is how François Chollet,
-author of <a href="https://github.com/keras-team/keras" target="_blank">Keras</a>, calls convolutional
+author of <a href="https://github.com/keras-team/keras">Keras</a>, calls convolutional
 neural networks (CNNs).  Convolutional network is an architecture that, like
 other artificial neural networks, has a neuron as its core building block.  It
 is also differentiable, so the network is conveniently trained via backpropagation.
@@ -398,7 +398,7 @@ weights.</p>
 Then, we are taking a close look at a classic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement a convolutional network in Haskell.
-We will see that on <a href="/neural-networks/day4/" target="_blank">handwritten digits</a> our CNN
+We will see that on <a href="/neural-networks/day4/">handwritten digits</a> our CNN
 achieves a twice lower test error, compared to the fully-connected
 architecture. We will build up on what we have learned during
 the previous days, so do not hesitate to refresh your memory first.</p>
@@ -406,10 +406,10 @@ the previous days, so do not hesitate to refresh your memory first.</p>
 <p><strong>Previous posts</strong></p>
 
 <ul>
-<li><a href="/neural-networks/day1/" target="_blank">Day 1: Learning Neural Networks The Hard Way</a></li>
-<li><a href="/neural-networks/day2/" target="_blank">Day 2: What Do Hidden Layers Do?</a></li>
-<li><a href="/neural-networks/day3/" target="_blank">Day 3: Haskell Guide To Neural Networks</a></li>
-<li><a href="/neural-networks/day4/" target="_blank">Day 4: The Importance Of Batch Normalization</a></li>
+<li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+<li><a href="/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></li>
+<li><a href="/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></li>
+<li><a href="/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></li>
 </ul>
 
 <h2 id="convolution-operator">Convolution operator</h2>
@@ -516,7 +516,7 @@ The image kernel is typically a $3 \times 3$ matrix such as below.</p>
 <figcaption data-pre="Figure " data-post=":" >
   <h4>A single convolution step:</h4>
   <p>
-    Dot product between pixel values and a kernel. Image credit: <a href="https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png" target="_blank">GIMP</a>.
+    Dot product between pixel values and a kernel. Image credit: <a href="https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png">GIMP</a>.
     
     
     
@@ -544,14 +544,14 @@ where
 $0 \le i &lt; D_{K_1} + D_{F_1} - 1$
 and $0 \le i &lt; D_{K_2} + D_{F_2} - 1$.
 To better understand how convolution with a kernel
-changes the original image, you can play with different <a href="http://setosa.io/ev/image-kernels/" target="_blank">image kernels</a>.</p>
+changes the original image, you can play with different <a href="http://setosa.io/ev/image-kernels/">image kernels</a>.</p>
 
 <p>What is the motivation behind the sliding window/convolution operator approach?
 Actually, it has a biological background.
-In fact, human eye has a relatively narrow <a href="https://en.wikipedia.org/wiki/Visual_field" target="_blank"><em>visual field</em></a>.
+In fact, human eye has a relatively narrow <a href="https://en.wikipedia.org/wiki/Visual_field"><em>visual field</em></a>.
 We perceive objects as a whole by constantly moving eyes around them.
-These rapid <a href="https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm" target="_blank">eye movements</a>
-are called <a href="https://en.wikipedia.org/wiki/Saccade" target="_blank"><em>saccades</em></a>.
+These rapid <a href="https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm">eye movements</a>
+are called <a href="https://en.wikipedia.org/wiki/Saccade"><em>saccades</em></a>.
 Therefore, convolution operator may be regarded as a simplified model of
 image scanning that occurs naturally. The important point
 is that convolutions achieve translation invariance
@@ -571,9 +571,9 @@ in neural networks we achieve both translation invariance and connection sparsit
 <p><small>Lecun <em>et al.</em> Gradient-based learning applied to document recognition (1998)</small></p>
 </blockquote>
 
-<p>The <a href="http://www.scholarpedia.org/article/Neocognitron" target="_blank">prototype</a> of what we call today convolutional neural
-networks has been first proposed back <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network#History" target="_blank">in late
-1970s</a> <a href="http://www.scholarpedia.org/article/Neocognitron" target="_blank">by
+<p>The <a href="http://www.scholarpedia.org/article/Neocognitron">prototype</a> of what we call today convolutional neural
+networks has been first proposed back <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network#History">in late
+1970s</a> <a href="http://www.scholarpedia.org/article/Neocognitron">by
 Fukushima</a>. There were proposed many unsupervised and supervised training
 methods, but today CNNs are trained almost exclusively with backpropagation.
 Let us take a look at one of the famous ConvNet architectures known as LeNet-5.</p>
@@ -587,7 +587,7 @@ Let us take a look at one of the famous ConvNet architectures known as LeNet-5.<
 <figcaption data-pre="Figure " data-post=":" >
   <h4></h4>
   <p>
-    LeNet-5 architecture from <a href="http://doi.org/10.1109/5.726791" target="_blank">Lecun <em>et al.</em> Gradient-based learning applied to document recognition</a>.
+    LeNet-5 architecture from <a href="http://doi.org/10.1109/5.726791">Lecun <em>et al.</em> Gradient-based learning applied to document recognition</a>.
     
     
     
@@ -660,7 +660,7 @@ let us inspect receptive fields visualization below.</p>
   Your browser does not support HTML5 canvas.
 </canvas>
 
-<p>Receptive field visualization derived from <a href="http://arunmallya.github.io" target="_blank">Arun Mallya</a>.
+<p>Receptive field visualization derived from <a href="http://arunmallya.github.io">Arun Mallya</a>.
 Hover the mouse cursor over any neuron in top layers to see
 how extends its receptive field in previous (bottom) layers.
 <!-- TODO: make it horizontal left-to-right. --></p>
@@ -690,8 +690,8 @@ free to skip the section and revisit it later.</p>
 <p>There is a lot of hype around convolutions nowadays. However, it is not made
 clear that low-level convolutions for computer vision are often different from
 those exploited by ConvNets. Yet, even in ConvNets there is a variety of
-convolutional layers inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf" target="_blank">Inception</a> ConvNet architecture
-and shaped by <a href="https://arxiv.org/pdf/1610.02357.pdf" target="_blank">Xception</a> and <a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">Mobilenet</a> works. I
+convolutional layers inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf">Inception</a> ConvNet architecture
+and shaped by <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception</a> and <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet</a> works. I
 believe that you deserve to know that there exist multiple kinds of
 convolutions applied in different contexts and here I shall provide a general
 roadmap<sup class="footnote-ref" id="fnref:fn-7"><a href="#fn:fn-7">7</a></sup>.</p>
@@ -776,11 +776,11 @@ the feature map size<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9"
 
 <p>LeNet-style convolution requires a large number of operations.
 But do we really need all of them? For instance, can spatial and cross-channel
-correlations be somehow decoupled? The <a href="https://arxiv.org/pdf/1610.02357.pdf" target="_blank">Xception
-paper</a> largely inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf" target="_blank">Inception</a> architecture
+correlations be somehow decoupled? The <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception
+paper</a> largely inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf">Inception</a> architecture
 shows that indeed, one can build more efficient convolutions by assuming that
 spatial correlations and cross-channel correlations can be mapped
-independently. This principle was also applied in <a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">Mobilenet</a>
+independently. This principle was also applied in <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet</a>
 architectures.</p>
 
 <p>The depthwise separable convolution works the following way. First, like in
@@ -815,8 +815,8 @@ network inspired by LeNet-5.
 We will witness that indeed this ConvNet
 has about twice lower error on the MNIST
 handwritten digit recognition task,
-while being four times smaller compared to the <a href="/neural-networks/day4/" target="_blank">previous model</a>!
-The source code from this post is available <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day5" target="_blank">on Github</a>.</p>
+while being four times smaller compared to the <a href="/neural-networks/day4/">previous model</a>!
+The source code from this post is available <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day5">on Github</a>.</p>
 
 <h3 id="convolutional-layer-gradients">Convolutional Layer Gradients</h3>
 
@@ -918,7 +918,7 @@ Here we have a <code>Volume4</code> type:</p>
 coming from the <code>massiv</code> package.
 In deep learning frameworks those n-dimensional arrays
 are conventionally called
-<a href="https://en.wikipedia.org/wiki/Tensor" target="_blank"><em>tensors</em></a>.
+<a href="https://en.wikipedia.org/wiki/Tensor"><em>tensors</em></a>.
 Note that during transformation in a neural network,
 the shape of data will change, except the batch dimension that will always remain the same.
 Similarly, we need a way to represent our convolutional filters.
@@ -955,7 +955,7 @@ as we did on Days 2 and 4 quickly becomes tedious.
 Moreover, last time when we introduced a <code>Batchnorm1d</code> layer,
 our forward-backward <code>pass</code> function already oversized 100 lines of code.
 Today, we will make use of the <code>backprop</code> library
-introduced on <a href="/neural-networks/day3/" target="_blank">Day 3</a> to better structure
+introduced on <a href="/neural-networks/day3/">Day 3</a> to better structure
 our project. Thus, LeNet can be represented as a differentiable
 function <code>lenet</code>, which is nothing more than a composition
 of other functions <em>aka</em> neural network layers:</p>
@@ -991,7 +991,7 @@ of other functions <em>aka</em> neural network layers:</p>
 <p>This description pretty much talks for itself. The <code>(~&gt;)</code> operator
 is a function composition, i.e. <code>f ~&gt; g = \x -&gt; g(f(x))</code>.
 This could be written in other forms, though. We prefer the
-so-called <a href="https://wiki.haskell.org/Pointfree" target="_blank"><em>pointfree</em></a> notation:</p>
+so-called <a href="https://wiki.haskell.org/Pointfree"><em>pointfree</em></a> notation:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(<span style="color:#f92672">~&gt;</span>) <span style="color:#f92672">::</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">b</span>) <span style="color:#f92672">-&gt;</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">c</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">c</span>
 <span style="color:#a6e22e">f</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">g</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">g</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">f</span></code></pre></div>
@@ -1000,7 +1000,7 @@ so-called <a href="https://wiki.haskell.org/Pointfree" target="_blank"><em>point
 is applied <code>f</code>, and only then <code>g</code><sup class="footnote-ref" id="fnref:fn-12"><a href="#fn:fn-12">12</a></sup>.
 I find this &quot;backward composition&quot; notation consistent with
 major neural network frameworks. Compare how an
-equivalent network can be represented in <a href="https://pytorch.org" target="_blank">PyTorch</a>:</p>
+equivalent network can be represented in <a href="https://pytorch.org">PyTorch</a>:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch.nn <span style="color:#f92672">as</span> nn
 
@@ -1045,7 +1045,7 @@ Now, let us return back to <code>lenet</code> signature:</p>
       <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Batch of images</span>
       <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>)</code></pre></div>
 
-<p>We have <a href="/neural-networks/day3/" target="_blank">already seen</a> the <code>BVar s</code>
+<p>We have <a href="/neural-networks/day3/">already seen</a> the <code>BVar s</code>
 (&quot;backprop variable&quot;) type meaning that we deal with a differentiable
 structure. The first argument has type
 <code>BVar s (LeNet Float)</code>. That conventionally means that <code>LeNet</code>
@@ -1064,12 +1064,12 @@ our <code>LeNet</code> data type. For instance, <code>sameConv2d (l ^^. conv1)</
 means that <code>sameConv2d</code> has access to the <code>_conv1</code> field.</p>
 
 <p>Layers known from the previous days (linear, ReLU) will be
-<a href="https://github.com/masterdezign/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352" target="_blank">reused</a>
-in accordance to <a href="https://backprop.jle.im/06-manual-gradients.html" target="_blank"><code>backprop</code> conventions</a>.
+<a href="https://github.com/masterdezign/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352">reused</a>
+in accordance to <a href="https://backprop.jle.im/06-manual-gradients.html"><code>backprop</code> conventions</a>.
 What is left to implement are <code>sameConv2d</code>, <code>validConv2d</code>, and <code>maxpool</code> layers.
 To be able to do that simply and efficiently
 we will learn a neat tool called
-<a href="https://en.wikipedia.org/wiki/Stencil_code" target="_blank"><em>stencils</em></a>.</p>
+<a href="https://en.wikipedia.org/wiki/Stencil_code"><em>stencils</em></a>.</p>
 
 <h3 id="fun-with-stencils">Fun With Stencils</h3>
 
@@ -1087,14 +1087,14 @@ The stencil convolution approach can be also used to perform
 subsampling operations, e.g. max pooling.
 Moreover, the method allows for efficient data parallelism.</p>
 
-<p>Previously, we have introduced <a href="http://hackage.haskell.org/package/massiv" target="_blank">Massiv</a> library
+<p>Previously, we have introduced <a href="http://hackage.haskell.org/package/massiv">Massiv</a> library
 featuring parallel arrays computation.
 This library was preferable to <code>hmatrix</code>
 due to two reasons: multidimensional arrays and
 parallel computation. Today, we have yet one more
 reason: stencils.
 Good news: <code>massiv</code> already implements them for us!
-Those are based on <a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf" target="_blank">this work</a>.</p>
+Those are based on <a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf">this work</a>.</p>
 
 <p>First, we warm up with a 1D cross-correlation from Equation (2).
 Suppose, we have a &quot;delay&quot; kernel $[1, 0, 0]$.
@@ -1127,13 +1127,13 @@ Alternatively, we could use <code>applyStencil noPadding</code> as below:</p>
   [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span> ]</code></pre></div>
 
 <p>Here is a more interesting computer
-<a href="https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs" target="_blank">vision example</a>. For comparison, we define an identity
+<a href="https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs">vision example</a>. For comparison, we define an identity
 (no transformation) stencil and a box stencil (blurring effect).
 The identity kernel has one in its center
 (coordinate <code>0 :. 0</code>) and zeroes everywhere else.
 The box transformation computes
 averaged value over nine neighboring pixels including the center
-pixel itself (see also <a href="https://github.com/pjreddie/vision-hw1" target="_blank">this</a>
+pixel itself (see also <a href="https://github.com/pjreddie/vision-hw1">this</a>
 for more information), therefore the kernel has weights 1/9
 everywhere.</p>
 
@@ -1183,7 +1183,7 @@ This is what we get:</p>
 
 
 <figcaption data-pre="Figure " data-post=":" >
-  <h4>Original frog (left) and blurred (right). <a href="https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429" target="_blank">Image credit</a>.</h4>
+  <h4>Original frog (left) and blurred (right). <a href="https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429">Image credit</a>.</h4>
   
 </figcaption>
 
@@ -1366,7 +1366,7 @@ $\frac{\partial L}{\partial X}$:</p>
 <p>Let us remind that these <code>compute</code> functions evaluate
 <em>delayed arrays</em> into actual representation in memory.
 Please do not hesitate to find <code>reverse</code> and <code>transposeInner</code> in
-<a href="http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html" target="_blank"><code>massiv</code> documentation</a>.
+<a href="http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html"><code>massiv</code> documentation</a>.
 Finally, here we have gradients w.r.t. convolution kernel
 weights $\frac{\partial L}{\partial W}$:</p>
 
@@ -1400,7 +1400,7 @@ we generalize Equation (4) to get those transformations:</p>
 Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
 the corresponding stencil pattern
-(or just use <a href="http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil" target="_blank"><code>maxStencil</code></a>
+(or just use <a href="http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil"><code>maxStencil</code></a>
 from the library instead).</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix4</span> <span style="color:#66d9ef">Float</span> <span style="color:#66d9ef">Float</span>
@@ -1431,7 +1431,7 @@ a coordinates (index) &quot;list&quot; with two elements
 and <code>:&gt;</code> just adds more coordinates for higher dimensions.
 To learn more about
 <code>&lt;$&gt;</code> and <code>&lt;*&gt;</code> functions, see
-<a href="http://learnyouahaskell.com/functors-applicative-functors-and-monoids" target="_blank">Applicative Functors</a>.</p>
+<a href="http://learnyouahaskell.com/functors-applicative-functors-and-monoids">Applicative Functors</a>.</p>
 
 <p>We would like to have non-overlapping sliding windows in max pooling,
 therefore, we want to use $2 \times 2$ stride in the image plane.
@@ -1448,7 +1448,7 @@ four times in this case.</p>
              <span style="color:#a6e22e">applyStencil</span> <span style="color:#a6e22e">noPadding</span> <span style="color:#a6e22e">maxpoolStencil2x2</span></code></pre></div>
 
 <p>Finally, we compute
-<a href="https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers" target="_blank">gradients</a>
+<a href="https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers">gradients</a>
 using pixels that had maximal values in the forward pass.
 And we obtain a differentiable <code>maxpool</code> function
 lifting forward-backward passes with <code>liftOp1. op1</code>:</p>
@@ -1575,7 +1575,7 @@ a handwritten digit, we call <code>evalBP</code>:</p>
 we have obtained a $\sim 1\%$ validation error, which
 is about twice as low compared to
 the simple fully-connected architecture.
-See the complete project on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day5" target="_blank">Github</a>.</p>
+See the complete project on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day5">Github</a>.</p>
 
 <!--
 * Learned conv filters visualization
@@ -1583,28 +1583,28 @@ See the complete project on <a href="https://github.com/masterdezign/10-days-of-
 
 <h3 id="model-parameters-comparison">Model Parameters Comparison</h3>
 
-<p>Our three-layer model from <a href="/neural-networks/day4/" target="_blank">Day 4</a>
+<p>Our three-layer model from <a href="/neural-networks/day4/">Day 4</a>
 consumed</p>
 
-<p>$$784 \cdot (300+1) + 300 \cdot (50+1) + 50 \cdot (10+1) = 251,834$$</p>
+<p>$$(784+1) \cdot 300 + (300+1) \cdot 50 + (50+1) \cdot 10 = 251,060$$</p>
 
 <p>learnable parameters (not counting batchnorm parameters).
 In contrast, the convolutional neural network model that we have implemented
 today requires only</p>
 
-<p>$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + 400 \cdot (120+1) + 120 \cdot (84 + 1) +  $$
-$$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$</p>
+<p>$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + (400+1) \cdot 120 + (120+1) \cdot 84 +  $$
+$$ + (84+1) \cdot 10 = 61,684~\text{parameters.}$$</p>
 
 <p>Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
 convolutional layers parameters, whereas
-the majority ($59,524$) reside in classifier's fully-connected
+the majority ($59,134$) reside in classifier's fully-connected
 layers.</p>
 
 <p>Although, we did not apply batch normalization today,
 like was in the original LeNet,
 feel free to experiment with adding batchnorm layers.
 Please also note that there is a difference between batch normalization
-after convolution and after fully-connected layers (see the <a href="https://arxiv.org/abs/1502.03167" target="_blank">batchnorm article</a>).</p>
+after convolution and after fully-connected layers (see the <a href="https://arxiv.org/abs/1502.03167">batchnorm article</a>).</p>
 
 <h2 id="summary">Summary</h2>
 
@@ -1620,7 +1620,7 @@ Stay tuned!</p>
 
 <h2 id="acknowledgment">Acknowledgment</h2>
 
-<p>I would like to acknowledge <a href="https://github.com/lehins/" target="_blank">Alexey Kuleshevich</a>
+<p>I would like to acknowledge <a href="https://github.com/lehins/">Alexey Kuleshevich</a>
 for his help with <code>massiv</code> array library, upon which this
 convolutional neural network was built.</p>
 
@@ -1629,20 +1629,20 @@ convolutional neural network was built.</p>
 <p>Learned today:</p>
 
 <ul>
-<li><a href="http://setosa.io/ev/image-kernels/" target="_blank">Interactive Image Kernels</a></li>
-<li><a href="http://cs231n.github.io/convolutional-networks/" target="_blank">Excellent tutorial on ConvNets</a></li>
-<li><a href="https://pjreddie.com/courses/computer-vision/" target="_blank">The Ancient Secrets of Computer Vision (online course)</a></li>
-<li><a href="https://morgenthum.dev/articles/why-prefer-fp" target="_blank">Why I prefer functional programming</a></li>
-<li><a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf" target="_blank">Efficient Parallel Stencil Convolution in Haskell</a></li>
+<li><a href="http://setosa.io/ev/image-kernels/">Interactive Image Kernels</a></li>
+<li><a href="http://cs231n.github.io/convolutional-networks/">Excellent tutorial on ConvNets</a></li>
+<li><a href="https://pjreddie.com/courses/computer-vision/">The Ancient Secrets of Computer Vision (online course)</a></li>
+<li><a href="https://morgenthum.dev/articles/why-prefer-fp">Why I prefer functional programming</a></li>
+<li><a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf">Efficient Parallel Stencil Convolution in Haskell</a></li>
 </ul>
 
 <p>Deeper into neural networks:</p>
 
 <ul>
-<li><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf" target="_blank">LeNet-5 paper</a></li>
-<li><a href="https://arxiv.org/pdf/1409.4842.pdf" target="_blank">Inception paper</a></li>
-<li><a href="https://arxiv.org/pdf/1610.02357.pdf" target="_blank">Xception paper</a></li>
-<li><a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">Mobilenet paper</a></li>
+<li><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">LeNet-5 paper</a></li>
+<li><a href="https://arxiv.org/pdf/1409.4842.pdf">Inception paper</a></li>
+<li><a href="https://arxiv.org/pdf/1610.02357.pdf">Xception paper</a></li>
+<li><a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet paper</a></li>
 </ul>
 
 <script type="text/x-mathjax-config">
@@ -1663,9 +1663,9 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
 <li id="fn:fn-3">By subsampling LeNet authors mean local averaging in $2 \times 2$ squares with subsequent scaling by a constant, bias addition, and sigmoid activation. In modern CNNs, a simple max-pooling is performed instead.
  <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
-<li id="fn:fn-4">We have discussed one-hot encoding on <a href="/neural-networks/day1/" target="_blank">Day 1</a>.
+<li id="fn:fn-4">We have discussed one-hot encoding on <a href="/neural-networks/day1/">Day 1</a>.
  <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
-<li id="fn:fn-5">To refresh your memory about backprop algorithm, check out <a href="/neural-networks/day1/" target="_blank">previous</a> <a href="/neural-networks/day3/" target="_blank">days</a>.
+<li id="fn:fn-5">To refresh your memory about backprop algorithm, check out <a href="/neural-networks/day1/">previous</a> <a href="/neural-networks/day3/">days</a>.
  <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
 <li id="fn:fn-6">Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
  <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
@@ -1673,9 +1673,9 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
 <li id="fn:fn-8">By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
  <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
-<li id="fn:fn-9">For the details, see <a href="https://arxiv.org/pdf/1704.04861.pdf" target="_blank">Mobilenet paper</a>.
+<li id="fn:fn-9">For the details, see <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet paper</a>.
  <a class="footnote-return" href="#fnref:fn-9"><sup>^</sup></a></li>
-<li id="fn:fn-10">In <a href="https://arxiv.org/pdf/1610.02357.pdf" target="_blank">Xception</a> architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by <a href="/neural-networks/day4/" target="_blank">batch normalization</a>. Batch normalization results in no added bias term after convolutions.
+<li id="fn:fn-10">In <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception</a> architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by <a href="/neural-networks/day4/">batch normalization</a>. Batch normalization results in no added bias term after convolutions.
  <a class="footnote-return" href="#fnref:fn-10"><sup>^</sup></a></li>
 <li id="fn:fn-11">Convolution has flipped kernel whereas cross-correlation operator does not flip the kernel.
  <a class="footnote-return" href="#fnref:fn-11"><sup>^</sup></a></li>

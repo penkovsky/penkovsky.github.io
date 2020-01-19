@@ -381,24 +381,24 @@ our strategy on the lowest level. However, as neural networks become more compli
 calculation of gradients by hand becomes a murky business. Yet, fear not young
 <em>padawan</em>, there is a way out! I am very excited that today we will finally get
 acquainted with automatic differentiation, an essential tool in your deep
-learning arsenal.  This post was largely inspired by <a href="http://karpathy.github.io/neuralnets/" target="_blank">Hacker's guide to Neural
+learning arsenal.  This post was largely inspired by <a href="http://karpathy.github.io/neuralnets/">Hacker's guide to Neural
 Networks</a>. For comparison, see also
-<a href="https://github.com/urwithajit9/HG_NeuralNetwork" target="_blank">Python version</a>.</p>
+<a href="https://github.com/urwithajit9/HG_NeuralNetwork">Python version</a>.</p>
 
 <p>Before jumping ahead, you may also want to check the previous posts:</p>
 
 <ul>
-<li><a href="/neural-networks/day1/" target="_blank">Day 1: Learning Neural Networks The Hard Way</a></li>
-<li><a href="/neural-networks/day2/" target="_blank">Day 2: What Do Hidden Layers Do?</a></li>
+<li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+<li><a href="/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></li>
 </ul>
 
-<p>The source code from this guide is available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day3" target="_blank">on
+<p>The source code from this guide is available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day3">on
 Github</a>. The
 guide is written in literate Haskell, so it can be safely compiled.</p>
 
 <h2 id="why-random-local-search-fails">Why Random Local Search Fails</h2>
 
-<p>Following Karpathy's <a href="http://karpathy.github.io/neuralnets/" target="_blank">guide</a>, we
+<p>Following Karpathy's <a href="http://karpathy.github.io/neuralnets/">guide</a>, we
 first consider a simple multiplication circuit.  Well, Haskell is not JavaScript,
 so the definition is pretty straightforward:</p>
 
@@ -444,7 +444,7 @@ of the algorithm is <code>searchStep</code>:</p>
 <p>which is a convenience function that glues those two pieces together.  It
 simply ignores the iteration number and calls <code>_search</code>. Now, we would like to
 have a random number generator within the range of [-1; 1). From the
-<a href="http://hackage.haskell.org/package/random-1.1/docs/System-Random.html" target="_blank">documentation</a>,
+<a href="http://hackage.haskell.org/package/random-1.1/docs/System-Random.html">documentation</a>,
 we know that <code>randomIO</code> produces a number between 0 and 1.  Therefore, we scale
 the value by multiplying by 2 and subtracting 1:</p>
 
@@ -479,18 +479,18 @@ at least by a little bit?</p>
 
 <p>Instead of random search in random direction, we can make use of the precise
 direction and amount to change the input so that the output would improve. And
-that is exactly what the <a href="https://en.wikipedia.org/wiki/Gradient" target="_blank">gradient</a>
+that is exactly what the <a href="https://en.wikipedia.org/wiki/Gradient">gradient</a>
 tells us.  Instead of manually computing the gradient every time, we can employ
 some clever algorithm. There exist multiple approaches: numerical, symbolic,
 and automatic differentiation.  In his
-<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">article</a>,
+<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/">article</a>,
 Dominic Steinitz explains the differences between them.  The last approach,
 automatic differentiation is exactly what we need: accurate gradients with
 minimal overhead.  Here, we will briefly explain the concept.</p>
 
 <p>The idea behind automatic differentiation is that we explicitly define
 gradients only for elementary, basic operators. Then, we exploit the
-<a href="https://en.wikipedia.org/wiki/Chain_rule" target="_blank">chain rule</a> combining those
+<a href="https://en.wikipedia.org/wiki/Chain_rule">chain rule</a> combining those
 operators into neural networks or whatever we like. That strategy will infer
 the necessary gradients by itself. Let us illustrate the method with an
 example.</p>
@@ -574,13 +574,13 @@ In a similar way, we can obtain the rest of the gradients:</p>
 
 <h2 id="introducing-backprop-library">Introducing backprop library</h2>
 
-<p>The <a href="https://backprop.jle.im/" target="_blank">backprop library</a> was specifically designed for
-<a href="https://www.quora.com/What-is-Differentiable-Programming" target="_blank">differentiable
+<p>The <a href="https://backprop.jle.im/">backprop library</a> was specifically designed for
+<a href="https://www.quora.com/What-is-Differentiable-Programming">differentiable
 programming</a>.  It
 provides combinators to reduce our mental overhead.  In addition, the most
 useful operations such as arithmetics and trigonometry, have already been
 defined in the library. See also
-<a href="http://hackage.haskell.org/package/hmatrix-backprop" target="_blank">hmatrix-backprop</a> for
+<a href="http://hackage.haskell.org/package/hmatrix-backprop">hmatrix-backprop</a> for
 linear algebra.  So all you need for differentiable programming now is to
 define some functions:</p>
 
@@ -621,18 +621,18 @@ how automatic differentiation can face this problem.</p>
 
 <p>In the next posts we will apply automatic differentiation to real neural
 networks. We will talk about
-<a href="/neural-networks/day4/" target="_blank">batch normalization</a>,
+<a href="/neural-networks/day4/">batch normalization</a>,
 another crucial method in modern deep learning.  And we will ramp it up to
-<a href="/neural-networks/day5/" target="_blank">convolutional networks</a> allowing us
+<a href="/neural-networks/day5/">convolutional networks</a> allowing us
 to solve some interesting challenges.
 Stay tuned!</p>
 
 <h2 id="further-reading">Further reading</h2>
 
 <ul>
-<li><a href="https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/" target="_blank">Visual guide to neural networks</a></li>
-<li><a href="https://backprop.jle.im/01-getting-started.html" target="_blank">Backprop documentation</a></li>
-<li><a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/" target="_blank">Article on backpropagation by Dominic Steinitz</a></li>
+<li><a href="https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/">Visual guide to neural networks</a></li>
+<li><a href="https://backprop.jle.im/01-getting-started.html">Backprop documentation</a></li>
+<li><a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/">Article on backpropagation by Dominic Steinitz</a></li>
 </ul>
 <div class="footnotes">
 

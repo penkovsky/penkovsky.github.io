@@ -7,10 +7,28 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Sun, 24 Nov 2019 18:20:00 +0200</lastBuildDate>
+    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0100</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
+      <link>http://penkovsky.com/publication/medical-bnn/</link>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/medical-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Digital Biologically Plausible Implementation of Binarized Neural Networks with Differential Hafnium Oxide Resistive Memory Arrays</title>
+      <link>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>

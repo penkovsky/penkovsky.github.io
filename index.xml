@@ -11,6 +11,24 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
+      <link>http://penkovsky.com/publication/medical-bnn/</link>
+      <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/medical-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Digital Biologically Plausible Implementation of Binarized Neural Networks with Differential Hafnium Oxide Resistive Memory Arrays</title>
+      <link>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>
       <link>http://penkovsky.com/neural-networks/day5/</link>
       <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
@@ -20,7 +38,7 @@
 
 &lt;p&gt;Today we will talk about one of the most important deep learning architectures,
 the &amp;quot;master algorithm&amp;quot; in computer vision.  That is how François Chollet,
-author of &lt;a href=&#34;https://github.com/keras-team/keras&#34; target=&#34;_blank&#34;&gt;Keras&lt;/a&gt;, calls convolutional
+author of &lt;a href=&#34;https://github.com/keras-team/keras&#34;&gt;Keras&lt;/a&gt;, calls convolutional
 neural networks (CNNs).  Convolutional network is an architecture that, like
 other artificial neural networks, has a neuron as its core building block.  It
 is also differentiable, so the network is conveniently trained via backpropagation.
@@ -32,7 +50,7 @@ weights.&lt;/p&gt;
 Then, we are taking a close look at a classic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement a convolutional network in Haskell.
-We will see that on &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;handwritten digits&lt;/a&gt; our CNN
+We will see that on &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;handwritten digits&lt;/a&gt; our CNN
 achieves a twice lower test error, compared to the fully-connected
 architecture. We will build up on what we have learned during
 the previous days, so do not hesitate to refresh your memory first.&lt;/p&gt;
@@ -40,10 +58,10 @@ the previous days, so do not hesitate to refresh your memory first.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;convolution-operator&#34;&gt;Convolution operator&lt;/h2&gt;
@@ -150,7 +168,7 @@ The image kernel is typically a $3 \times 3$ matrix such as below.&lt;/p&gt;
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
   &lt;h4&gt;A single convolution step:&lt;/h4&gt;
   &lt;p&gt;
-    Dot product between pixel values and a kernel. Image credit: &lt;a href=&#34;https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png&#34; target=&#34;_blank&#34;&gt;GIMP&lt;/a&gt;.
+    Dot product between pixel values and a kernel. Image credit: &lt;a href=&#34;https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png&#34;&gt;GIMP&lt;/a&gt;.
     
     
     
@@ -178,14 +196,14 @@ where
 $0 \le i &amp;lt; D_{K_1} + D_{F_1} - 1$
 and $0 \le i &amp;lt; D_{K_2} + D_{F_2} - 1$.
 To better understand how convolution with a kernel
-changes the original image, you can play with different &lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;image kernels&lt;/a&gt;.&lt;/p&gt;
+changes the original image, you can play with different &lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34;&gt;image kernels&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;What is the motivation behind the sliding window/convolution operator approach?
 Actually, it has a biological background.
-In fact, human eye has a relatively narrow &lt;a href=&#34;https://en.wikipedia.org/wiki/Visual_field&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;visual field&lt;/em&gt;&lt;/a&gt;.
+In fact, human eye has a relatively narrow &lt;a href=&#34;https://en.wikipedia.org/wiki/Visual_field&#34;&gt;&lt;em&gt;visual field&lt;/em&gt;&lt;/a&gt;.
 We perceive objects as a whole by constantly moving eyes around them.
-These rapid &lt;a href=&#34;https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm&#34; target=&#34;_blank&#34;&gt;eye movements&lt;/a&gt;
-are called &lt;a href=&#34;https://en.wikipedia.org/wiki/Saccade&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;saccades&lt;/em&gt;&lt;/a&gt;.
+These rapid &lt;a href=&#34;https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm&#34;&gt;eye movements&lt;/a&gt;
+are called &lt;a href=&#34;https://en.wikipedia.org/wiki/Saccade&#34;&gt;&lt;em&gt;saccades&lt;/em&gt;&lt;/a&gt;.
 Therefore, convolution operator may be regarded as a simplified model of
 image scanning that occurs naturally. The important point
 is that convolutions achieve translation invariance
@@ -205,9 +223,9 @@ in neural networks we achieve both translation invariance and connection sparsit
 &lt;p&gt;&lt;small&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition (1998)&lt;/small&gt;&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;The &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;prototype&lt;/a&gt; of what we call today convolutional neural
-networks has been first proposed back &lt;a href=&#34;https://en.wikipedia.org/wiki/Convolutional_neural_network#History&#34; target=&#34;_blank&#34;&gt;in late
-1970s&lt;/a&gt; &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34; target=&#34;_blank&#34;&gt;by
+&lt;p&gt;The &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34;&gt;prototype&lt;/a&gt; of what we call today convolutional neural
+networks has been first proposed back &lt;a href=&#34;https://en.wikipedia.org/wiki/Convolutional_neural_network#History&#34;&gt;in late
+1970s&lt;/a&gt; &lt;a href=&#34;http://www.scholarpedia.org/article/Neocognitron&#34;&gt;by
 Fukushima&lt;/a&gt;. There were proposed many unsupervised and supervised training
 methods, but today CNNs are trained almost exclusively with backpropagation.
 Let us take a look at one of the famous ConvNet architectures known as LeNet-5.&lt;/p&gt;
@@ -221,7 +239,7 @@ Let us take a look at one of the famous ConvNet architectures known as LeNet-5.&
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
   &lt;h4&gt;&lt;/h4&gt;
   &lt;p&gt;
-    LeNet-5 architecture from &lt;a href=&#34;http://doi.org/10.1109/5.726791&#34; target=&#34;_blank&#34;&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition&lt;/a&gt;.
+    LeNet-5 architecture from &lt;a href=&#34;http://doi.org/10.1109/5.726791&#34;&gt;Lecun &lt;em&gt;et al.&lt;/em&gt; Gradient-based learning applied to document recognition&lt;/a&gt;.
     
     
     
@@ -294,7 +312,7 @@ let us inspect receptive fields visualization below.&lt;/p&gt;
   Your browser does not support HTML5 canvas.
 &lt;/canvas&gt;
 
-&lt;p&gt;Receptive field visualization derived from &lt;a href=&#34;http://arunmallya.github.io&#34; target=&#34;_blank&#34;&gt;Arun Mallya&lt;/a&gt;.
+&lt;p&gt;Receptive field visualization derived from &lt;a href=&#34;http://arunmallya.github.io&#34;&gt;Arun Mallya&lt;/a&gt;.
 Hover the mouse cursor over any neuron in top layers to see
 how extends its receptive field in previous (bottom) layers.
 &lt;!-- TODO: make it horizontal left-to-right. --&gt;&lt;/p&gt;
@@ -324,8 +342,8 @@ free to skip the section and revisit it later.&lt;/p&gt;
 &lt;p&gt;There is a lot of hype around convolutions nowadays. However, it is not made
 clear that low-level convolutions for computer vision are often different from
 those exploited by ConvNets. Yet, even in ConvNets there is a variety of
-convolutional layers inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception&lt;/a&gt; ConvNet architecture
-and shaped by &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception&lt;/a&gt; and &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet&lt;/a&gt; works. I
+convolutional layers inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34;&gt;Inception&lt;/a&gt; ConvNet architecture
+and shaped by &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception&lt;/a&gt; and &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34;&gt;Mobilenet&lt;/a&gt; works. I
 believe that you deserve to know that there exist multiple kinds of
 convolutions applied in different contexts and here I shall provide a general
 roadmap&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
@@ -410,11 +428,11 @@ the feature map size&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;
 
 &lt;p&gt;LeNet-style convolution requires a large number of operations.
 But do we really need all of them? For instance, can spatial and cross-channel
-correlations be somehow decoupled? The &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception
-paper&lt;/a&gt; largely inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception&lt;/a&gt; architecture
+correlations be somehow decoupled? The &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception
+paper&lt;/a&gt; largely inspired by &lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34;&gt;Inception&lt;/a&gt; architecture
 shows that indeed, one can build more efficient convolutions by assuming that
 spatial correlations and cross-channel correlations can be mapped
-independently. This principle was also applied in &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet&lt;/a&gt;
+independently. This principle was also applied in &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34;&gt;Mobilenet&lt;/a&gt;
 architectures.&lt;/p&gt;
 
 &lt;p&gt;The depthwise separable convolution works the following way. First, like in
@@ -449,8 +467,8 @@ network inspired by LeNet-5.
 We will witness that indeed this ConvNet
 has about twice lower error on the MNIST
 handwritten digit recognition task,
-while being four times smaller compared to the &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;previous model&lt;/a&gt;!
-The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+while being four times smaller compared to the &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;previous model&lt;/a&gt;!
+The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;convolutional-layer-gradients&#34;&gt;Convolutional Layer Gradients&lt;/h3&gt;
 
@@ -552,7 +570,7 @@ Here we have a &lt;code&gt;Volume4&lt;/code&gt; type:&lt;/p&gt;
 coming from the &lt;code&gt;massiv&lt;/code&gt; package.
 In deep learning frameworks those n-dimensional arrays
 are conventionally called
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Tensor&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;tensors&lt;/em&gt;&lt;/a&gt;.
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Tensor&#34;&gt;&lt;em&gt;tensors&lt;/em&gt;&lt;/a&gt;.
 Note that during transformation in a neural network,
 the shape of data will change, except the batch dimension that will always remain the same.
 Similarly, we need a way to represent our convolutional filters.
@@ -589,7 +607,7 @@ as we did on Days 2 and 4 quickly becomes tedious.
 Moreover, last time when we introduced a &lt;code&gt;Batchnorm1d&lt;/code&gt; layer,
 our forward-backward &lt;code&gt;pass&lt;/code&gt; function already oversized 100 lines of code.
 Today, we will make use of the &lt;code&gt;backprop&lt;/code&gt; library
-introduced on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3&lt;/a&gt; to better structure
+introduced on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3&lt;/a&gt; to better structure
 our project. Thus, LeNet can be represented as a differentiable
 function &lt;code&gt;lenet&lt;/code&gt;, which is nothing more than a composition
 of other functions &lt;em&gt;aka&lt;/em&gt; neural network layers:&lt;/p&gt;
@@ -625,7 +643,7 @@ of other functions &lt;em&gt;aka&lt;/em&gt; neural network layers:&lt;/p&gt;
 &lt;p&gt;This description pretty much talks for itself. The &lt;code&gt;(~&amp;gt;)&lt;/code&gt; operator
 is a function composition, i.e. &lt;code&gt;f ~&amp;gt; g = \x -&amp;gt; g(f(x))&lt;/code&gt;.
 This could be written in other forms, though. We prefer the
-so-called &lt;a href=&#34;https://wiki.haskell.org/Pointfree&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;pointfree&lt;/em&gt;&lt;/a&gt; notation:&lt;/p&gt;
+so-called &lt;a href=&#34;https://wiki.haskell.org/Pointfree&#34;&gt;&lt;em&gt;pointfree&lt;/em&gt;&lt;/a&gt; notation:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;~&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;g&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;g&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
@@ -634,7 +652,7 @@ so-called &lt;a href=&#34;https://wiki.haskell.org/Pointfree&#34; target=&#34;_b
 is applied &lt;code&gt;f&lt;/code&gt;, and only then &lt;code&gt;g&lt;/code&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-12&#34;&gt;&lt;a href=&#34;#fn:fn-12&#34;&gt;12&lt;/a&gt;&lt;/sup&gt;.
 I find this &amp;quot;backward composition&amp;quot; notation consistent with
 major neural network frameworks. Compare how an
-equivalent network can be represented in &lt;a href=&#34;https://pytorch.org&#34; target=&#34;_blank&#34;&gt;PyTorch&lt;/a&gt;:&lt;/p&gt;
+equivalent network can be represented in &lt;a href=&#34;https://pytorch.org&#34;&gt;PyTorch&lt;/a&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; torch.nn &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; nn
 
@@ -679,7 +697,7 @@ Now, let us return back to &lt;code&gt;lenet&lt;/code&gt; signature:&lt;/p&gt;
       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Batch of images&lt;/span&gt;
       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;We have &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;already seen&lt;/a&gt; the &lt;code&gt;BVar s&lt;/code&gt;
+&lt;p&gt;We have &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;already seen&lt;/a&gt; the &lt;code&gt;BVar s&lt;/code&gt;
 (&amp;quot;backprop variable&amp;quot;) type meaning that we deal with a differentiable
 structure. The first argument has type
 &lt;code&gt;BVar s (LeNet Float)&lt;/code&gt;. That conventionally means that &lt;code&gt;LeNet&lt;/code&gt;
@@ -698,12 +716,12 @@ our &lt;code&gt;LeNet&lt;/code&gt; data type. For instance, &lt;code&gt;sameConv
 means that &lt;code&gt;sameConv2d&lt;/code&gt; has access to the &lt;code&gt;_conv1&lt;/code&gt; field.&lt;/p&gt;
 
 &lt;p&gt;Layers known from the previous days (linear, ReLU) will be
-&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352&#34; target=&#34;_blank&#34;&gt;reused&lt;/a&gt;
-in accordance to &lt;a href=&#34;https://backprop.jle.im/06-manual-gradients.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;backprop&lt;/code&gt; conventions&lt;/a&gt;.
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352&#34;&gt;reused&lt;/a&gt;
+in accordance to &lt;a href=&#34;https://backprop.jle.im/06-manual-gradients.html&#34;&gt;&lt;code&gt;backprop&lt;/code&gt; conventions&lt;/a&gt;.
 What is left to implement are &lt;code&gt;sameConv2d&lt;/code&gt;, &lt;code&gt;validConv2d&lt;/code&gt;, and &lt;code&gt;maxpool&lt;/code&gt; layers.
 To be able to do that simply and efficiently
 we will learn a neat tool called
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Stencil_code&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;stencils&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Stencil_code&#34;&gt;&lt;em&gt;stencils&lt;/em&gt;&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;fun-with-stencils&#34;&gt;Fun With Stencils&lt;/h3&gt;
 
@@ -721,14 +739,14 @@ The stencil convolution approach can be also used to perform
 subsampling operations, e.g. max pooling.
 Moreover, the method allows for efficient data parallelism.&lt;/p&gt;
 
-&lt;p&gt;Previously, we have introduced &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;Massiv&lt;/a&gt; library
+&lt;p&gt;Previously, we have introduced &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34;&gt;Massiv&lt;/a&gt; library
 featuring parallel arrays computation.
 This library was preferable to &lt;code&gt;hmatrix&lt;/code&gt;
 due to two reasons: multidimensional arrays and
 parallel computation. Today, we have yet one more
 reason: stencils.
 Good news: &lt;code&gt;massiv&lt;/code&gt; already implements them for us!
-Those are based on &lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34; target=&#34;_blank&#34;&gt;this work&lt;/a&gt;.&lt;/p&gt;
+Those are based on &lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34;&gt;this work&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;First, we warm up with a 1D cross-correlation from Equation (2).
 Suppose, we have a &amp;quot;delay&amp;quot; kernel $[1, 0, 0]$.
@@ -761,13 +779,13 @@ Alternatively, we could use &lt;code&gt;applyStencil noPadding&lt;/code&gt; as b
   [ &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Here is a more interesting computer
-&lt;a href=&#34;https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs&#34; target=&#34;_blank&#34;&gt;vision example&lt;/a&gt;. For comparison, we define an identity
+&lt;a href=&#34;https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs&#34;&gt;vision example&lt;/a&gt;. For comparison, we define an identity
 (no transformation) stencil and a box stencil (blurring effect).
 The identity kernel has one in its center
 (coordinate &lt;code&gt;0 :. 0&lt;/code&gt;) and zeroes everywhere else.
 The box transformation computes
 averaged value over nine neighboring pixels including the center
-pixel itself (see also &lt;a href=&#34;https://github.com/pjreddie/vision-hw1&#34; target=&#34;_blank&#34;&gt;this&lt;/a&gt;
+pixel itself (see also &lt;a href=&#34;https://github.com/pjreddie/vision-hw1&#34;&gt;this&lt;/a&gt;
 for more information), therefore the kernel has weights 1/9
 everywhere.&lt;/p&gt;
 
@@ -817,7 +835,7 @@ This is what we get:&lt;/p&gt;
 
 
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Original frog (left) and blurred (right). &lt;a href=&#34;https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429&#34; target=&#34;_blank&#34;&gt;Image credit&lt;/a&gt;.&lt;/h4&gt;
+  &lt;h4&gt;Original frog (left) and blurred (right). &lt;a href=&#34;https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429&#34;&gt;Image credit&lt;/a&gt;.&lt;/h4&gt;
   
 &lt;/figcaption&gt;
 
@@ -1000,7 +1018,7 @@ $\frac{\partial L}{\partial X}$:&lt;/p&gt;
 &lt;p&gt;Let us remind that these &lt;code&gt;compute&lt;/code&gt; functions evaluate
 &lt;em&gt;delayed arrays&lt;/em&gt; into actual representation in memory.
 Please do not hesitate to find &lt;code&gt;reverse&lt;/code&gt; and &lt;code&gt;transposeInner&lt;/code&gt; in
-&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;.
+&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;.
 Finally, here we have gradients w.r.t. convolution kernel
 weights $\frac{\partial L}{\partial W}$:&lt;/p&gt;
 
@@ -1034,7 +1052,7 @@ we generalize Equation (4) to get those transformations:&lt;/p&gt;
 Another use case are pooling (subsampling) layers.
 To be able to perform max pooling, first we have to define
 the corresponding stencil pattern
-(or just use &lt;a href=&#34;http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;maxStencil&lt;/code&gt;&lt;/a&gt;
+(or just use &lt;a href=&#34;http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil&#34;&gt;&lt;code&gt;maxStencil&lt;/code&gt;&lt;/a&gt;
 from the library instead).&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Stencil&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Ix4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
@@ -1065,7 +1083,7 @@ a coordinates (index) &amp;quot;list&amp;quot; with two elements
 and &lt;code&gt;:&amp;gt;&lt;/code&gt; just adds more coordinates for higher dimensions.
 To learn more about
 &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; and &lt;code&gt;&amp;lt;*&amp;gt;&lt;/code&gt; functions, see
-&lt;a href=&#34;http://learnyouahaskell.com/functors-applicative-functors-and-monoids&#34; target=&#34;_blank&#34;&gt;Applicative Functors&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;http://learnyouahaskell.com/functors-applicative-functors-and-monoids&#34;&gt;Applicative Functors&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;We would like to have non-overlapping sliding windows in max pooling,
 therefore, we want to use $2 \times 2$ stride in the image plane.
@@ -1082,7 +1100,7 @@ four times in this case.&lt;/p&gt;
              &lt;span style=&#34;color:#a6e22e&#34;&gt;applyStencil&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;noPadding&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maxpoolStencil2x2&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Finally, we compute
-&lt;a href=&#34;https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers&#34; target=&#34;_blank&#34;&gt;gradients&lt;/a&gt;
+&lt;a href=&#34;https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers&#34;&gt;gradients&lt;/a&gt;
 using pixels that had maximal values in the forward pass.
 And we obtain a differentiable &lt;code&gt;maxpool&lt;/code&gt; function
 lifting forward-backward passes with &lt;code&gt;liftOp1. op1&lt;/code&gt;:&lt;/p&gt;
@@ -1209,7 +1227,7 @@ a handwritten digit, we call &lt;code&gt;evalBP&lt;/code&gt;:&lt;/p&gt;
 we have obtained a $\sim 1\%$ validation error, which
 is about twice as low compared to
 the simple fully-connected architecture.
-See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;!--
 * Learned conv filters visualization
@@ -1217,28 +1235,28 @@ See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-d
 
 &lt;h3 id=&#34;model-parameters-comparison&#34;&gt;Model Parameters Comparison&lt;/h3&gt;
 
-&lt;p&gt;Our three-layer model from &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;Day 4&lt;/a&gt;
+&lt;p&gt;Our three-layer model from &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4&lt;/a&gt;
 consumed&lt;/p&gt;
 
-&lt;p&gt;$$784 \cdot (300+1) + 300 \cdot (50+1) + 50 \cdot (10+1) = 251,834$$&lt;/p&gt;
+&lt;p&gt;$$(784+1) \cdot 300 + (300+1) \cdot 50 + (50+1) \cdot 10 = 251,060$$&lt;/p&gt;
 
 &lt;p&gt;learnable parameters (not counting batchnorm parameters).
 In contrast, the convolutional neural network model that we have implemented
 today requires only&lt;/p&gt;
 
-&lt;p&gt;$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + 400 \cdot (120+1) + 120 \cdot (84 + 1) +  $$
-$$ + 84 \cdot (10 + 1) = 62,074~\text{parameters.}$$&lt;/p&gt;
+&lt;p&gt;$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + (400+1) \cdot 120 + (120+1) \cdot 84 +  $$
+$$ + (84+1) \cdot 10 = 61,684~\text{parameters.}$$&lt;/p&gt;
 
 &lt;p&gt;Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
 convolutional layers parameters, whereas
-the majority ($59,524$) reside in classifier&#39;s fully-connected
+the majority ($59,134$) reside in classifier&#39;s fully-connected
 layers.&lt;/p&gt;
 
 &lt;p&gt;Although, we did not apply batch normalization today,
 like was in the original LeNet,
 feel free to experiment with adding batchnorm layers.
 Please also note that there is a difference between batch normalization
-after convolution and after fully-connected layers (see the &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batchnorm article&lt;/a&gt;).&lt;/p&gt;
+after convolution and after fully-connected layers (see the &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;batchnorm article&lt;/a&gt;).&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -1254,7 +1272,7 @@ Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;acknowledgment&#34;&gt;Acknowledgment&lt;/h2&gt;
 
-&lt;p&gt;I would like to acknowledge &lt;a href=&#34;https://github.com/lehins/&#34; target=&#34;_blank&#34;&gt;Alexey Kuleshevich&lt;/a&gt;
+&lt;p&gt;I would like to acknowledge &lt;a href=&#34;https://github.com/lehins/&#34;&gt;Alexey Kuleshevich&lt;/a&gt;
 for his help with &lt;code&gt;massiv&lt;/code&gt; array library, upon which this
 convolutional neural network was built.&lt;/p&gt;
 
@@ -1263,20 +1281,20 @@ convolutional neural network was built.&lt;/p&gt;
 &lt;p&gt;Learned today:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34; target=&#34;_blank&#34;&gt;Interactive Image Kernels&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/convolutional-networks/&#34; target=&#34;_blank&#34;&gt;Excellent tutorial on ConvNets&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://pjreddie.com/courses/computer-vision/&#34; target=&#34;_blank&#34;&gt;The Ancient Secrets of Computer Vision (online course)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://morgenthum.dev/articles/why-prefer-fp&#34; target=&#34;_blank&#34;&gt;Why I prefer functional programming&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34; target=&#34;_blank&#34;&gt;Efficient Parallel Stencil Convolution in Haskell&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://setosa.io/ev/image-kernels/&#34;&gt;Interactive Image Kernels&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/convolutional-networks/&#34;&gt;Excellent tutorial on ConvNets&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://pjreddie.com/courses/computer-vision/&#34;&gt;The Ancient Secrets of Computer Vision (online course)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://morgenthum.dev/articles/why-prefer-fp&#34;&gt;Why I prefer functional programming&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf&#34;&gt;Efficient Parallel Stencil Convolution in Haskell&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;Deeper into neural networks:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf&#34; target=&#34;_blank&#34;&gt;LeNet-5 paper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34; target=&#34;_blank&#34;&gt;Inception paper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception paper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf&#34;&gt;LeNet-5 paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1409.4842.pdf&#34;&gt;Inception paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34;&gt;Mobilenet paper&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
@@ -1297,9 +1315,9 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-3&#34;&gt;By subsampling LeNet authors mean local averaging in $2 \times 2$ squares with subsequent scaling by a constant, bias addition, and sigmoid activation. In modern CNNs, a simple max-pooling is performed instead.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-4&#34;&gt;We have discussed one-hot encoding on &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-4&#34;&gt;We have discussed one-hot encoding on &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-5&#34;&gt;To refresh your memory about backprop algorithm, check out &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;days&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-5&#34;&gt;To refresh your memory about backprop algorithm, check out &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;days&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-6&#34;&gt;Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1307,9 +1325,9 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-9&#34;&gt;For the details, see &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34; target=&#34;_blank&#34;&gt;Mobilenet paper&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-9&#34;&gt;For the details, see &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34;&gt;Mobilenet paper&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34; target=&#34;_blank&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
+&lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-11&#34;&gt;Convolution has flipped kernel whereas cross-correlation operator does not flip the kernel.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-11&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1353,18 +1371,18 @@ MathJax.Hub.Config({
 models. Their ultimate goal is to approach or even surpass human
 cognitive abilities. As Richard Sutton puts it,
 &lt;em&gt;&#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;&lt;/em&gt;.
-In &lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34; target=&#34;_blank&#34;&gt;his essay&lt;/a&gt;, Sutton argues that only models without encoded
+In &lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34;&gt;his essay&lt;/a&gt;, Sutton argues that only models without encoded
 human-knowledge can outperform human-centeric approaches. Indeed, neural
 networks are general enough and they leverage computation. Then, it is not
 surprising how they can exhibit millions of learnable degrees of freedom.&lt;/p&gt;
 
 &lt;p&gt;The biggest challenge with neural networks is two-fold: (1) how to train those
 millions of parameters, and (2) how to interpret them. Batch normalization
-(shortly &lt;em&gt;batchnorm&lt;/em&gt;) was &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;introduced&lt;/a&gt; as an attempt to
+(shortly &lt;em&gt;batchnorm&lt;/em&gt;) was &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;introduced&lt;/a&gt; as an attempt to
 make training more efficient. The method can dramatically reduce the number of
 training epochs. Moreover, batchnorm is perhaps the key ingredient that made
 possible training of certain architectures such as
-&lt;a href=&#34;https://papers.nips.cc/paper/6573-binarized-neural-networks.pdf&#34; target=&#34;_blank&#34;&gt;binarized neural networks&lt;/a&gt;. Finally, batchnorm is one of the most
+&lt;a href=&#34;https://papers.nips.cc/paper/6573-binarized-neural-networks.pdf&#34;&gt;binarized neural networks&lt;/a&gt;. Finally, batchnorm is one of the most
 recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -1372,12 +1390,12 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;hr /&gt;
 
@@ -1388,7 +1406,7 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 &lt;p&gt;Until now, we have looked on toy datasets. These were so small that they could
 completely fit into the memory. However, in the real world exist huge databases
 occupying hundreds of gigabytes of memory, such as
-&lt;a href=&#34;http://www.image-net.org/&#34; target=&#34;_blank&#34;&gt;Imagenet&lt;/a&gt; for example. Those often would not fit
+&lt;a href=&#34;http://www.image-net.org/&#34;&gt;Imagenet&lt;/a&gt; for example. Those often would not fit
 into the memory. In that case, it makes more sense to split a dataset into
 smaller &lt;em&gt;mini-batches&lt;/em&gt;. During a forward/backward pass, only one batch is
 typically processed.&lt;/p&gt;
@@ -1400,7 +1418,7 @@ unit) $f(x)=\max(0, x)$ activation, all negative values will result in zero
 activations.  Therefore, it is a good idea to normalize those values by
 subtracting the batch mean $\mu$. Similarly, division by standard deviation
 $\sqrt{\text{var}}$ scales the amplitudes, which is especially beneficial for
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Sigmoid_function&#34; target=&#34;_blank&#34;&gt;sigmoid&lt;/a&gt;-like activations.&lt;/p&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Sigmoid_function&#34;&gt;sigmoid&lt;/a&gt;-like activations.&lt;/p&gt;
 
 &lt;h3 id=&#34;training-and-batchnorm&#34;&gt;Training And Batchnorm&lt;/h3&gt;
 
@@ -1464,8 +1482,8 @@ avoiding thus the problem of normalizing a singleton batch.&lt;/p&gt;
 &lt;p&gt;So far we have played with tasks that provided low-dimensional input features.
 Now, we are going to test neural networks on a bit more interesting challenge.
 We will apply our skills to automatically recognize human-written digits on a
-famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34; target=&#34;_blank&#34;&gt;MNIST dataset&lt;/a&gt;. This challenge came from the need to have
-&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf&#34; target=&#34;_blank&#34;&gt;zip-code machine reading&lt;/a&gt;
+famous &lt;a href=&#34;http://yann.lecun.com/exdb/mnist/&#34;&gt;MNIST dataset&lt;/a&gt;. This challenge came from the need to have
+&lt;a href=&#34;http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf&#34;&gt;zip-code machine reading&lt;/a&gt;
 for more efficient postal services.&lt;/p&gt;
 
 &lt;p&gt;We construct two neural networks, each having two fully-connected hidden layers
@@ -1473,7 +1491,7 @@ for more efficient postal services.&lt;/p&gt;
 number of image pixels, and give back 10 outputs, the number of recognized
 classes (digits).  As in-between layer activations we apply ReLU $f(x) =
 \max(0,x)$.  To obtain the classification probabilities vector in the result,
-we use &lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation $\sigma(\mathbf{x})_i =
+we use &lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34;&gt;softmax&lt;/a&gt; activation $\sigma(\mathbf{x})_i =
 \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}.$ One of the networks in addition
 performs batch normalization before ReLUs.  Then, we train those using
 stochastic gradient descent&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt; with learning rate $\alpha = 0.01$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;
@@ -1503,12 +1521,12 @@ one is struggling to reach comparable performance in fifty epochs!
 Similar results can be obtained for other architectures.&lt;/p&gt;
 
 &lt;p&gt;It is worth mentioning that we still may lack understanding how exactly does
-batchnorm help. In its &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;original paper&lt;/a&gt;, it was hypothesized that
-batchnorm is reducing internal covariate shift. Recently, &lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;it was
+batchnorm help. In its &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;original paper&lt;/a&gt;, it was hypothesized that
+batchnorm is reducing internal covariate shift. Recently, &lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34;&gt;it was
 shown&lt;/a&gt; that that is not necessary true. The best up-to-date
-&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;explanation&lt;/a&gt; is that batchnorm makes optimization landscape
+&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34;&gt;explanation&lt;/a&gt; is that batchnorm makes optimization landscape
 smooth, thus making gradient descent training more efficient. This, in its
-turn, allows &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;using higher learning rates&lt;/a&gt; than without batchnorm!&lt;/p&gt;
+turn, allows &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;using higher learning rates&lt;/a&gt; than without batchnorm!&lt;/p&gt;
 
 &lt;h2 id=&#34;implementing-batchnorm&#34;&gt;Implementing batchnorm&lt;/h2&gt;
 
@@ -1541,7 +1559,7 @@ why we define a &lt;code&gt;Linear&#39;&lt;/code&gt; layer without biases. We al
                    &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;NoGrad&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Next, we want to extend the neural network propagation function &lt;code&gt;_pass&lt;/code&gt;,
-depending on the layer.  That is easy with &lt;a href=&#34;http://learnyouahaskell.com/syntax-in-functions&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;pattern
+depending on the layer.  That is easy with &lt;a href=&#34;http://learnyouahaskell.com/syntax-in-functions&#34;&gt;&lt;em&gt;pattern
 matching&lt;/em&gt;&lt;/a&gt;.
 Here is how we match the &lt;code&gt;Batchnorm1d&lt;/code&gt; layer and its parameters:&lt;/p&gt;
 
@@ -1559,7 +1577,7 @@ predictions &lt;code&gt;pred&lt;/code&gt;, and prepended list &lt;code&gt;t&lt;/
 layer (batch mean &lt;code&gt;batchMu&lt;/code&gt;, variance &lt;code&gt;batchVariance&lt;/code&gt;, and learnable parameters
 gradients).&lt;/p&gt;
 
-&lt;p&gt;The forward pass as illustrated in &lt;a href=&#34;https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html&#34; target=&#34;_blank&#34;&gt;this post&lt;/a&gt;:
+&lt;p&gt;The forward pass as illustrated in &lt;a href=&#34;https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html&#34;&gt;this post&lt;/a&gt;:
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;        &lt;span style=&#34;color:#75715e&#34;&gt;-- Forward&lt;/span&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;eps&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1e-12&lt;/span&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;br&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;)  &lt;span style=&#34;color:#75715e&#34;&gt;-- Broadcast (replicate) rows from 1 to batch size&lt;/span&gt;
@@ -1596,7 +1614,7 @@ gradients).&lt;/p&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gammax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
 
-&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;,
+&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;,
 there is a recurrent call obtaining gradients from the next layer,
 neural network prediction &lt;code&gt;pred&lt;/code&gt; and computed values tail &lt;code&gt;t&lt;/code&gt;:&lt;/p&gt;
 
@@ -1645,7 +1663,7 @@ $\mathbf{X} - \mathbf{\mu}$, where in practice we have a matrix
 $\mathbf{X}$ and a vector $\mathbf{\mu}$.
 How do you subtract a vector from a matrix?  Right,
 &lt;em&gt;you don&#39;t&lt;/em&gt;.  You can subtract only two matrices. Libraries like &lt;code&gt;Numpy&lt;/code&gt; may
-have a &lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;broadcasting&lt;/em&gt;&lt;/a&gt; magic that would implicitly convert a
+have a &lt;a href=&#34;https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html&#34;&gt;&lt;em&gt;broadcasting&lt;/em&gt;&lt;/a&gt; magic that would implicitly convert a
 vector to a matrix&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;. This broadcasting might be useful, but might also
 obscure different kinds of bugs. We instead perform explicit vector to matrix
 transformations. For our convenience, we have a shortcut &lt;code&gt;b = br (rows inp)&lt;/code&gt;
@@ -1691,7 +1709,7 @@ In order to obtain an actual array residing in memory, use &lt;code&gt;compute&l
   ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;You will find more information about manipulating arrays in
-&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;. Similarly to &lt;code&gt;br&lt;/code&gt;, there exist several more convenience
+&lt;a href=&#34;http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html&#34;&gt;&lt;code&gt;massiv&lt;/code&gt; documentation&lt;/a&gt;. Similarly to &lt;code&gt;br&lt;/code&gt;, there exist several more convenience
 functions, &lt;code&gt;rowsLike&lt;/code&gt; and &lt;code&gt;colsLike&lt;/code&gt;. Those are useful in conjunction with
 &lt;code&gt;_sumRows&lt;/code&gt; and &lt;code&gt;_sumCols&lt;/code&gt;:&lt;/p&gt;
 
@@ -1704,7 +1722,7 @@ functions, &lt;code&gt;rowsLike&lt;/code&gt; and &lt;code&gt;colsLike&lt;/code&g
 &lt;span style=&#34;color:#a6e22e&#34;&gt;_sumCols&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;foldlWithin&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Dim1&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;Here is an example of &lt;code&gt;_sumCols&lt;/code&gt; and &lt;code&gt;colsLike&lt;/code&gt; when computing
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34; target=&#34;_blank&#34;&gt;softmax&lt;/a&gt; activation
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Softmax_function&#34;&gt;softmax&lt;/a&gt; activation
 $\sigma(\mathbf{x})_i = \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}$:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;softmax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
@@ -1769,7 +1787,7 @@ together with loss gradients in the final recursive call in &lt;code&gt;_pass&lt
 and &lt;code&gt;[]&lt;/code&gt; on the right-hand side is the empty tail of computed values in the
 beginning of the backward pass.&lt;/p&gt;
 
-&lt;p&gt;The complete project is available on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
+&lt;p&gt;The complete project is available on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34;&gt;Github&lt;/a&gt;.
 I recommend playing with different neuron networks architectures
 and parameters. Have fun!&lt;/p&gt;
 
@@ -1777,15 +1795,15 @@ and parameters. Have fun!&lt;/p&gt;
 
 &lt;p&gt;There are several potential traps when using batchnorm. First,
 batchnorm is different
-&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305&#34; target=&#34;_blank&#34;&gt;during training&lt;/a&gt;
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305&#34;&gt;during training&lt;/a&gt;
 and
-&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355&#34; target=&#34;_blank&#34;&gt;during inference&lt;/a&gt;.
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355&#34;&gt;during inference&lt;/a&gt;.
 That makes your implementation more complicated.
-Second, batchnorm may &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;fail&lt;/a&gt; when training data come from different datasets.
+Second, batchnorm may &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34;&gt;fail&lt;/a&gt; when training data come from different datasets.
 To avoid the second pitfall, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
+trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34;&gt;Read more&lt;/a&gt; about that.&lt;/p&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
@@ -1793,7 +1811,7 @@ trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-bat
 method in the context of deep neural networks. Batchnorm&#39;s power is that it can
 substantially reduce the number of training epochs or even help achieving
 better neural network accuracy. After discussing this, we are prepared for such
-hot subjects as &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional neural networks&lt;/a&gt;
+hot subjects as &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional neural networks&lt;/a&gt;
 and reinforcement learning. Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
@@ -1801,20 +1819,20 @@ and reinforcement learning. Stay tuned!&lt;/p&gt;
 &lt;h3 id=&#34;ai-and-neural-networks&#34;&gt;AI And Neural Networks&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34; target=&#34;_blank&#34;&gt;Richard Sutton. The Bitter Lesson&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap1.html&#34; target=&#34;_blank&#34;&gt;Using neural nets to recognize handwritten digits&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;Batch normalization paper&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34; target=&#34;_blank&#34;&gt;How Does Batch Normalization Help Optimization?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34; target=&#34;_blank&#34;&gt;On The Perils of Batch Norm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://incompleteideas.net/IncIdeas/BitterLesson.html&#34;&gt;Richard Sutton. The Bitter Lesson&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap1.html&#34;&gt;Using neural nets to recognize handwritten digits&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;Batch normalization paper&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1805.11604&#34;&gt;How Does Batch Normalization Help Optimization?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-batch-norm.html&#34;&gt;On The Perils of Batch Norm&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;haskell&#34;&gt;Haskell&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/&#34; target=&#34;_blank&#34;&gt;Why I think Haskell is the best general purpose language&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md&#34; target=&#34;_blank&#34;&gt;An opinionated beginner&#39;s guide to Haskell in mid 2019&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;Massiv Array Library&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=AAx2a0bUsxA&#34; target=&#34;_blank&#34;&gt;Alexey&#39;s presentation about massiv&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/&#34;&gt;Why I think Haskell is the best general purpose language&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md&#34;&gt;An opinionated beginner&#39;s guide to Haskell in mid 2019&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34;&gt;Massiv Array Library&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=AAx2a0bUsxA&#34;&gt;Alexey&#39;s presentation about massiv&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
@@ -1831,9 +1849,9 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-2&#34;&gt;The difference of stochastic gradient descent is that it approximates the true gradient by a gradient over a mini-batch.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-3&#34;&gt;We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34; target=&#34;_blank&#34;&gt;batch normalization paper&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-3&#34;&gt;We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original &lt;a href=&#34;https://arxiv.org/abs/1502.03167&#34;&gt;batch normalization paper&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-4&#34;&gt;There are some technical differences, though. Namely, we use &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34; target=&#34;_blank&#34;&gt;massiv&lt;/a&gt; library supporting multidimensional arrays and parallelism. For the reference, &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/massiv&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are the first two days reimplemented with &lt;code&gt;massiv&lt;/code&gt;. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
+&lt;li id=&#34;fn:fn-4&#34;&gt;There are some technical differences, though. Namely, we use &lt;a href=&#34;http://hackage.haskell.org/package/massiv&#34;&gt;massiv&lt;/a&gt; library supporting multidimensional arrays and parallelism. For the reference, &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/massiv&#34;&gt;here&lt;/a&gt; are the first two days reimplemented with &lt;code&gt;massiv&lt;/code&gt;. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-5&#34;&gt;In general, broadcasting is about making multidimensional arrays with different shapes compatible, not only vector to matrix translation.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1889,24 +1907,24 @@ our strategy on the lowest level. However, as neural networks become more compli
 calculation of gradients by hand becomes a murky business. Yet, fear not young
 &lt;em&gt;padawan&lt;/em&gt;, there is a way out! I am very excited that today we will finally get
 acquainted with automatic differentiation, an essential tool in your deep
-learning arsenal.  This post was largely inspired by &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34; target=&#34;_blank&#34;&gt;Hacker&#39;s guide to Neural
+learning arsenal.  This post was largely inspired by &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34;&gt;Hacker&#39;s guide to Neural
 Networks&lt;/a&gt;. For comparison, see also
-&lt;a href=&#34;https://github.com/urwithajit9/HG_NeuralNetwork&#34; target=&#34;_blank&#34;&gt;Python version&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;https://github.com/urwithajit9/HG_NeuralNetwork&#34;&gt;Python version&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;Before jumping ahead, you may also want to check the previous posts:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
-&lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34; target=&#34;_blank&#34;&gt;on
+&lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34;&gt;on
 Github&lt;/a&gt;. The
 guide is written in literate Haskell, so it can be safely compiled.&lt;/p&gt;
 
 &lt;h2 id=&#34;why-random-local-search-fails&#34;&gt;Why Random Local Search Fails&lt;/h2&gt;
 
-&lt;p&gt;Following Karpathy&#39;s &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34; target=&#34;_blank&#34;&gt;guide&lt;/a&gt;, we
+&lt;p&gt;Following Karpathy&#39;s &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34;&gt;guide&lt;/a&gt;, we
 first consider a simple multiplication circuit.  Well, Haskell is not JavaScript,
 so the definition is pretty straightforward:&lt;/p&gt;
 
@@ -1952,7 +1970,7 @@ of the algorithm is &lt;code&gt;searchStep&lt;/code&gt;:&lt;/p&gt;
 &lt;p&gt;which is a convenience function that glues those two pieces together.  It
 simply ignores the iteration number and calls &lt;code&gt;_search&lt;/code&gt;. Now, we would like to
 have a random number generator within the range of [-1; 1). From the
-&lt;a href=&#34;http://hackage.haskell.org/package/random-1.1/docs/System-Random.html&#34; target=&#34;_blank&#34;&gt;documentation&lt;/a&gt;,
+&lt;a href=&#34;http://hackage.haskell.org/package/random-1.1/docs/System-Random.html&#34;&gt;documentation&lt;/a&gt;,
 we know that &lt;code&gt;randomIO&lt;/code&gt; produces a number between 0 and 1.  Therefore, we scale
 the value by multiplying by 2 and subtracting 1:&lt;/p&gt;
 
@@ -1987,18 +2005,18 @@ at least by a little bit?&lt;/p&gt;
 
 &lt;p&gt;Instead of random search in random direction, we can make use of the precise
 direction and amount to change the input so that the output would improve. And
-that is exactly what the &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient&#34; target=&#34;_blank&#34;&gt;gradient&lt;/a&gt;
+that is exactly what the &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient&#34;&gt;gradient&lt;/a&gt;
 tells us.  Instead of manually computing the gradient every time, we can employ
 some clever algorithm. There exist multiple approaches: numerical, symbolic,
 and automatic differentiation.  In his
-&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;article&lt;/a&gt;,
+&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;article&lt;/a&gt;,
 Dominic Steinitz explains the differences between them.  The last approach,
 automatic differentiation is exactly what we need: accurate gradients with
 minimal overhead.  Here, we will briefly explain the concept.&lt;/p&gt;
 
 &lt;p&gt;The idea behind automatic differentiation is that we explicitly define
 gradients only for elementary, basic operators. Then, we exploit the
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt; combining those
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34;&gt;chain rule&lt;/a&gt; combining those
 operators into neural networks or whatever we like. That strategy will infer
 the necessary gradients by itself. Let us illustrate the method with an
 example.&lt;/p&gt;
@@ -2082,13 +2100,13 @@ In a similar way, we can obtain the rest of the gradients:&lt;/p&gt;
 
 &lt;h2 id=&#34;introducing-backprop-library&#34;&gt;Introducing backprop library&lt;/h2&gt;
 
-&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34; target=&#34;_blank&#34;&gt;backprop library&lt;/a&gt; was specifically designed for
-&lt;a href=&#34;https://www.quora.com/What-is-Differentiable-Programming&#34; target=&#34;_blank&#34;&gt;differentiable
+&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34;&gt;backprop library&lt;/a&gt; was specifically designed for
+&lt;a href=&#34;https://www.quora.com/What-is-Differentiable-Programming&#34;&gt;differentiable
 programming&lt;/a&gt;.  It
 provides combinators to reduce our mental overhead.  In addition, the most
 useful operations such as arithmetics and trigonometry, have already been
 defined in the library. See also
-&lt;a href=&#34;http://hackage.haskell.org/package/hmatrix-backprop&#34; target=&#34;_blank&#34;&gt;hmatrix-backprop&lt;/a&gt; for
+&lt;a href=&#34;http://hackage.haskell.org/package/hmatrix-backprop&#34;&gt;hmatrix-backprop&lt;/a&gt; for
 linear algebra.  So all you need for differentiable programming now is to
 define some functions:&lt;/p&gt;
 
@@ -2129,18 +2147,18 @@ how automatic differentiation can face this problem.&lt;/p&gt;
 
 &lt;p&gt;In the next posts we will apply automatic differentiation to real neural
 networks. We will talk about
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34; target=&#34;_blank&#34;&gt;batch normalization&lt;/a&gt;,
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;,
 another crucial method in modern deep learning.  And we will ramp it up to
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional networks&lt;/a&gt; allowing us
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt; allowing us
 to solve some interesting challenges.
 Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/&#34; target=&#34;_blank&#34;&gt;Visual guide to neural networks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://backprop.jle.im/01-getting-started.html&#34; target=&#34;_blank&#34;&gt;Backprop documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;Article on backpropagation by Dominic Steinitz&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/&#34;&gt;Visual guide to neural networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://backprop.jle.im/01-getting-started.html&#34;&gt;Backprop documentation&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;Article on backpropagation by Dominic Steinitz&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class=&#34;footnotes&#34;&gt;
 
@@ -2162,7 +2180,7 @@ Stay tuned!&lt;/p&gt;
       <guid>http://penkovsky.com/neural-networks/day2/</guid>
       <description>
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
 we have introduced the concept of learning in a single-layer neural network.
 Today, we will learn about the
 benefits of multi-layer neural networks,
@@ -2172,7 +2190,7 @@ how to properly design and train them.&lt;/p&gt;
 have just started discovering machine learning techniques:&lt;/p&gt;
 
 &lt;p&gt;&amp;quot;I have built a
-&lt;a href=&#34;https://en.wikipedia.org/wiki/MNIST_database&#34; target=&#34;_blank&#34;&gt;handwritten digits&lt;/a&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/MNIST_database&#34;&gt;handwritten digits&lt;/a&gt;
 recognition network.
 But my accuracy is only &lt;strong&gt;Y&lt;/strong&gt;.&amp;quot;&lt;/p&gt;
 
@@ -2185,7 +2203,7 @@ The real cause appears to be much more trivial:
 instead of a multi-layer neural network the student has built
 a single-layer neural network or its equivalent.
 This network acts as a
-&lt;em&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Linear_classifier&#34; target=&#34;_blank&#34;&gt;linear classifier&lt;/a&gt;&lt;/em&gt;,
+&lt;em&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Linear_classifier&#34;&gt;linear classifier&lt;/a&gt;&lt;/em&gt;,
 therefore it cannot learn non-linear relations
 between the input and the desired output.&lt;/p&gt;
 
@@ -2252,7 +2270,7 @@ which we will interchangeably call a &lt;em&gt;two-layer network&lt;/em&gt;:&lt;
 y = f_2 \left( \mathbf{W}_2 \cdot f_1 ( \mathbf{W}_1 \cdot \mathbf{x} + \mathbf{b}_1 ) + \mathbf{b}_2 \right),
 $$&lt;/p&gt;
 
-&lt;p&gt;where $f_1(x) = \max(0, x)$ also known as &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34; target=&#34;_blank&#34;&gt;ReLU&lt;/a&gt;
+&lt;p&gt;where $f_1(x) = \max(0, x)$ also known as &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34;&gt;ReLU&lt;/a&gt;
 will be the first activation
 function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
 will be the second activation function, which you already have seen in the
@@ -2269,7 +2287,7 @@ $$&lt;/p&gt;
 
 &lt;p&gt;where $y$ is the target output and $\hat y$ is neural network&#39;s prediction.
 This loss function was
-&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function&#34; target=&#34;_blank&#34;&gt;specifically designed&lt;/a&gt; to efficiently train
+&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function&#34;&gt;specifically designed&lt;/a&gt; to efficiently train
 neural networks.
 Another perk of cross-entropy is that in conjunction with
 sigmoid activation, the error gradient
@@ -2278,7 +2296,7 @@ is simply a difference between predicted and desired outputs.&lt;/p&gt;
 &lt;h3 id=&#34;how-to-initialize&#34;&gt;How To Initialize?&lt;/h3&gt;
 
 &lt;p&gt;The first mistake may creep in when you completely ignore the importance of the neural network
-&lt;a href=&#34;https://medium.com/usf-msds/deep-learning-best-practices-1-weight-initialization-14e5c0295b94&#34; target=&#34;_blank&#34;&gt;weight initialization&lt;/a&gt;.
+&lt;a href=&#34;https://medium.com/usf-msds/deep-learning-best-practices-1-weight-initialization-14e5c0295b94&#34;&gt;weight initialization&lt;/a&gt;.
 In essence, you want to create neurons capable of learning different features.
 Therefore, you should select neural network weights randomly.&lt;/p&gt;
 
@@ -2300,7 +2318,7 @@ Therefore, you should select neural network weights randomly.&lt;/p&gt;
 
 &lt;/figure&gt;
 
-&lt;p&gt;Above we can see the &lt;a href=&#34;https://en.wikipedia.org/wiki/Decision_boundary&#34; target=&#34;_blank&#34;&gt;decision boundaries&lt;/a&gt;
+&lt;p&gt;Above we can see the &lt;a href=&#34;https://en.wikipedia.org/wiki/Decision_boundary&#34;&gt;decision boundaries&lt;/a&gt;
 for three cases of initialization.
 First, when the weights are initialized as zeroes, the network cannot learn anything.
 In the second case, the weights are initialized as non-zero, but identical values.
@@ -2312,7 +2330,7 @@ it becomes capable to learn.&lt;/p&gt;
 
 &lt;h3 id=&#34;how-to-train&#34;&gt;How To Train?&lt;/h3&gt;
 
-&lt;p&gt;The &lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34; target=&#34;_blank&#34;&gt;universal approximation theorem&lt;/a&gt;
+&lt;p&gt;The &lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34;&gt;universal approximation theorem&lt;/a&gt;
 claims that under certain assumptions, a single hidden layer architecture
 should be sufficient to approximate any reasonable function.
 However, it indicates nothing about how to obtain or how difficult is to obtain those
@@ -2321,7 +2339,7 @@ As we have seen from weights initialization example,
 using simple gradient descent training
 our network was able to distinguish between the two
 circles. Now, how about a more difficult example: spirals,
-which &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;is hard due to its extreme nonlinearity&lt;/em&gt;&lt;/a&gt;.
+which &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34;&gt;&lt;em&gt;is hard due to its extreme nonlinearity&lt;/em&gt;&lt;/a&gt;.
 Check out the animation below, on the left, to see how
 a naive gradient descent training can get easily stuck in a suboptimal setting.&lt;/p&gt;
 
@@ -2346,7 +2364,7 @@ a naive gradient descent training can get easily stuck in a suboptimal setting.&
 &lt;p&gt;The network fails to properly distinguish between the
 two classes. One may suggest that a more adequate neural network architecture is needed.
 That is partially true. However, the mentioned above
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34; target=&#34;_blank&#34;&gt;theorem&lt;/a&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34;&gt;theorem&lt;/a&gt;
 hints that it might be not necessary.&lt;/p&gt;
 
 &lt;p&gt;It turns out a lot of research in neural networks and deep learning is exactly about
@@ -2356,8 +2374,8 @@ gradient descent is that the algorithm often gets stuck
 far from an acceptable solution. One of the
 ways to alleviate this issue is to introduce momentum.
 Perhaps, the most popular among the algorithms
-with momentum is &lt;a href=&#34;https://arxiv.org/abs/1412.6980&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt;.
-As we can see from the diagram above, on the right, the &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;Adam&lt;/a&gt; algorithm
+with momentum is &lt;a href=&#34;https://arxiv.org/abs/1412.6980&#34;&gt;Adam&lt;/a&gt;.
+As we can see from the diagram above, on the right, the &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34;&gt;Adam&lt;/a&gt; algorithm
 is able to efficiently build the appropriate decision boundary.
 I find it can be more illustrative if we visualize the neural network&#39;s output during its training.&lt;/p&gt;
 
@@ -2381,7 +2399,7 @@ I find it can be more illustrative if we visualize the neural network&#39;s outp
 
 &lt;p&gt;This way we see the faster convergence of Adam on a more detailed level.
 If you want to learn more about different algorithms from the gradient descent family,
-&lt;a href=&#34;http://ruder.io/optimizing-gradient-descent/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;
+&lt;a href=&#34;http://ruder.io/optimizing-gradient-descent/&#34;&gt;here&lt;/a&gt;
 there is a nice comparison.&lt;/p&gt;
 
 &lt;h3 id=&#34;avoiding-the-linear-classifier-pitfall&#34;&gt;Avoiding The Linear Classifier Pitfall&lt;/h3&gt;
@@ -2423,12 +2441,12 @@ To avoid this issue, all activation functions must remain nonlinear.&lt;/p&gt;
 Why add more layers?
 To address this question,
 let us animate the decision boundaries during neural network training for three different architectures.
-All the networks have &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34; target=&#34;_blank&#34;&gt;ReLU&lt;/a&gt; activations in non-terminal layers and sigmoid in the final layer.
+All the networks have &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34;&gt;ReLU&lt;/a&gt; activations in non-terminal layers and sigmoid in the final layer.
 As can be seen from the image below, the
 network with three hidden layers and with fewer neurons in
 each layer, learns faster.
 The reason can be understood intuitively. A neural network
-&lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34; target=&#34;_blank&#34;&gt;performs topological transformations&lt;/a&gt; of the input space.
+&lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34;&gt;performs topological transformations&lt;/a&gt; of the input space.
 Composing several simple transformations leads to a more complex
 one. Therefore, for such non-linearly separated classes as in the spirals problem
 one benefits from adding more layers.&lt;/p&gt;
@@ -2456,11 +2474,11 @@ The most contrasting border indicating the highest confidence in
 the least number of steps is achieved with
 the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
 This number is about 30 percent less than the second architecture with a single hidden layer.
-Indeed, one may need to carefully &lt;a href=&#34;http://proceedings.mlr.press/v70/real17a/real17a.pdf&#34; target=&#34;_blank&#34;&gt;pick&lt;/a&gt;
-&lt;a href=&#34;https://github.com/JasperSnoek/spearmint&#34; target=&#34;_blank&#34;&gt;the&lt;/a&gt; &lt;a href=&#34;https://aip.scitation.org/doi/10.1063/1.5039826&#34; target=&#34;_blank&#34;&gt;architecture&lt;/a&gt;
+Indeed, one may need to carefully &lt;a href=&#34;http://proceedings.mlr.press/v70/real17a/real17a.pdf&#34;&gt;pick&lt;/a&gt;
+&lt;a href=&#34;https://github.com/JasperSnoek/spearmint&#34;&gt;the&lt;/a&gt; &lt;a href=&#34;https://aip.scitation.org/doi/10.1063/1.5039826&#34;&gt;architecture&lt;/a&gt;
 taking into consideration different factors
 such as dataset size, variance, input dimensionality, kind of the task, and others.
-With more layers, neural network can more efficiently &lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34; target=&#34;_blank&#34;&gt;represent complex relationships&lt;/a&gt;.
+With more layers, neural network can more efficiently &lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34;&gt;represent complex relationships&lt;/a&gt;.
 On the other hand, if the number of layers is very large, one may need to apply different
 tricks in order to avoid such problems as fading gradients.&lt;/p&gt;
 
@@ -2470,12 +2488,12 @@ build multilayer networks in Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;implementing-backpropagation&#34;&gt;Implementing Backpropagation&lt;/h2&gt;
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
 we have implemented &lt;em&gt;backpropagation&lt;/em&gt; (shortly &lt;em&gt;backprop&lt;/em&gt;)
 for a single-layer (no hidden layer) network.
 This method easily extends towards the case of multiple layers.
 Here is a nice
-&lt;a href=&#34;https://www.youtube.com/watch?v=d14TUNcbn1k&amp;amp;index=4&amp;amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;
+&lt;a href=&#34;https://www.youtube.com/watch?v=d14TUNcbn1k&amp;amp;index=4&amp;amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&#34;&gt;video&lt;/a&gt;
 to provide you with more technical details. Below, we remind
 how backprop works for each individual neuron.&lt;/p&gt;
 
@@ -2528,14 +2546,14 @@ are used in reverse (backward) order to compute weight gradients &lt;code&gt;dW&
 results is typical for many
 tutorials in imperative languages (looking at you, Python).
 In fact, in functional languages you can do
-&lt;a href=&#34;https://themonadreader.files.wordpress.com/2013/03/issue214.pdf&#34; target=&#34;_blank&#34;&gt;the same thing&lt;/a&gt;.
+&lt;a href=&#34;https://themonadreader.files.wordpress.com/2013/03/issue214.pdf&#34;&gt;the same thing&lt;/a&gt;.
 The disadvantage of separate forward and backward implementations
 is that it becomes tedious to keep track of all the intermediate
 results and may require more mental effort to implement the backprop.
 I also feel that such backprop
 explanation is not very intuitive.
 The whole pattern of forward and backward passes
-may seem strangely familiar. Hey, that is actually &lt;a href=&#34;https://en.wikipedia.org/wiki/Recursion_(computer_science)&#34; target=&#34;_blank&#34;&gt;recursion&lt;/a&gt;!
+may seem strangely familiar. Hey, that is actually &lt;a href=&#34;https://en.wikipedia.org/wiki/Recursion_(computer_science)&#34;&gt;recursion&lt;/a&gt;!
 Recursion is bread and butter of functional languages,
 so why not apply it to the backprop?
 Instead of defining two separate methods and manually managing all the intermediate results,
@@ -2594,15 +2612,15 @@ We also have to define the &lt;code&gt;Gradients&lt;/code&gt; data type:&lt;/p&g
 &lt;p&gt;To update all layers in functional programming we would need
 an analog to the &lt;code&gt;for&lt;/code&gt; loop construct known from imperative programming languages.
 Great news: there are different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=map&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;map&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zip&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zip&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=foldl&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;foldl&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=scanr&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;scanr&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=map&#34;&gt;&lt;code&gt;map&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zip&#34;&gt;&lt;code&gt;zip&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=foldl&#34;&gt;&lt;code&gt;foldl&lt;/code&gt;&lt;/a&gt;,
+&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=scanr&#34;&gt;&lt;code&gt;scanr&lt;/code&gt;&lt;/a&gt;,
 etc.
-And &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;
+And &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;
 is exactly what we need.
-Its &lt;a href=&#34;https://en.wikipedia.org/wiki/Polymorphism_(computer_science)&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;polymorphic&lt;/em&gt;&lt;/a&gt; type&lt;/p&gt;
+Its &lt;a href=&#34;https://en.wikipedia.org/wiki/Polymorphism_(computer_science)&#34;&gt;&lt;em&gt;polymorphic&lt;/em&gt;&lt;/a&gt; type&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
@@ -2642,7 +2660,7 @@ Now, the complete gradient descent implementation is&lt;/p&gt;
 
 &lt;p&gt;We now see how well previously defined &lt;code&gt;f&lt;/code&gt; fits in.
 The resulting function &lt;code&gt;optimize&lt;/code&gt; should look familiar from the
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34; target=&#34;_blank&#34;&gt;previous post&lt;/a&gt;.
+&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous post&lt;/a&gt;.
 Back then, it was called &lt;code&gt;descend&lt;/code&gt;.
 Now, we generalize it to operate on a list of layers,
 instead of a single layer weights. Finally,
@@ -2765,7 +2783,7 @@ the end of the layers list. Now, we compute the network prediction:
 We apply sigmoid to squash the outputs between 0 and 1 on line 86.
 This, together with a binary cross-entropy loss function,
 will allow for a very
-&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34; target=&#34;_blank&#34;&gt;simple gradient&lt;/a&gt;
+&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34;&gt;simple gradient&lt;/a&gt;
 in the final layer: &lt;code&gt;loss&#39; = pred - tgt&lt;/code&gt; on line 89
 (highlighted).&lt;/p&gt;
 
@@ -2842,7 +2860,7 @@ with randomly generated samples.&lt;/p&gt;
 &lt;p&gt;We create the &lt;code&gt;trainSet&lt;/code&gt; with 200
 and the &lt;code&gt;testSet&lt;/code&gt; with 100 data samples.
 &lt;code&gt;0.6&lt;/code&gt; and &lt;code&gt;0.1&lt;/code&gt; are model parameters, for the full
-implementation feel free to check &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;Main.hs&lt;/a&gt;.
+implementation feel free to check &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;Main.hs&lt;/a&gt;.
 In a similar way we will create training and validation
 datasets for the spirals problem.&lt;/p&gt;
 
@@ -2874,7 +2892,7 @@ will combine the operations from above. This is how it is used:&lt;/p&gt;
 &lt;p&gt;We remember that for the greatest benefit of a neural network,
 the weights should be initialized randomly.
 Here we employ a common initialization strategy
-from this &lt;a href=&#34;https://arxiv.org/pdf/1502.01852.pdf&#34; target=&#34;_blank&#34;&gt;paper&lt;/a&gt;.&lt;/p&gt;
+from this &lt;a href=&#34;https://arxiv.org/pdf/1502.01852.pdf&#34;&gt;paper&lt;/a&gt;.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Generate new random weights and biases&lt;/span&gt;
 &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
@@ -2896,7 +2914,7 @@ i.e. gets more and more layers.&lt;/p&gt;
 &lt;p&gt;Previously we have seen that naive gradient descent may
 easily get stuck in a suboptimal setting.
 Let us implement Adam optimization strategy,
-explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34; target=&#34;_blank&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;
+explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;adam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
@@ -2936,7 +2954,7 @@ explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#3
 &lt;p&gt;The Adam implementation is a derived from &lt;code&gt;optimize&lt;/code&gt;.
 The most prominent change is additional &amp;quot;zipping&amp;quot; with
 two new functions:
-&lt;code&gt;f2&lt;/code&gt; embodies the &lt;a href=&#34;https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf&#34; target=&#34;_blank&#34;&gt;RMSprop&lt;/a&gt; strategy and
+&lt;code&gt;f2&lt;/code&gt; embodies the &lt;a href=&#34;https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf&#34;&gt;RMSprop&lt;/a&gt; strategy and
 &lt;code&gt;f3&lt;/code&gt; performs momentum estimation.&lt;/p&gt;
 
 &lt;h4 id=&#34;running-the-experiments&#34;&gt;Running the experiments&lt;/h4&gt;
@@ -2949,7 +2967,7 @@ two new functions:
       &lt;span style=&#34;color:#a6e22e&#34;&gt;netA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;optimizeAdam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;adamParams&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochs&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainSet&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
 &lt;p&gt;It is time to compile and run our networks. Please check the output below.
-The &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;complete project&lt;/a&gt; is available on &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34; target=&#34;_blank&#34;&gt;Github&lt;/a&gt;.
+The &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;complete project&lt;/a&gt; is available on &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;Github&lt;/a&gt;.
 Feel free to play with neural network architecture and initialization strategies.&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ stack --resolver lts-10.6 --install-ghc ghc &lt;span style=&#34;color:#ae81ff&#34;&gt;\
@@ -3009,7 +3027,7 @@ Reduce the number of layers in the opposite case.&lt;/li&gt;
 a single hidden layer neural network architecture
 should be sufficient to approximate any reasonable map.
 However, how to obtain the weights is a much harder question.
-For instance, one of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34; target=&#34;_blank&#34;&gt;first networks&lt;/a&gt;
+For instance, one of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34;&gt;first networks&lt;/a&gt;
 solving the tough spirals challenge
 with backpropagation had not one, but three hidden layers.
 Indeed, we have seen that due to the highly nonlinear
@@ -3017,9 +3035,9 @@ relationships in the dataset,
 a three-layer network with fewer parameters converges faster than
 the one with a single hidden layer.&lt;/p&gt;
 
-&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
+&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
 discuss how Haskell compiler can help ensure that our neural network is
-correct. And we will ramp it up to &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34; target=&#34;_blank&#34;&gt;convolutional networks&lt;/a&gt;
+correct. And we will ramp it up to &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt;
 allowing us to solve some interesting challenges.  Stay tuned.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -3033,22 +3051,22 @@ like to thank Elena Prokopets for proofreading the article.&lt;/p&gt;
 &lt;h3 id=&#34;haskell&#34;&gt;Haskell&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://learnyouahaskell.com/&#34; target=&#34;_blank&#34;&gt;A great start to learning Haskell&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tryhaskell.org/&#34; target=&#34;_blank&#34;&gt;Try Haskell tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/saschagrunert/nn&#34; target=&#34;_blank&#34;&gt;Another example NN in Haskell&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/quickdudley/hfnn&#34; target=&#34;_blank&#34;&gt;Yet one more&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://learnyouahaskell.com/&#34;&gt;A great start to learning Haskell&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://tryhaskell.org/&#34;&gt;Try Haskell tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/saschagrunert/nn&#34;&gt;Another example NN in Haskell&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/quickdudley/hfnn&#34;&gt;Yet one more&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h3 id=&#34;neural-networks-and-backpropagation&#34;&gt;Neural Networks And Backpropagation&lt;/h3&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/slides/2018/cs231n_2018_ds02.pdf&#34; target=&#34;_blank&#34;&gt;A brief tutorial on backprop&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/optimization-2/&#34; target=&#34;_blank&#34;&gt;More intuition on backprop&lt;/a&gt; and &lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf&#34; target=&#34;_blank&#34;&gt;slides&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34; target=&#34;_blank&#34;&gt;Derivation of gradients&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/handouts/derivatives.pdf&#34; target=&#34;_blank&#34;&gt;Another tutorial on derivatives&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34; target=&#34;_blank&#34;&gt;Notes on softmax and crossentropy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/&#34; target=&#34;_blank&#34;&gt;A more or less complete introduction to deep learning&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://web.archive.org/web/20160706105446/http://benmargolis.com/compsci/ai/two_spirals_problem.htm&#34; target=&#34;_blank&#34;&gt;More about the spirals challenge&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/slides/2018/cs231n_2018_ds02.pdf&#34;&gt;A brief tutorial on backprop&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/optimization-2/&#34;&gt;More intuition on backprop&lt;/a&gt; and &lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf&#34;&gt;slides&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34;&gt;Derivation of gradients&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/handouts/derivatives.pdf&#34;&gt;Another tutorial on derivatives&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34;&gt;Notes on softmax and crossentropy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/&#34;&gt;A more or less complete introduction to deep learning&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://web.archive.org/web/20160706105446/http://benmargolis.com/compsci/ai/two_spirals_problem.htm&#34;&gt;More about the spirals challenge&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
@@ -3092,11 +3110,11 @@ As a result, I came across neural networks idea.
 It was 2010, and &lt;em&gt;deep learning&lt;/em&gt; was not nearly as popular as
 it is now&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
 Moreover, no one made much effort linking to neural networks
-in calculus or linear algebra curricula. Even guys doing classical
+in calculus or linear algebra curricula. Even folks doing classical
 optimization and statistics sometimes
 seemed puzzled when hearing about neural nets.
 Some year later, I have implemented
-a &lt;a href=&#34;https://bitbucket.org/masterdezign/labNN&#34; target=&#34;_blank&#34;&gt;simple neural net&lt;/a&gt; with sigmoid
+a &lt;a href=&#34;https://bitbucket.org/masterdezign/labNN&#34;&gt;simple neural net&lt;/a&gt; with sigmoid
 activations as a part of a decision-making course.
 At the time I realized that existing state of our knowledge
 was still lacking to really build &amp;quot;thinking computers&amp;quot;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
@@ -3119,7 +3137,7 @@ described many times somewhere else.
 For those who are completely new to
 the subject, instead of introducing neural networks
 all over again I would refer to Chapter 1.2
-of my &lt;a href=&#34;https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf&#34; target=&#34;_blank&#34;&gt;PhD thesis&lt;/a&gt;.
+of my &lt;a href=&#34;https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf&#34;&gt;PhD thesis&lt;/a&gt;.
 Here I will only summarize that neural networks are
 to some extent inspired by biological neurons.
 Similarly to its biological counterpart,
@@ -3140,7 +3158,7 @@ in a modern neural network
 $f$ can be practically any nonlinear function.
 This nonlinear function is often called an &lt;em&gt;activation function&lt;/em&gt;.
 Congratulations, we have arrived at a
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Perceptron&#34; target=&#34;_blank&#34;&gt;neural network from 1950-s&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Perceptron&#34;&gt;neural network from 1950-s&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;To continue reading
 this article, some mathematical background is useful, but not mandatory.
@@ -3152,13 +3170,13 @@ Anyone can develop an intuition about neural networks!&lt;/p&gt;
 in Haskell programming language.
 To motivate you, here are some Q &amp;amp; A you always wanted to know.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az&#34; target=&#34;_blank&#34;&gt;Q:&lt;/a&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az&#34;&gt;Q:&lt;/a&gt;
 Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?&lt;/strong&gt;&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t&#34; target=&#34;_blank&#34;&gt;A:&lt;/a&gt;&lt;/strong&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t&#34;&gt;A:&lt;/a&gt;&lt;/strong&gt;
 Neural networks are very &amp;quot;function objects&amp;quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.&lt;/p&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx&#34; target=&#34;_blank&#34;&gt;Q:&lt;/a&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx&#34;&gt;Q:&lt;/a&gt;
 As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; The benefits of using Haskell:&lt;/p&gt;
@@ -3168,10 +3186,10 @@ As I am completely new to Haskell, would like to know what are the benefits of u
 &lt;li&gt;Great when refactoring existing code base.&lt;/li&gt;
 &lt;li&gt;Haskell shapes your thinking towards problem solving
 in a pragmatic way.&lt;/li&gt;
-&lt;li&gt;Haskell programs are &lt;a href=&#34;https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast&#34; target=&#34;_blank&#34;&gt;fast&lt;/a&gt;.&lt;/li&gt;
+&lt;li&gt;Haskell programs are &lt;a href=&#34;https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast&#34;&gt;fast&lt;/a&gt;.&lt;/li&gt;
 &lt;/ol&gt;
 
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9&#34; target=&#34;_blank&#34;&gt;Q:&lt;/a&gt;
+&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9&#34;&gt;Q:&lt;/a&gt;
 I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.&lt;/strong&gt;&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; Thank you. I find Haskell to be very intuitive
@@ -3186,7 +3204,7 @@ when explaining neural nets.&lt;/p&gt;
 
 
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Gradient Descent. &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Gradient_descent.svg&#34; target=&#34;_blank&#34;&gt;Image credit&lt;/a&gt;&lt;/h4&gt;
+  &lt;h4&gt;Gradient Descent. &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Gradient_descent.svg&#34;&gt;Image credit&lt;/a&gt;&lt;/h4&gt;
   
 &lt;/figcaption&gt;
 
@@ -3194,9 +3212,9 @@ when explaining neural nets.&lt;/p&gt;
 
 &lt;p&gt;The very basic idea behind neural networks
 training and deep learning is a local optimization method known
-as &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;gradient descent&lt;/em&gt;&lt;/a&gt;.
+as &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;&lt;em&gt;gradient descent&lt;/em&gt;&lt;/a&gt;.
 For those who have hard time remembering their freshman year,
-just watch an &lt;a href=&#34;https://www.youtube.com/watch?v=jc2IthslyzM&#34; target=&#34;_blank&#34;&gt;introductory video&lt;/a&gt;
+just watch an &lt;a href=&#34;https://www.youtube.com/watch?v=jc2IthslyzM&#34;&gt;introductory video&lt;/a&gt;
 explaining the idea.&lt;/p&gt;
 
 &lt;p&gt;How does a concept as simple as gradient descent work for a neural network?
@@ -3224,7 +3242,7 @@ $$&lt;/p&gt;
 the &lt;em&gt;learning rate&lt;/em&gt;, i.e. the amount of learning per iteration $n$.
 In the simplest case, $x$ is a scalar variable. The gradient descent
 method can be implemented in few lines of code.
-The Haskell &lt;a href=&#34;https://repl.it/@masterdezign/Grad&#34; target=&#34;_blank&#34;&gt;code snippet&lt;/a&gt;
+The Haskell &lt;a href=&#34;https://repl.it/@masterdezign/Grad&#34;&gt;code snippet&lt;/a&gt;
 below is interactive. Press the green triangle
 button to Run the code.&lt;/p&gt;
 
@@ -3270,7 +3288,7 @@ rather than scalars.&lt;/p&gt;
 
 
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Iris plant. Image credit &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg&#34; target=&#34;_blank&#34;&gt;David Iliff&lt;/a&gt; &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/3.0/&#34; target=&#34;_blank&#34;&gt;(CC-BY-SA 3.0)&lt;/a&gt;&lt;/h4&gt;
+  &lt;h4&gt;Iris plant. Image credit &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg&#34;&gt;David Iliff&lt;/a&gt; &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/3.0/&#34;&gt;(CC-BY-SA 3.0)&lt;/a&gt;&lt;/h4&gt;
   
 &lt;/figcaption&gt;
 
@@ -3288,7 +3306,7 @@ classes so that our neural network can handle them?&lt;/p&gt;
 &lt;h3 id=&#34;naive-solution-and-why-it-does-not-work&#34;&gt;Naive Solution And Why It Does Not Work&lt;/h3&gt;
 
 &lt;p&gt;The most simple solution to indicate each species
-would be using &lt;a href=&#34;https://en.wikipedia.org/wiki/Natural_number&#34; target=&#34;_blank&#34;&gt;natural numbers&lt;/a&gt;.
+would be using &lt;a href=&#34;https://en.wikipedia.org/wiki/Natural_number&#34;&gt;natural numbers&lt;/a&gt;.
 For instance, &lt;em&gt;Iris Setosa&lt;/em&gt; can be encoded as &lt;code&gt;1&lt;/code&gt;,
 &lt;em&gt;Versicolour&lt;/em&gt;, as &lt;code&gt;2&lt;/code&gt;, and &lt;em&gt;Virginica&lt;/em&gt;, as &lt;code&gt;3&lt;/code&gt;.
 There is, however, a problem with this kind of encoding:
@@ -3313,7 +3331,7 @@ That becomes possible if we use vectors of three dimensions
 (as there are three classes).
 Therefore, now &lt;em&gt;Setosa&lt;/em&gt; class is encoded as $[1, 0, 0]$,
 &lt;em&gt;Versicolour&lt;/em&gt;, as $[0, 1, 0]$, and &lt;em&gt;Virginica&lt;/em&gt; as $[0, 0, 1]$.
-The &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34; target=&#34;_blank&#34;&gt;Euclidean distance&lt;/a&gt;
+The &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34;&gt;Euclidean distance&lt;/a&gt;
 between any pair of classes is equal to $\sqrt 2$.
 &lt;strong&gt;Update&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6a&#34;&gt;&lt;a href=&#34;#fn:fn-6a&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;&lt;/strong&gt;: For example, the distance between
 &lt;em&gt;Setosa&lt;/em&gt; and &lt;em&gt;Versicolour&lt;/em&gt; is computed as&lt;/p&gt;
@@ -3345,7 +3363,7 @@ $$&lt;/p&gt;
 
 &lt;p&gt;As a nonlinear activation function $f$ we will use the &lt;em&gt;sigmoid&lt;/em&gt; function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;
 $\sigma(x) = [1 + e^{-x}]^{-1}$.
-We will exploit &lt;a href=&#34;http://hackage.haskell.org/package/hmatrix&#34; target=&#34;_blank&#34;&gt;&lt;code&gt;hmatrix&lt;/code&gt;&lt;/a&gt;
+We will exploit &lt;a href=&#34;http://hackage.haskell.org/package/hmatrix&#34;&gt;&lt;code&gt;hmatrix&lt;/code&gt;&lt;/a&gt;
 Haskell library for linear algebra operations
 such as matrix multiplication. With &lt;code&gt;hmatrix&lt;/code&gt;,
 Equation (4) can be written as:&lt;/p&gt;
@@ -3381,7 +3399,7 @@ This is a so-called &#39;winner takes all&#39; rule.&lt;/p&gt;
 &lt;p&gt;Before training the neural network, we need some
 measure of error or &lt;em&gt;loss function&lt;/em&gt; to minimize.
 For instance, we can use
-the &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer&#34; target=&#34;_blank&#34;&gt;Euclidean loss&lt;/a&gt;
+the &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer&#34;&gt;Euclidean loss&lt;/a&gt;
 $\text{loss} = \sum_i (\hat y_i - y_i)^2$
 where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
 dataset:&lt;/p&gt;
@@ -3396,8 +3414,8 @@ Now, we have to specify the gradient function for our neural
 network equation (4).
 We use what is called a &lt;em&gt;backpropagation&lt;/em&gt;
 or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a
-&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34; target=&#34;_blank&#34;&gt;result&lt;/a&gt;
-of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34; target=&#34;_blank&#34;&gt;chain rule&lt;/a&gt; and is illustrated
+&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;result&lt;/a&gt;
+of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34;&gt;chain rule&lt;/a&gt; and is illustrated
 for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;figure&gt;
@@ -3434,7 +3452,7 @@ and the loss function.
 Note that by operating on matrices rather than scalar values
 we calculate the gradients vector &lt;code&gt;dW&lt;/code&gt;
 denoting every synaptic weight gradient $dw_i$.
-Below are those &amp;quot;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34; target=&#34;_blank&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;quot;
+Below are those &amp;quot;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;quot;
 functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;tr&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt;)
@@ -3450,9 +3468,9 @@ functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&
   &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;
   &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;To test our network, we download the dataset &lt;a href=&#34;https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;
+&lt;p&gt;To test our network, we download the dataset &lt;a href=&#34;https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets&#34;&gt;here&lt;/a&gt;
 (there are two files: x.dat and y.dat) and the code
-&lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+&lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34;&gt;here&lt;/a&gt;.
 As instructed in the comments,
 we run our program:&lt;/p&gt;
 
@@ -3481,14 +3499,14 @@ Targets
 , &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
 , &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;That&#39;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34; target=&#34;_blank&#34;&gt;code&lt;/a&gt;.
+&lt;p&gt;That&#39;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34;&gt;code&lt;/a&gt;.
 &lt;strong&gt;Hint&lt;/strong&gt;: you may have noticed that &lt;code&gt;grad&lt;/code&gt; calls &lt;code&gt;sigmoid&lt;/code&gt; twice on the same
 data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
 the code to avoid this redundancy.&lt;/p&gt;
 
 &lt;p&gt;As soon as you understand the basics of neural networks,
-make sure you continue to &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;Day 2&lt;/a&gt;.
-In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34; target=&#34;_blank&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
+make sure you continue to &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;.
+In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
 First of all, we will highlight the importance of multilayer structure.
 We will also show that nonlinear activations are crucial.
 Finally, we will improve neural network training
@@ -3504,11 +3522,11 @@ MathJax.Hub.Config({
 &lt;hr /&gt;
 
 &lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;There even exists a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34; target=&#34;_blank&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
+&lt;li id=&#34;fn:fn-1&#34;&gt;There even exists a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34; target=&#34;_blank&#34;&gt;Why people think computers can&#39;t&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34;&gt;Why people think computers can&#39;t&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-3&#34;&gt;With Google Trends in hand, we can witness the raise of global &lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;q=deep%20learning&#34; target=&#34;_blank&#34;&gt;deep learning&lt;/a&gt; interest.
+&lt;li id=&#34;fn:fn-3&#34;&gt;With Google Trends in hand, we can witness the raise of global &lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;q=deep%20learning&#34;&gt;deep learning&lt;/a&gt; interest.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-4&#34;&gt;Despite people have fantasized about it long before Alan Turing.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -3516,15 +3534,15 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-6&#34;&gt;With recurrent neural networks it is not true. Those have an internal state, making such networks equivalent to computer programs, i.e. potentially more complex than maps.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-7&#34;&gt;Here we refer to the classical &lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets/iris&#34; target=&#34;_blank&#34;&gt;Iris dataset&lt;/a&gt;. If you prefer another light dataset please let me know.
+&lt;li id=&#34;fn:fn-7&#34;&gt;Here we refer to the classical &lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets/iris&#34;&gt;Iris dataset&lt;/a&gt;. If you prefer another light dataset please let me know.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-6a&#34;&gt;Kudos to Peter Harpending who spotted a typo in Euclidean distance.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6a&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;here&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34; target=&#34;_blank&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
+&lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
@@ -3558,24 +3576,6 @@ MathJax.Hub.Config({
       <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/publication/photonic-neural-networks/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
-      <link>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Bioinspired computing</title>
-      <link>http://penkovsky.com/project/bioinspired/</link>
-      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/bioinspired/</guid>
       <description></description>
     </item>
     

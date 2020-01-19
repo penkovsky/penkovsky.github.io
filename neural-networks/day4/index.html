@@ -313,7 +313,7 @@
     <img src="/img/posts/mnist/mnist-sky-blue.png" class="article-banner" itemprop="image">
   
 
-  <span class="article-header-caption">Handwritten digits from the <a href="http://yann.lecun.com/exdb/mnist" target="_blank">MNIST dataset</a></span>
+  <span class="article-header-caption">Handwritten digits from the <a href="http://yann.lecun.com/exdb/mnist">MNIST dataset</a></span>
 </div>
 
 
@@ -388,18 +388,18 @@
 models. Their ultimate goal is to approach or even surpass human
 cognitive abilities. As Richard Sutton puts it,
 <em>'The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective'</em>.
-In <a href="http://incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank">his essay</a>, Sutton argues that only models without encoded
+In <a href="http://incompleteideas.net/IncIdeas/BitterLesson.html">his essay</a>, Sutton argues that only models without encoded
 human-knowledge can outperform human-centeric approaches. Indeed, neural
 networks are general enough and they leverage computation. Then, it is not
 surprising how they can exhibit millions of learnable degrees of freedom.</p>
 
 <p>The biggest challenge with neural networks is two-fold: (1) how to train those
 millions of parameters, and (2) how to interpret them. Batch normalization
-(shortly <em>batchnorm</em>) was <a href="https://arxiv.org/abs/1502.03167" target="_blank">introduced</a> as an attempt to
+(shortly <em>batchnorm</em>) was <a href="https://arxiv.org/abs/1502.03167">introduced</a> as an attempt to
 make training more efficient. The method can dramatically reduce the number of
 training epochs. Moreover, batchnorm is perhaps the key ingredient that made
 possible training of certain architectures such as
-<a href="https://papers.nips.cc/paper/6573-binarized-neural-networks.pdf" target="_blank">binarized neural networks</a>. Finally, batchnorm is one of the most
+<a href="https://papers.nips.cc/paper/6573-binarized-neural-networks.pdf">binarized neural networks</a>. Finally, batchnorm is one of the most
 recent neural network advances<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.</p>
 
 <hr />
@@ -407,12 +407,12 @@ recent neural network advances<sup class="footnote-ref" id="fnref:fn-1"><a href=
 <p><strong>Previous posts</strong></p>
 
 <ul>
-<li><a href="/neural-networks/day1/" target="_blank">Day 1: Learning Neural Networks The Hard Way</a></li>
-<li><a href="/neural-networks/day2/" target="_blank">Day 2: What Do Hidden Layers Do?</a></li>
-<li><a href="/neural-networks/day3/" target="_blank">Day 3: Haskell Guide To Neural Networks</a></li>
+<li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+<li><a href="/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></li>
+<li><a href="/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></li>
 </ul>
 
-<p>The source code from this post is available <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4" target="_blank">on Github</a>.</p>
+<p>The source code from this post is available <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4">on Github</a>.</p>
 
 <hr />
 
@@ -423,7 +423,7 @@ recent neural network advances<sup class="footnote-ref" id="fnref:fn-1"><a href=
 <p>Until now, we have looked on toy datasets. These were so small that they could
 completely fit into the memory. However, in the real world exist huge databases
 occupying hundreds of gigabytes of memory, such as
-<a href="http://www.image-net.org/" target="_blank">Imagenet</a> for example. Those often would not fit
+<a href="http://www.image-net.org/">Imagenet</a> for example. Those often would not fit
 into the memory. In that case, it makes more sense to split a dataset into
 smaller <em>mini-batches</em>. During a forward/backward pass, only one batch is
 typically processed.</p>
@@ -435,7 +435,7 @@ unit) $f(x)=\max(0, x)$ activation, all negative values will result in zero
 activations.  Therefore, it is a good idea to normalize those values by
 subtracting the batch mean $\mu$. Similarly, division by standard deviation
 $\sqrt{\text{var}}$ scales the amplitudes, which is especially beneficial for
-<a href="https://en.wikipedia.org/wiki/Sigmoid_function" target="_blank">sigmoid</a>-like activations.</p>
+<a href="https://en.wikipedia.org/wiki/Sigmoid_function">sigmoid</a>-like activations.</p>
 
 <h3 id="training-and-batchnorm">Training And Batchnorm</h3>
 
@@ -499,8 +499,8 @@ avoiding thus the problem of normalizing a singleton batch.</p>
 <p>So far we have played with tasks that provided low-dimensional input features.
 Now, we are going to test neural networks on a bit more interesting challenge.
 We will apply our skills to automatically recognize human-written digits on a
-famous <a href="http://yann.lecun.com/exdb/mnist/" target="_blank">MNIST dataset</a>. This challenge came from the need to have
-<a href="http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf" target="_blank">zip-code machine reading</a>
+famous <a href="http://yann.lecun.com/exdb/mnist/">MNIST dataset</a>. This challenge came from the need to have
+<a href="http://yann.lecun.com/exdb/publis/pdf/matan-92.pdf">zip-code machine reading</a>
 for more efficient postal services.</p>
 
 <p>We construct two neural networks, each having two fully-connected hidden layers
@@ -508,7 +508,7 @@ for more efficient postal services.</p>
 number of image pixels, and give back 10 outputs, the number of recognized
 classes (digits).  As in-between layer activations we apply ReLU $f(x) =
 \max(0,x)$.  To obtain the classification probabilities vector in the result,
-we use <a href="https://en.wikipedia.org/wiki/Softmax_function" target="_blank">softmax</a> activation $\sigma(\mathbf{x})_i =
+we use <a href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a> activation $\sigma(\mathbf{x})_i =
 \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}.$ One of the networks in addition
 performs batch normalization before ReLUs.  Then, we train those using
 stochastic gradient descent<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup> with learning rate $\alpha = 0.01$<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>
@@ -538,12 +538,12 @@ one is struggling to reach comparable performance in fifty epochs!
 Similar results can be obtained for other architectures.</p>
 
 <p>It is worth mentioning that we still may lack understanding how exactly does
-batchnorm help. In its <a href="https://arxiv.org/abs/1502.03167" target="_blank">original paper</a>, it was hypothesized that
-batchnorm is reducing internal covariate shift. Recently, <a href="https://arxiv.org/abs/1805.11604" target="_blank">it was
+batchnorm help. In its <a href="https://arxiv.org/abs/1502.03167">original paper</a>, it was hypothesized that
+batchnorm is reducing internal covariate shift. Recently, <a href="https://arxiv.org/abs/1805.11604">it was
 shown</a> that that is not necessary true. The best up-to-date
-<a href="https://arxiv.org/abs/1805.11604" target="_blank">explanation</a> is that batchnorm makes optimization landscape
+<a href="https://arxiv.org/abs/1805.11604">explanation</a> is that batchnorm makes optimization landscape
 smooth, thus making gradient descent training more efficient. This, in its
-turn, allows <a href="https://arxiv.org/abs/1502.03167" target="_blank">using higher learning rates</a> than without batchnorm!</p>
+turn, allows <a href="https://arxiv.org/abs/1502.03167">using higher learning rates</a> than without batchnorm!</p>
 
 <h2 id="implementing-batchnorm">Implementing batchnorm</h2>
 
@@ -576,7 +576,7 @@ why we define a <code>Linear'</code> layer without biases. We also extend
                    <span style="color:#f92672">|</span> <span style="color:#66d9ef">NoGrad</span></code></pre></div>
 
 <p>Next, we want to extend the neural network propagation function <code>_pass</code>,
-depending on the layer.  That is easy with <a href="http://learnyouahaskell.com/syntax-in-functions" target="_blank"><em>pattern
+depending on the layer.  That is easy with <a href="http://learnyouahaskell.com/syntax-in-functions"><em>pattern
 matching</em></a>.
 Here is how we match the <code>Batchnorm1d</code> layer and its parameters:</p>
 
@@ -594,7 +594,7 @@ predictions <code>pred</code>, and prepended list <code>t</code> with values <co
 layer (batch mean <code>batchMu</code>, variance <code>batchVariance</code>, and learnable parameters
 gradients).</p>
 
-<p>The forward pass as illustrated in <a href="https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html" target="_blank">this post</a>:
+<p>The forward pass as illustrated in <a href="https://kratzert.github.io/2016/02/12/understanding-the-gradient-flow-through-the-batch-normalization-layer.html">this post</a>:
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">        <span style="color:#75715e">-- Forward</span>
         <span style="color:#a6e22e">eps</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-12</span>
         <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">br</span> (<span style="color:#a6e22e">rows</span> <span style="color:#a6e22e">inp</span>)  <span style="color:#75715e">-- Broadcast (replicate) rows from 1 to batch size</span>
@@ -631,7 +631,7 @@ gradients).</p>
         <span style="color:#a6e22e">out0</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>
         <span style="color:#a6e22e">out0</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">gammax</span> <span style="color:#f92672">.+</span> <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">beta</span></code></pre></div></p>
 
-<p>As discussed on <a href="/neural-networks/day2/" target="_blank">Day 2</a>,
+<p>As discussed on <a href="/neural-networks/day2/">Day 2</a>,
 there is a recurrent call obtaining gradients from the next layer,
 neural network prediction <code>pred</code> and computed values tail <code>t</code>:</p>
 
@@ -680,7 +680,7 @@ $\mathbf{X} - \mathbf{\mu}$, where in practice we have a matrix
 $\mathbf{X}$ and a vector $\mathbf{\mu}$.
 How do you subtract a vector from a matrix?  Right,
 <em>you don't</em>.  You can subtract only two matrices. Libraries like <code>Numpy</code> may
-have a <a href="https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html" target="_blank"><em>broadcasting</em></a> magic that would implicitly convert a
+have a <a href="https://docs.scipy.org/doc/numpy/user/theory.broadcasting.html"><em>broadcasting</em></a> magic that would implicitly convert a
 vector to a matrix<sup class="footnote-ref" id="fnref:fn-5"><a href="#fn:fn-5">5</a></sup>. This broadcasting might be useful, but might also
 obscure different kinds of bugs. We instead perform explicit vector to matrix
 transformations. For our convenience, we have a shortcut <code>b = br (rows inp)</code>
@@ -726,7 +726,7 @@ In order to obtain an actual array residing in memory, use <code>compute</code>:
   ]</code></pre></div>
 
 <p>You will find more information about manipulating arrays in
-<a href="http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html" target="_blank"><code>massiv</code> documentation</a>. Similarly to <code>br</code>, there exist several more convenience
+<a href="http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html"><code>massiv</code> documentation</a>. Similarly to <code>br</code>, there exist several more convenience
 functions, <code>rowsLike</code> and <code>colsLike</code>. Those are useful in conjunction with
 <code>_sumRows</code> and <code>_sumCols</code>:</p>
 
@@ -739,7 +739,7 @@ functions, <code>rowsLike</code> and <code>colsLike</code>. Those are useful in 
 <span style="color:#a6e22e">_sumCols</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">A</span><span style="color:#f92672">.</span><span style="color:#a6e22e">foldlWithin</span> <span style="color:#66d9ef">Dim1</span> (<span style="color:#f92672">+</span>) <span style="color:#ae81ff">0.0</span></code></pre></div>
 
 <p>Here is an example of <code>_sumCols</code> and <code>colsLike</code> when computing
-<a href="https://en.wikipedia.org/wiki/Softmax_function" target="_blank">softmax</a> activation
+<a href="https://en.wikipedia.org/wiki/Softmax_function">softmax</a> activation
 $\sigma(\mathbf{x})_i = \frac{\exp{x_i}}{\sum_{j=1}\exp{x_j}}$:</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">softmax</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>
@@ -804,7 +804,7 @@ together with loss gradients in the final recursive call in <code>_pass</code>:<
 and <code>[]</code> on the right-hand side is the empty tail of computed values in the
 beginning of the backward pass.</p>
 
-<p>The complete project is available on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4" target="_blank">Github</a>.
+<p>The complete project is available on <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/day4">Github</a>.
 I recommend playing with different neuron networks architectures
 and parameters. Have fun!</p>
 
@@ -812,15 +812,15 @@ and parameters. Have fun!</p>
 
 <p>There are several potential traps when using batchnorm. First,
 batchnorm is different
-<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305" target="_blank">during training</a>
+<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L305">during training</a>
 and
-<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355" target="_blank">during inference</a>.
+<a href="https://github.com/masterdezign/10-days-of-grad/blob/389ee62a89a31946bab226731432345bdeaf3288/day4/src/NeuralNetwork.hs#L355">during inference</a>.
 That makes your implementation more complicated.
-Second, batchnorm may <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">fail</a> when training data come from different datasets.
+Second, batchnorm may <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html">fail</a> when training data come from different datasets.
 To avoid the second pitfall, it is
 essential to ensure that every batch represents the whole dataset, i.e. it has
 data coming from the same distribution as the machine learning task you are
-trying to solve. <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">Read more</a> about that.</p>
+trying to solve. <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html">Read more</a> about that.</p>
 
 <h2 id="summary">Summary</h2>
 
@@ -828,7 +828,7 @@ trying to solve. <a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm
 method in the context of deep neural networks. Batchnorm's power is that it can
 substantially reduce the number of training epochs or even help achieving
 better neural network accuracy. After discussing this, we are prepared for such
-hot subjects as <a href="/neural-networks/day5/" target="_blank">convolutional neural networks</a>
+hot subjects as <a href="/neural-networks/day5/">convolutional neural networks</a>
 and reinforcement learning. Stay tuned!</p>
 
 <h2 id="further-reading">Further Reading</h2>
@@ -836,20 +836,20 @@ and reinforcement learning. Stay tuned!</p>
 <h3 id="ai-and-neural-networks">AI And Neural Networks</h3>
 
 <ul>
-<li><a href="http://incompleteideas.net/IncIdeas/BitterLesson.html" target="_blank">Richard Sutton. The Bitter Lesson</a></li>
-<li><a href="http://neuralnetworksanddeeplearning.com/chap1.html" target="_blank">Using neural nets to recognize handwritten digits</a></li>
-<li><a href="https://arxiv.org/abs/1502.03167" target="_blank">Batch normalization paper</a></li>
-<li><a href="https://arxiv.org/abs/1805.11604" target="_blank">How Does Batch Normalization Help Optimization?</a></li>
-<li><a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html" target="_blank">On The Perils of Batch Norm</a></li>
+<li><a href="http://incompleteideas.net/IncIdeas/BitterLesson.html">Richard Sutton. The Bitter Lesson</a></li>
+<li><a href="http://neuralnetworksanddeeplearning.com/chap1.html">Using neural nets to recognize handwritten digits</a></li>
+<li><a href="https://arxiv.org/abs/1502.03167">Batch normalization paper</a></li>
+<li><a href="https://arxiv.org/abs/1805.11604">How Does Batch Normalization Help Optimization?</a></li>
+<li><a href="https://www.alexirpan.com/2017/04/26/perils-batch-norm.html">On The Perils of Batch Norm</a></li>
 </ul>
 
 <h3 id="haskell">Haskell</h3>
 
 <ul>
-<li><a href="http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/" target="_blank">Why I think Haskell is the best general purpose language</a></li>
-<li><a href="https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md" target="_blank">An opinionated beginner's guide to Haskell in mid 2019</a></li>
-<li><a href="http://hackage.haskell.org/package/massiv" target="_blank">Massiv Array Library</a></li>
-<li><a href="https://www.youtube.com/watch?v=AAx2a0bUsxA" target="_blank">Alexey's presentation about massiv</a></li>
+<li><a href="http://www.philipzucker.com/why-i-as-of-june-22-2019-think-haskell-is-the-best-general-purpose-language-as-of-june-22-2019/">Why I think Haskell is the best general purpose language</a></li>
+<li><a href="https://github.com/theindigamer/not-a-blog/blob/master/opinionated-haskell-guide-2019.md">An opinionated beginner's guide to Haskell in mid 2019</a></li>
+<li><a href="http://hackage.haskell.org/package/massiv">Massiv Array Library</a></li>
+<li><a href="https://www.youtube.com/watch?v=AAx2a0bUsxA">Alexey's presentation about massiv</a></li>
 </ul>
 
 <script type="text/x-mathjax-config">
@@ -866,9 +866,9 @@ MathJax.Hub.Config({
  <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
 <li id="fn:fn-2">The difference of stochastic gradient descent is that it approximates the true gradient by a gradient over a mini-batch.
  <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
-<li id="fn:fn-3">We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original <a href="https://arxiv.org/abs/1502.03167" target="_blank">batch normalization paper</a>.
+<li id="fn:fn-3">We have previously called learning rate $\gamma$. In this post we call learning rate $\alpha$ since $\gamma$ is a scaling parameter in the original <a href="https://arxiv.org/abs/1502.03167">batch normalization paper</a>.
  <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
-<li id="fn:fn-4">There are some technical differences, though. Namely, we use <a href="http://hackage.haskell.org/package/massiv" target="_blank">massiv</a> library supporting multidimensional arrays and parallelism. For the reference, <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/massiv" target="_blank">here</a> are the first two days reimplemented with <code>massiv</code>. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
+<li id="fn:fn-4">There are some technical differences, though. Namely, we use <a href="http://hackage.haskell.org/package/massiv">massiv</a> library supporting multidimensional arrays and parallelism. For the reference, <a href="https://github.com/masterdezign/10-days-of-grad/tree/master/massiv">here</a> are the first two days reimplemented with <code>massiv</code>. Those multidimensional arrays are crucial when dealing with convolutional neural networks for image processing.
  <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
 <li id="fn:fn-5">In general, broadcasting is about making multidimensional arrays with different shapes compatible, not only vector to matrix translation.
  <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
