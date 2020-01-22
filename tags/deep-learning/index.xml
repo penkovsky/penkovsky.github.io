@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2019</copyright>
-    <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0100</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jan 2020 07:30:00 +0200</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Day 6: Saving Energy with Binarized Neural Networks</title>
+      <link>http://penkovsky.com/neural-networks/day6/</link>
+      <pubDate>Wed, 22 Jan 2020 07:30:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/neural-networks/day6/</guid>
+      <description>Last week Apple has acquired XNOR.ai startup for amazing $200 million. The startup is known for promoting binarized neural network algorithms to save the energy and computational resources. That is definitely a way to go for mobile devices, and Apple just acknowledged that it is a great deal for them too. I feel now is a good time to explain what binarized neural networks are so that you can better appreciate their value for the industry.</description>
+    </item>
     
     <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
@@ -72,7 +81,8 @@
       <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/project/edge-ai/</guid>
-      <description>We aim at bringing AI from data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.</description>
+      <description>We aim at bringing AI from data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.
+To help you getting familiar with the subject, here is an introductory post on binarized neural networks.</description>
     </item>
     
     <item>

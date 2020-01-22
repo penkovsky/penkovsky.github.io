@@ -11,6 +11,290 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Day 6: Saving Energy with Binarized Neural Networks</title>
+      <link>http://penkovsky.com/neural-networks/day6/</link>
+      <pubDate>Wed, 22 Jan 2020 07:30:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/neural-networks/day6/</guid>
+      <description>
+
+&lt;p&gt;Last week Apple &lt;a href=&#34;https://techcrunch.com/2020/01/15/apple-buys-edge-based-ai-startup-xnor-ai-for-a-reported-200m/&#34;&gt;has acquired&lt;/a&gt;
+XNOR.ai startup for amazing $200 million.
+The startup is known for promoting binarized neural network
+algorithms to save the energy and computational resources.
+That is definitely a way to go for mobile devices, and Apple
+just acknowledged that it is a great deal for them too.
+I feel now is a good time to explain what
+binarized neural networks are so that you can better
+appreciate their value for the industry.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Today&#39;s post is based on&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day6&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;the-basics&#34;&gt;The Basics&lt;/h2&gt;
+
+&lt;p&gt;Knowing what a (real-weight) &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;neural network is&lt;/a&gt; you already
+have the most essential information. In contrast,
+a binarized neural network (BNN) has its weights and activations
+limited to a single bit precision.
+Meaning that those have values of either $+1$ or $-1$.
+Below is a comparison table.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/bnn.png&#34; alt=&#34;Binarized neural network vs conventional neural network with real weights&#34; width=&#34;590px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Binarized neural network vs conventional neural network with real weights
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Having single-bit values can drastically reduce hardware
+requirements to operate those networks.
+As you remember from &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;,
+neural networks are built around activations of dot products.
+When every value is $+1$ or $-1$, multiplication can be replaced
+with $\text{XNOR}$ binary operation, thus eliminating the need in hardware
+multipliers. The dot product sum is then replaced by a simple
+bit counting operation ($\text{Popcount}$).
+And finally the activation is merely a thresholding ($\text{Sign}$) function.&lt;/p&gt;
+
+&lt;p&gt;Overall, the architecture can &lt;a href=&#34;http://arxiv.org/abs/1602.02830&#34;&gt;speed up&lt;/a&gt; conventional
+hardware or even better, drastically reduce the area of dedicated
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Application-specific_integrated_circuit&#34;&gt;ASICs&lt;/a&gt;.
+Reduced area means smaller manufacturing cost.
+Not less important is another implication, reduced energy consumption.
+That is crucial for &lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;edge&lt;/a&gt; devices.
+To further save the energy one can even merge computation and memory
+giving rise to emerging &lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;in-memory computing&lt;/a&gt;
+technology.&lt;/p&gt;
+
+&lt;p&gt;As we have &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;discussed before&lt;/a&gt;, batch normalization is
+helpful to prevent neurons from saturation and to faster train the network.
+It turns out that for binarized networks batchnorm is actually indispensable.
+Indeed, neurons with $\text{Sign}$ activations tend to be useless (&amp;quot;dead&amp;quot;)
+otherwise.
+Moreover, for an efficient training, to make the error landscape smooth,
+it is advisable to also include batch normalization
+immediately before the softmax layer.
+Yes, the most important lesson to learn here is is actually how to
+&lt;em&gt;train&lt;/em&gt; a BNN. I attempt to answer the most frequently encountered questions
+in the following section.&lt;/p&gt;
+
+&lt;h2 id=&#34;binarized-neural-networks-faq&#34;&gt;Binarized Neural Networks FAQ&lt;/h2&gt;
+
+&lt;p&gt;Here are some typical questions that people tend to ask.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Do I need to provide binarized inputs to a BNN?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; No, BNN inputs can remain non-binarized (real).
+That results in the first layer slightly different
+from the others: having binary weights (+1 and -1), yet producing real
+pre-activation values. After activation, those values are
+converted to binary ones. Here is a hint:&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;It is relatively easy to handle continuous-valued inputs as fixed point numbers, with $m$ bits of precision.
+&lt;small&gt;Courbariaux &lt;em&gt;et al.&lt;/em&gt; Binarized Neural Networks: Training Deep Neural Networks... (2016)&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;You should also be aware that indeed there exist
+&lt;a href=&#34;Hirtzlin2019&#34;&gt;methods&lt;/a&gt; to have binary inputs as well.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Do I need more neurons?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; Yes, typically one needs 3 to 4 times more &lt;em&gt;binary&lt;/em&gt; neurons to
+compensate for information loss.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Do I need a softmax layer?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; Only for BNN training. For inference (and simpler hardware) it can be removed.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Do binary neurons have learnable biases?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; No, biases are redundant as normally you
+want to use batch normalization layers. Those layers already learn
+bias-equivalent parameters.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Why BNNs are sometimes called &amp;quot;integer networks&amp;quot;?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; Because bit count (before activation) results in an integer value.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: $\text{Sign}$ activation gradient is zero&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; We approximate $\text{Sign}(x)$ derivative with
+$\text{Hardtanh}(x)$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; derivative, i.e. $ 1_{|x| \le 1} $.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: Are gradients binarized in backprop training?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; No, during the training one typically deals with
+real gradients and thus, real weights.
+Therefore, it is only in the forward pass where the network applies
+its binarized weights.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q: So what is the interest then?&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; BNNs are interesting to develop dedicated hardware hosting pretrained networks
+for inference, i.e. performing only the forward pass.
+Think about handwriting recognition-based automation system as an example.
+Binarized networks facilitate smaller, faster, and more energy-efficient
+inference devices. Though, there is also an effort towards (on-chip)
+binarized networks training.&lt;/p&gt;
+
+&lt;h2 id=&#34;implementing-binarized-neural-networks-in-haskell&#34;&gt;Implementing Binarized Neural Networks in Haskell&lt;/h2&gt;
+
+&lt;p&gt;There is no better way to understand a binarized network
+than to create one ourselves.
+This easy demo is built
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/commit/95b08aa50abe3a0051662f79134545ba7e99ffdd&#34;&gt;on top of Day 4&lt;/a&gt;.
+Here are a few code highlights.&lt;/p&gt;
+
+&lt;p&gt;First of all, the layers types we will use&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;-- A linear layer (BNN training)&lt;/span&gt;
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinear&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- Batch normalization with running mean, variance, and two&lt;/span&gt;
+               &lt;span style=&#34;color:#75715e&#34;&gt;-- learnable affine parameters&lt;/span&gt;
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Vector&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
+               &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;FActivation&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Second, we provide the $\text{Sign}$ activation&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sign&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;sign&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;computeMap&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;
+             &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;
+             &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;and its gradient approximation:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sign&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
+&lt;span style=&#34;color:#a6e22e&#34;&gt;sign&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;A&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;amp;&amp;amp;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+                  &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy0&lt;/span&gt;
+                  &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Finally, we accommodate the forward and backward passes of the network
+through the &lt;code&gt;BinarizedLinear&lt;/code&gt; layer.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinearGradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;)
+   &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Binarize the weights (!)&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;wB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sign&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Forward&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;maybe&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;error&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Incompatible shapes&amp;#34;&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|*|&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;wB&lt;/span&gt;)
+
+    (&lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Backward&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearW&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;-- Gradient w.r.t. wB (!)&lt;/span&gt;
+    &lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt;            &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearX&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;wB&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In the &lt;code&gt;main&lt;/code&gt; function we define the architecture, starting with the
+number of neurons in each layer.
+Good news: on MNIST handwriting recognition we can achieve accuracy
+comparable to those of a 32 bit network.
+However, we may need more neurons (by &lt;code&gt;infl&lt;/code&gt; factor) in the hidden layers.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;infl&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;
+
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;i&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;784&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;infl&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;300&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;infl&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;50&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is the network specification. Note the &lt;code&gt;BinarizedLinear&lt;/code&gt; layers
+defined above. The first &lt;code&gt;BinarizedLinear&lt;/code&gt; has real inputs, however every subsequent
+one receives binary inputs coming from &lt;code&gt;Sign&lt;/code&gt; activation.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
+        [ &lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1&lt;/span&gt;
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h1&lt;/span&gt;)
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sign&lt;/span&gt;
+
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2&lt;/span&gt;
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h2&lt;/span&gt;)
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sign&lt;/span&gt;
+
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;BinarizedLinear&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w3&lt;/span&gt;
+        &lt;span style=&#34;color:#75715e&#34;&gt;-- NB this batchnorm (!)&lt;/span&gt;
+        , &lt;span style=&#34;color:#66d9ef&#34;&gt;Batchnorm1d&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;zeros&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;o&lt;/span&gt;)
+        ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;A final technical note is that dividing by the batch variance (and rescaling by a learnable parameter &lt;code&gt;gamma&lt;/code&gt;)
+&lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/blob/master/day6/src/NeuralNetwork.hs#L294-L311&#34;&gt;in batchnorm&lt;/a&gt;
+actually makes little sense since division (multiplication) by a positive constant does not change the sign.
+If you would like to get your hands dirty with the code, that is a good place to optimize.
+Another suggestion is to transfer your newly acquired skills to
+a &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional network&lt;/a&gt; architecture&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day6&#34;&gt;Github&lt;/a&gt;.
+If you have any questions, remarks, or any typos found
+please send me an email. For suggestions about the code,
+feel free to open a &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/issues&#34;&gt;new issue&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;A binarized neural network (BNN)
+can achieve handwritten digits recognition (MNIST) task accuracy comparable
+to a 32 bit network provided that we moderately increase the number of binary neurons.
+To better grasp today&#39;s concept, train your own BNN.
+Pay attention to small details. Do not forget the batch normalization before
+the softmax. And good luck!&lt;/p&gt;
+
+&lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
+
+&lt;p&gt;Binarized neural networks:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;http://arxiv.org/abs/1602.02830&#34;&gt;Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1603.05279&#34;&gt;XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;Emerging technology (low-power hardware)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
+});
+&lt;/script&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;$\text{Hardtanh}(x)=\max(-1, \min(1,x))$
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-2&#34;&gt;In convolutional layers you may also want to increase the number convolutional filters.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
       <link>http://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
@@ -1265,7 +1549,7 @@ and connection sparsity.  Thanks to weight sharing, ConvNets dramatically
 reduce the number of trained parameters.  The power of ConvNet comes from
 training convolution filters, in contrast to manual feature engineering.
 In future posts, we will gain power of GPU to face the CIFAR image challenge.
-We will save the planet.
+We will &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;save the planet&lt;/a&gt;.
 We will read someone&#39;s mind with convolutional networks.
 And we will finally understand what &lt;em&gt;reservoir computing&lt;/em&gt; is all about.
 Stay tuned!&lt;/p&gt;
@@ -1872,6 +2156,10 @@ MathJax.Hub.Config({
 Lower energy consumption will improve battery-powered devices autonomy.
 Moreover, no need for data transfer over the network will ultimately enhance privacy
 and provide better data security.&lt;/p&gt;
+
+&lt;p&gt;To help you getting familiar with the subject,
+here is an &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
+on binarized neural networks.&lt;/p&gt;
 </description>
     </item>
     
@@ -3567,15 +3855,6 @@ MathJax.Hub.Config({
       <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>
       
       <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
-      <link>http://penkovsky.com/publication/photonic-neural-networks/</link>
-      <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/publication/photonic-neural-networks/</guid>
       <description></description>
     </item>
     
