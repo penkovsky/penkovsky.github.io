@@ -522,7 +522,9 @@ its binarized weights.</p>
 
 <p><strong>A:</strong> BNNs are interesting to develop dedicated hardware hosting pretrained networks
 for inference, i.e. performing only the forward pass.
-Think about handwriting recognition-based automation system as an example.
+Think about handwriting recognition-based automated systems as a use case.
+Think about energy-harvesting sensors. Solar-powered smart cameras. Drones.
+Smart <a href="/publication/medical-bnn/">wearable devices</a> and implants.
 Binarized networks facilitate smaller, faster, and more energy-efficient
 inference devices. Though, there is also an effort towards (on-chip)
 binarized networks training.</p>
@@ -584,8 +586,8 @@ through the <code>BinarizedLinear</code> layer.</p>
 
 <p>In the <code>main</code> function we define the architecture, starting with the
 number of neurons in each layer.
-Good news: on MNIST handwriting recognition we can achieve accuracy
-comparable to those of a 32 bit network.
+Good news: on the MNIST handwriting recognition benchmark
+we can achieve accuracy comparable to those of a 32 bit network.
 However, we may need more neurons (by <code>infl</code> factor) in the hidden layers.</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">infl</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">4</span>
