@@ -260,10 +260,17 @@ feel free to open a &lt;a href=&#34;https://github.com/masterdezign/10-days-of-g
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
 
-&lt;p&gt;A binarized neural network (BNN)
-can achieve handwritten digits recognition (MNIST) task accuracy comparable
-to a 32 bit network provided that we moderately increase the number of binary neurons.
-To better grasp today&#39;s concept, train your own BNN.
+&lt;p&gt;Binarized neural networks (BNNs) are valuable for low-power edge devices.
+Starting with energy-harvesting sensors and finishing with
+smart wearable medical devices and implants.
+Binarized networks facilitate smaller, faster, and more energy-efficient
+hardware.&lt;/p&gt;
+
+&lt;p&gt;We have illustrated how to train a BNN solving a handwritten digits recognition task.
+Our binarized network can achieve accuracy comparable
+to a full-precision 32 bit network provided
+that we moderately increase the number of binary neurons.
+To better grasp today&#39;s concept, train your own BNNs.
 Pay attention to small details. Do not forget the batch normalization before
 the softmax. And good luck!&lt;/p&gt;
 
