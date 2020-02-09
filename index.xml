@@ -304,6 +304,23 @@ MathJax.Hub.Config({
     </item>
     
     <item>
+      <title>Energy-efficient AI</title>
+      <link>http://penkovsky.com/project/edge-ai/</link>
+      <pubDate>Wed, 22 Jan 2020 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <description>&lt;p&gt;We aim at bringing AI from data centers to the edge.
+Lower energy consumption will improve battery-powered devices autonomy.
+Moreover, no need for data transfer over the network will ultimately enhance privacy
+and provide better data security.&lt;/p&gt;
+
+&lt;p&gt;To help you getting familiar with the subject,
+here is an &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
+on binarized neural networks.&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
       <link>http://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
@@ -2156,23 +2173,6 @@ MathJax.Hub.Config({
     </item>
     
     <item>
-      <title>Energy-efficient AI</title>
-      <link>http://penkovsky.com/project/edge-ai/</link>
-      <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/edge-ai/</guid>
-      <description>&lt;p&gt;We aim at bringing AI from data centers to the edge.
-Lower energy consumption will improve battery-powered devices autonomy.
-Moreover, no need for data transfer over the network will ultimately enhance privacy
-and provide better data security.&lt;/p&gt;
-
-&lt;p&gt;To help you getting familiar with the subject,
-here is an &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
-on binarized neural networks.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
       <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
       <link>http://penkovsky.com/publication/stochastic-bnn/</link>
       <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
@@ -3859,12 +3859,17 @@ MathJax.Hub.Config({
     </item>
     
     <item>
-      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
-      <link>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
-      <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>
+      <title>Syncronization patterns</title>
+      <link>http://penkovsky.com/project/sync/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
       
-      <guid>http://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
-      <description></description>
+      <guid>http://penkovsky.com/project/sync/</guid>
+      <description>&lt;p&gt;We study chimera states and dissipative solitons syncronization pattens
+in delayed feedback systems.
+High dynamics multistability of those systems makes them suitable for optical memory applications.
+Based on existing hardware, this memory is compatible with
+&lt;a href=&#34;http://penkovsky.com/publication/photonic-neural-networks/&#34;&gt;photonic reservoir computing&lt;/a&gt;.&lt;/p&gt;
+</description>
     </item>
     
   </channel>

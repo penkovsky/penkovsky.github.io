@@ -22,6 +22,16 @@
     </item>
     
     <item>
+      <title>Energy-efficient AI</title>
+      <link>http://penkovsky.com/project/edge-ai/</link>
+      <pubDate>Wed, 22 Jan 2020 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <description>We aim at bringing AI from data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.
+To help you getting familiar with the subject, here is an introductory post on binarized neural networks.</description>
+    </item>
+    
+    <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
       <link>http://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
@@ -73,16 +83,6 @@
       
       <guid>http://penkovsky.com/neural-networks/day4/</guid>
       <description>Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, &#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches. Indeed, neural networks are general enough and they leverage computation.</description>
-    </item>
-    
-    <item>
-      <title>Energy-efficient AI</title>
-      <link>http://penkovsky.com/project/edge-ai/</link>
-      <pubDate>Thu, 20 Jun 2019 10:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/project/edge-ai/</guid>
-      <description>We aim at bringing AI from data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.
-To help you getting familiar with the subject, here is an introductory post on binarized neural networks.</description>
     </item>
     
     <item>

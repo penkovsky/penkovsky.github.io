@@ -7,36 +7,18 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
-    <lastBuildDate>Tue, 09 Oct 2018 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Tue, 30 Oct 2018 11:00:10 +0200</lastBuildDate>
     
 	<atom:link href="http://penkovsky.com/tags/chimera/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
-      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
-      <link>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
-      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
+      <title>Syncronization patterns</title>
+      <link>http://penkovsky.com/project/sync/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
       
-      <guid>http://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Chimera States in Nonlinear Systems with Multiple Delayed Feedbacks</title>
-      <link>http://penkovsky.com/talk/ddays2018/</link>
-      <pubDate>Wed, 15 Aug 2018 13:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/talk/ddays2018/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>On Theory and Modeling of Complex Nonlinear Delay Dynamics</title>
-      <link>http://penkovsky.com/talk/juelich2018/</link>
-      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
-      
-      <guid>http://penkovsky.com/talk/juelich2018/</guid>
-      <description></description>
+      <guid>http://penkovsky.com/project/sync/</guid>
+      <description>We study chimera states and dissipative solitons syncronization pattens in delayed feedback systems. High dynamics multistability of those systems makes them suitable for optical memory applications. Based on existing hardware, this memory is compatible with photonic reservoir computing.</description>
     </item>
     
     <item>
@@ -45,6 +27,15 @@
       <pubDate>Tue, 14 Jul 2015 00:00:00 +0200</pubDate>
       
       <guid>http://penkovsky.com/publication/laser-chimeras/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Virtual Chimera States for Delayed-Feedback Systems</title>
+      <link>http://penkovsky.com/publication/virtual-chimera/</link>
+      <pubDate>Fri, 30 Aug 2013 00:00:00 +0200</pubDate>
+      
+      <guid>http://penkovsky.com/publication/virtual-chimera/</guid>
       <description></description>
     </item>
     
