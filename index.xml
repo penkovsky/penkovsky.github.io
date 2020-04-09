@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</title>
-    <link>http://penkovsky.com/</link>
+    <link>https://penkovsky.com/</link>
     <description>Recent content in Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
@@ -12,10 +12,10 @@
     
     <item>
       <title>Day 6: Saving Energy with Binarized Neural Networks</title>
-      <link>http://penkovsky.com/neural-networks/day6/</link>
+      <link>https://penkovsky.com/neural-networks/day6/</link>
       <pubDate>Wed, 22 Jan 2020 07:30:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day6/</guid>
+      <guid>https://penkovsky.com/neural-networks/day6/</guid>
       <description>
 
 &lt;p&gt;Last week Apple &lt;a href=&#34;https://techcrunch.com/2020/01/15/apple-buys-edge-based-ai-startup-xnor-ai-for-a-reported-200m/&#34;&gt;has acquired&lt;/a&gt;
@@ -33,9 +33,9 @@ appreciate their value for the industry.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Today&#39;s post is based on&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day6&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
@@ -44,7 +44,7 @@ appreciate their value for the industry.&lt;/p&gt;
 
 &lt;h2 id=&#34;the-basics&#34;&gt;The Basics&lt;/h2&gt;
 
-&lt;p&gt;Knowing what a (real-weight) &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;neural network is&lt;/a&gt; you already
+&lt;p&gt;Knowing what a (real-weight) &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;neural network is&lt;/a&gt; you already
 have the most essential information. In contrast,
 a binarized neural network (BNN) has its weights and activations
 limited to a single bit precision.
@@ -53,7 +53,7 @@ Below is a comparison table.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/bnn.png&#34; alt=&#34;Binarized neural network vs conventional neural network with real weights&#34; width=&#34;590px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/bnn.png&#34; alt=&#34;Binarized neural network vs conventional neural network with real weights&#34; width=&#34;590px&#34; /&gt;
 
 
 
@@ -71,7 +71,7 @@ Below is a comparison table.&lt;/p&gt;
 
 &lt;p&gt;Having single-bit values can drastically reduce hardware
 requirements to operate those networks.
-As you remember from &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;,
+As you remember from &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;,
 neural networks are built around activations of dot products.
 When every value is $+1$ or $-1$, multiplication can be replaced
 with $\text{XNOR}$ binary operation, thus eliminating the need in hardware
@@ -84,12 +84,12 @@ hardware or even better, drastically reduce the area of dedicated
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Application-specific_integrated_circuit&#34;&gt;ASICs&lt;/a&gt;.
 Reduced area means smaller manufacturing cost.
 Not less important is another implication, reduced energy consumption.
-That is crucial for &lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;edge&lt;/a&gt; devices.
+That is crucial for &lt;a href=&#34;https://penkovsky.com/project/edge-ai/&#34;&gt;edge&lt;/a&gt; devices.
 To further save the energy one can even merge computation and memory
-giving rise to emerging &lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;in-memory computing&lt;/a&gt;
+giving rise to emerging &lt;a href=&#34;https://penkovsky.com/project/edge-ai/&#34;&gt;in-memory computing&lt;/a&gt;
 technology.&lt;/p&gt;
 
-&lt;p&gt;As we have &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;discussed before&lt;/a&gt;, batch normalization is
+&lt;p&gt;As we have &lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;discussed before&lt;/a&gt;, batch normalization is
 helpful to prevent neurons from saturation and to faster train the network.
 It turns out that for binarized networks batchnorm is actually indispensable.
 Indeed, neurons with $\text{Sign}$ activations tend to be useless (&amp;quot;dead&amp;quot;)
@@ -158,7 +158,7 @@ its binarized weights.&lt;/p&gt;
 for inference, i.e. performing only the forward pass.
 Think about handwriting recognition-based automated systems as a use case.
 Think about energy-harvesting sensors. Solar-powered smart cameras. Drones.
-Smart &lt;a href=&#34;http://penkovsky.com/publication/medical-bnn/&#34;&gt;wearable devices&lt;/a&gt; and implants.
+Smart &lt;a href=&#34;https://penkovsky.com/publication/medical-bnn/&#34;&gt;wearable devices&lt;/a&gt; and implants.
 Binarized networks facilitate smaller, faster, and more energy-efficient
 inference devices. Though, there is also an effort towards (on-chip)
 binarized networks training.&lt;/p&gt;
@@ -251,7 +251,7 @@ one receives binary inputs coming from &lt;code&gt;Sign&lt;/code&gt; activation.
 actually makes little sense since division (multiplication) by a positive constant does not change the sign.
 If you would like to get your hands dirty with the code, that is a good place to optimize.
 Another suggestion is to transfer your newly acquired skills to
-a &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional network&lt;/a&gt; architecture&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+a &lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional network&lt;/a&gt; architecture&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;p&gt;See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day6&#34;&gt;Github&lt;/a&gt;.
 If you have any questions, remarks, or any typos found
@@ -281,7 +281,7 @@ the softmax. And good luck!&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;http://arxiv.org/abs/1602.02830&#34;&gt;Binarized Neural Networks: Training Deep Neural Networks with Weights and Activations Constrained to +1 or -1&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1603.05279&#34;&gt;XNOR-Net: ImageNet Classification Using Binary Convolutional Neural Networks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/project/edge-ai/&#34;&gt;Emerging technology (low-power hardware)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/project/edge-ai/&#34;&gt;Emerging technology (low-power hardware)&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
@@ -305,27 +305,27 @@ MathJax.Hub.Config({
     
     <item>
       <title>Energy-efficient AI</title>
-      <link>http://penkovsky.com/project/edge-ai/</link>
+      <link>https://penkovsky.com/project/edge-ai/</link>
       <pubDate>Wed, 22 Jan 2020 00:00:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/project/edge-ai/</guid>
+      <guid>https://penkovsky.com/project/edge-ai/</guid>
       <description>&lt;p&gt;We aim at bringing AI from data centers to the edge.
 Lower energy consumption will improve battery-powered devices autonomy.
 Moreover, no need for data transfer over the network will ultimately enhance privacy
 and provide better data security.&lt;/p&gt;
 
 &lt;p&gt;To help you getting familiar with the subject,
-here is an &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
+here is an &lt;a href=&#34;https://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
 on binarized neural networks.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
-      <link>http://penkovsky.com/publication/medical-bnn/</link>
+      <link>https://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
       
-      <guid>http://penkovsky.com/publication/medical-bnn/</guid>
+      <guid>https://penkovsky.com/publication/medical-bnn/</guid>
       <description>&lt;p&gt;The results are very encouraging to reduce efficiently
 memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.&lt;/p&gt;
 </description>
@@ -333,19 +333,19 @@ memory requirement of edge devices and thus to obtain low energy hardware. This 
     
     <item>
       <title>Digital Biologically Plausible Implementation of Binarized Neural Networks with Differential Hafnium Oxide Resistive Memory Arrays</title>
-      <link>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</link>
+      <link>https://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</link>
       <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
       
-      <guid>http://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</guid>
+      <guid>https://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>
-      <link>http://penkovsky.com/neural-networks/day5/</link>
+      <link>https://penkovsky.com/neural-networks/day5/</link>
       <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day5/</guid>
+      <guid>https://penkovsky.com/neural-networks/day5/</guid>
       <description>
 
 &lt;p&gt;Today we will talk about one of the most important deep learning architectures,
@@ -362,7 +362,7 @@ weights.&lt;/p&gt;
 Then, we are taking a close look at a classic CNN architecture. After
 discussing the differences between convolutional layer types,
 we are going to implement a convolutional network in Haskell.
-We will see that on &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;handwritten digits&lt;/a&gt; our CNN
+We will see that on &lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;handwritten digits&lt;/a&gt; our CNN
 achieves a twice lower test error, compared to the fully-connected
 architecture. We will build up on what we have learned during
 the previous days, so do not hesitate to refresh your memory first.&lt;/p&gt;
@@ -370,10 +370,10 @@ the previous days, so do not hesitate to refresh your memory first.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4: The Importance Of Batch Normalization&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;convolution-operator&#34;&gt;Convolution operator&lt;/h2&gt;
@@ -386,7 +386,7 @@ To explain this, let us take a look at the two cat pictures below.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/translation-symmetry.png&#34; alt=&#34;Translation symmetry: Same object in different locations.&#34; width=&#34;590px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/translation-symmetry.png&#34; alt=&#34;Translation symmetry: Same object in different locations.&#34; width=&#34;590px&#34; /&gt;
 
 
 
@@ -414,7 +414,7 @@ Is there a way to make a neural network translation invariant?&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/fully-connected.png&#34; alt=&#34;Fully-connected neural network with two hidden layers. Image credit: Wikimedia.&#34; width=&#34;300px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/fully-connected.png&#34; alt=&#34;Fully-connected neural network with two hidden layers. Image credit: Wikimedia.&#34; width=&#34;300px&#34; /&gt;
 
 
 
@@ -442,7 +442,7 @@ The area that a neuron &amp;quot;sees&amp;quot; is called a &lt;em&gt;receptive 
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/cat-head-pixels.png&#34; alt=&#34;Zoom into the cats figure.&#34; width=&#34;400px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/cat-head-pixels.png&#34; alt=&#34;Zoom into the cats figure.&#34; width=&#34;400px&#34; /&gt;
 
 
 
@@ -473,7 +473,7 @@ The image kernel is typically a $3 \times 3$ matrix such as below.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/kernel-dot-product.png&#34; alt=&#34;Dot product between pixel values and a kernel. Image credit: [GIMP](https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png).&#34; width=&#34;475px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/kernel-dot-product.png&#34; alt=&#34;Dot product between pixel values and a kernel. Image credit: [GIMP](https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png).&#34; width=&#34;475px&#34; /&gt;
 
 
 
@@ -544,7 +544,7 @@ Let us take a look at one of the famous ConvNet architectures known as LeNet-5.&
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/LeNet.png&#34; alt=&#34;LeNet-5 architecture from [Lecun _et al._ Gradient-based learning applied to document recognition](http://doi.org/10.1109/5.726791).&#34; width=&#34;760px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/LeNet.png&#34; alt=&#34;LeNet-5 architecture from [Lecun _et al._ Gradient-based learning applied to document recognition](http://doi.org/10.1109/5.726791).&#34; width=&#34;760px&#34; /&gt;
 
 
 
@@ -664,7 +664,7 @@ roadmap&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a hre
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv-cv.png&#34; width=&#34;480px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/conv-cv.png&#34; width=&#34;480px&#34; /&gt;
 
 
 &lt;/figure&gt;
@@ -681,7 +681,7 @@ channels are summed producing a one-channel image (e.g. edge detection).&lt;/p&g
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv.png&#34; width=&#34;500px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/conv.png&#34; width=&#34;500px&#34; /&gt;
 
 
 &lt;/figure&gt;
@@ -733,7 +733,7 @@ the feature map size&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv-depthwise-separable.png&#34; width=&#34;610px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/conv-depthwise-separable.png&#34; width=&#34;610px&#34; /&gt;
 
 
 &lt;/figure&gt;
@@ -779,7 +779,7 @@ network inspired by LeNet-5.
 We will witness that indeed this ConvNet
 has about twice lower error on the MNIST
 handwritten digit recognition task,
-while being four times smaller compared to the &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;previous model&lt;/a&gt;!
+while being four times smaller compared to the &lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;previous model&lt;/a&gt;!
 The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day5&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
 
 &lt;h3 id=&#34;convolutional-layer-gradients&#34;&gt;Convolutional Layer Gradients&lt;/h3&gt;
@@ -919,7 +919,7 @@ as we did on Days 2 and 4 quickly becomes tedious.
 Moreover, last time when we introduced a &lt;code&gt;Batchnorm1d&lt;/code&gt; layer,
 our forward-backward &lt;code&gt;pass&lt;/code&gt; function already oversized 100 lines of code.
 Today, we will make use of the &lt;code&gt;backprop&lt;/code&gt; library
-introduced on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3&lt;/a&gt; to better structure
+introduced on &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3&lt;/a&gt; to better structure
 our project. Thus, LeNet can be represented as a differentiable
 function &lt;code&gt;lenet&lt;/code&gt;, which is nothing more than a composition
 of other functions &lt;em&gt;aka&lt;/em&gt; neural network layers:&lt;/p&gt;
@@ -1009,7 +1009,7 @@ Now, let us return back to &lt;code&gt;lenet&lt;/code&gt; signature:&lt;/p&gt;
       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Volume4&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- ^ Batch of images&lt;/span&gt;
       &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;p&gt;We have &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;already seen&lt;/a&gt; the &lt;code&gt;BVar s&lt;/code&gt;
+&lt;p&gt;We have &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;already seen&lt;/a&gt; the &lt;code&gt;BVar s&lt;/code&gt;
 (&amp;quot;backprop variable&amp;quot;) type meaning that we deal with a differentiable
 structure. The first argument has type
 &lt;code&gt;BVar s (LeNet Float)&lt;/code&gt;. That conventionally means that &lt;code&gt;LeNet&lt;/code&gt;
@@ -1142,7 +1142,7 @@ This is what we get:&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/frog_blurred.png&#34; width=&#34;670px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/frog_blurred.png&#34; width=&#34;670px&#34; /&gt;
 
 
 
@@ -1245,7 +1245,7 @@ here is a visualization what is going on in the first convolutional layer.&lt;/p
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/conv1.png&#34; alt=&#34;Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right.&#34; width=&#34;500px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/conv1.png&#34; alt=&#34;Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right.&#34; width=&#34;500px&#34; /&gt;
 
 
 
@@ -1547,7 +1547,7 @@ See the complete project on &lt;a href=&#34;https://github.com/masterdezign/10-d
 
 &lt;h3 id=&#34;model-parameters-comparison&#34;&gt;Model Parameters Comparison&lt;/h3&gt;
 
-&lt;p&gt;Our three-layer model from &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4&lt;/a&gt;
+&lt;p&gt;Our three-layer model from &lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;Day 4&lt;/a&gt;
 consumed&lt;/p&gt;
 
 &lt;p&gt;$$(784+1) \cdot 300 + (300+1) \cdot 50 + (50+1) \cdot 10 = 251,060$$&lt;/p&gt;
@@ -1577,7 +1577,7 @@ and connection sparsity.  Thanks to weight sharing, ConvNets dramatically
 reduce the number of trained parameters.  The power of ConvNet comes from
 training convolution filters, in contrast to manual feature engineering.
 In future posts, we will gain power of GPU to face the CIFAR image challenge.
-We will &lt;a href=&#34;http://penkovsky.com/neural-networks/day6/&#34;&gt;save the planet&lt;/a&gt;.
+We will &lt;a href=&#34;https://penkovsky.com/neural-networks/day6/&#34;&gt;save the planet&lt;/a&gt;.
 We will read someone&#39;s mind with convolutional networks.
 And we will finally understand what &lt;em&gt;reservoir computing&lt;/em&gt; is all about.
 Stay tuned!&lt;/p&gt;
@@ -1615,7 +1615,7 @@ MathJax.Hub.Config({
 });
 &lt;/script&gt;
 
-&lt;script src=&#34;http://penkovsky.com/js/receptive-field.js&#34;&gt;&lt;/script&gt;
+&lt;script src=&#34;https://penkovsky.com/js/receptive-field.js&#34;&gt;&lt;/script&gt;
 &lt;div class=&#34;footnotes&#34;&gt;
 
 &lt;hr /&gt;
@@ -1627,9 +1627,9 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-3&#34;&gt;By subsampling LeNet authors mean local averaging in $2 \times 2$ squares with subsequent scaling by a constant, bias addition, and sigmoid activation. In modern CNNs, a simple max-pooling is performed instead.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-4&#34;&gt;We have discussed one-hot encoding on &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-4&#34;&gt;We have discussed one-hot encoding on &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-5&#34;&gt;To refresh your memory about backprop algorithm, check out &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;days&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-5&#34;&gt;To refresh your memory about backprop algorithm, check out &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous&lt;/a&gt; &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;days&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-6&#34;&gt;Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1639,7 +1639,7 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-9&#34;&gt;For the details, see &lt;a href=&#34;https://arxiv.org/pdf/1704.04861.pdf&#34;&gt;Mobilenet paper&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
+&lt;li id=&#34;fn:fn-10&#34;&gt;In &lt;a href=&#34;https://arxiv.org/pdf/1610.02357.pdf&#34;&gt;Xception&lt;/a&gt; architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by &lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;. Batch normalization results in no added bias term after convolutions.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-11&#34;&gt;Convolution has flipped kernel whereas cross-correlation operator does not flip the kernel.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-11&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -1654,29 +1654,29 @@ MathJax.Hub.Config({
     
     <item>
       <title>Medical Applications of Low Precision Neuromorphic Systems</title>
-      <link>http://penkovsky.com/talk/us-french-symposium2019/</link>
+      <link>https://penkovsky.com/talk/us-french-symposium2019/</link>
       <pubDate>Sun, 22 Sep 2019 15:40:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/talk/us-french-symposium2019/</guid>
+      <guid>https://penkovsky.com/talk/us-french-symposium2019/</guid>
       <description>&lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade impacting computer vision, natural language processing, and other domains. However, those deep learning implementations require almost two orders of magnitude more power compared to the human brain, requiring thus constant connection to dedicated data centers. With new memories available, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation, enabling machine learning on the edge devices and avoiding data transfer over the network. In the talk we will discuss strategies to apply BNNs to biomedical signals such as electrocardiography and electroencephalography, without sacrificing accuracy and improving energy use. The ultimate goal of this research is to enable smart autonomous healthcare devices.&lt;/p&gt;
 </description>
     </item>
     
     <item>
       <title>Coupled Nonlinear Delay Systems As Deep Convolutional Neural Networks</title>
-      <link>http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</link>
+      <link>https://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</link>
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</guid>
+      <guid>https://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Day 4: The Importance Of Batch Normalization</title>
-      <link>http://penkovsky.com/neural-networks/day4/</link>
+      <link>https://penkovsky.com/neural-networks/day4/</link>
       <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day4/</guid>
+      <guid>https://penkovsky.com/neural-networks/day4/</guid>
       <description>
 
 &lt;p&gt;Which purpose do neural networks serve for? Neural networks are learnable
@@ -1702,9 +1702,9 @@ recent neural network advances&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref
 &lt;p&gt;&lt;strong&gt;Previous posts&lt;/strong&gt;&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;Day 3: Haskell Guide To Neural Networks&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this post is available &lt;a href=&#34;https://github.com/masterdezign/10-days-of-grad/tree/master/day4&#34;&gt;on Github&lt;/a&gt;.&lt;/p&gt;
@@ -1789,7 +1789,7 @@ avoiding thus the problem of normalizing a singleton batch.&lt;/p&gt;
 
 &lt;h2 id=&#34;how-efficient-is-batchnorm&#34;&gt;How Efficient Is Batchnorm&lt;/h2&gt;
 
-&lt;p&gt;&lt;img src=&#34;http://penkovsky.com/img/posts/mnist/mnist-five.png&#34; alt=&#34;Handwritten digit&#34; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://penkovsky.com/img/posts/mnist/mnist-five.png&#34; alt=&#34;Handwritten digit&#34; /&gt;&lt;/p&gt;
 
 &lt;p&gt;So far we have played with tasks that provided low-dimensional input features.
 Now, we are going to test neural networks on a bit more interesting challenge.
@@ -1811,7 +1811,7 @@ and batch size $m = 100$.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/mnist/mnist-training.png&#34; alt=&#34;Training with batchnorm (blue) leads to high accuracies faster than without batchnorm (orange).&#34; width=&#34;450px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/mnist/mnist-training.png&#34; alt=&#34;Training with batchnorm (blue) leads to high accuracies faster than without batchnorm (orange).&#34; width=&#34;450px&#34; /&gt;
 
 
 
@@ -1926,7 +1926,7 @@ gradients).&lt;/p&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Float&lt;/span&gt;
         &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;compute&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;gammax&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;.+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;/p&gt;
 
-&lt;p&gt;As discussed on &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;,
+&lt;p&gt;As discussed on &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;,
 there is a recurrent call obtaining gradients from the next layer,
 neural network prediction &lt;code&gt;pred&lt;/code&gt; and computed values tail &lt;code&gt;t&lt;/code&gt;:&lt;/p&gt;
 
@@ -2123,7 +2123,7 @@ trying to solve. &lt;a href=&#34;https://www.alexirpan.com/2017/04/26/perils-bat
 method in the context of deep neural networks. Batchnorm&#39;s power is that it can
 substantially reduce the number of training epochs or even help achieving
 better neural network accuracy. After discussing this, we are prepared for such
-hot subjects as &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional neural networks&lt;/a&gt;
+hot subjects as &lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional neural networks&lt;/a&gt;
 and reinforcement learning. Stay tuned!&lt;/p&gt;
 
 &lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
@@ -2176,28 +2176,28 @@ MathJax.Hub.Config({
     
     <item>
       <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
-      <link>http://penkovsky.com/publication/stochastic-bnn/</link>
+      <link>https://penkovsky.com/publication/stochastic-bnn/</link>
       <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/publication/stochastic-bnn/</guid>
+      <guid>https://penkovsky.com/publication/stochastic-bnn/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Coupled Delay Systems For Brain-Inspired Computing</title>
-      <link>http://penkovsky.com/talk/ictp2019/</link>
+      <link>https://penkovsky.com/talk/ictp2019/</link>
       <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/talk/ictp2019/</guid>
+      <guid>https://penkovsky.com/talk/ictp2019/</guid>
       <description></description>
     </item>
     
     <item>
       <title>Day 3: Haskell Guide To Neural Networks</title>
-      <link>http://penkovsky.com/neural-networks/day3/</link>
+      <link>https://penkovsky.com/neural-networks/day3/</link>
       <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day3/</guid>
+      <guid>https://penkovsky.com/neural-networks/day3/</guid>
       <description>
 
 &lt;p&gt;Now that we have seen how neural networks work, we realize that understanding
@@ -2213,8 +2213,8 @@ Networks&lt;/a&gt;. For comparison, see also
 &lt;p&gt;Before jumping ahead, you may also want to check the previous posts:&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34;&gt;on
@@ -2446,9 +2446,9 @@ how automatic differentiation can face this problem.&lt;/p&gt;
 
 &lt;p&gt;In the next posts we will apply automatic differentiation to real neural
 networks. We will talk about
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;,
+&lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;,
 another crucial method in modern deep learning.  And we will ramp it up to
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt; allowing us
+&lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt; allowing us
 to solve some interesting challenges.
 Stay tuned!&lt;/p&gt;
 
@@ -2473,13 +2473,13 @@ Stay tuned!&lt;/p&gt;
     
     <item>
       <title>Day 2: What Do Hidden Layers Do?</title>
-      <link>http://penkovsky.com/neural-networks/day2/</link>
+      <link>https://penkovsky.com/neural-networks/day2/</link>
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day2/</guid>
+      <guid>https://penkovsky.com/neural-networks/day2/</guid>
       <description>
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
 we have introduced the concept of learning in a single-layer neural network.
 Today, we will learn about the
 benefits of multi-layer neural networks,
@@ -2529,7 +2529,7 @@ as shown below.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/initial-data.png&#34; width=&#34;590px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/initial-data.png&#34; width=&#34;590px&#34; /&gt;
 
 
 &lt;/figure&gt;
@@ -2546,7 +2546,7 @@ Let us bring in an additional layer.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-network-2.png&#34; alt=&#34;Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$.&#34; width=&#34;400px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-network-2.png&#34; alt=&#34;Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$.&#34; width=&#34;400px&#34; /&gt;
 
 
 
@@ -2601,7 +2601,7 @@ Therefore, you should select neural network weights randomly.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/circles.png&#34; alt=&#34;Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights.&#34; width=&#34;600px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/circles.png&#34; alt=&#34;Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights.&#34; width=&#34;600px&#34; /&gt;
 
 
 
@@ -2644,7 +2644,7 @@ a naive gradient descent training can get easily stuck in a suboptimal setting.&
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-boundary2.gif&#34; alt=&#34;Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam.&#34; width=&#34;450px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-boundary2.gif&#34; alt=&#34;Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam.&#34; width=&#34;450px&#34; /&gt;
 
 
 
@@ -2680,7 +2680,7 @@ I find it can be more illustrative if we visualize the neural network&#39;s outp
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-2.gif&#34; alt=&#34;The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes.&#34; width=&#34;500px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-2.gif&#34; alt=&#34;The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes.&#34; width=&#34;500px&#34; /&gt;
 
 
 
@@ -2718,7 +2718,7 @@ from the resulting decision boundaries.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/linear-classifier.png&#34; width=&#34;450px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/linear-classifier.png&#34; width=&#34;450px&#34; /&gt;
 
 
 
@@ -2752,7 +2752,7 @@ one benefits from adding more layers.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/spirals-adam.gif&#34; alt=&#34;Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture.&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-adam.gif&#34; alt=&#34;Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture.&#34; /&gt;
 
 
 
@@ -2787,7 +2787,7 @@ build multilayer networks in Haskell.&lt;/p&gt;
 
 &lt;h2 id=&#34;implementing-backpropagation&#34;&gt;Implementing Backpropagation&lt;/h2&gt;
 
-&lt;p&gt;In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
+&lt;p&gt;In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
 we have implemented &lt;em&gt;backpropagation&lt;/em&gt; (shortly &lt;em&gt;backprop&lt;/em&gt;)
 for a single-layer (no hidden layer) network.
 This method easily extends towards the case of multiple layers.
@@ -2798,7 +2798,7 @@ how backprop works for each individual neuron.&lt;/p&gt;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/backprop.png&#34; width=&#34;570px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/backprop.png&#34; width=&#34;570px&#34; /&gt;
 
 
 
@@ -2959,7 +2959,7 @@ Now, the complete gradient descent implementation is&lt;/p&gt;
 
 &lt;p&gt;We now see how well previously defined &lt;code&gt;f&lt;/code&gt; fits in.
 The resulting function &lt;code&gt;optimize&lt;/code&gt; should look familiar from the
-&lt;a href=&#34;http://penkovsky.com/neural-networks/day1/&#34;&gt;previous post&lt;/a&gt;.
+&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous post&lt;/a&gt;.
 Back then, it was called &lt;code&gt;descend&lt;/code&gt;.
 Now, we generalize it to operate on a list of layers,
 instead of a single layer weights. Finally,
@@ -3334,9 +3334,9 @@ relationships in the dataset,
 a three-layer network with fewer parameters converges faster than
 the one with a single hidden layer.&lt;/p&gt;
 
-&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
+&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
 discuss how Haskell compiler can help ensure that our neural network is
-correct. And we will ramp it up to &lt;a href=&#34;http://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt;
+correct. And we will ramp it up to &lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt;
 allowing us to solve some interesting challenges.  Stay tuned.&lt;/p&gt;
 
 &lt;hr /&gt;
@@ -3393,10 +3393,10 @@ MathJax.Hub.Config({
     
     <item>
       <title>Day 1: Learning Neural Networks The Hard Way</title>
-      <link>http://penkovsky.com/neural-networks/day1/</link>
+      <link>https://penkovsky.com/neural-networks/day1/</link>
       <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day1/</guid>
+      <guid>https://penkovsky.com/neural-networks/day1/</guid>
       <description>
 
 &lt;p&gt;Neural networks is a topic that recurrently appears throughout my life.
@@ -3719,7 +3719,7 @@ for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34;
 
 &lt;figure&gt;
 
-&lt;img src=&#34;http://penkovsky.com/img/posts/neural-networks/backprop.png&#34; alt=&#34;First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$&#34; width=&#34;570px&#34; /&gt;
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/backprop.png&#34; alt=&#34;First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$&#34; width=&#34;570px&#34; /&gt;
 
 
 
@@ -3804,8 +3804,8 @@ data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#
 the code to avoid this redundancy.&lt;/p&gt;
 
 &lt;p&gt;As soon as you understand the basics of neural networks,
-make sure you continue to &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;.
-In the &lt;a href=&#34;http://penkovsky.com/neural-networks/day2/&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
+make sure you continue to &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;.
+In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
 First of all, we will highlight the importance of multilayer structure.
 We will also show that nonlinear activations are crucial.
 Finally, we will improve neural network training
@@ -3839,7 +3839,7 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6a&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;http://penkovsky.com/neural-networks/day3/&#34;&gt;here&lt;/a&gt;.
+&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;here&lt;/a&gt;.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
@@ -3850,10 +3850,10 @@ MathJax.Hub.Config({
     
     <item>
       <title>Towards Binarized Neural Networks Hardware</title>
-      <link>http://penkovsky.com/talk/icee2018/</link>
+      <link>https://penkovsky.com/talk/icee2018/</link>
       <pubDate>Sat, 24 Nov 2018 13:00:00 +0100</pubDate>
       
-      <guid>http://penkovsky.com/talk/icee2018/</guid>
+      <guid>https://penkovsky.com/talk/icee2018/</guid>
       <description>&lt;p&gt;B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz&lt;/p&gt;
 
 &lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress. With new memories available, such as Resistive and Magnetoelectric Random Access Memory (RRAM and MRAM), thanks to the latest advancements in nanotechnology, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation. The simplicity and energy efficiency of BNNs makes them especially suitable for wearable devices, including but not limited to biomedical, healthcare, and sport application domains. In this talk, we discuss our latest BNN developments along with our vision towards the future of energy-efficient smart devices.&lt;/p&gt;
@@ -3862,15 +3862,15 @@ MathJax.Hub.Config({
     
     <item>
       <title>Syncronization patterns</title>
-      <link>http://penkovsky.com/project/sync/</link>
+      <link>https://penkovsky.com/project/sync/</link>
       <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
       
-      <guid>http://penkovsky.com/project/sync/</guid>
+      <guid>https://penkovsky.com/project/sync/</guid>
       <description>&lt;p&gt;We study chimera states and dissipative solitons syncronization pattens
 in delayed feedback systems.
 High dynamics multistability of those systems makes them suitable for optical memory applications.
 Based on existing hardware, this memory is compatible with
-&lt;a href=&#34;http://penkovsky.com/publication/photonic-neural-networks/&#34;&gt;photonic reservoir computing&lt;/a&gt;.&lt;/p&gt;
+&lt;a href=&#34;https://penkovsky.com/publication/photonic-neural-networks/&#34;&gt;photonic reservoir computing&lt;/a&gt;.&lt;/p&gt;
 </description>
     </item>
     

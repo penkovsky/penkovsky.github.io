@@ -2,58 +2,58 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Haskell on Bogdan Penkovsky, PhD</title>
-    <link>http://penkovsky.com/tags/haskell/</link>
+    <link>https://penkovsky.com/tags/haskell/</link>
     <description>Recent content in Haskell on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
     <lastBuildDate>Wed, 22 Jan 2020 07:30:00 +0200</lastBuildDate>
     
-	<atom:link href="http://penkovsky.com/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://penkovsky.com/tags/haskell/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Day 6: Saving Energy with Binarized Neural Networks</title>
-      <link>http://penkovsky.com/neural-networks/day6/</link>
+      <link>https://penkovsky.com/neural-networks/day6/</link>
       <pubDate>Wed, 22 Jan 2020 07:30:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day6/</guid>
+      <guid>https://penkovsky.com/neural-networks/day6/</guid>
       <description>Last week Apple has acquired XNOR.ai startup for amazing $200 million. The startup is known for promoting binarized neural network algorithms to save the energy and computational resources. That is definitely a way to go for mobile devices, and Apple just acknowledged that it is a great deal for them too. I feel now is a good time to explain what binarized neural networks are so that you can better appreciate their value for the industry.</description>
     </item>
     
     <item>
       <title>Day 5: Convolutional Neural Networks Tutorial</title>
-      <link>http://penkovsky.com/neural-networks/day5/</link>
+      <link>https://penkovsky.com/neural-networks/day5/</link>
       <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day5/</guid>
+      <guid>https://penkovsky.com/neural-networks/day5/</guid>
       <description>Today we will talk about one of the most important deep learning architectures, the &amp;quot;master algorithm&amp;quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.</description>
     </item>
     
     <item>
       <title>Day 4: The Importance Of Batch Normalization</title>
-      <link>http://penkovsky.com/neural-networks/day4/</link>
+      <link>https://penkovsky.com/neural-networks/day4/</link>
       <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day4/</guid>
+      <guid>https://penkovsky.com/neural-networks/day4/</guid>
       <description>Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, &#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches. Indeed, neural networks are general enough and they leverage computation.</description>
     </item>
     
     <item>
       <title>Day 3: Haskell Guide To Neural Networks</title>
-      <link>http://penkovsky.com/neural-networks/day3/</link>
+      <link>https://penkovsky.com/neural-networks/day3/</link>
       <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day3/</guid>
+      <guid>https://penkovsky.com/neural-networks/day3/</guid>
       <description>Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.</description>
     </item>
     
     <item>
       <title>Day 2: What Do Hidden Layers Do?</title>
-      <link>http://penkovsky.com/neural-networks/day2/</link>
+      <link>https://penkovsky.com/neural-networks/day2/</link>
       <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day2/</guid>
+      <guid>https://penkovsky.com/neural-networks/day2/</guid>
       <description>In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
 Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
 &amp;quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&amp;quot;
@@ -62,19 +62,19 @@ Sometimes I discuss neural networks with students who have just started discover
     
     <item>
       <title>Day 1: Learning Neural Networks The Hard Way</title>
-      <link>http://penkovsky.com/neural-networks/day1/</link>
+      <link>https://penkovsky.com/neural-networks/day1/</link>
       <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
       
-      <guid>http://penkovsky.com/neural-networks/day1/</guid>
+      <guid>https://penkovsky.com/neural-networks/day1/</guid>
       <description>Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &amp;quot;intelligent&amp;quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3.</description>
     </item>
     
     <item>
       <title>Delay Differential Equations</title>
-      <link>http://penkovsky.com/project/dde/</link>
+      <link>https://penkovsky.com/project/dde/</link>
       <pubDate>Wed, 15 Aug 2018 10:01:19 +0200</pubDate>
       
-      <guid>http://penkovsky.com/project/dde/</guid>
+      <guid>https://penkovsky.com/project/dde/</guid>
       <description>DDE package is a fast library written in Haskell that I have extracted after my PhD. Previously, my work involved a lot dynamical systems described by DDEs. I kept switching between several tools, still I had no fast and flexible library. So here is one now.
 Below is an example of a dual-delay model taken from a recent publication. It is given by the following delay differential equation:
 $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right), $$</description>
@@ -82,10 +82,10 @@ $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (
     
     <item>
       <title>HMEP</title>
-      <link>http://penkovsky.com/project/hmep/</link>
+      <link>https://penkovsky.com/project/hmep/</link>
       <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
       
-      <guid>http://penkovsky.com/project/hmep/</guid>
+      <guid>https://penkovsky.com/project/hmep/</guid>
       <description>Multi Expression Programming is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.</description>
     </item>
     

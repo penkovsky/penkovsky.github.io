@@ -2,31 +2,31 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Publication_types on Bogdan Penkovsky, PhD</title>
-    <link>http://penkovsky.com/publication_types/</link>
+    <link>https://penkovsky.com/publication_types/</link>
     <description>Recent content in Publication_types on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
     <lastBuildDate>Sat, 18 Jan 2020 00:00:00 +0100</lastBuildDate>
     
-	<atom:link href="http://penkovsky.com/publication_types/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://penkovsky.com/publication_types/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>1</title>
-      <link>http://penkovsky.com/publication_types/1/</link>
+      <link>https://penkovsky.com/publication_types/1/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
       
-      <guid>http://penkovsky.com/publication_types/1/</guid>
+      <guid>https://penkovsky.com/publication_types/1/</guid>
       <description></description>
     </item>
     
     <item>
       <title>2</title>
-      <link>http://penkovsky.com/publication_types/2/</link>
+      <link>https://penkovsky.com/publication_types/2/</link>
       <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
       
-      <guid>http://penkovsky.com/publication_types/2/</guid>
+      <guid>https://penkovsky.com/publication_types/2/</guid>
       <description></description>
     </item>
     
