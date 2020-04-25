@@ -4,6 +4,22 @@
     
     <url>
     
+      <loc>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</loc>
+      <lastmod>2020-04-25T16:03:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/homelab/</loc>
+      <lastmod>2020-04-24T12:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/neural-networks/day6/</loc>
       <lastmod>2020-01-22T07:30:00+02:00</lastmod>
     </url>
@@ -300,6 +316,15 @@
     
     <url>
     
+      <loc>https://penkovsky.com/tags/diy/</loc>
+      <lastmod>2020-04-25T16:03:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/tags/deep-learning/</loc>
       <lastmod>2020-01-22T07:30:00+02:00</lastmod>
       <priority>0</priority>
@@ -347,6 +372,24 @@
     
       <loc>https://penkovsky.com/tags/rnn/</loc>
       <lastmod>2018-08-20T10:01:19+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/categories/raspberry-pi/</loc>
+      <lastmod>2020-04-25T16:03:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/tags/raspi/</loc>
+      <lastmod>2020-04-25T16:03:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
