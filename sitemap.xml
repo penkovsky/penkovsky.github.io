@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>https://penkovsky.com/project/optical-pow/</loc>
+      <lastmod>2020-05-03T08:20:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</loc>
       <lastmod>2020-04-25T16:03:00+02:00</lastmod>
     </url>
@@ -271,15 +279,6 @@
     
     <url>
     
-      <loc>https://penkovsky.com/tags/ai/</loc>
-      <lastmod>2020-01-22T00:00:00+02:00</lastmod>
-      <priority>0</priority>
-    </url>
-    
-  
-    
-    <url>
-    
       <loc>https://penkovsky.com/</loc>
       <lastmod>2019-08-20T00:00:00+02:00</lastmod>
       <priority>0</priority>
@@ -353,7 +352,7 @@
     <url>
     
       <loc>https://penkovsky.com/project/</loc>
-      <lastmod>2020-01-22T00:00:00+02:00</lastmod>
+      <lastmod>2020-05-03T08:20:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -407,7 +406,7 @@
     <url>
     
       <loc>https://penkovsky.com/tags/</loc>
-      <lastmod>2020-01-22T00:00:00+02:00</lastmod>
+      <lastmod>2018-10-30T11:00:10+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -425,7 +424,7 @@
     <url>
     
       <loc>https://penkovsky.com/tags/machine-learning/</loc>
-      <lastmod>2020-01-22T00:00:00+02:00</lastmod>
+      <lastmod>2018-08-20T10:01:19+02:00</lastmod>
       <priority>0</priority>
     </url>
     

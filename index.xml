@@ -11,6 +11,15 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Optical Proof of Work</title>
+      <link>https://penkovsky.com/project/optical-pow/</link>
+      <pubDate>Sun, 03 May 2020 08:20:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/project/optical-pow/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>Connecting To Raspberry Pi Over WiFi</title>
       <link>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</link>
       <pubDate>Sat, 25 Apr 2020 16:03:00 +0200</pubDate>
@@ -3998,18 +4007,6 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Towards Binarized Neural Networks Hardware</title>
-      <link>https://penkovsky.com/talk/icee2018/</link>
-      <pubDate>Sat, 24 Nov 2018 13:00:00 +0100</pubDate>
-      
-      <guid>https://penkovsky.com/talk/icee2018/</guid>
-      <description>&lt;p&gt;B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz&lt;/p&gt;
-
-&lt;p&gt;The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress. With new memories available, such as Resistive and Magnetoelectric Random Access Memory (RRAM and MRAM), thanks to the latest advancements in nanotechnology, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation. The simplicity and energy efficiency of BNNs makes them especially suitable for wearable devices, including but not limited to biomedical, healthcare, and sport application domains. In this talk, we discuss our latest BNN developments along with our vision towards the future of energy-efficient smart devices.&lt;/p&gt;
 </description>
     </item>
     

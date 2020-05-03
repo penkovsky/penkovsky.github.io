@@ -22,16 +22,6 @@
     </item>
     
     <item>
-      <title>Energy-efficient AI</title>
-      <link>https://penkovsky.com/project/edge-ai/</link>
-      <pubDate>Wed, 22 Jan 2020 00:00:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/project/edge-ai/</guid>
-      <description>We aim at bringing AI from data centers to the edge. Lower energy consumption will improve battery-powered devices autonomy. Moreover, no need for data transfer over the network will ultimately enhance privacy and provide better data security.
-To help you getting familiar with the subject, here is an introductory post on binarized neural networks.</description>
-    </item>
-    
-    <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
       <link>https://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>

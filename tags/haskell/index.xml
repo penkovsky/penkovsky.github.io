@@ -80,14 +80,5 @@ Below is an example of a dual-delay model taken from a recent publication. It is
 $$ \varepsilon \frac{dx(t)}{dt}+x(t)+\delta\cdot\intop_{t_{0}}^{t}x(\xi)d\xi = (1-\gamma)f\left(x_{\tau_{1}}\right)+\gamma f\left(x_{\tau_{2}}\right), $$</description>
     </item>
     
-    <item>
-      <title>HMEP</title>
-      <link>https://penkovsky.com/project/hmep/</link>
-      <pubDate>Sun, 15 Oct 2017 10:36:48 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/project/hmep/</guid>
-      <description>Multi Expression Programming is a genetic programming variant encoding multiple solutions in the same chromosome. Essentially, a chromosome is a computer program consisting of reusable subprograms. The remarkable thing about MEP algorithms is that they are programs actually writing programs.</description>
-    </item>
-    
   </channel>
 </rss>
