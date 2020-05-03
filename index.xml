@@ -32,9 +32,9 @@ variety of projects.  Sometimes you may wish to remotely control a Rasperry Pi
 that is in your local WiFi network. This is possible and even quite easy.&lt;/p&gt;
 
 &lt;p&gt;We will use a Secure Shell aka &lt;a href=&#34;https://en.wikipedia.org/wiki/Secure_Shell&#34;&gt;SSH&lt;/a&gt;
-to establish a remote connection.
-I assume that you have previously connected your
-Raspberry Pi board to a WiFi network. I also assume
+to establish a remote connection. I assume that you have
+&lt;a href=&#34;https://gist.github.com/masterdezign/5370fdfb113e84d39314f71281d3d7cb&#34;&gt;previously connected&lt;/a&gt;
+your Raspberry Pi board to a WiFi network. I also assume
 that you are connecting from a Linux or OS X machine.&lt;/p&gt;
 
 &lt;h2 id=&#34;step-1-enable-ssh-on-raspberry-pi&#34;&gt;Step 1: Enable SSH On Raspberry Pi&lt;/h2&gt;
