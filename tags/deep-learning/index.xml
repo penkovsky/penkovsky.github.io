@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
-    <lastBuildDate>Wed, 22 Jan 2020 07:30:00 +0200</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2020 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://penkovsky.com/tags/deep-learning/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
+      <link>https://penkovsky.com/publication/medical-bnn/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/medical-bnn/</guid>
+      <description>The results are very encouraging to reduce efficiently memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.</description>
+    </item>
     
     <item>
       <title>Day 6: Saving Energy with Binarized Neural Networks</title>
@@ -19,15 +28,6 @@
       
       <guid>https://penkovsky.com/neural-networks/day6/</guid>
       <description>Last week Apple has acquired XNOR.ai startup for amazing $200 million. The startup is known for promoting binarized neural network algorithms to save the energy and computational resources. That is definitely a way to go for mobile devices, and Apple just acknowledged that it is a great deal for them too. I feel now is a good time to explain what binarized neural networks are so that you can better appreciate their value for the industry.</description>
-    </item>
-    
-    <item>
-      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
-      <link>https://penkovsky.com/publication/medical-bnn/</link>
-      <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
-      
-      <guid>https://penkovsky.com/publication/medical-bnn/</guid>
-      <description>The results are very encouraging to reduce efficiently memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.</description>
     </item>
     
     <item>

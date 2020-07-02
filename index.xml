@@ -7,8 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
-    <lastBuildDate>Tue, 20 Aug 2019 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2020 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
+      <link>https://penkovsky.com/publication/medical-bnn/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/medical-bnn/</guid>
+      <description>&lt;p&gt;The results are very encouraging to reduce efficiently
+memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.&lt;/p&gt;
+</description>
+    </item>
     
     <item>
       <title>Optical Proof of Work</title>
@@ -479,17 +490,6 @@ and provide better data security.&lt;/p&gt;
 &lt;p&gt;To help you getting familiar with the subject,
 here is an &lt;a href=&#34;https://penkovsky.com/neural-networks/day6/&#34;&gt;introductory post&lt;/a&gt;
 on binarized neural networks.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
-      <link>https://penkovsky.com/publication/medical-bnn/</link>
-      <pubDate>Sat, 18 Jan 2020 00:00:00 +0100</pubDate>
-      
-      <guid>https://penkovsky.com/publication/medical-bnn/</guid>
-      <description>&lt;p&gt;The results are very encouraging to reduce efficiently
-memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.&lt;/p&gt;
 </description>
     </item>
     

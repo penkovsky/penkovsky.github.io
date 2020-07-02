@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>https://penkovsky.com/publication/medical-bnn/</loc>
+      <lastmod>2020-06-15T00:00:00+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/project/optical-pow/</loc>
       <lastmod>2020-05-03T08:20:00+02:00</lastmod>
     </url>
@@ -38,14 +46,6 @@
     
       <loc>https://penkovsky.com/project/edge-ai/</loc>
       <lastmod>2020-01-22T00:00:00+02:00</lastmod>
-    </url>
-    
-  
-    
-    <url>
-    
-      <loc>https://penkovsky.com/publication/medical-bnn/</loc>
-      <lastmod>2020-01-18T00:00:00+01:00</lastmod>
     </url>
     
   
@@ -253,7 +253,7 @@
     <url>
     
       <loc>https://penkovsky.com/publication_types/1/</loc>
-      <lastmod>2020-01-18T00:00:00+01:00</lastmod>
+      <lastmod>2020-06-15T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -280,7 +280,7 @@
     <url>
     
       <loc>https://penkovsky.com/</loc>
-      <lastmod>2019-08-20T00:00:00+02:00</lastmod>
+      <lastmod>2020-07-02T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -325,7 +325,7 @@
     <url>
     
       <loc>https://penkovsky.com/tags/deep-learning/</loc>
-      <lastmod>2020-01-22T07:30:00+02:00</lastmod>
+      <lastmod>2020-06-15T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -335,6 +335,15 @@
     
       <loc>https://penkovsky.com/tags/dissipative-solitons/</loc>
       <lastmod>2018-10-30T11:00:10+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/tags/eeg/</loc>
+      <lastmod>2020-06-15T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
@@ -361,7 +370,7 @@
     <url>
     
       <loc>https://penkovsky.com/publication_types/</loc>
-      <lastmod>2020-01-18T00:00:00+01:00</lastmod>
+      <lastmod>2020-06-15T00:00:00+02:00</lastmod>
       <priority>0</priority>
     </url>
     
