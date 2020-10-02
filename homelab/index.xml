@@ -13,15 +13,6 @@
     
     
     <item>
-      <title>The posts I have never written</title>
-      <link>https://penkovsky.com/homelab/ghosts/</link>
-      <pubDate>Sun, 19 Jul 2020 00:41:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/homelab/ghosts/</guid>
-      <description>Every time I embark on a new exciting project, I plan to write about it. Sometimes life gets in and my to do list only increases. Here is an (incomplete) list of posts I have started, but never finished. If you are interested in any of the topics, please send me an email and I&amp;#8217;ll make sure that it appears. By writing this list out I hope that I will be able to focus the most of my energy on a single project at a time.</description>
-    </item>
-    
-    <item>
       <title>Connecting To Raspberry Pi Over WiFi</title>
       <link>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</link>
       <pubDate>Sat, 25 Apr 2020 16:03:00 +0200</pubDate>
