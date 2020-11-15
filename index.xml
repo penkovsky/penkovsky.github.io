@@ -11,6 +11,432 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Making Your Self-Driving Robot</title>
+      <link>https://penkovsky.com/homelab/self-driving-robot/</link>
+      <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/homelab/self-driving-robot/</guid>
+      <description>
+
+&lt;p&gt;We will build an autonomous robot. Captured by robot&#39;s camera,
+video stream will be analyzed by a neural network. The network will be running
+on the onboard Raspberry Pi that will steer the robot.  Before you start with
+the project, I want you to answer two questions.  First, how
+everything will be attached mechanically?  Second, what will be the energy
+source?  While your autonomous robot can work from a cardboard box, having a
+mechanically sound chassis will greatly improve the result on the AI training
+stage. And the question of the energy source is essential for any autonomous
+robot. Ready to answer? Then let&#39;s go!&lt;/p&gt;
+
+&lt;h2 id=&#34;parts-and-tools&#34;&gt;Parts And Tools&lt;/h2&gt;
+
+&lt;p&gt;For this project I used:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Raspberry Pi 3B, 1 GB RAM (priceless 😉)&lt;/li&gt;
+&lt;li&gt;Power bank (for mobile phone)&lt;/li&gt;
+&lt;li&gt;USB to micro-USB cable&lt;/li&gt;
+&lt;li&gt;SD memory card class 10, at least 16 GB, $11.99&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B07DNYQ3PX&#34;&gt;Chassis + 2 DC motors&lt;/a&gt; $13.99&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B07QKCGX1Z&#34;&gt;Raspberry Pi camera&lt;/a&gt; $17.21&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B014KMHSW6&#34;&gt;L298N dual H-bridge controller&lt;/a&gt; $6.89&lt;/li&gt;
+&lt;li&gt;9 V battery (local store)&lt;/li&gt;
+&lt;li&gt;Jumper wires&lt;/li&gt;
+&lt;li&gt;Something to attach the components to chassis (I used rubber bands and adhesive putty)&lt;/li&gt;
+&lt;li&gt;Enclosure for the electronics&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Tools:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.amazon.fr/gp/product/B07N2QZPJP&#34;&gt;Soldering iron&lt;/a&gt; $20.07&lt;/li&gt;
+&lt;li&gt;A laptop with WiFi and SSH client (for robot training)&lt;/li&gt;
+&lt;li&gt;Multimeter (I didn&#39;t have one at hand, but it would have been useful)&lt;/li&gt;
+&lt;li&gt;Small screw driver&lt;/li&gt;
+&lt;li&gt;Wire strippers (optional)&lt;/li&gt;
+&lt;li&gt;Breadboard (optional)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Note that the prices may vary and they are here for indicative budget only.
+You can also order similar parts on AliExpress or other sites.
+The bottom line is that you can easily build a self-driving robot under $100.&lt;/p&gt;
+
+&lt;p&gt;I decided to power the Raspberry Pi board and motors separately so that the
+board will be reliably powered, even when the motors battery exhausts itself.
+The power bank for that purpose (originally, for a mobile phone) and a USB
+cable I already had at home, so they didn&#39;t count towards the budget.&lt;/p&gt;
+
+&lt;p&gt;I recommend at least 16 GB SD memory card so that you can install the Raspberry
+Pi OS and have some storage space for training data acquisition (images from
+the camera). Regarding camera itself, usually it is recommended to use a
+wide-angle camera. However, feel free to use any camera you have (as I did).&lt;/p&gt;
+
+&lt;p&gt;The H-bridge circuit is useful to allow DC motors to run forwards or backwards.
+Unlike some tutorials, mine H-bridge required between 7 V and 35 V driving
+voltage. To see if the circuit is working, check if the red LED is on.  With 6
+V driving voltage, it was still off. Therefore, I used a 9 V battery to power
+the motors.  Finally, using a laptop with Linux will make your life easier. But
+feel free to use whatever you have.&lt;/p&gt;
+
+&lt;h2 id=&#34;part-i-let-the-hack-begin&#34;&gt;Part I: Let The Hack Begin&lt;/h2&gt;
+
+&lt;h3 id=&#34;assemble-the-robot&#34;&gt;Assemble The Robot&lt;/h3&gt;
+
+&lt;h4 id=&#34;1-assemble-the-chassis&#34;&gt;1. Assemble the chassis.&lt;/h4&gt;
+
+&lt;p&gt;Attach the wheels, the ball caster, and the motors.
+Don&#39;t mind the battery holder, I didn&#39;t use it in the end.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/chassis.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h4 id=&#34;2-solder-wires-to-the-motors&#34;&gt;2. Solder wires to the motors.&lt;/h4&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/solder-wires.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h4 id=&#34;3-connect-motors-to-the-h-bridge-controller&#34;&gt;3. Connect motors to the H-bridge controller.&lt;/h4&gt;
+
+&lt;p&gt;Here you will need a small screw driver.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge1.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h4 id=&#34;4-connect-the-motors-controller-to-the-raspberry-pi&#34;&gt;4. Connect the motors controller to the Raspberry Pi.&lt;/h4&gt;
+
+&lt;p&gt;Here I use a breadboard in-between, but feel free to connect the jumper wires
+directly. You can choose any free (non-specialized) GPIOs pins.
+Please refer to the board&#39;s pinout.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/pinout.png&#34; alt=&#34;Raspberry Pi pinout. Source: [pinout.xyz](https://pinout.xyz/).&#34; width=&#34;500&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Raspberry Pi pinout. Source: &lt;a href=&#34;https://pinout.xyz/&#34;&gt;pinout.xyz&lt;/a&gt;.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;For instance, I have chosen pins &lt;code&gt;15&lt;/code&gt;, &lt;code&gt;11&lt;/code&gt;, &lt;code&gt;13&lt;/code&gt;, and &lt;code&gt;31&lt;/code&gt;. Note those
+are Raspberry Pi pins, not GPIO numbers.  For example, the above pins
+correspond to GPIO 22, GPIO 17, GPIO 27, and GPIO 6.  Remember those magic
+numbers.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Please do not confuse pins and GPIO numbers.
+The &lt;code&gt;gpiozero&lt;/code&gt; Python module refers to GPIO numbers,
+whereas the software that we will use later requires Raspberry Pi pins.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;To determine the order in which you connect the jumper wires to the controller
+you may want to check the controller&#39;s data sheet. Or determine the pins
+experimentally, testing the digital inputs in isolation. There are four
+wires: two controlling the left wheel (&lt;code&gt;IN1&lt;/code&gt; and &lt;code&gt;IN2&lt;/code&gt;) and
+two for the right wheel control (&lt;code&gt;IN3&lt;/code&gt; and &lt;code&gt;IN4&lt;/code&gt;).
+For example, when both &lt;code&gt;IN1&lt;/code&gt; and &lt;code&gt;IN3&lt;/code&gt; digital signals are high,
+the robot will move forward.&lt;/p&gt;
+
+&lt;p&gt;Note that you will have to connect the ground (GND) of the controller board and
+the ground of Raspberry.  Otherwise, your controller may not be able to
+interpret the digital signal it receives from the Raspberry.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge2.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h4 id=&#34;5-power-up-the-motors-controller-with-a-9-v-battery&#34;&gt;5. Power up the motors controller with a 9 V battery.&lt;/h4&gt;
+
+&lt;p&gt;I didn&#39;t have a battery connector at hand, so I used a chewing gum to
+attach the wires to the battery.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge3.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h4 id=&#34;6-power-up-the-raspberry-pi&#34;&gt;6. Power up the Raspberry Pi.&lt;/h4&gt;
+
+&lt;p&gt;Finally, power up the Raspberry Pi with a power bank using a small USB cable.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;You may want to assemble the modules neatly so that the robot is actually
+autonomous. Make sure that the hardware is fixed well and will not move
+during the ride.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/proto.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;sanity-check&#34;&gt;Sanity Check&lt;/h3&gt;
+
+&lt;p&gt;Let us test what robot we have built so far! First, we connect to the
+Raspberry Pi. This is done via SSH.
+&lt;a href=&#34;https://gist.github.com/masterdezign/5370fdfb113e84d39314f71281d3d7cb&#34;&gt;Setup Raspberry Pi WiFi connection&lt;/a&gt;
+and &lt;a href=&#34;https://penkovsky.com/homelab/raspi-ssh-over-wifi/&#34;&gt;connect to your board&lt;/a&gt;.
+Now, we can play with the robot interactively.
+Being connected to the Raspberry Pi via SSH, type
+&lt;code&gt;python&lt;/code&gt; to open up the Python interpreter.
+Then define your robot object&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gpiozero &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Robot
+robot &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Robot(left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;22&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;17&lt;/span&gt;), right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;27&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note the GPIO numbers we have discussed before.
+Those are your connections to the bridge controller.
+To make the robot do something&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here &lt;code&gt;0.4&lt;/code&gt; is the speed with which to rotate the left wheel.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/test1.gif&#34; width=&#34;300&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;To stop the robot, issue&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Type &lt;code&gt;exit()&lt;/code&gt; (or press Ctrl-D) to exit the Python&#39;s interpreter&#39;s shell.  In
+your favourite text editor you can create a sequence of actions to pre-program
+your robot.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gpiozero &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Robot
+&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; time &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sleep
+robot &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Robot(left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;22&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;17&lt;/span&gt;), right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;27&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;))
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Left&amp;#34;&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
+sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Right&amp;#34;&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;right(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
+sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Forward&amp;#34;&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;forward(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
+sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
+robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here we ask the robot to rotate left for a second,
+then rotate right for a second, and finally, move
+forward for three seconds.
+Save it to a file on your Raspberry Pi, e.g. &lt;code&gt;robo.py&lt;/code&gt;,
+and execute&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;python robo.py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If we have missed something, here is an official Raspberry Pi
+&lt;a href=&#34;https://projects.raspberrypi.org/en/projects/build-a-buggy/1&#34;&gt;tutorial&lt;/a&gt; to assist with assembling your robot.
+Before you continue, now is a good time to
+&lt;a href=&#34;https://www.dexterindustries.com/howto/installing-the-raspberry-pi-camera/&#34;&gt;attach the camera&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;part-ii-remote-control&#34;&gt;Part II: Remote Control&lt;/h2&gt;
+
+&lt;p&gt;Now that the robot is based on the Raspberry Pi,
+we can do amazing things with it.
+For example, we can benefit from the
+&lt;a href=&#34;https://github.com/autorope/donkeycar&#34;&gt;DonkeyCar&lt;/a&gt;,
+an open source platform to build a small scale self driving car.
+You will have to &lt;a href=&#34;http://docs.donkeycar.com/guide/install_software/&#34;&gt;follow the instructions&lt;/a&gt;
+to install the necessary software on your Raspberry Pi.&lt;/p&gt;
+
+&lt;p&gt;As soon as you finish with installation,
+&lt;a href=&#34;http://docs.donkeycar.com/guide/create_application/&#34;&gt;create your Donkeycar App&lt;/a&gt;. Connect to your Pi with SSH and type&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;donkey createcar --path ~/mycar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then check the newly created project in &lt;code&gt;~/mycar&lt;/code&gt;. Thankfully, Donkey
+supports our two-wheel robot almost out of the box. The remaining bits are to
+edit &lt;code&gt;config.py&lt;/code&gt;. Set&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;DRIVE_TRAIN_TYPE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;DC_TWO_WHEEL&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This will select the appropriate driving model.
+Finally, set the pins as discussed before:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;HBRIDGE_PIN_LEFT_FWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;
+HBRIDGE_PIN_LEFT_BWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;
+HBRIDGE_PIN_RIGHT_FWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;13&lt;/span&gt;
+HBRIDGE_PIN_RIGHT_BWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;31&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Now, test if everything was successful.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cd ~/mycar
+python manage.py drive&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;In under a minute, the Donkey server should be up
+and running. As a result, you will be able
+to access a control web interface
+using &lt;code&gt;http://&amp;lt;your car&#39;s IP&amp;gt;:8887&lt;/code&gt;.
+This will allow you to remotely control the car
+and capture the video stream with its camera.
+Like in this video.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/oz7arGJ-uvM&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;h2 id=&#34;part-iii-making-it-self-driving&#34;&gt;Part III: Making It Self-Driving&lt;/h2&gt;
+
+&lt;p&gt;Being able to control your car remotely is useful
+to collect the training data for the neural network.
+But first we may want to set up a driving track like this.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/training.jpg&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Now, drive several laps on your track. The captured image data are automatically
+stored in &lt;code&gt;~/mycar/data&lt;/code&gt;.
+Having collected a sufficient amount of data
+we pass to the driving model (neural network) training.
+Here is how the world looks like from the car&#39;s viewpoint.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/1L9VchNi3B0&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;Green vector illustrates human-driver commands
+and the blue one is the model after training.&lt;/p&gt;
+
+&lt;p&gt;You want to revisit &lt;code&gt;~/mycar/config.py&lt;/code&gt; to set the neural network parameters,
+e.g. &lt;code&gt;LEARNING_RATE&lt;/code&gt; and &lt;code&gt;BATCH_SIZE&lt;/code&gt;.
+The key training command is&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;python manage.py train --type linear --model models/mypilot.h5&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;You can experiment with any of the driving models:
+&lt;code&gt;linear&lt;/code&gt;, &lt;code&gt;categorical&lt;/code&gt;, &lt;code&gt;rnn&lt;/code&gt;, &lt;code&gt;imu&lt;/code&gt;, &lt;code&gt;behavior&lt;/code&gt;, etc.
+More housekeeping details can be found in
+&lt;a href=&#34;https://colab.research.google.com/drive/1lkQUvJ2Quu0m_LNLJvSicl9zDgCf4Qu6?usp=sharing&#34;&gt;this notebook&lt;/a&gt; adapted for TensorFlow 2.
+The original version can be found
+&lt;a href=&#34;http://github.com/robocarstore/donkey-car-training-on-google-colab/blob/master/Donkey_Car_Training_using_Google_Colab.ipynb&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Et voilà&lt;/em&gt;, your self-driving car is ready!&lt;/p&gt;
+
+&lt;p&gt;Now, run the auto-pilot&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;screen
+cd ~/mycar
+python manage.py drive --model models/mypilot.h5&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/k36-46wPwvA&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;&lt;p&gt;
+You can learn more about neural networks from
+&lt;a href=&#34;https://penkovsky.com/neural-networks/&#34;&gt;my tutorials&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;what-could-be-done-better&#34;&gt;What Could Be Done Better&lt;/h2&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;The mechanical part could be better. After I have mounted the
+acrylic chasssis, I have realized that the motors do not hold firmly.
+Moreover, there was a friction between one of the wheels and chassis.
+Therefore, I had to programmatically adjust the power
+to balance the wheels.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Moreover, I believe that having a streering wheel motor
+would be much more efficient, instead of
+&lt;a href=&#34;https://www.societyofrobots.com/programming_differentialdrive.shtml&#34;&gt;differential drive&lt;/a&gt;, as they call this construction in
+the robotics community. To test in the future.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Likewise, it is important to keep your camera in the same position
+during training and during self-piloting. Also make sure
+that the battery is always charged.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;It would be nice to have a 9 V battery connector, instead of a piece of
+putty. As simple as that.&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/raspi/robo.jpg&#34; alt=&#34;A robot from 70s I have seen at Musée des Arts et Métiers in Paris. The robot inspired me for this project.&#34; width=&#34;590&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    A robot from 70s I have seen at Musée des Arts et Métiers in Paris. The robot inspired me for this project.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;I would like to thank the folks from the Integnano group who
+gave me a Raspberry Pi as a birthday gift.
+You are amazing!&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;As always, if you have any questions, remarks, or spotted any typos please send me
+a message.&lt;/p&gt;
+
+&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://projects.raspberrypi.org/en/projects/build-a-buggy/1&#34;&gt;Build a robot buggy tutorial&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.societyofrobots.com/programming_differentialdrive.shtml&#34;&gt;Differential drive&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://donkeycar.com&#34;&gt;Donkey Car platform&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/smellslikeml/LitterBug_donkey/wiki&#34;&gt;LitterBug donkey&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=4fXbDf_QWM4&amp;amp;feature=emb_logo&#34;&gt;Driving Tips to Train your Autonomous End-to-End NN Driver&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+    </item>
+    
+    <item>
       <title>In-Memory Resistive RAM Implementation of Binarized Neural Networks for Medical Applications</title>
       <link>https://penkovsky.com/publication/medical-bnn/</link>
       <pubDate>Mon, 15 Jun 2020 00:00:00 +0200</pubDate>
@@ -3548,463 +3974,6 @@ MathJax.Hub.Config({
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-3&#34;&gt;To put simply, &lt;code&gt;a `f` b&lt;/code&gt; is the same as &lt;code&gt;f a b&lt;/code&gt;, or $f(a,b)$.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Day 1: Learning Neural Networks The Hard Way</title>
-      <link>https://penkovsky.com/neural-networks/day1/</link>
-      <pubDate>Tue, 11 Dec 2018 16:22:28 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/neural-networks/day1/</guid>
-      <description>
-
-&lt;p&gt;Neural networks is a topic that recurrently appears throughout my life.
-Once, when I was a BSc student,
-I got obsessed with the idea to build an &amp;quot;intelligent&amp;quot; machine&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
-I spent a couple of sleepless nights thinking. I read a few essays
-shedding some light on this philosophical subject,
-among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
-As a result, I came across neural networks idea.
-It was 2010, and &lt;em&gt;deep learning&lt;/em&gt; was not nearly as popular as
-it is now&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
-Moreover, no one made much effort linking to neural networks
-in calculus or linear algebra curricula. Even folks doing classical
-optimization and statistics sometimes
-seemed puzzled when hearing about neural nets.
-Some year later, I have implemented
-a &lt;a href=&#34;https://bitbucket.org/masterdezign/labNN&#34;&gt;simple neural net&lt;/a&gt; with sigmoid
-activations as a part of a decision-making course.
-At the time I realized that existing state of our knowledge
-was still lacking to really build &amp;quot;thinking computers&amp;quot;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-4&#34;&gt;&lt;a href=&#34;#fn:fn-4&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;It was 2012, the conference in Crimea, Ukraine where
-I attended a brilliant talk by Prof. Laurent Larger.
-He explained how to build a high-speed hardware for speech recognition
-using a laser. The talk really inspired me, and a year later
-I have started a PhD with an aim to develop
-&lt;em&gt;reservoir computing&lt;/em&gt;, recurrent neural networks implemented
-directly in hardware.
-Finally, now I am using deep neural networks as a part of my
-job.&lt;/p&gt;
-
-&lt;p&gt;In this series of posts I will highlight some
-curious details of problem solving with neural networks.
-I am pretty much against duplicate efforts,
-therefore I would avoid repeating aspects
-described many times somewhere else.
-For those who are completely new to
-the subject, instead of introducing neural networks
-all over again I would refer to Chapter 1.2
-of my &lt;a href=&#34;https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf&#34;&gt;PhD thesis&lt;/a&gt;.
-Here I will only summarize that neural networks are
-to some extent inspired by biological neurons.
-Similarly to its biological counterpart,
-artificial neuron receives many inputs, performs
-a nonlinear transformation, and produces
-an output. The equation below formalizes this kind of behavior:&lt;/p&gt;
-
-&lt;p&gt;$$
-\begin{equation}
-y = f(w_1 x_1 + w_2 x_2 + \dots + w_N x_N) = f(\sum_i w_i x_i),
-\end{equation}
-$$&lt;/p&gt;
-
-&lt;p&gt;where $N$ is the number of inputs $x_i$,
-$w_i$ are synaptic weights&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-5&#34;&gt;&lt;a href=&#34;#fn:fn-5&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;,
-and $y$ is the result. Surprising as it may appear,
-in a modern neural network
-$f$ can be practically any nonlinear function.
-This nonlinear function is often called an &lt;em&gt;activation function&lt;/em&gt;.
-Congratulations, we have arrived at a
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Perceptron&#34;&gt;neural network from 1950-s&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;To continue reading
-this article, some mathematical background is useful, but not mandatory.
-Anyone can develop an intuition about neural networks!&lt;/p&gt;
-
-&lt;h2 id=&#34;a-word-on-haskell&#34;&gt;A Word On Haskell&lt;/h2&gt;
-
-&lt;p&gt;This series of posts practically illustrate all the concepts
-in Haskell programming language.
-To motivate you, here are some Q &amp;amp; A you always wanted to know.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az&#34;&gt;Q:&lt;/a&gt;
-Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t&#34;&gt;A:&lt;/a&gt;&lt;/strong&gt;
-Neural networks are very &amp;quot;function objects&amp;quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx&#34;&gt;Q:&lt;/a&gt;
-As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; The benefits of using Haskell:&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;It is much easier to reason about what your program is doing.&lt;/li&gt;
-&lt;li&gt;Great when refactoring existing code base.&lt;/li&gt;
-&lt;li&gt;Haskell shapes your thinking towards problem solving
-in a pragmatic way.&lt;/li&gt;
-&lt;li&gt;Haskell programs are &lt;a href=&#34;https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast&#34;&gt;fast&lt;/a&gt;.&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;p&gt;&lt;strong&gt;&lt;a href=&#34;https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9&#34;&gt;Q:&lt;/a&gt;
-I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; Thank you. I find Haskell to be very intuitive
-when explaining neural nets.&lt;/p&gt;
-
-&lt;h2 id=&#34;gradient-descent-a-cs-freshman-year&#34;&gt;Gradient Descent: A CS Freshman Year&lt;/h2&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/f/ff/Gradient_descent.svg&#34; width=&#34;590px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Gradient Descent. &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Gradient_descent.svg&#34;&gt;Image credit&lt;/a&gt;&lt;/h4&gt;
-  
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;The very basic idea behind neural networks
-training and deep learning is a local optimization method known
-as &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient_descent&#34;&gt;&lt;em&gt;gradient descent&lt;/em&gt;&lt;/a&gt;.
-For those who have hard time remembering their freshman year,
-just watch an &lt;a href=&#34;https://www.youtube.com/watch?v=jc2IthslyzM&#34;&gt;introductory video&lt;/a&gt;
-explaining the idea.&lt;/p&gt;
-
-&lt;p&gt;How does a concept as simple as gradient descent work for a neural network?
-Well, a neural network is only a function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6&#34;&gt;&lt;a href=&#34;#fn:fn-6&#34;&gt;6&lt;/a&gt;&lt;/sup&gt;, mapping an input to some output.
-By comparing the neural network&#39;s output to some desired output, one can obtain
-another function known as an &lt;em&gt;error function&lt;/em&gt;. This error function
-has a certain &lt;em&gt;error landscape&lt;/em&gt;, like in the mountains.
-By using gradient descent, we modify our neural network
-in such a way that we are descending this landscape.
-Therefore, we aim at finding an error minimum.
-The key concept of the optimization method is that the
-error gradients give us a direction in which to change the neural network.
-In a similar way one would be able to descend a hill
-covered with a thick fog. In both cases only a local gradient (slope)
-is available.&lt;/p&gt;
-
-&lt;p&gt;Gradient descent can be described by a formula:&lt;/p&gt;
-
-&lt;p&gt;$$\begin{equation}
-x_{n+1} = x_n - \gamma \cdot \nabla F(x_n),
-\end{equation}
-$$&lt;/p&gt;
-
-&lt;p&gt;where constant $\gamma$ is what is referred to in deep learning as
-the &lt;em&gt;learning rate&lt;/em&gt;, i.e. the amount of learning per iteration $n$.
-In the simplest case, $x$ is a scalar variable. The gradient descent
-method can be implemented in few lines of code.
-The Haskell &lt;a href=&#34;https://repl.it/@masterdezign/Grad&#34;&gt;code snippet&lt;/a&gt;
-below is interactive. Press the green triangle
-button to Run the code.&lt;/p&gt;
-
-&lt;iframe height=&#34;400px&#34; width=&#34;100%&#34; src=&#34;https://repl.it/@penkovsky/Grad?lite=true&#34; scrolling=&#34;no&#34; frameborder=&#34;no&#34; allowtransparency=&#34;true&#34; allowfullscreen=&#34;true&#34; sandbox=&#34;allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals&#34;&gt;&lt;/iframe&gt;
-
-&lt;p&gt;That outputs the following sequence:
-$0.0,2.4,2.88,2.976,2.9952,2.99904,2.999808,2.9999616,\dots$
-Indeed, the value minimizing function $f(x)$ is $3$,
-i.e. $\min f(x) = f(3) = (x-3)^2 = 0$.
-And the sequence is gradually converging towards that number.
-Let us look more carefully what does the code above do.&lt;/p&gt;
-
-&lt;p&gt;Lines 1-3: We define the gradient descent method, which
-iteratively applies the function &lt;code&gt;step&lt;/code&gt; implementing equation (2).
-We provide the intermediate results taking the first &lt;code&gt;iterN&lt;/code&gt; values.&lt;/p&gt;
-
-&lt;p&gt;Line 5: Suppose, we would like to optimize a function $f(x) = (x-3)^2$.
-Its gradient &lt;code&gt;gradF_test&lt;/code&gt; is then $\nabla f(x) = 2\cdot(x-3)$.&lt;/p&gt;
-
-&lt;p&gt;Lines 7-10: Finally, we run our gradient descent using
-learning rate $\gamma = 0.4$.&lt;/p&gt;
-
-&lt;p&gt;It is crucial to realize that the value of $\gamma$ affects
-the convergence.
-When $\gamma$ is too small, the algorithm will take many more
-iterations to converge, however,
-when $\gamma$ is too large the algorithm will never converge.
-At the moment, I am not aware of a good way how to determine
-the best $\gamma$ for a given problem. Therefore, often different
-$\gamma$ values have to be tried. Feel free to modify the code above
-and see what comes out! For example, you can try out different
-values of &lt;code&gt;gamma&lt;/code&gt;, such as &lt;code&gt;gamma = 0.01&lt;/code&gt;, &lt;code&gt;gamma = 0.1&lt;/code&gt;, &lt;code&gt;gamma = 1.1&lt;/code&gt;.
-The method is generalizable to $N$ dimensions. Essentially, we would
-replace the &lt;code&gt;gradF_test&lt;/code&gt; function with the one operating on vectors
-rather than scalars.&lt;/p&gt;
-
-&lt;h2 id=&#34;neural-network-ingredients-for-classification&#34;&gt;Neural Network Ingredients For Classification&lt;/h2&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://upload.wikimedia.org/wikipedia/commons/4/49/Iris_germanica_%28Purple_bearded_Iris%29%2C_Wakehurst_Place%2C_UK_-_Diliff.jpg&#34; width=&#34;250px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Iris plant. Image credit &lt;a href=&#34;https://commons.wikimedia.org/wiki/File:Iris_germanica_(Purple_bearded_Iris),_Wakehurst_Place,_UK_-_Diliff.jpg&#34;&gt;David Iliff&lt;/a&gt; &lt;a href=&#34;https://creativecommons.org/licenses/by-sa/3.0/&#34;&gt;(CC-BY-SA 3.0)&lt;/a&gt;&lt;/h4&gt;
-  
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;Now that we realize how the gradient descent works, we may want to
-train a moderately useful network. Let&#39;s say we want to perform
-&lt;em&gt;Iris&lt;/em&gt; flower classification using four distinctive features&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;:
-sepal length, sepal width, petal length, petal width.
-There are three classes of flowers we want to be able to recognize:
-&lt;em&gt;Setosa&lt;/em&gt;, &lt;em&gt;Versicolour&lt;/em&gt;, and &lt;em&gt;Virginica&lt;/em&gt;.
-Now, there is a problem: how do we encode those three
-classes so that our neural network can handle them?&lt;/p&gt;
-
-&lt;h3 id=&#34;naive-solution-and-why-it-does-not-work&#34;&gt;Naive Solution And Why It Does Not Work&lt;/h3&gt;
-
-&lt;p&gt;The most simple solution to indicate each species
-would be using &lt;a href=&#34;https://en.wikipedia.org/wiki/Natural_number&#34;&gt;natural numbers&lt;/a&gt;.
-For instance, &lt;em&gt;Iris Setosa&lt;/em&gt; can be encoded as &lt;code&gt;1&lt;/code&gt;,
-&lt;em&gt;Versicolour&lt;/em&gt;, as &lt;code&gt;2&lt;/code&gt;, and &lt;em&gt;Virginica&lt;/em&gt;, as &lt;code&gt;3&lt;/code&gt;.
-There is, however, a problem with this kind of encoding:
-we impose a &lt;em&gt;bias&lt;/em&gt;. First, by encoding those classes
-as numbers, we impose a &lt;em&gt;linear order&lt;/em&gt; over those three
-classes. It means, we start our count with &lt;em&gt;Setosa&lt;/em&gt;, then, &lt;em&gt;Versicolour&lt;/em&gt;,
-and then we arrive at &lt;em&gt;Virginica&lt;/em&gt;. However, in reality it doesn&#39;t really matter
-if we end with &lt;em&gt;Virginica&lt;/em&gt; or &lt;em&gt;Vernicolour&lt;/em&gt;.
-Second, we also assume that the distance between
-&lt;em&gt;Virginica&lt;/em&gt; and &lt;em&gt;Setosa&lt;/em&gt; &lt;code&gt;3 - 1 = 2&lt;/code&gt; is larger than between
-&lt;em&gt;Virginica&lt;/em&gt; and &lt;em&gt;Versicolor&lt;/em&gt; &lt;code&gt;3 - 2 = 1&lt;/code&gt;,
-which is a priory wrong.&lt;/p&gt;
-
-&lt;h3 id=&#34;one-hot-encoding&#34;&gt;One-Hot Encoding&lt;/h3&gt;
-
-&lt;p&gt;So which kind of encoding do we need?
-First, we want not to impose any restriction on ordering and second,
-we want the distances between classes to be equal.
-Therefore, we would prefer encoding each class to be orthogonal,
-i.e. independent from the other two.
-That becomes possible if we use vectors of three dimensions
-(as there are three classes).
-Therefore, now &lt;em&gt;Setosa&lt;/em&gt; class is encoded as $[1, 0, 0]$,
-&lt;em&gt;Versicolour&lt;/em&gt;, as $[0, 1, 0]$, and &lt;em&gt;Virginica&lt;/em&gt; as $[0, 0, 1]$.
-The &lt;a href=&#34;https://en.wikipedia.org/wiki/Euclidean_distance&#34;&gt;Euclidean distance&lt;/a&gt;
-between any pair of classes is equal to $\sqrt 2$.
-&lt;strong&gt;Update&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-6a&#34;&gt;&lt;a href=&#34;#fn:fn-6a&#34;&gt;8&lt;/a&gt;&lt;/sup&gt;&lt;/strong&gt;: For example, the distance between
-&lt;em&gt;Setosa&lt;/em&gt; and &lt;em&gt;Versicolour&lt;/em&gt; is computed as&lt;/p&gt;
-
-&lt;p&gt;$$\sqrt{(1-0)^2 + (0-1)^2 + (0-0)^2}=\sqrt{2}.$$&lt;/p&gt;
-
-&lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting It All Together&lt;/h3&gt;
-
-&lt;p&gt;Now that we are familiar with basic neural networks and gradient descent
-and also have some data to play with&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-7&#34;&gt;&lt;a href=&#34;#fn:fn-7&#34;&gt;7&lt;/a&gt;&lt;/sup&gt;, let the fun begin!&lt;/p&gt;
-
-&lt;p&gt;First, we create a network of three neurons.
-To do that, we generalize formula (1):&lt;/p&gt;
-
-&lt;p&gt;$$\begin{equation}
-y_{i}=f (\sum_k w_{ik} x_k),
-\end{equation}
-$$
-where $(x_1, x_2, x_3, x_4) = \mathbf{x}$ is a 4D input vector,
-$w_{ik} \in \mathbf{W}, i=1 \dots 3, k=1 \dots 4$ is synaptic weights matrix,
-and result $(y_1, y_2, y_3) = \mathbf{y}$ is a 3D vector.
-Generally speaking, we perform a matrix-vector multiplication
-with a subsequent element-wise activation:&lt;/p&gt;
-
-&lt;p&gt;$$\begin{equation}
-\mathbf y = f (\mathbf {W x}).
-\end{equation}
-$$&lt;/p&gt;
-
-&lt;p&gt;As a nonlinear activation function $f$ we will use the &lt;em&gt;sigmoid&lt;/em&gt; function&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-8&#34;&gt;&lt;a href=&#34;#fn:fn-8&#34;&gt;9&lt;/a&gt;&lt;/sup&gt;
-$\sigma(x) = [1 + e^{-x}]^{-1}$.
-We will exploit &lt;a href=&#34;http://hackage.haskell.org/package/hmatrix&#34;&gt;&lt;code&gt;hmatrix&lt;/code&gt;&lt;/a&gt;
-Haskell library for linear algebra operations
-such as matrix multiplication. With &lt;code&gt;hmatrix&lt;/code&gt;,
-Equation (4) can be written as:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;import&lt;/span&gt; Numeric.LinearAlgebra &lt;span style=&#34;color:#66d9ef&#34;&gt;as&lt;/span&gt; LA
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;recip&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;where &lt;code&gt;&amp;lt;&amp;gt;&lt;/code&gt; denotes the matrix product function from &lt;code&gt;LA&lt;/code&gt; module.
-Note that &lt;code&gt;x&lt;/code&gt; can be a vector, but it can be also a dataset matrix.
-In the latter case, &lt;code&gt;forward&lt;/code&gt; will transform our entire dataset.
-Notice that we provide not only the result of our computation &lt;code&gt;y&lt;/code&gt;,
-but also an intermediate step &lt;code&gt;h&lt;/code&gt; since it will be later
-reused for &lt;code&gt;w&lt;/code&gt; gradient computation.&lt;/p&gt;
-
-&lt;p&gt;Each neuron $y_i$
-is supposed to fire when it &#39;thinks&#39; that it has detected one of the three
-species. E.g. when we have an output [0.89, 0.1, 0.2], we would
-assume that the fist neuron is the most &#39;confident&#39;,
-i.e. we interpret the result as &lt;em&gt;Setosa&lt;/em&gt;.
-In other words, this output is treated as similar to [1, 0, 0].
-As you can see, the maximal
-element was set to one and others, to zero.
-This is a so-called &#39;winner takes all&#39; rule.&lt;/p&gt;
-
-&lt;p&gt;Before training the neural network, we need some
-measure of error or &lt;em&gt;loss function&lt;/em&gt; to minimize.
-For instance, we can use
-the &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer&#34;&gt;Euclidean loss&lt;/a&gt;
-$\text{loss} = \sum_i (\hat y_i - y_i)^2$
-where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
-dataset:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;loss&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sumElements&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;For the sake of gradient descend illustration,
-we will reuse the &lt;code&gt;descend&lt;/code&gt; function defined above.
-Now, we have to specify the gradient function for our neural
-network equation (4).
-We use what is called a &lt;em&gt;backpropagation&lt;/em&gt;
-or shortly &lt;em&gt;backprop&lt;/em&gt; method, which is essentially a
-&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;result&lt;/a&gt;
-of the &lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34;&gt;chain rule&lt;/a&gt; and is illustrated
-for an individual neuron in the figure below&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-10&#34;&gt;&lt;a href=&#34;#fn:fn-10&#34;&gt;10&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/backprop.png&#34; alt=&#34;First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$&#34; width=&#34;570px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Backpropation for a single neuron.&lt;/h4&gt;
-  &lt;p&gt;
-    First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;Now we can calculate the weights gradient &lt;code&gt;dW&lt;/code&gt; using the &lt;em&gt;backprop&lt;/em&gt; method from above:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;grad&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    [&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y_pred&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;dE&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y_pred&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dE&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code&gt;linear&#39;&lt;/code&gt;, &lt;code&gt;sigmoid&#39;&lt;/code&gt;, &lt;code&gt;loss&#39;&lt;/code&gt;
-are gradients of linear operation (multiplication),
-sigmoid activation $\sigma(x)$,
-and the loss function.
-Note that by operating on matrices rather than scalar values
-we calculate the gradients vector &lt;code&gt;dW&lt;/code&gt;
-denoting every synaptic weight gradient $dw_i$.
-Below are those &amp;quot;&lt;a href=&#34;https://en.wikipedia.org/wiki/Array_programming&#34;&gt;&lt;em&gt;vectorized&lt;/em&gt;&lt;/a&gt;&amp;quot;
-functions definitions in Haskell using &lt;code&gt;hmatrix&lt;/code&gt; library&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-9&#34;&gt;&lt;a href=&#34;#fn:fn-9&#34;&gt;11&lt;/a&gt;&lt;/sup&gt;:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;tr&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dy&lt;/span&gt;)
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromIntegral&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;ones&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;rows&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&amp;lt;&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;cols&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;repeat&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt;
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;diff&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;To test our network, we download the dataset &lt;a href=&#34;https://www.kaggle.com/masterdezign/iris-with-onehotencoded-targets&#34;&gt;here&lt;/a&gt;
-(there are two files: x.dat and y.dat) and the code
-&lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34;&gt;here&lt;/a&gt;.
-As instructed in the comments,
-we run our program:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ stack --resolver lts-10.6 --install-ghc runghc --package hmatrix-0.18.2.0 Iris.hs
-Initial loss &lt;span style=&#34;color:#ae81ff&#34;&gt;169&lt;/span&gt;.33744797846379
-Loss after training &lt;span style=&#34;color:#ae81ff&#34;&gt;61&lt;/span&gt;.41242708538934
-Some predictions by an untrained network:
-&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;.797633210095851e-2, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15127581829026382, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9482351750129188
-,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.11279346747947296,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1733431584272155, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9502442520696124
-,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.10592462402394615, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.17057190568339017, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9367875655363787
-,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.10167941966201806, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.20651101803783944, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.9300343579182122
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;.328154248684484e-2, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15568011758813116,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.940816298954776 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-Some predictions by a trained network:
-&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6989749292681016, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.14916793398555747,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1442697900857393
-,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.678406436711954,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.1691062984304366,  &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.2052955124240905
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6842327447503195, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.16782087736820395, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.16721778476233148
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6262988163006756, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.19656943129188192, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.17521133197774072
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.6905553549763312, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.15299944611286123, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.12910826989854146 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;
-Targets
-&lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;&amp;gt;&amp;lt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-&lt;span style=&#34;color:#f92672&#34;&gt;[&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0
-, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;.0 &lt;span style=&#34;color:#f92672&#34;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;That&#39;s all for today. Please feel free to play with the &lt;a href=&#34;https://gist.github.com/masterdezign/34ab610715df7dbf504cbe7cacdba68e&#34;&gt;code&lt;/a&gt;.
-&lt;strong&gt;Hint&lt;/strong&gt;: you may have noticed that &lt;code&gt;grad&lt;/code&gt; calls &lt;code&gt;sigmoid&lt;/code&gt; twice on the same
-data: once in &lt;code&gt;forward&lt;/code&gt; and once in &lt;code&gt;sigmoid&#39;&lt;/code&gt;. Try optimizing
-the code to avoid this redundancy.&lt;/p&gt;
-
-&lt;p&gt;As soon as you understand the basics of neural networks,
-make sure you continue to &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2&lt;/a&gt;.
-In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;next post&lt;/a&gt; you will learn how to make your neural network operational.
-First of all, we will highlight the importance of multilayer structure.
-We will also show that nonlinear activations are crucial.
-Finally, we will improve neural network training
-and discuss weights initialization.&lt;/p&gt;
-
-&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
-});
-&lt;/script&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;There even exists a &lt;a href=&#34;https://en.wikipedia.org/wiki/Artificial_general_intelligence&#34;&gt;term&lt;/a&gt; describing exactly what I dreamed to achieve.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-2&#34;&gt;For instance, check &lt;a href=&#34;https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt&#34;&gt;Why people think computers can&#39;t&lt;/a&gt;.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-3&#34;&gt;With Google Trends in hand, we can witness the raise of global &lt;a href=&#34;https://trends.google.com/trends/explore?date=all&amp;amp;q=deep%20learning&#34;&gt;deep learning&lt;/a&gt; interest.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-4&#34;&gt;Despite people have fantasized about it long before Alan Turing.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-4&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-5&#34;&gt;Essentially, a synaptic weight $w_i$ determines the strength of connection to the $i$-th input.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-5&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-6&#34;&gt;With recurrent neural networks it is not true. Those have an internal state, making such networks equivalent to computer programs, i.e. potentially more complex than maps.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-7&#34;&gt;Here we refer to the classical &lt;a href=&#34;https://archive.ics.uci.edu/ml/datasets/iris&#34;&gt;Iris dataset&lt;/a&gt;. If you prefer another light dataset please let me know.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-7&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-6a&#34;&gt;Kudos to Peter Harpending who spotted a typo in Euclidean distance.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-6a&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-8&#34;&gt;In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-8&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-10&#34;&gt;We look closer at the backpropagation mechanics &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;here&lt;/a&gt;.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-10&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-9&#34;&gt;And &lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34;&gt;here&lt;/a&gt; are their mathematical derivations.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-9&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </description>
