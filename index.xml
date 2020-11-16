@@ -387,12 +387,22 @@ would be much more efficient, instead of
 &lt;a href=&#34;https://www.societyofrobots.com/programming_differentialdrive.shtml&#34;&gt;differential drive&lt;/a&gt;, as they call this construction in
 the robotics community. To test in the future.&lt;/p&gt;&lt;/li&gt;
 
-&lt;li&gt;&lt;p&gt;Likewise, it is important to keep your camera in the same position
-during training and during self-piloting. Also make sure
-that the battery is always charged.&lt;/p&gt;&lt;/li&gt;
+&lt;li&gt;&lt;p&gt;Likewise, it is important to keep your camera in the same position during
+training and during self-piloting. Also make sure that the battery is
+always charged.&lt;/p&gt;&lt;/li&gt;
 
 &lt;li&gt;&lt;p&gt;It would be nice to have a 9 V battery connector, instead of a piece of
 putty. As simple as that.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Quality of the training data. The better is your driving strategy, the
+better training data you will produce, the better the car will learn its
+turns.&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Transfer learning. You can pretrain your driving model in a virtual
+environment such as
+&lt;a href=&#34;https://github.com/tawnkramer/gym-donkeycar&#34;&gt;Donkey Gym&lt;/a&gt;.
+See also this
+&lt;a href=&#34;https://www.youtube.com/watch?v=J6Ll5Obtuxk&amp;amp;feature=youtu.be&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
 &lt;/ol&gt;
 
 &lt;hr /&gt;
