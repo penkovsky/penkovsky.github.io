@@ -13,6 +13,18 @@
     
     
     <item>
+      <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
+      <link>https://penkovsky.com/homelab/beatle/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/homelab/beatle/</guid>
+      <description>&lt;p&gt;Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Making Your Self-Driving Robot</title>
       <link>https://penkovsky.com/homelab/self-driving-robot/</link>
       <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>

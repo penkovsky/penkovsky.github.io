@@ -11,6 +11,646 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
+      <link>https://penkovsky.com/homelab/beatle/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/homelab/beatle/</guid>
+      <description>&lt;p&gt;Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Contents&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#3d-printing-intro&#34;&gt;3D Printing Intro&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#designing-a-drone-frame&#34;&gt;Designing a Drone Frame&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#building&#34;&gt;Building&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#demo&#34;&gt;Demo&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;3d-printing-intro&#34;&gt;3D Printing Intro&lt;/h2&gt;
+
+&lt;p&gt;3D printing (known in the industry as &lt;em&gt;additive manufacturing&lt;/em&gt;) is a process of
+fabrication of a 3D object from a digital model. 3D printer prices have
+significantly dropped during past decade, so 3D printing is much more
+common nowadays. The reason why we don&#39;t see such printers in every household
+is not economical, but rather psychological. People often prefer ready-made
+solutions to their problems.&lt;/p&gt;
+
+&lt;p&gt;Despite that, maker communities such as
+&lt;a href=&#34;https://www.thingiverse.com/thing:1221911&#34;&gt;Thingiverse&lt;/a&gt; provide millions of
+objects for free. Having access to a 3D printer means that you can download and
+fabricate things that you would need to buy otherwise. Last Christmas, for
+example, I have printed pegs to hang Christmas stockings :)&lt;/p&gt;
+
+&lt;h4 id=&#34;3d-printing-steps&#34;&gt;3D printing steps&lt;/h4&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Computer-aided design (CAD)&lt;/li&gt;
+&lt;li&gt;Export to STL model (de-facto standard format)&lt;/li&gt;
+&lt;li&gt;File preparation (slicing) - transforming into the series of commands &amp;quot;understood&amp;quot; by a 3D printer&lt;/li&gt;
+&lt;li&gt;Building (&amp;quot;3D printing&amp;quot;)&lt;/li&gt;
+&lt;li&gt;Post-processing (removing fabricated parts from the printing bed, removing support, etc.)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h4 id=&#34;materials&#34;&gt;Materials&lt;/h4&gt;
+
+&lt;p&gt;Plastics, such as &lt;a href=&#34;https://pick3dprinter.com/pla-3d-printing/&#34;&gt;PLA&lt;/a&gt;, are the
+most common materials you can use to 3D print objects. While PLA is one of the
+popular materials to print with, it is also relatively fragile.  For increased
+robustness, it is possible to use e.g. nylon, which like PLA is also compatible
+with &lt;a href=&#34;https://en.wikipedia.org/wiki/Fused_filament_fabrication&#34;&gt;FFF (FDM)&lt;/a&gt;, the most common 3D printing process. In the industry,
+there exist different other methods to fabricate objects in metal, carbon
+fiber, PEEK, and many other
+&lt;a href=&#34;https://www.simplify3d.com/support/materials-guide/&#34;&gt;materials&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h4 id=&#34;faq&#34;&gt;FAQ&lt;/h4&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;If you’ve ever written a simple blog post or email in HTML, you can handle OpenSCAD.&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;&lt;a href=&#34;https://cubehero.com/2013/11/19/know-only-10-things-to-be-dangerous-in-openscad/&#34;&gt;Cubehero&lt;/a&gt;&lt;/small&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;OpenSCAD vs traditional graphic CAD interfaces&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q:&lt;/strong&gt; Why should I use OpenSCAD?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; There might be different reasons:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;OpenSCAD is a great project (and it is open source).&lt;/li&gt;
+&lt;li&gt;You prefer programming to avoid wasting time for repeatable actions. Then, you can learn OpenSCAD in about an hour.&lt;/li&gt;
+&lt;li&gt;Or maybe you have never done any programming, but would not mind to acquire this valuable skill.&lt;/li&gt;
+&lt;li&gt;Your OpenSCAD models are easily parametrizable, virtually out-of-box.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;h2 id=&#34;designing-a-drone-frame&#34;&gt;Designing a Drone Frame&lt;/h2&gt;
+
+&lt;p&gt;Some requirements for the frame I had in mind:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;It should accommodate four motors of a given shape.&lt;/li&gt;
+&lt;li&gt;The motor positions should be stable when flying (they should not wiggle).&lt;/li&gt;
+&lt;li&gt;The propellers should be far enough from each other.&lt;/li&gt;
+&lt;li&gt;Easy to print (fast, no support, one or two pieces).&lt;/li&gt;
+&lt;li&gt;Lightweight frame.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;CAD design is an iterative process. My first attempt at designing a drone frame was naive and looked like this.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/rev01.png&#34; alt=&#34;First version. Don&amp;#39;t recommend.&#34; width=&#34;500&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    First version. Don&#39;t recommend.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;A quadcopter&#39;s frame is simply a holder for four motors and a body. Right? Wrong. The biggest issue with this design was that the arms were fragile. In fact, one of them cracked while I was removing the newly fabricated frame from printer&#39;s platform. Clearly, a better solution was required.&lt;/p&gt;
+
+&lt;p&gt;One improvement might be to orient the arms vertically, not horizontally as they are. That would make them more robust in the vertical direction and prevent undesired wiggling. I have also recalled that I have seen a micro quadcopter on Thingiverse some time ago. Indeed, &lt;a href=&#34;https://www.thingiverse.com/thing:1221911&#34;&gt;this copter&#39;s design&lt;/a&gt; suggests a more robust frame. What I like about it is that each motor is supported not by one, but two segments making it more stable in the horizontal plane. So let&#39;s see what we can build with OpenSCAD.&lt;/p&gt;
+
+&lt;h3 id=&#34;basic-operations-motor-compartment-design&#34;&gt;Basic Operations: Motor Compartment Design&lt;/h3&gt;
+
+&lt;p&gt;I like to start my design from individual components (bottom-up), however, the opposite method (top-bottom) is also perfectly valid.
+For starters, I have created emplacements for &lt;a href=&#34;https://www.olimex.com/Products/Robot-CNC-Parts/Micro-Motors/MOTOR-F1607/&#34;&gt;F-1607 DC motors&lt;/a&gt;,
+which I have ordered from Olimex. This part can be imagined as a shell around the motor, or a Boolean difference between the external box (gray cylinder) and the motor itself (red cylinder).&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/01a.png&#34; alt=&#34;A motor holder is simply a difference between two cylinders: the outer (grey) and the inner (highlighted in red).&#34; width=&#34;300&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    A motor holder is simply a difference between two cylinders: the outer (grey) and the inner (highlighted in red).
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;The motor dimensions given by Olimex are 7 mm diameter and 16.5 mm height. I have chosen shell size parameter to be 0.8 mm. I have lifted the inner cylinder by 0.8 mm (&lt;code&gt;translate&lt;/code&gt;) so that the result is a box, not a tube. The red transparent cylinder only illustrates where the motor goes, so it will be not visible in the final rendering.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;shell&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;;
+
+difference() {
+  cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; shell, h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;);
+  translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, shell])
+    cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;,  h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;How about the motor wires? We can carve out a side and a bottom holes using Boolean &lt;code&gt;difference&lt;/code&gt; and &lt;code&gt;union&lt;/code&gt; transformations.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/01.png&#34; alt=&#34;A motor compartment: perspective view and top view. The holes will allow motor wires to escape comfortably.&#34; width=&#34;500&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    A motor compartment: perspective view and top view. The holes will allow motor wires to escape comfortably.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; SlotF1607(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;,
+                 d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;,
+                 shell&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;,  &lt;span style=&#34;color:#75715e&#34;&gt;// Shell thickness
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 slack&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1&lt;/span&gt;   &lt;span style=&#34;color:#75715e&#34;&gt;// Some extra space to accommodate a motor
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 ) {
+    difference() {
+       &lt;span style=&#34;color:#75715e&#34;&gt;// Motor compartment
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;       cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;d &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; shell, h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;);
+
+       union () {
+           &lt;span style=&#34;color:#75715e&#34;&gt;// Motor emplacement
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, shell])
+             cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;d &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; slack,  h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;);
+
+           &lt;span style=&#34;color:#75715e&#34;&gt;// Bottom hole for motor contacts/wires
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;h, center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+
+           &lt;span style=&#34;color:#75715e&#34;&gt;// Wires hole
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;           translate([d&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+               cube([d, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;, h &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;], center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+       }
+   }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Last but not least you can see that I have also given some slack for a motor (0.1 mm) to more easily fit into its compartment.&lt;/p&gt;
+
+&lt;h3 id=&#34;placing-motor-compartments&#34;&gt;Placing Motor Compartments&lt;/h3&gt;
+
+&lt;p&gt;Usually quadcopter size is characterised by its diagonal, i.e. the largest
+distance between the centers of the propellers (thus the centers of the
+motors). Our microdrone is small and its diagonal will be only 92 mm (it can
+fit into a hand). The nearest distance between any two motors is then computed
+as $\sqrt{2} \cdot (\text{diagonal} / 2)$. This distance is an edge of a square
+with 92 mm diagonal. Now, we can easily place the four motors on the vertices
+of the imaginary square.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/02a.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;diagonal &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;92&lt;/span&gt;;
+
+motors_dist &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; sqrt(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; diagonal);
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// Half distance between motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;half_dist &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; motors_dist;
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Place the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        SlotF1607();
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Note that &lt;code&gt;for (i = [1, -1], j = [1, -1])&lt;/code&gt; is simply a shortcut of two nested loops, i.e. it is the same as&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+  &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+    &lt;span style=&#34;color:#f92672&#34;&gt;//&lt;/span&gt; &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Anything wrong? Yes, we forgot to properly rotate the wire outlets.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Place the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])  &lt;span style=&#34;color:#75715e&#34;&gt;// &amp;lt;--
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            SlotF1607();
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/02b.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Now much better.&lt;/p&gt;
+
+&lt;h3 id=&#34;motors-support&#34;&gt;Motors Support&lt;/h3&gt;
+
+&lt;p&gt;We would like to connect the motors using something like an arc. How to do that? First, create and place a small segment:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;41&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+    square([&lt;span style=&#34;color:#ae81ff&#34;&gt;1.2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;]);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Then, by rotating this segment in space (&lt;a href=&#34;https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#Rotate_Extrude&#34;&gt;&lt;code&gt;rotate_extrude&lt;/code&gt;&lt;/a&gt;), we obtain a 90-degree arc:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; arc() {
+    rotate_extrude(angle&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt;, $fn&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;70&lt;/span&gt;)
+        translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;41&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+            square([&lt;span style=&#34;color:#ae81ff&#34;&gt;1.2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;]);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/03a.png&#34; alt=&#34;An arc created with rotate_extrude()&#34; width=&#34;300&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    An arc created with rotate_extrude()
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Let us link those arcs to the motors.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Place the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+            SlotF1607(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6.5&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Connect the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+            arc();
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/03b.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;I figured out that probably 6.5 mm slot heigh would be enough. That is why I
+have specified the height parameter &lt;code&gt;SlotF1607(h=6.5)&lt;/code&gt;. Works like a charm!&lt;/p&gt;
+
+&lt;h3 id=&#34;the-platform&#34;&gt;The Platform&lt;/h3&gt;
+
+&lt;p&gt;By now I have realized that to create the body I could reuse the same method as
+for the motor emplacements to create an open box, a box with no top cover.
+However, the only distinction would be the shape (a Boolean difference between
+rectangular boxes rather than cylinders). Now, I would like to somehow
+generalize a method of creating an open box. Ideally, I would like to create
+boxes of any base shape (circle, square, etc.), thus parametrizing the method
+by a base shape.&lt;/p&gt;
+
+&lt;p&gt;To help me with this idea, OpenSCAD provides &lt;code&gt;children()&lt;/code&gt; method to access
+child modules. The new operation could be described as&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; openbox(delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) {
+    difference() {
+        resize_somehow(&lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;...&lt;/span&gt;)
+            children();
+        translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,delta])
+            children();
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;So for example the motor compartment could be created simply as&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;shell) circle(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Where &lt;code&gt;openbox&lt;/code&gt; would receive a 2D shape as a child (a circle, a square, or a
+polygon) and transform it into a 3D shape (a box) of a given height using the
+recipe from above. So how to transform a 2D circle into a 3D cylinder? Using a
+common method called &lt;code&gt;linear_extrude&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;linear_extrude(&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;) circle(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This method is similar to &lt;code&gt;rotate_extrude&lt;/code&gt; that we used for the arc. However,
+it does not rotate the base 2D shape.&lt;/p&gt;
+
+&lt;p&gt;Now, how to create a larger version of the cylinder (becoming the shell)? One
+way to do that would be to use &lt;code&gt;scale()&lt;/code&gt; or &lt;code&gt;resize()&lt;/code&gt;. However, a more
+efficient method would be to operate on the original 2D object, before
+extruding it (that is actually the reason why our &lt;code&gt;openbox&lt;/code&gt; was assigned to
+operate on 2D objects). The &lt;a href=&#34;https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#offset&#34;&gt;&lt;code&gt;offset()&lt;/code&gt;&lt;/a&gt; transformation does
+exactly what we need to: enlarge the 2D object by a &amp;quot;delta&amp;quot; difference (see
+&lt;a href=&#34;https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#offset&#34;&gt;documentation&lt;/a&gt;).  Therefore, the complete &lt;code&gt;openbox&lt;/code&gt; module
+becomes&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) {
+    difference() {
+        linear_extrude(h)
+            &lt;span style=&#34;color:#75715e&#34;&gt;// Create a larger base by offsetting the child module by delta
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            offset(delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;delta)
+                children();
+
+        translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,delta])
+            linear_extrude(h)
+                children();
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Create a motor compartment as planned&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) circle(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is how to refactor the SlotF1607 module, making use of &lt;code&gt;openbox&lt;/code&gt;&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; SlotF1607(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;16.5&lt;/span&gt;,     &lt;span style=&#34;color:#75715e&#34;&gt;// Module height
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;7&lt;/span&gt;,        &lt;span style=&#34;color:#75715e&#34;&gt;// Motor diameter
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 shell&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;,  &lt;span style=&#34;color:#75715e&#34;&gt;// Shell thickness
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 slack&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1&lt;/span&gt;   &lt;span style=&#34;color:#75715e&#34;&gt;// Some extra space to accommodate a motor
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                 ) {
+        difference() {
+            &lt;span style=&#34;color:#75715e&#34;&gt;// Motor compartment shell
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;h, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;shell) circle(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;d &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; slack);
+
+            union () {
+                &lt;span style=&#34;color:#75715e&#34;&gt;// Bottom hole for motor contacts/wires
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                cylinder(d&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;h, center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+
+                &lt;span style=&#34;color:#75715e&#34;&gt;// Wires hole
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                translate([d&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+                    cube([d, &lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;, h &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;], center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+            }
+        }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Similarly, create the body&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) square([&lt;span style=&#34;color:#ae81ff&#34;&gt;46&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt;], center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;If it is hard to follow this section, note what we do in the
+line above is the same operation as with the cylinders in the
+very beginning:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;shell&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;;
+
+difference() {
+  cube([&lt;span style=&#34;color:#ae81ff&#34;&gt;46&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; shell, &lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; shell, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;]);
+  translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, shell])
+    cube([&lt;span style=&#34;color:#ae81ff&#34;&gt;46&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;]);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/04a.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;We are essentially done. However, this design somewhat does not inspire me.
+Replacing the base square with a rounded one looks like a good idea. After all,
+we designed &lt;code&gt;openbox&lt;/code&gt; to support any 2D base shape. Here is a common idiom:
+&lt;a href=&#34;https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#minkowski&#34;&gt;create a rounded square as a Minkowski sum&lt;/a&gt;.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; rounded_square(dim&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;20&lt;/span&gt;], r&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5&lt;/span&gt;) {
+    minkowski() {
+        square([dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; r, dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; r], center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+        circle(r&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;r);
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/04b.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;So here we go:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) {
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Place the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+            SlotF1607(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6.5&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Connect the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+        rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+            arc();
+}
+
+openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;)
+    rounded_square([&lt;span style=&#34;color:#ae81ff&#34;&gt;46&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt;]);&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/04c.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Much better!&lt;/p&gt;
+
+&lt;p&gt;Now, I would like to shave off a bit of weight if possible. So I will introduce
+some holes as e.g. in the honeycomb pattern. I will generate an array of
+hexagonal cylinders and subtract it from the platform. A hexagonal cylinder is
+simply a cylinder with six fragments, i.e. &lt;code&gt;cylinder($fn=6, …);&lt;/code&gt;. Here is an
+array of those generated with two nested loops &lt;code&gt;for (i = [-M:M], j = [-N:N])&lt;/code&gt;:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; honey_comb(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, M&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;, N&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, d1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, d2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4.6&lt;/span&gt;) {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;M:M], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;N:N]) {
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Shift the row by d1/4
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; (abs(i) &lt;span style=&#34;color:#f92672&#34;&gt;%&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)
+            translate([i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; d1, j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; d2 &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; d1&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;h])
+                cylinder(d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; d1, h &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; h &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, $fn&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;);
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Shift the row by -d1/4
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt;
+            translate([i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; d1, j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; d2 &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; d1&lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;h])
+                cylinder(d &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; d1, h &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; h &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, $fn&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;);
+    }
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Where &lt;code&gt;abs(i) % 2 == 0&lt;/code&gt; simply checks if index &lt;code&gt;i&lt;/code&gt; is an even value so that odd
+and even rows are shifted by a different amount.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/honeycomb-array.png&#34; width=&#34;400&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Now I use an &lt;code&gt;intersection&lt;/code&gt; with another shape to limit the span of the honeycomb pattern.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;intersection() {
+    honey_comb(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;, M&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, N&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, d1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4.1&lt;/span&gt;, d2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4.9&lt;/span&gt;);
+
+    &lt;span style=&#34;color:#75715e&#34;&gt;// Limited by this volume
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;    translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;])
+        linear_extrude(&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
+            rounded_square([dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;, dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;], r&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;);
+}&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/04d.png&#34; width=&#34;300&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;Finally, I subtract the above pattern and some side holes.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-scad&#34; data-lang=&#34;scad&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;// The platform
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; platform(dim&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[&lt;span style=&#34;color:#ae81ff&#34;&gt;46&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;23&lt;/span&gt;], shell&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) {
+    difference() {
+        openbox(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3.6&lt;/span&gt;, delta&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8&lt;/span&gt;) rounded_square(dim);
+
+        union () {
+            &lt;span style=&#34;color:#75715e&#34;&gt;// Honey-comb patterned floor
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            intersection() {
+                honey_comb(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;, M&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;, N&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;, d1&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4.1&lt;/span&gt;, d2&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;4.9&lt;/span&gt;);
+
+                &lt;span style=&#34;color:#75715e&#34;&gt;// Limited by this volume
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;                translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.5&lt;/span&gt;])
+                    linear_extrude(&lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt;)
+                        rounded_square([dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;, dim[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2.5&lt;/span&gt;], r&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;);
+            }
+
+            &lt;span style=&#34;color:#75715e&#34;&gt;// Side holes
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;            &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;])
+                translate([&lt;span style=&#34;color:#ae81ff&#34;&gt;12.5&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, shell &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;4&lt;/span&gt;])
+                    cube([&lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;8&lt;/span&gt;], center&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;true&lt;/span&gt;);
+        }
+    }
+}
+
+&lt;span style=&#34;color:#75715e&#34;&gt;// The main module
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;module&lt;/span&gt; beatle1() {
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], j &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) {
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Place the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i, half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+            rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+                SlotF1607(h&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;6.5&lt;/span&gt;);
+
+        &lt;span style=&#34;color:#75715e&#34;&gt;// Connect the motors
+&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&lt;/span&gt;        translate([half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), half_dist &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; (i &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+            rotate([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;45&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; i &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;90&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; j])
+                arc();
+    }
+
+    platform();
+}
+
+beatle1();&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/04e.png&#34; width=&#34;500&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;That was quite easy. Wasn’t it?&lt;/p&gt;
+
+&lt;p&gt;I made the complete design available on &lt;a href=&#34;https://www.thingiverse.com/thing:4708493&#34;&gt;Thingiverse&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;To learn OpenSCAD, check its official &lt;a href=&#34;https://www.openscad.org/cheatsheet/&#34;&gt;cheatsheet&lt;/a&gt;.
+For example, there you will find the magic parameter &lt;code&gt;$fn&lt;/code&gt; (number of fragments) which I have used to make the shapes smooth
+(or conversely to create hexagonal cylinders).&lt;/p&gt;
+
+&lt;h2 id=&#34;building&#34;&gt;Building&lt;/h2&gt;
+
+&lt;p&gt;First, export the design as STL. This is quite straightforward:
+after rendering the design, press &lt;F7&gt; and save an .stl file.&lt;/p&gt;
+
+&lt;p&gt;Parameters:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Fabrication method: &lt;a href=&#34;https://en.wikipedia.org/wiki/Fused_filament_fabrication&#34;&gt;FFF&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Material: PLA&lt;/li&gt;
+&lt;li&gt;0.2 mm layer height&lt;/li&gt;
+&lt;li&gt;Three perimeters&lt;/li&gt;
+&lt;li&gt;30 % infill&lt;/li&gt;
+&lt;li&gt;Designed to be fabricated with no support&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;Next, open your favorite slicer software that often comes with a 3D printer.
+You will need to specify 0.2 mm layer height and other settings from the list
+above.  After slicing (transforming into a series of commands that 3D printer
+can perform) the design can be inspected layer by layer.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/beatle1/slicing.png&#34; alt=&#34;Sliced Beatle-1. The pink lines (so-called skirt) will be printed first to stabilize the flow of plastic.&#34; width=&#34;650&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Sliced Beatle-1. The pink lines (so-called skirt) will be printed first to stabilize the flow of plastic.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;demo&#34;&gt;Demo&lt;/h2&gt;
+
+&lt;p&gt;I used a set of four F-1607 DC motors with propellers, a flight controller from
+a drone toy, and a 150 mAh LiPo battery.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/koSanik0-8I&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;h3 id=&#34;some-of-the-challenges-i-have-faced&#34;&gt;Some of the Challenges I Have Faced&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;The design from the very first version was impractical and fragile.&lt;/li&gt;
+&lt;li&gt;Motor wires could be easily detached from the controller. To prevent this, I fixated the wires to the frame.&lt;/li&gt;
+&lt;li&gt;I tried several methods to create the &lt;code&gt;openbox&lt;/code&gt; module. The one presented here was the least ambiguous.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;As always, if you have any questions, remarks, or spotted any typos please
+send me a message.&lt;/p&gt;
+
+&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Fused_filament_fabrication&#34;&gt;Fused filament fabrication&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.openscad.org/cheatsheet/&#34;&gt;OpenSCAD cheatsheet&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
       <title>Making Your Self-Driving Robot</title>
       <link>https://penkovsky.com/homelab/self-driving-robot/</link>
       <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
@@ -3064,926 +3704,6 @@ Stay tuned!&lt;/p&gt;
 &lt;ol&gt;
 &lt;li id=&#34;fn:fn-1&#34;&gt;In fact, 64 bit double precision is not necessary for neural networks, if not an overkill. In practice you would prefer to use a 32 bit &lt;code&gt;Float&lt;/code&gt; type.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Day 2: What Do Hidden Layers Do?</title>
-      <link>https://penkovsky.com/neural-networks/day2/</link>
-      <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/neural-networks/day2/</guid>
-      <description>
-
-&lt;p&gt;In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
-we have introduced the concept of learning in a single-layer neural network.
-Today, we will learn about the
-benefits of multi-layer neural networks,
-how to properly design and train them.&lt;/p&gt;
-
-&lt;p&gt;Sometimes I discuss neural networks with students who
-have just started discovering machine learning techniques:&lt;/p&gt;
-
-&lt;p&gt;&amp;quot;I have built a
-&lt;a href=&#34;https://en.wikipedia.org/wiki/MNIST_database&#34;&gt;handwritten digits&lt;/a&gt;
-recognition network.
-But my accuracy is only &lt;strong&gt;Y&lt;/strong&gt;.&amp;quot;&lt;/p&gt;
-
-&lt;p&gt;&amp;quot;&lt;em&gt;It seems to be much less than state-of-the-art&lt;/em&gt;&amp;quot;, I contemplate.&lt;/p&gt;
-
-&lt;p&gt;&amp;quot;Indeed. Maybe the reason is &lt;strong&gt;X&lt;/strong&gt;?&amp;quot;&lt;/p&gt;
-
-&lt;p&gt;Usually &lt;strong&gt;X&lt;/strong&gt; is not the reason.
-The real cause appears to be much more trivial:
-instead of a multi-layer neural network the student has built
-a single-layer neural network or its equivalent.
-This network acts as a
-&lt;em&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Linear_classifier&#34;&gt;linear classifier&lt;/a&gt;&lt;/em&gt;,
-therefore it cannot learn non-linear relations
-between the input and the desired output.&lt;/p&gt;
-
-&lt;p&gt;So what is a multi-layer neural network and
-how to avoid the linear classifier trap?&lt;/p&gt;
-
-&lt;h2 id=&#34;multilayer-neural-networks&#34;&gt;Multilayer neural networks&lt;/h2&gt;
-
-&lt;p&gt;Multilayer neural network can be formalized as:&lt;/p&gt;
-
-&lt;p&gt;$$
-\begin{equation}
-\mathbf{y} = f_N \left( \mathbf{W}_N \cdot \left( \dots f_2 \left( \mathbf{W}_2 \cdot f_1( \mathbf{W}_1 \cdot \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 \right) \dots \right) + \mathbf{b}_N \right),
-\end{equation}
-$$&lt;/p&gt;
-
-&lt;p&gt;where $\mathbf{x}$ and $\mathbf{y}$ is an input and output vectors respectively,
-$\mathbf{W}_i, \mathbf{b}_i, i=1..N$ are weight matrices and bias vectors,
-and $f_i, i=1..N$ are activations functions in the $i$th layer.
-The nonlinear activation functions $f_i$ are applied elementwise.&lt;/p&gt;
-
-&lt;p&gt;For the sake of illustration, today we will employ two-dimensional datasets
-as shown below.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/initial-data.png&#34; width=&#34;590px&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;p&gt;Both datasets feature two classes depicted by orange and blue dots, respectively.
-The goal of the neural network training will be to learn
-how to prescribe a class to
-a new dot by knowing its coordinates $(x_1, x_2)$.
-It turns out these simple tasks cannot be solved with a single-layer architecture,
-as it is only capable of drawing straight lines in the input space $(x_1, x_2)$.
-Let us bring in an additional layer.&lt;/p&gt;
-
-&lt;h3 id=&#34;two-layer-network&#34;&gt;Two-layer network&lt;/h3&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-network-2.png&#34; alt=&#34;Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$.&#34; width=&#34;400px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Two-layer neural network.&lt;/h4&gt;
-  &lt;p&gt;
-    Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;The figure above shows the single hidden layer network architecture,
-which we will interchangeably call a &lt;em&gt;two-layer network&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;$$
-y = f_2 \left( \mathbf{W}_2 \cdot f_1 ( \mathbf{W}_1 \cdot \mathbf{x} + \mathbf{b}_1 ) + \mathbf{b}_2 \right),
-$$&lt;/p&gt;
-
-&lt;p&gt;where $f_1(x) = \max(0, x)$ also known as &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34;&gt;ReLU&lt;/a&gt;
-will be the first activation
-function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
-will be the second activation function, which you already have seen in the
-previous article. The particularity of sigmoid is squashing its inputs
-between 0 and 1. This output tends to be useful in our case where
-we only have two classes: blue dots denoted by 0
-and orange dots, by 1.
-As a loss function to minimize during neural network training,
-we will use &lt;em&gt;binary cross-entropy&lt;/em&gt;:&lt;/p&gt;
-
-&lt;p&gt;$$
-L(y, \hat y) = - \frac 1 m \sum_{i=1}^m \left[ y_i \ln(\hat y_i) + (1 - y_i) \ln(1 - \hat y_i) \right],
-$$&lt;/p&gt;
-
-&lt;p&gt;where $y$ is the target output and $\hat y$ is neural network&#39;s prediction.
-This loss function was
-&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function&#34;&gt;specifically designed&lt;/a&gt; to efficiently train
-neural networks.
-Another perk of cross-entropy is that in conjunction with
-sigmoid activation, the error gradient
-is simply a difference between predicted and desired outputs.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-to-initialize&#34;&gt;How To Initialize?&lt;/h3&gt;
-
-&lt;p&gt;The first mistake may creep in when you completely ignore the importance of the neural network
-&lt;a href=&#34;https://medium.com/usf-msds/deep-learning-best-practices-1-weight-initialization-14e5c0295b94&#34;&gt;weight initialization&lt;/a&gt;.
-In essence, you want to create neurons capable of learning different features.
-Therefore, you should select neural network weights randomly.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/circles.png&#34; alt=&#34;Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights.&#34; width=&#34;600px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;The circles problem.&lt;/h4&gt;
-  &lt;p&gt;
-    Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;Above we can see the &lt;a href=&#34;https://en.wikipedia.org/wiki/Decision_boundary&#34;&gt;decision boundaries&lt;/a&gt;
-for three cases of initialization.
-First, when the weights are initialized as zeroes, the network cannot learn anything.
-In the second case, the weights are initialized as non-zero, but identical values.
-Even though the network becomes able to learn something,
-there is no distinction between individual neurons.
-Therefore, the entire network behaves like one big neuron.
-Finally, when the neural network is initialized with random weights,
-it becomes capable to learn.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-to-train&#34;&gt;How To Train?&lt;/h3&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34;&gt;universal approximation theorem&lt;/a&gt;
-claims that under certain assumptions, a single hidden layer architecture
-should be sufficient to approximate any reasonable function.
-However, it indicates nothing about how to obtain or how difficult is to obtain those
-neural network weights&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-0&#34;&gt;&lt;a href=&#34;#fn:fn-0&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
-As we have seen from weights initialization example,
-using simple gradient descent training
-our network was able to distinguish between the two
-circles. Now, how about a more difficult example: spirals,
-which &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34;&gt;&lt;em&gt;is hard due to its extreme nonlinearity&lt;/em&gt;&lt;/a&gt;.
-Check out the animation below, on the left, to see how
-a naive gradient descent training can get easily stuck in a suboptimal setting.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-boundary2.gif&#34; alt=&#34;Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam.&#34; width=&#34;450px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;The spirals problem.&lt;/h4&gt;
-  &lt;p&gt;
-    Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;The network fails to properly distinguish between the
-two classes. One may suggest that a more adequate neural network architecture is needed.
-That is partially true. However, the mentioned above
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Universal_approximation_theorem&#34;&gt;theorem&lt;/a&gt;
-hints that it might be not necessary.&lt;/p&gt;
-
-&lt;p&gt;It turns out a lot of research in neural networks and deep learning is exactly about
-how to obtain those set of weights, that is about neural network training algorithms.
-The disadvantage of the naive
-gradient descent is that the algorithm often gets stuck
-far from an acceptable solution. One of the
-ways to alleviate this issue is to introduce momentum.
-Perhaps, the most popular among the algorithms
-with momentum is &lt;a href=&#34;https://arxiv.org/abs/1412.6980&#34;&gt;Adam&lt;/a&gt;.
-As we can see from the diagram above, on the right, the &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34;&gt;Adam&lt;/a&gt; algorithm
-is able to efficiently build the appropriate decision boundary.
-I find it can be more illustrative if we visualize the neural network&#39;s output during its training.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-gd-adam-2.gif&#34; alt=&#34;The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes.&#34; width=&#34;500px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;The spirals problem.&lt;/h4&gt;
-  &lt;p&gt;
-    The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;This way we see the faster convergence of Adam on a more detailed level.
-If you want to learn more about different algorithms from the gradient descent family,
-&lt;a href=&#34;http://ruder.io/optimizing-gradient-descent/&#34;&gt;here&lt;/a&gt;
-there is a nice comparison.&lt;/p&gt;
-
-&lt;h3 id=&#34;avoiding-the-linear-classifier-pitfall&#34;&gt;Avoiding The Linear Classifier Pitfall&lt;/h3&gt;
-
-&lt;p&gt;Now, what if by mistake we have provided linear activations.
-What happens?
-If activations $f_i$ were linear, then the model in formula (2)
-would reduce to a single-layer neural network:&lt;/p&gt;
-
-&lt;p&gt;$$
-\mathbf{y} = c_N \cdot W_N \cdot \dots \cdot c_2 \cdot W_2 \cdot c_1 \cdot W_1 \cdot \mathbf{x} = W \mathbf{x},
-$$&lt;/p&gt;
-
-&lt;p&gt;where $c_i$ denote constants.
-Thus, one obtains a linear classifier $W \mathbf{x}$. This can be seen
-from the resulting decision boundaries.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/linear-classifier.png&#34; width=&#34;450px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Two-layer network with linear activation $f_1(x) = x$.&lt;/h4&gt;
-  
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;We have used exactly the same architecture as above,
-except the activation $f_1(x) = x$. Now we see that the two-layer neural network
-acts as a simple single-layer one: it can only divide the input space using a straight line.
-To avoid this issue, all activation functions must remain nonlinear.&lt;/p&gt;
-
-&lt;h3 id=&#34;how-many-layers&#34;&gt;How Many Layers?&lt;/h3&gt;
-
-&lt;p&gt;We have solved the spirals problem with a single hidden layer network.
-Why add more layers?
-To address this question,
-let us animate the decision boundaries during neural network training for three different architectures.
-All the networks have &lt;a href=&#34;https://en.wikipedia.org/wiki/Rectifier_(neural_networks)&#34;&gt;ReLU&lt;/a&gt; activations in non-terminal layers and sigmoid in the final layer.
-As can be seen from the image below, the
-network with three hidden layers and with fewer neurons in
-each layer, learns faster.
-The reason can be understood intuitively. A neural network
-&lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34;&gt;performs topological transformations&lt;/a&gt; of the input space.
-Composing several simple transformations leads to a more complex
-one. Therefore, for such non-linearly separated classes as in the spirals problem
-one benefits from adding more layers.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/spirals-adam.gif&#34; alt=&#34;Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture.&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Neural network training convergence (Adam).&lt;/h4&gt;
-  &lt;p&gt;
-    Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;From the figure we may conclude that more neurons are not always the best option.
-The most contrasting border indicating the highest confidence in
-the least number of steps is achieved with
-the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
-This number is about 30 percent less than the second architecture with a single hidden layer.
-Indeed, one may need to carefully &lt;a href=&#34;http://proceedings.mlr.press/v70/real17a/real17a.pdf&#34;&gt;pick&lt;/a&gt;
-&lt;a href=&#34;https://github.com/JasperSnoek/spearmint&#34;&gt;the&lt;/a&gt; &lt;a href=&#34;https://aip.scitation.org/doi/10.1063/1.5039826&#34;&gt;architecture&lt;/a&gt;
-taking into consideration different factors
-such as dataset size, variance, input dimensionality, kind of the task, and others.
-With more layers, neural network can more efficiently &lt;a href=&#34;http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/&#34;&gt;represent complex relationships&lt;/a&gt;.
-On the other hand, if the number of layers is very large, one may need to apply different
-tricks in order to avoid such problems as fading gradients.&lt;/p&gt;
-
-&lt;p&gt;Given all the new information, how about experimenting with
-neural networks? In the rest of this post we will learn how to
-build multilayer networks in Haskell.&lt;/p&gt;
-
-&lt;h2 id=&#34;implementing-backpropagation&#34;&gt;Implementing Backpropagation&lt;/h2&gt;
-
-&lt;p&gt;In the &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous article&lt;/a&gt;,
-we have implemented &lt;em&gt;backpropagation&lt;/em&gt; (shortly &lt;em&gt;backprop&lt;/em&gt;)
-for a single-layer (no hidden layer) network.
-This method easily extends towards the case of multiple layers.
-Here is a nice
-&lt;a href=&#34;https://www.youtube.com/watch?v=d14TUNcbn1k&amp;amp;index=4&amp;amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk&#34;&gt;video&lt;/a&gt;
-to provide you with more technical details. Below, we remind
-how backprop works for each individual neuron.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/backprop.png&#34; width=&#34;570px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Backprop for a neuron. A neuron&#39;s computation $y = f(\sum_i w_i \cdot x_i)$ known as the &lt;em&gt;forward pass&lt;/em&gt; is illustrated in black using a computational graph. The &lt;em&gt;backward pass&lt;/em&gt; propagating the gradients in the opposite direction is depicted in red.&lt;/h4&gt;
-  
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;If you have ever found any other tutorial on backprop,
-chances are you will first implement the so-called
-&lt;em&gt;forward pass&lt;/em&gt; and then, as a separate function,
-the &lt;em&gt;backward pass&lt;/em&gt;.
-The forward pass calculates the neural network output,
-whereas the backward pass does the gradients bookkeeping.
-Last time we have provided an example of a forward
-pass in a single-layer architecture:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;in&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;where &lt;code&gt;h = x LA.&amp;lt;&amp;gt; w&lt;/code&gt; calculates
-$\mathbf{h} = \mathbf{x \cdot W^{\intercal}}$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;
-and &lt;code&gt;y = sigmoid h&lt;/code&gt; is an elementwise activation
-$\mathbf{y} = \sigma(\mathbf{h})$. Here we have provided both
-the result of neural network computation &lt;code&gt;y&lt;/code&gt;
-and an intermediate value &lt;code&gt;h&lt;/code&gt;, which was subsequently
-used in the backward pass to compute the weights gradient &lt;code&gt;dW&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;dE&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y_target&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;h&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dE&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linear&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;If there are multiple layers, the two passes (forward and backward)
-are typically computing all the intermediate results
-$\mathbf{h}_i = \mathbf{x}_{i - 1} \mathbf{W}_i^{\intercal} + \mathbf{b}_i$
-and $\mathbf{y}_i = f(\mathbf{x}_i)$. Then, these intermediate results
-are used in reverse (backward) order to compute weight gradients &lt;code&gt;dW&lt;/code&gt;.&lt;/p&gt;
-
-&lt;p&gt;The strategy of storing intermediate
-results is typical for many
-tutorials in imperative languages (looking at you, Python).
-In fact, in functional languages you can do
-&lt;a href=&#34;https://themonadreader.files.wordpress.com/2013/03/issue214.pdf&#34;&gt;the same thing&lt;/a&gt;.
-The disadvantage of separate forward and backward implementations
-is that it becomes tedious to keep track of all the intermediate
-results and may require more mental effort to implement the backprop.
-I also feel that such backprop
-explanation is not very intuitive.
-The whole pattern of forward and backward passes
-may seem strangely familiar. Hey, that is actually &lt;a href=&#34;https://en.wikipedia.org/wiki/Recursion_(computer_science)&#34;&gt;recursion&lt;/a&gt;!
-Recursion is bread and butter of functional languages,
-so why not apply it to the backprop?
-Instead of defining two separate methods and manually managing all the intermediate results,
-we will define both in one place.&lt;/p&gt;
-
-&lt;p&gt;To begin our new multilayer networks project,
-we start with data structures. First, we define a data type
-that will represent a single layer.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Neural network layer: weights, biases, and activation&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;where the first &lt;code&gt;Matrix a&lt;/code&gt; stands for
-$\mathbf{W}^{\intercal} \in \mathbb{R}^{\text{inp} \times \text{out}}$&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;,
-the second &lt;code&gt;Matrix a&lt;/code&gt; means $\mathbf{b} \in \mathbb{R}^{\text{1} \times \text{out}}$,
-and &lt;code&gt;Activation&lt;/code&gt; is an algebraic data type, which
-in practice denotes known activation functions in a symbolic fashion:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Activation function:&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- * Rectified linear unit (ReLU)&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- * Sigmoid&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- * Hyperbolic tangent&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- * Identity (no activation)&lt;/span&gt;
-&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Activation&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Sigmoid&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Tanh&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;|&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Id&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Then, the neural network from Equation (2) can be
-serialized as a list of &lt;code&gt;Layer&lt;/code&gt;s&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
-This list will bear the type of&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;[&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;indicating that each element in the list has to be
-a &lt;code&gt;Layer&lt;/code&gt; operating on real numbers (&lt;code&gt;Double&lt;/code&gt;).&lt;/p&gt;
-
-&lt;p&gt;Now, we can easily update any &lt;code&gt;Layer&lt;/code&gt;
-in a single gradient descent step&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The signature &lt;code&gt;f :: Layer Double
-  -&amp;gt; Gradients Double
-  -&amp;gt; Layer Double&lt;/code&gt; means nothing else but:
-&lt;em&gt;f is a function that can take an old layer
-and gradients and produce a new layer&lt;/em&gt;.
-Here, &lt;code&gt;lr&lt;/code&gt; is the learning
-rate and &lt;code&gt;scale&lt;/code&gt; is a multiplication by a constant
-written in a fancy infix way&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.
-We also have to define the &lt;code&gt;Gradients&lt;/code&gt; data type:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;data&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;To update all layers in functional programming we would need
-an analog to the &lt;code&gt;for&lt;/code&gt; loop construct known from imperative programming languages.
-Great news: there are different &lt;code&gt;for&lt;/code&gt;-loops for different needs:
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=map&#34;&gt;&lt;code&gt;map&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zip&#34;&gt;&lt;code&gt;zip&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=foldl&#34;&gt;&lt;code&gt;foldl&lt;/code&gt;&lt;/a&gt;,
-&lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=scanr&#34;&gt;&lt;code&gt;scanr&lt;/code&gt;&lt;/a&gt;,
-etc.
-And &lt;a href=&#34;https://www.haskell.org/hoogle/?hoogle=zipWith&#34;&gt;&lt;code&gt;zipWith&lt;/code&gt;&lt;/a&gt;
-is exactly what we need.
-Its &lt;a href=&#34;https://en.wikipedia.org/wiki/Polymorphism_(computer_science)&#34;&gt;&lt;em&gt;polymorphic&lt;/em&gt;&lt;/a&gt; type&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;in our context can be interpreted as&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;)
-     &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;]
-     &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;]
-     &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;where &lt;code&gt;(Layer a -&amp;gt; Gradients a -&amp;gt; Layer a)&lt;/code&gt;
-denotes a function which takes a &lt;code&gt;Layer&lt;/code&gt; and &lt;code&gt;Gradients&lt;/code&gt;
-and produces a new &lt;code&gt;Layer&lt;/code&gt;. This is the signature of &lt;code&gt;f&lt;/code&gt;
-defined above with the only precision that the type &lt;code&gt;a&lt;/code&gt; is &lt;code&gt;Double&lt;/code&gt;.
-Therefore, &lt;code&gt;zipWith&lt;/code&gt; can be interpreted as:
-&lt;em&gt;take a function &lt;code&gt;f&lt;/code&gt; from above,
-take a list of layers and a list of gradients,
-then apply &lt;code&gt;f&lt;/code&gt; to each &lt;code&gt;Layer&lt;/code&gt; in the first list
-and each &lt;code&gt;Gradient&lt;/code&gt; in the second list.
-Obtain a new list of &lt;code&gt;Layer&lt;/code&gt;s&lt;/em&gt;.
-The new list of layers &lt;code&gt;[Layer]&lt;/code&gt; is our modified neural
-network after a single gradient descent step.
-Now, the complete gradient descent implementation is&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;optimize&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;last&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;take&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;iterate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;step&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net0&lt;/span&gt;)
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;step&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-        (&lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt;
-
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-      &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;) (&lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;act&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We now see how well previously defined &lt;code&gt;f&lt;/code&gt; fits in.
-The resulting function &lt;code&gt;optimize&lt;/code&gt; should look familiar from the
-&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;previous post&lt;/a&gt;.
-Back then, it was called &lt;code&gt;descend&lt;/code&gt;.
-Now, we generalize it to operate on a list of layers,
-instead of a single layer weights. Finally,
-we provide the &lt;code&gt;dataSet&lt;/code&gt; as an argument.
-This last interface change is a matter of convenience.&lt;/p&gt;
-
-&lt;p&gt;Now, as promised, we implement the backprop algorithm in a single
-&lt;code&gt;pass&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;
-&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;80
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;81
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;82
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;83
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;84
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;85
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;86
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;87
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;88
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;89
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;90
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;91
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;92
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;93
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;94
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;95
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;96
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;97
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;98
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;99
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;100
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;101
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;grads&lt;/span&gt;)
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-    (&lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;grads&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt;
-
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt;)
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;
-        &lt;span style=&#34;color:#75715e&#34;&gt;-- Gradient of cross-entropy loss&lt;/span&gt;
-        &lt;span style=&#34;color:#75715e&#34;&gt;-- after sigmoid activation&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;
-
-    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;)
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getActivation&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt;
-
-        (&lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;
-
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getActivation&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearW&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bias&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearX&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;Let us break down what the code above does.
-First, the inputs are an initial neural network &lt;code&gt;net&lt;/code&gt;
-and training data with corresponding targets &lt;code&gt;(x, tgt)&lt;/code&gt;.
-The function will provide inference result and gradients
-&lt;code&gt;(pred, grads)&lt;/code&gt; as the computation result.
-Line 82 launches the &lt;code&gt;_pass&lt;/code&gt; function which accepts
-two arguments: initial input &lt;code&gt;x&lt;/code&gt; and neural network &lt;code&gt;net&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;
-&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;91
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;92
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;93
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;94
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;95
-&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;96
-&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;97
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;98
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;99
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;100
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;101
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;:&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;)
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;LA&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&amp;lt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getActivation&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt;
-
-&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;        (&lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;t&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;layers&lt;/span&gt;
-&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;getActivation&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sact&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dZ&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearW&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bias&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;dX&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;linearX&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dY&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;This piece of code above performs computations with respect to
-the current layer.
-First, we perform pattern matching
-selecting current layer weights and biases &lt;code&gt;w b&lt;/code&gt;
-and activation &lt;code&gt;sact&lt;/code&gt; and also we get the tail of
-the layers list &lt;code&gt;layers&lt;/code&gt; on line 91.
-Lines 93-94 perform the forward
-pass, i.e. the $f (\mathbf{W} \mathbf{x} + \mathbf{b})$ operation.
-Line 96 (highlighted) launches a recursive call
-to &lt;code&gt;_pass&lt;/code&gt; providing the arguments of current layer computation
-&lt;code&gt;y&lt;/code&gt; and the rest of the tail of the network &lt;code&gt;layers&lt;/code&gt;.
-As a result of the recursive call we obtain
-gradient coming back from the layer &lt;code&gt;dZ&lt;/code&gt;, prediction result &lt;code&gt;pred&lt;/code&gt;, and
-partially computed weights gradients list &lt;code&gt;t&lt;/code&gt;.
-Lines 98-101 compute new gradients, which &lt;code&gt;_pass&lt;/code&gt; returns
-to its previous caller.&lt;/p&gt;
-
-&lt;p&gt;Now, what happens when we finish our forward propagation?
-Lines 84-89 below contain the stop condition
-for the recursive call. The empty list &lt;code&gt;[]&lt;/code&gt;
-on line 84 signifies that we have reached
-the end of the layers list. Now, we compute the network prediction:
-We apply sigmoid to squash the outputs between 0 and 1 on line 86.
-This, together with a binary cross-entropy loss function,
-will allow for a very
-&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34;&gt;simple gradient&lt;/a&gt;
-in the final layer: &lt;code&gt;loss&#39; = pred - tgt&lt;/code&gt; on line 89
-(highlighted).&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;div style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;
-&lt;table style=&#34;border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;&#34;&gt;&lt;tr&gt;&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;84
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;85
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;86
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;87
-&lt;/span&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;88
-&lt;/span&gt;&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;&lt;span style=&#34;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79&#34;&gt;89
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td style=&#34;vertical-align:top;padding:0;margin:0;border:0;&#34;&gt;
-&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;    &lt;span style=&#34;color:#a6e22e&#34;&gt;_pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;[]&lt;/span&gt;)
-      &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;inp&lt;/span&gt;
-        &lt;span style=&#34;color:#75715e&#34;&gt;-- We calculate the gradient of cross-entropy loss&lt;/span&gt;
-        &lt;span style=&#34;color:#75715e&#34;&gt;-- after sigmoid activation.&lt;/span&gt;
-&lt;span style=&#34;display:block;width:100%;background-color:#3c3d38&#34;&gt;        &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pred&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tgt&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-
-&lt;p&gt;The function &lt;code&gt;_pass&lt;/code&gt; provides three results:
-the loss gradient &lt;code&gt;loss&#39;&lt;/code&gt;, the predicted result &lt;code&gt;pred&lt;/code&gt;,
-and an empty list &lt;code&gt;[]&lt;/code&gt; to accumulate the weight gradients
-in the backward pass (lines 96-101).
-Note that since &lt;code&gt;sigmoid&lt;/code&gt; activation has been already
-calculated on line 86,
-the final layer must have no activation,
-i.e. we will specify the identity transformation &lt;code&gt;Id&lt;/code&gt;
-of the final layer, when defining the network architecture.&lt;/p&gt;
-
-&lt;p&gt;Now, the question: how can we calculate the forward
-pass separately, i.e. without the need to compute all the gradients?
-It turns out that Haskell has &lt;em&gt;lazy&lt;/em&gt; evaluation:
-it computes only what we specifically ask for.
-In the &lt;code&gt;forward&lt;/code&gt; implementation below, gradients are
-never asked, and therefore never computed.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forward&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fst&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;dta&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;undefined&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Normally, &lt;code&gt;undefined&lt;/code&gt; will return an error when encountered.
-However, since we never calculate the gradients,
-the undefined target is never evaluated.&lt;/p&gt;
-
-&lt;h3 id=&#34;putting-it-all-together&#34;&gt;Putting It All Together&lt;/h3&gt;
-
-&lt;p&gt;Now, we have all the necessary components to create a multilayer neural network.
-First, we generate our data. Then, we define the architecture
-and initialize the actual neural networks.
-Finally, we run our experiments.&lt;/p&gt;
-
-&lt;h4 id=&#34;train-and-validation-datasets&#34;&gt;Train And Validation Datasets&lt;/h4&gt;
-
-&lt;p&gt;We generate a random circles dataset for our experiments. We will provide
-the coordinate pairs $(x_1,x_2)$ as well as target class labels $y$.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;makeCircles&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-&lt;span style=&#34;color:#a6e22e&#34;&gt;makeCircles&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;factor&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;noise&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-
-  &lt;span style=&#34;color:#75715e&#34;&gt;-- Code omitted&lt;/span&gt;
-
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;In general, it is a good idea to have at least two separate machine learning
-datasets: one used for training and another one
-for model validation. Therefore, we will create two of those
-with randomly generated samples.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#a6e22e&#34;&gt;trainSet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeCircles&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;200&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.6&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.1&lt;/span&gt;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;testSet&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;makeCircles&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.6&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.1&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We create the &lt;code&gt;trainSet&lt;/code&gt; with 200
-and the &lt;code&gt;testSet&lt;/code&gt; with 100 data samples.
-&lt;code&gt;0.6&lt;/code&gt; and &lt;code&gt;0.1&lt;/code&gt; are model parameters, for the full
-implementation feel free to check &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;Main.hs&lt;/a&gt;.
-In a similar way we will create training and validation
-datasets for the spirals problem.&lt;/p&gt;
-
-&lt;h4 id=&#34;defining-the-architecture&#34;&gt;Defining The Architecture&lt;/h4&gt;
-
-&lt;p&gt;Below we define an architecture for a single hidden
-layer network.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- Initializing a single hidden layer network&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;nIn&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;hidden&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nOut&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-
-  &lt;span style=&#34;color:#75715e&#34;&gt;-- Generate weights/biases W1 and W2&lt;/span&gt;
-  (&lt;span style=&#34;color:#a6e22e&#34;&gt;w1_rand&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b1_rand&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;nIn&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;hidden&lt;/span&gt;)
-  (&lt;span style=&#34;color:#a6e22e&#34;&gt;w2_rand&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b2_rand&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;hidden&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nOut&lt;/span&gt;)
-
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [ &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w1_rand&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b1_rand&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;
-            , &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w2_rand&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b2_rand&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Id&lt;/span&gt; ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Note that the activation of the final layer is calculated separately,
-therefore we leave no activation &lt;code&gt;Id&lt;/code&gt;. &lt;code&gt;w*_rand&lt;/code&gt; and &lt;code&gt;b*_rand&lt;/code&gt; are
-randomly generated weights and biases.
-For convenience we define a &lt;code&gt;genNetwork&lt;/code&gt; function which
-will combine the operations from above. This is how it is used:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;genNetwork&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;] [&lt;span style=&#34;color:#66d9ef&#34;&gt;Relu&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Id&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h4 id=&#34;initializing-weights&#34;&gt;Initializing Weights&lt;/h4&gt;
-
-&lt;p&gt;We remember that for the greatest benefit of a neural network,
-the weights should be initialized randomly.
-Here we employ a common initialization strategy
-from this &lt;a href=&#34;https://arxiv.org/pdf/1502.01852.pdf&#34;&gt;paper&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;-- Generate new random weights and biases&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Int&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-&lt;span style=&#34;color:#a6e22e&#34;&gt;genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;)
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_genWeights&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;)
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;)
-    &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;_genWeights&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-          &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sqrt&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;fromIntegral&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt;)
-          &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randn&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nin&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;nout&lt;/span&gt;
-          &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;k&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This strategy becomes more useful as soon as your neural network becomes &amp;quot;deeper&amp;quot;,
-i.e. gets more and more layers.&lt;/p&gt;
-
-&lt;h4 id=&#34;adam&#34;&gt;Adam&lt;/h4&gt;
-
-&lt;p&gt;Previously we have seen that naive gradient descent may
-easily get stuck in a suboptimal setting.
-Let us implement Adam optimization strategy,
-explained in this &lt;a href=&#34;https://www.youtube.com/watch?v=JXQT_vxqwIs&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;adam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;p&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;iterN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;where&lt;/span&gt;
-
-    &lt;span style=&#34;color:#75715e&#34;&gt;-- Some code omitted&lt;/span&gt;
-
-        (&lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;pass&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dataSet&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;loss&amp;#39;&lt;/span&gt;
-
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;sN&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f2&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;vN&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;v&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;wN&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;zipWith3&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;w&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;vN&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sN&lt;/span&gt;
-
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-          &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Layer&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;w_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b_&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;sf&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;vW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;vB&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;sW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;sB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-          ( &lt;span style=&#34;color:#a6e22e&#34;&gt;w_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;vW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; ((&lt;span style=&#34;color:#a6e22e&#34;&gt;sqrt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sW&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;addC&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;epsilon&lt;/span&gt;)
-          , &lt;span style=&#34;color:#a6e22e&#34;&gt;b_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;vB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; ((&lt;span style=&#34;color:#a6e22e&#34;&gt;sqrt&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sB&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;addC&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;epsilon&lt;/span&gt;)
-          , &lt;span style=&#34;color:#a6e22e&#34;&gt;sf&lt;/span&gt;)
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;addC&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;cmap&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;) &lt;span style=&#34;color:#a6e22e&#34;&gt;m&lt;/span&gt;
-
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f2&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f2&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;sW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;sB&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-          ( &lt;span style=&#34;color:#a6e22e&#34;&gt;beta2&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;sW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta2&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` (&lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
-          , &lt;span style=&#34;color:#a6e22e&#34;&gt;beta2&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;sB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta2&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` (&lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
-
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f3&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Gradients&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-           &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Matrix&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-        &lt;span style=&#34;color:#a6e22e&#34;&gt;f3&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;vW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;vB&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
-          ( &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;vW&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dW&lt;/span&gt;
-          , &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt; `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;vB&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;beta1&lt;/span&gt;) `&lt;span style=&#34;color:#a6e22e&#34;&gt;scale&lt;/span&gt;` &lt;span style=&#34;color:#a6e22e&#34;&gt;dB&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The Adam implementation is a derived from &lt;code&gt;optimize&lt;/code&gt;.
-The most prominent change is additional &amp;quot;zipping&amp;quot; with
-two new functions:
-&lt;code&gt;f2&lt;/code&gt; embodies the &lt;a href=&#34;https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf&#34;&gt;RMSprop&lt;/a&gt; strategy and
-&lt;code&gt;f3&lt;/code&gt; performs momentum estimation.&lt;/p&gt;
-
-&lt;h4 id=&#34;running-the-experiments&#34;&gt;Running the experiments&lt;/h4&gt;
-
-&lt;p&gt;Now, we shall train our network:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochs&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0.001&lt;/span&gt;  &lt;span style=&#34;color:#75715e&#34;&gt;-- Learning rate&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;net&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;optimize&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;lr&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochs&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainSet&lt;/span&gt;
-      &lt;span style=&#34;color:#a6e22e&#34;&gt;netA&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;optimizeAdam&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;adamParams&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;epochs&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;net&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;trainSet&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;It is time to compile and run our networks. Please check the output below.
-The &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;complete project&lt;/a&gt; is available on &lt;a href=&#34;http://github.com/penkovsky/10-days-of-grad/tree/master/day2&#34;&gt;Github&lt;/a&gt;.
-Feel free to play with neural network architecture and initialization strategies.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;$ stack --resolver lts-10.6 --install-ghc ghc &lt;span style=&#34;color:#ae81ff&#34;&gt;\
-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --package hmatrix-0.18.2.0 &lt;span style=&#34;color:#ae81ff&#34;&gt;\
-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  --package hmatrix-morpheus-0.1.1.2 &lt;span style=&#34;color:#ae81ff&#34;&gt;\
-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;&lt;/span&gt;  -- -O2 Main.hs
-$ ./Main
-
-Circles problem, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; hidden layer of &lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt; neurons, &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt; epochs
----
-Training accuracy &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;gradient descent&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;76&lt;/span&gt;.5
-Validation accuracy &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;gradient descent&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;74&lt;/span&gt;.0
-
-Training accuracy &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Adam&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0
-Validation accuracy &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;Adam&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;96&lt;/span&gt;.0
-
-
-Spirals problem, Adam, &lt;span style=&#34;color:#ae81ff&#34;&gt;700&lt;/span&gt; epochs
----
-&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; hidden layer, &lt;span style=&#34;color:#ae81ff&#34;&gt;128&lt;/span&gt; neurons &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;513&lt;/span&gt; parameters&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-Training accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;77&lt;/span&gt;.5
-Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;72&lt;/span&gt;.0
-
-&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; hidden layer, &lt;span style=&#34;color:#ae81ff&#34;&gt;512&lt;/span&gt; neurons &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2049&lt;/span&gt; parameters&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-Training accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;97&lt;/span&gt;.2
-Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;97&lt;/span&gt;.0
-
-&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt; hidden layers, &lt;span style=&#34;color:#ae81ff&#34;&gt;40&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;25&lt;/span&gt;, and &lt;span style=&#34;color:#ae81ff&#34;&gt;10&lt;/span&gt; neurons &lt;span style=&#34;color:#f92672&#34;&gt;(&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1416&lt;/span&gt; parameters&lt;span style=&#34;color:#f92672&#34;&gt;)&lt;/span&gt;
-Training accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0
-Validation accuracy &lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;.0&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The first experiment shows the advantage of
-Adam over a naive gradient descent training
-algorithm on a simple circles dataset.
-The second experiment compares three
-architectures solving the spirals challenge.
-I had to reduce the number of training
-epochs to 700 to show which architecture
-will converge first.&lt;/p&gt;
-
-&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;When designing and training neural networks one should
-keep in mind several simple heuristics.&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Initialize weights randomly.&lt;/li&gt;
-&lt;li&gt;Keep activation functions nonlinear.
-Remember, a superposition of linear operators
-is a linear operator.&lt;/li&gt;
-&lt;li&gt;Use more layers and more neurons if the application appears to be complex.
-Reduce the number of layers in the opposite case.&lt;/li&gt;
-&lt;li&gt;Apply training strategies with momentum instead of naive gradient descent.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The universal approximation theorem claims that
-a single hidden layer neural network architecture
-should be sufficient to approximate any reasonable map.
-However, how to obtain the weights is a much harder question.
-For instance, one of the &lt;a href=&#34;https://www.gwern.net/docs/ai/1988-lang.pdf&#34;&gt;first networks&lt;/a&gt;
-solving the tough spirals challenge
-with backpropagation had not one, but three hidden layers.
-Indeed, we have seen that due to the highly nonlinear
-relationships in the dataset,
-a three-layer network with fewer parameters converges faster than
-the one with a single hidden layer.&lt;/p&gt;
-
-&lt;p&gt;In the next posts we will take a look on &lt;a href=&#34;https://penkovsky.com/neural-networks/day3/&#34;&gt;automatic differentiation&lt;/a&gt; and regularization techniques.  We will also
-discuss how Haskell compiler can help ensure that our neural network is
-correct. And we will ramp it up to &lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt;
-allowing us to solve some interesting challenges.  Stay tuned.&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;I would like to dedicate this article to Maxence Ernoult for
-his early feedback and constructive criticism. I would also
-like to thank Elena Prokopets for proofreading the article.&lt;/p&gt;
-
-&lt;h2 id=&#34;further-reading&#34;&gt;Further Reading&lt;/h2&gt;
-
-&lt;h3 id=&#34;haskell&#34;&gt;Haskell&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://learnyouahaskell.com/&#34;&gt;A great start to learning Haskell&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://tryhaskell.org/&#34;&gt;Try Haskell tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/saschagrunert/nn&#34;&gt;Another example NN in Haskell&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/quickdudley/hfnn&#34;&gt;Yet one more&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;h3 id=&#34;neural-networks-and-backpropagation&#34;&gt;Neural Networks And Backpropagation&lt;/h3&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/slides/2018/cs231n_2018_ds02.pdf&#34;&gt;A brief tutorial on backprop&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.github.io/optimization-2/&#34;&gt;More intuition on backprop&lt;/a&gt; and &lt;a href=&#34;http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf&#34;&gt;slides&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://arunmallya.github.io/writeups/nn/backprop.html&#34;&gt;Derivation of gradients&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cs231n.stanford.edu/handouts/derivatives.pdf&#34;&gt;Another tutorial on derivatives&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://deepnotes.io/softmax-crossentropy&#34;&gt;Notes on softmax and crossentropy&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://neuralnetworksanddeeplearning.com/&#34;&gt;A more or less complete introduction to deep learning&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://web.archive.org/web/20160706105446/http://benmargolis.com/compsci/ai/two_spirals_problem.htm&#34;&gt;More about the spirals challenge&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
-MathJax.Hub.Config({
-  TeX: { equationNumbers: { autoNumber: &#34;AMS&#34; } }
-});
-&lt;/script&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:fn-0&#34;&gt;Such a cheeky theorem!
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-0&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;The attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-2&#34;&gt;For now, there is nothing that prevents us from mismatching matrix dimensions, however, we will revisit this issue in the future.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-3&#34;&gt;To put simply, &lt;code&gt;a `f` b&lt;/code&gt; is the same as &lt;code&gt;f a b&lt;/code&gt;, or $f(a,b)$.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;
 </description>

@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
-    <lastBuildDate>Tue, 30 Oct 2018 11:00:10 +0200</lastBuildDate>
+    <lastBuildDate>Sun, 21 Mar 2021 18:40:00 +0200</lastBuildDate>
     
 	<atom:link href="https://penkovsky.com/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>3D Printing</title>
+      <link>https://penkovsky.com/tags/3d-printing/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/3d-printing/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Chimera</title>
@@ -33,7 +42,7 @@
     <item>
       <title>DIY</title>
       <link>https://penkovsky.com/tags/diy/</link>
-      <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
       
       <guid>https://penkovsky.com/tags/diy/</guid>
       <description></description>
@@ -54,6 +63,15 @@
       <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
       
       <guid>https://penkovsky.com/tags/dissipative-solitons/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Drone</title>
+      <link>https://penkovsky.com/tags/drone/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/drone/</guid>
       <description></description>
     </item>
     
@@ -99,6 +117,15 @@
       <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
       
       <guid>https://penkovsky.com/tags/reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial</title>
+      <link>https://penkovsky.com/tags/tutorial/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/tutorial/</guid>
       <description></description>
     </item>
     
