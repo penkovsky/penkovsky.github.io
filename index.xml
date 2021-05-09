@@ -11,6 +11,413 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>A Quadcopter From Scratch</title>
+      <link>https://penkovsky.com/homelab/quadcopter/</link>
+      <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/homelab/quadcopter/</guid>
+      <description>
+
+&lt;p&gt;Recently NASA has made the first powered flight on Mars.
+They have deployed a drone called &lt;a href=&#34;https://en.wikipedia.org/wiki/Ingenuity_(helicopter)&#34;&gt;Ingenuity&lt;/a&gt;
+costing about $85 million. The helicopter was able to fly
+on about ten meters (as of May, 7)
+over the surface of the Red Planet.&lt;/p&gt;
+
+&lt;p&gt;Coincidently, I have also built a flying drone.
+This looked like a good challenge and an opportunity to
+learn about unmanned aerial vehicles (UAVs).&lt;/p&gt;
+
+&lt;p&gt;Here is what I learned.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/quad/copter.gif&#34; alt=&#34;Ingenuity helicopter hovering on Mars (2021). Image credit: NASA/JPL-Caltech.&#34; width=&#34;590&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Ingenuity helicopter hovering on Mars (2021). Image credit: NASA/JPL-Caltech.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Contents&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#parts&#34;&gt;Parts&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#assembling-a-drone&#34;&gt;Assembling a Drone&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#some-of-the-challenges-i-have-faced&#34;&gt;Some of the Challenges I Have Faced&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;h2 id=&#34;parts&#34;&gt;Parts&lt;/h2&gt;
+
+&lt;p&gt;What you will essentially need is propellers, motors, and some way to power and control them.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/quad/parts-flat.jpg&#34; alt=&#34;Our quadcopter parts&#34; width=&#34;700&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Our quadcopter parts
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Part&lt;/th&gt;
+&lt;th&gt;Qty&lt;/th&gt;
+&lt;th&gt;Unit W. (g)&lt;/th&gt;
+&lt;th&gt;Weight (g)&lt;/th&gt;
+&lt;th&gt;Price (EUR)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Arm (printed)&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;52&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Arm support (printed)&lt;/td&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;3.5&lt;/td&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Base (v1.1) (printed)&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;30&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Top (v1.1) (printed)&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;21&lt;/td&gt;
+&lt;td&gt;21&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/ZOP-Power-11_1V-1100mAh-65C-3S-Lipo-Battery-XT60-Plug-p-1085893.html&#34;&gt;1100 mAh Battery 3S&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;117&lt;/td&gt;
+&lt;td&gt;117&lt;/td&gt;
+&lt;td&gt;14.72&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2300 KV Motors 2204&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;25&lt;/td&gt;
+&lt;td&gt;100&lt;/td&gt;
+&lt;td&gt;14.02&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Racerstar-RS20Ax4-20A-4-in-1-Blheli_S-Opto-ESC-2-4S-Support-Dshot150-Dshot300-for-RC-FPV-Racing-Drone-p-1068210.html&#34;&gt;ESC (4 in 1)&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;24.84&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/F3-Flight-Controller-6-DOF-or-10-DOF-for-RC-Multirotor-FPV-Racing-Drone-p-1010232.html&#34;&gt;F3 flight controller&lt;/a&gt;*&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;18.87&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Radio receiver (FS-iA10B)&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;17.6&lt;/td&gt;
+&lt;td&gt;17.6&lt;/td&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/DC-DC-Converter-Step-Down-Module-UBEC-3A-5V-or-12V-BEC-For-RC-Airplane-FPV-for-RC-Drone-FPV-Racing-p-981978.html&#34;&gt;UBEC 3A 5V&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;3.13&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Wires*&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Bolts and nuts*&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;18&lt;/td&gt;
+&lt;td&gt;18&lt;/td&gt;
+&lt;td&gt;&amp;lt;10&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/10-Pairs-GEPRC-5040-V2-5-Inch-3-Blade-Propeller-Transparent-Color-For-RC-Multirotor-FPV-Racing-Drone-p-1169484.html&#34;&gt;5040 Propellers&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;7.38&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Suleve-M3NH12-50Pcs-M3-Nylon-Hex-Hexagonal-Female-Thread-PCB-Standoff-Spacers-2025303540mm-p-1262027.html&#34;&gt;Nylon spacers 40 mm&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;5.72&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/10PCS-Eachine-Lipo-Battery-Tie-Down-Strap-260mm-For-FPV-RC-Drone-p-1137622.html&#34;&gt;&amp;quot;Velcro&amp;quot; fasteners&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;2-3&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;1.63&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Amass-XT60-Male-Female-Plug-Connector-12AWG-10cm-Power-Cable-p-1155466.html&#34;&gt;XT60 connector&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;?&lt;/td&gt;
+&lt;td&gt;3.27&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/4-PCS-22XX-Series-Motor-Silicone-Anti-vibration-Pad-in-for-RC-Drone-FPV-Racing-Drone-p-1153904.html&#34;&gt;Motor anti-vibration pads&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;2.01&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Total**&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;418.6&lt;/td&gt;
+&lt;td&gt;124.59&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;small&gt;* Approximate weight.
+&lt;/small&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;small&gt;** Total price without LiPo charger (iMAX B6), radio transmitter, and
+camera. You can reuse those from other projects.  The prices are given for
+indicative purpose only. The parts are not guaranteed to be optimal or
+cheapest.
+&lt;/small&gt;&lt;/p&gt;
+
+&lt;p&gt;The 3D printed frame was downloaded from Thingiverse: design called
+&lt;a href=&#34;https://www.thingiverse.com/thing:629338&#34;&gt;Peon230&lt;/a&gt;. Initially I printed everything in PLA. However, I have found
+out that, when crashing, base and top parts tend to break. Now, I use nylon
+for those two parts: they are lighter in nylon and do not break so easily.  By
+the way, I did not use glue for platform adhesion when printing with PLA&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
+Printing directly on the glass platform gave parts a shiny finish.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/quad/3dprinting.gif&#34; alt=&#34;Fabricating quadcopter frame. Overall it took 11 hours to print all the parts.&#34; width=&#34;520&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Fabricating quadcopter frame. Overall it took 11 hours to print all the parts.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;h3 id=&#34;some-jargon&#34;&gt;Some Jargon&lt;/h3&gt;
+
+&lt;p&gt;&lt;strong&gt;ESC&lt;/strong&gt; = electronic speed controller. Those translate control pulses coming
+from the flight controller into voltage actually driving motors. The ESC I used
+in this build contains actually four ESCs, permitting to control all four
+motors. That reduces the copter&#39;s weight, which is great.&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;UBEC&lt;/strong&gt; = universal battery elimination circuit (DC-DC converter). Helped me
+to use a single battery both for the motors (12 V) and for the flight
+controller (5 V). UBECs are switching converters and they are recommended over
+linear DC converters, which dissipate a lot of heat when stepping down the
+voltage.&lt;/p&gt;
+
+&lt;p&gt;(Battery) &lt;strong&gt;3S&lt;/strong&gt; = 3 cells. Each cell contributes 3.7 V, therefore 11.1 V
+total. I used a battery with capacity of 1100 mAh. This battery gave me up to
+15 minutes to fly.&lt;/p&gt;
+
+&lt;p&gt;Motor characteristics. &lt;strong&gt;2300 KV&lt;/strong&gt;: 2300 revolutions per minute (RPMs) per volt
+(with no load attached to that motor). Therefore, at 12 volts, these motors are
+expected to achieve 12 * 2300 = 27600 RPMs. &lt;strong&gt;2204&lt;/strong&gt;: 22  is the rotor diameter
+and 04 is the stator height. Larger motors give you more torque, which is
+related to the uplift force you want to generate. This is especially important
+when considering the vehicle&#39;s weight.  Racing drones have high thrust to
+weight ratio enhancing their maneuverability and ability to rapidly accelerate
+Camera drones, on the other hand, have lower thrust to weight ratio making them
+more stable and easier to pilot.&lt;/p&gt;
+
+&lt;h3 id=&#34;battery-safety&#34;&gt;Battery Safety&lt;/h3&gt;
+
+&lt;!-- Speaking about the battery, --&gt;
+
+&lt;p&gt;The nominal voltage of a lithium-polymer (LiPo) battery cell (3.7 V) is
+actually closer to its storage voltage (3.8 V). When a battery cell is fully
+charged, it reaches 4.2 V. The battery should never be overcharged because of
+an explosion/fire hazard. Also discharging under 3 V is not recommended as the
+battery may break. It is a good idea using a balance charger that controls each
+cell individually. &lt;strong&gt;Be careful with your batteries&lt;/strong&gt;. There exist special
+safety bags designed for LiPo charging.  Never charge your batteries
+unattended.&lt;/p&gt;
+
+&lt;!-- The video below gives an idea what can happen if such battery is
+improperly handled.
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/CnNId0mDnBo&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+ --&gt;
+
+&lt;h2 id=&#34;assembling-a-drone&#34;&gt;Assembling a Drone&lt;/h2&gt;
+
+&lt;h3 id=&#34;soldering-motor-wires&#34;&gt;Soldering Motor Wires&lt;/h3&gt;
+
+&lt;p&gt;First of all we need to make sure that our electronic part (flight controller, ESCs, motors, etc.) works properly.
+We solder three wires of each motor directly to ESCs.
+Then, we solder an XT60 battery connector.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/4Ry7khyMQZo&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;In parallel to motors we solder a UBEC, not shown on the video&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+We connect UBEC to power the flight controller from the same battery.&lt;/p&gt;
+
+&lt;h3 id=&#34;complete-build&#34;&gt;Complete Build&lt;/h3&gt;
+
+&lt;p&gt;In this video we assemble the frame from earlier printed parts.  We put motors,
+ESCs, flight controller, and the receiver on the frame.  The flight controller
+is bolted on top of the 4-in-1 ESC.  Then, we connect the radio receiver to the
+flight controller.  We also connect flight controller output wires to ESCs.  We
+could solder everything instead, but these connections are already good for the
+test. We test connection with a transmitter and the motors. We finalize the build
+by putting the remaining part of the frame on top.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/kusp-hsykl8&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;p&gt;It is crucial that your build is tight. No wire, nothing should be in
+the way of your propellers.&lt;/p&gt;
+
+&lt;h3 id=&#34;tuning-the-flight-controller&#34;&gt;Tuning the Flight Controller&lt;/h3&gt;
+
+&lt;p&gt;While your UAV may seem functional, it is probably not yet ready to fly. In
+fact, the flight controller is probably the most important part, it acts as a
+&amp;quot;quadcopter&#39;s brain&amp;quot;. The controller interprets the received radio commands and
+the data coming from its sensors, most notably from the intertia measurement
+unit (IMU), to stabilize and steer the vehicle. In fact, without a flight
+controller it would be virtually impossible for a human to pilot a quadcopter.&lt;/p&gt;
+
+&lt;p&gt;To make sure the controller interprets the flight situation adequately,
+it has to be properly calibrated. To perform the tuning, I used
+&lt;a href=&#34;http://cleanflight.com&#34;&gt;Clean Flight&lt;/a&gt; software. However, there exist multiple
+alternative options, such as &lt;a href=&#34;https://betaflight.com/&#34;&gt;Beta Flight&lt;/a&gt;, which is a
+popular fork of Clean Flight.&lt;/p&gt;
+
+&lt;h2 id=&#34;some-of-the-challenges-i-have-faced&#34;&gt;Some of the Challenges I Have Faced&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Vibrations on captured videos from the quadcopter turned out to be mostly because of slightly damaged propellers (after emergency landings)&lt;/li&gt;
+&lt;li&gt;The best way to position antennas turned out to be along the body. This way they don&#39;t get into the way if crashing.&lt;/li&gt;
+&lt;li&gt;Regulations. In Europe, you need to obtain a special permission to fly a drone. Also there are very strict limitations where you can fly as a hobbyist.&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;This is my first racing quad. I am still learning to fly this thing.&lt;/p&gt;
+
+
+&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
+  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/kVYTW7eJe7k&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
+&lt;/div&gt;
+
+
+&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Ingenuity_(helicopter)&#34;&gt;Ingenuity helicopter&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;It is always advised to apply 3d printing glue for nylon prints because of high warping forces of this material.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-2&#34;&gt;I used UBEC in the second build. In the first build, I had a separate battery and a linear step-up DC converter to power the flight controller.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;
+</description>
+    </item>
+    
+    <item>
       <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
       <link>https://penkovsky.com/homelab/beatle/</link>
       <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
@@ -3428,285 +3835,6 @@ MathJax.Hub.Config({
       
       <guid>https://penkovsky.com/talk/ictp2019/</guid>
       <description></description>
-    </item>
-    
-    <item>
-      <title>Day 3: Haskell Guide To Neural Networks</title>
-      <link>https://penkovsky.com/neural-networks/day3/</link>
-      <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/neural-networks/day3/</guid>
-      <description>
-
-&lt;p&gt;Now that we have seen how neural networks work, we realize that understanding
-of the gradients flow is essential for survival.  Therefore, we will revise
-our strategy on the lowest level. However, as neural networks become more complicated,
-calculation of gradients by hand becomes a murky business. Yet, fear not young
-&lt;em&gt;padawan&lt;/em&gt;, there is a way out! I am very excited that today we will finally get
-acquainted with automatic differentiation, an essential tool in your deep
-learning arsenal.  This post was largely inspired by &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34;&gt;Hacker&#39;s guide to Neural
-Networks&lt;/a&gt;. For comparison, see also
-&lt;a href=&#34;https://github.com/urwithajit9/HG_NeuralNetwork&#34;&gt;Python version&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;Before jumping ahead, you may also want to check the previous posts:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;Day 1: Learning Neural Networks The Hard Way&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;Day 2: What Do Hidden Layers Do?&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;The source code from this guide is available &lt;a href=&#34;https://github.com/penkovsky/10-days-of-grad/tree/master/day3&#34;&gt;on
-Github&lt;/a&gt;. The
-guide is written in literate Haskell, so it can be safely compiled.&lt;/p&gt;
-
-&lt;h2 id=&#34;why-random-local-search-fails&#34;&gt;Why Random Local Search Fails&lt;/h2&gt;
-
-&lt;p&gt;Following Karpathy&#39;s &lt;a href=&#34;http://karpathy.github.io/neuralnets/&#34;&gt;guide&lt;/a&gt;, we
-first consider a simple multiplication circuit.  Well, Haskell is not JavaScript,
-so the definition is pretty straightforward:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Or we could have written&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;to make the function look more intuitively $f(x,y) = x \cdot y$. Anyway,&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;returns -6. Exciting.&lt;/p&gt;
-
-&lt;p&gt;Now, the question: is it possible to change the input $(x,y)$ slightly in order
-to increase the output?  One way would be to perform local random search.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;_search&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;do&lt;/span&gt;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; )&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;-&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; )&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt;
-  &lt;span style=&#34;color:#66d9ef&#34;&gt;let&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;forwardMultiplyGate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt;
-  &lt;span style=&#34;color:#a6e22e&#34;&gt;return&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;$&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;
-               &lt;span style=&#34;color:#66d9ef&#34;&gt;then&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x_try&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y_try&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out&lt;/span&gt;)
-               &lt;span style=&#34;color:#66d9ef&#34;&gt;else&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;bestOut&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Not surprisingly, the function above represents a single iteration of a
-&amp;quot;for&amp;quot;-loop. What it does, it randomly selects points around initial $(x, y)$
-and checks if the output has increased.  If yes, then it updates the best known
-inputs and the maximal output. To iterate, we can use &lt;code&gt;foldM :: (b -&amp;gt; a -&amp;gt; IO
-b) -&amp;gt; b -&amp;gt; [a] -&amp;gt; IO b&lt;/code&gt;. This function is convenient since we anticipate some
-interaction with the &amp;quot;external world&amp;quot; in the form of random numbers generation:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;localSearch&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;
- &lt;span style=&#34;color:#a6e22e&#34;&gt;foldM&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;searchStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;tweakAmount&lt;/span&gt;) (&lt;span style=&#34;color:#a6e22e&#34;&gt;x0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y0&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;out0&lt;/span&gt;) [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;..&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;100&lt;/span&gt;]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;What the code essentially tells us is that we seed the algorithm with some
-initial values of &lt;code&gt;x0&lt;/code&gt;, &lt;code&gt;y0&lt;/code&gt;, and &lt;code&gt;out0&lt;/code&gt; and iterate from 1 till 100.  The core
-of the algorithm is &lt;code&gt;searchStep&lt;/code&gt;:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;searchStep&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ta&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xyz&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;_search&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;ta&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;xyz&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;which is a convenience function that glues those two pieces together.  It
-simply ignores the iteration number and calls &lt;code&gt;_search&lt;/code&gt;. Now, we would like to
-have a random number generator within the range of [-1; 1). From the
-&lt;a href=&#34;http://hackage.haskell.org/package/random-1.1/docs/System-Random.html&#34;&gt;documentation&lt;/a&gt;,
-we know that &lt;code&gt;randomIO&lt;/code&gt; produces a number between 0 and 1.  Therefore, we scale
-the value by multiplying by 2 and subtracting 1:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;IO&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;randomDouble&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;subtract&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;&amp;lt;$&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;randomIO&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The &lt;code&gt;&amp;lt;$&amp;gt;&lt;/code&gt; function is a synonym to &lt;code&gt;fmap&lt;/code&gt;.  What it essentially does is
-attaching the pure function &lt;code&gt;subtract 1. (*2)&lt;/code&gt; which has type &lt;code&gt;Double -&amp;gt;
-Double&lt;/code&gt;, to the &amp;quot;external world&amp;quot; action &lt;code&gt;randomIO&lt;/code&gt;, which has type &lt;code&gt;IO Double&lt;/code&gt;
-(yes, IO = input/output)&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
-
-&lt;p&gt;A hack for a numerical minus infinity:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;inf_&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Now, we run &lt;code&gt;localSearch 0.01 (-2, 3, inf_)&lt;/code&gt; several times:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.7887454910045664&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.910160042416705&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.205535653974539&lt;/span&gt;)
-(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.7912166830200635&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.89808308735154&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.19109477484237&lt;/span&gt;)
-(&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1.8216809458018006&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;2.8372869694452523&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;5.168631610010152&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;In fact, we see that the outputs have increased from -6 to about -5.2.
-But the improvement is only about 0.8/100 = 0.008 units per iteration.
-That is an extremely inefficient method. The problem with random
-search is that each time it attempts to change the inputs in random
-directions. If the algorithm makes a mistake, it has to discard
-the result and start again from the previously known best position.
-Wouldn&#39;t it be nice if instead each iteration would improve the result
-at least by a little bit?&lt;/p&gt;
-
-&lt;h2 id=&#34;automatic-differentiation&#34;&gt;Automatic Differentiation&lt;/h2&gt;
-
-&lt;p&gt;Instead of random search in random direction, we can make use of the precise
-direction and amount to change the input so that the output would improve. And
-that is exactly what the &lt;a href=&#34;https://en.wikipedia.org/wiki/Gradient&#34;&gt;gradient&lt;/a&gt;
-tells us.  Instead of manually computing the gradient every time, we can employ
-some clever algorithm. There exist multiple approaches: numerical, symbolic,
-and automatic differentiation.  In his
-&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;article&lt;/a&gt;,
-Dominic Steinitz explains the differences between them.  The last approach,
-automatic differentiation is exactly what we need: accurate gradients with
-minimal overhead.  Here, we will briefly explain the concept.&lt;/p&gt;
-
-&lt;p&gt;The idea behind automatic differentiation is that we explicitly define
-gradients only for elementary, basic operators. Then, we exploit the
-&lt;a href=&#34;https://en.wikipedia.org/wiki/Chain_rule&#34;&gt;chain rule&lt;/a&gt; combining those
-operators into neural networks or whatever we like. That strategy will infer
-the necessary gradients by itself. Let us illustrate the method with an
-example.&lt;/p&gt;
-
-&lt;p&gt;Below we define both multiplication operator and its gradient using the chain
-rule, i.e. $\frac {d} {dt} x(t) y(t) = x(t) y&#39;(t) + x&#39;(t) y(t)$:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The same can be done with addition, subtraction, division, and exponent:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;negate&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;)
-
-(&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;/.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;, (&lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;^&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;exp1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&amp;#39;&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We also have &lt;code&gt;constOp&lt;/code&gt; for constants:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; (&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)
-&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0.0&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Finally, we can define our favourite sigmoid $\sigma(x)$
-combining the operators above:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;constOp&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp1&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;negate1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Now, let us compute a neuron $f(x, y) = \sigma(a x + b y + c)$, where $x$
-and $y$ are inputs and $a$, $b$, and $c$ are parameters&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid1&lt;/span&gt; ((&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;) &lt;span style=&#34;color:#f92672&#34;&gt;+.&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Now, we can obtain the gradient of &lt;code&gt;a&lt;/code&gt; in the point
-where $a = 1$, $b = 2$, $c = -3$, $x = -1$, and $y = 3$:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; [(&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;, &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;)]
-&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy1&lt;/span&gt;
-(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Here, the first number is the result of the neuron&#39;s output and the second
-one is the gradient with respect to &lt;code&gt;a&lt;/code&gt; ($\frac d {da}$). Let us verify the
-math behind the result:&lt;/p&gt;
-
-&lt;p&gt;$$
-\begin{equation}
-\sigma(ax + by + c) | _{a=(a,1), b=(b,0), c=(c,0), x=(x,0), y=(y,0)} = \\&lt;br /&gt;
-\sigma[(a, 1) (x, 0) + (b, 0) (y, 0) + (c, 0)] = \\&lt;br /&gt;
-\sigma[(ax, a \cdot 0 + 1 \cdot x) + (by, 0 \cdot b + 0 \cdot y) + (c, 0)] = \\&lt;br /&gt;
-\sigma[(ax + by + c, x)] = \\&lt;br /&gt;
-\frac {(1, 0)} {(1, 0) + \exp \left[ -(ax + by + c, x) \right]} = \\&lt;br /&gt;
-\frac {(1, 0)} {(1, 0) + \exp \left[ -ax - by - c, -x) \right]} = \\&lt;br /&gt;
-\frac {(1, 0)} {(1, 0) + (\exp (-ax - by - c), -x \exp (-ax - by - c))} = \\&lt;br /&gt;
-\frac {(1, 0)} {(1 + \exp(-ax - by - c), -x \exp(-ax - by - c))} = \\&lt;br /&gt;
-\left( \sigma(ax + by + c), \frac {x \exp(-ax - by -c)} {(1 + \exp(-ax - by -c))^2} \right).
-\end{equation}
-$$&lt;/p&gt;
-
-&lt;p&gt;The first expression is the result of neuron&#39;s computation
-and the second one is the exact analytic expression
-for $\frac d {da}$. That is all the magic behind
-automatic differentiation!
-In a similar way, we can obtain the rest of the gradients:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
-(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.3149807562105195&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
-(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;)]
-(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.1049935854035065&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron1&lt;/span&gt; [(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;), (&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)]
-(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.8807970779778823&lt;/span&gt;,&lt;span style=&#34;color:#ae81ff&#34;&gt;0.209987170807013&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;h2 id=&#34;introducing-backprop-library&#34;&gt;Introducing backprop library&lt;/h2&gt;
-
-&lt;p&gt;The &lt;a href=&#34;https://backprop.jle.im/&#34;&gt;backprop library&lt;/a&gt; was specifically designed for
-&lt;a href=&#34;https://www.quora.com/What-is-Differentiable-Programming&#34;&gt;differentiable
-programming&lt;/a&gt;.  It
-provides combinators to reduce our mental overhead.  In addition, the most
-useful operations such as arithmetics and trigonometry, have already been
-defined in the library. See also
-&lt;a href=&#34;http://hackage.haskell.org/package/hmatrix-backprop&#34;&gt;hmatrix-backprop&lt;/a&gt; for
-linear algebra.  So all you need for differentiable programming now is to
-define some functions:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Reifies&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;W&lt;/span&gt;
-  &lt;span style=&#34;color:#f92672&#34;&gt;=&amp;gt;&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;-&amp;gt;&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BVar&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;s&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;
-&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt; [&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;, &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt;] &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;a&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;b&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;y&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;c&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;sigmoid&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;+&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;exp&lt;/span&gt; (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;x&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code&gt;BVar s&lt;/code&gt; wrapper signifies that our function is
-differentiable. Now, the forward pass is:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;evalBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sequenceVar&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;We use &lt;code&gt;sequenceVar&lt;/code&gt; isomorphism to convert a &lt;code&gt;BVar&lt;/code&gt; of a list into a list of
-&lt;code&gt;BVar&lt;/code&gt;s, as required by our &lt;code&gt;neuron&lt;/code&gt; equation. And the backward pass is&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-haskell&#34; data-lang=&#34;haskell&#34;&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;backwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;gradBP&lt;/span&gt; (&lt;span style=&#34;color:#a6e22e&#34;&gt;neuron&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;BP&lt;/span&gt;&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;&lt;span style=&#34;color:#a6e22e&#34;&gt;sequenceVar&lt;/span&gt;)
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;::&lt;/span&gt; [&lt;span style=&#34;color:#66d9ef&#34;&gt;Double&lt;/span&gt;]
-&lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;), (&lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;), &lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;]
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;forwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- 0.8807970779778823&lt;/span&gt;
-
-&lt;span style=&#34;color:#a6e22e&#34;&gt;backwardNeuron&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;abcxy0&lt;/span&gt;
-&lt;span style=&#34;color:#75715e&#34;&gt;-- [-0.1049935854035065,0.3149807562105195,0.1049935854035065,0.1049935854035065,0.209987170807013]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Note that all the gradients are in one list, the type of the first &lt;code&gt;neuron&lt;/code&gt;
-argument.&lt;/p&gt;
-
-&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
-
-&lt;p&gt;Modern neural networks tend to be complex beasts.  Writing backpropagation
-gradients by hand can easily become a tedious task.  In this post we have seen
-how automatic differentiation can face this problem.&lt;/p&gt;
-
-&lt;p&gt;In the next posts we will apply automatic differentiation to real neural
-networks. We will talk about
-&lt;a href=&#34;https://penkovsky.com/neural-networks/day4/&#34;&gt;batch normalization&lt;/a&gt;,
-another crucial method in modern deep learning.  And we will ramp it up to
-&lt;a href=&#34;https://penkovsky.com/neural-networks/day5/&#34;&gt;convolutional networks&lt;/a&gt; allowing us
-to solve some interesting challenges.
-Stay tuned!&lt;/p&gt;
-
-&lt;h2 id=&#34;further-reading&#34;&gt;Further reading&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://jalammar.github.io/visual-interactive-guide-basics-neural-networks/&#34;&gt;Visual guide to neural networks&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://backprop.jle.im/01-getting-started.html&#34;&gt;Backprop documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/&#34;&gt;Article on backpropagation by Dominic Steinitz&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;In fact, 64 bit double precision is not necessary for neural networks, if not an overkill. In practice you would prefer to use a 32 bit &lt;code&gt;Float&lt;/code&gt; type.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
     </item>
     
   </channel>
