@@ -6,7 +6,7 @@
     <description>Recent content in Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
+    <copyright>&amp;copy; Bogdan Penkovsky 2021</copyright>
     <lastBuildDate>Thu, 02 Jul 2020 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
@@ -21,7 +21,7 @@
 &lt;p&gt;Recently NASA has made the first powered flight on Mars.
 They have deployed a drone called &lt;a href=&#34;https://en.wikipedia.org/wiki/Ingenuity_(helicopter)&#34;&gt;Ingenuity&lt;/a&gt;
 costing about $85 million. The helicopter was able to fly
-on about ten meters (as of May, 7)
+on about ten meters altitude (as of May, 7)
 over the surface of the Red Planet.&lt;/p&gt;
 
 &lt;p&gt;Coincidently, I have also built a flying drone.
@@ -337,6 +337,8 @@ improperly handled.
 
 &lt;p&gt;First of all we need to make sure that our electronic part (flight controller, ESCs, motors, etc.) works properly.
 We solder three wires of each motor directly to ESCs.
+Please pay attention to the motor wiring as neighboring motors rotate
+&lt;em&gt;in opposite directions&lt;/em&gt;.
 Then, we solder an XT60 battery connector.&lt;/p&gt;
 
 

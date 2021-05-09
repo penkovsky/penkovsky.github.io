@@ -6,7 +6,7 @@
     <description>Recent content in 3D Printing on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; Bogdan Penkovsky 2020</copyright>
+    <copyright>&amp;copy; Bogdan Penkovsky 2021</copyright>
     <lastBuildDate>Sun, 09 May 2021 11:33:00 +0200</lastBuildDate>
     
 	<atom:link href="https://penkovsky.com/tags/3d-printing/index.xml" rel="self" type="application/rss+xml" />
@@ -18,7 +18,7 @@
       <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
       
       <guid>https://penkovsky.com/homelab/quadcopter/</guid>
-      <description>Recently NASA has made the first powered flight on Mars. They have deployed a drone called Ingenuity costing about $85 million. The helicopter was able to fly on about ten meters (as of May, 7) over the surface of the Red Planet.
+      <description>Recently NASA has made the first powered flight on Mars. They have deployed a drone called Ingenuity costing about $85 million. The helicopter was able to fly on about ten meters altitude (as of May, 7) over the surface of the Red Planet.
 Coincidently, I have also built a flying drone. This looked like a good challenge and an opportunity to learn about unmanned aerial vehicles (UAVs).
 Here is what I learned.</description>
     </item>
