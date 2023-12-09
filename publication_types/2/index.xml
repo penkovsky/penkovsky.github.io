@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>2 on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/publication_types/2/</link>
+    <description>Recent content in 2 on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Wed, 05 Jan 2022 00:00:00 +0100</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/publication_types/2/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Hardware-Efficient Stochastic Binary CNN Architectures for Near-Sensor Computing</title>
+      <link>https://penkovsky.com/publication/stochastic-binary-cnn/</link>
+      <pubDate>Wed, 05 Jan 2022 00:00:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/publication/stochastic-binary-cnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reservoir computing with biocompatible organic electrochemical networks for brain-inspired biosignal classification</title>
+      <link>https://penkovsky.com/publication/biocompatible-reservoir-computing/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/biocompatible-reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Digital Biologically Plausible Implementation of Binarized Neural Networks with Differential Hafnium Oxide Resistive Memory Arrays</title>
+      <link>https://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</link>
+      <pubDate>Thu, 09 Jan 2020 00:00:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/publication/digital-biologically-plausible-binarized-neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Coupled Nonlinear Delay Systems As Deep Convolutional Neural Networks</title>
+      <link>https://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</link>
+      <pubDate>Thu, 01 Aug 2019 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/coupled-delay-systems-as-deep-convolutional-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Stochastic Computing for Hardware Implementation of Binarized Neural Networks</title>
+      <link>https://penkovsky.com/publication/stochastic-bnn/</link>
+      <pubDate>Wed, 05 Jun 2019 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/stochastic-bnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Efficient Design of Hardware-Enabled Reservoir Computing in FPGAs</title>
+      <link>https://penkovsky.com/publication/hardware-enabled-reservoir-computing/</link>
+      <pubDate>Tue, 30 Oct 2018 00:00:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/publication/hardware-enabled-reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial: Photonic Neural Networks in Delay Systems</title>
+      <link>https://penkovsky.com/publication/photonic-neural-networks/</link>
+      <pubDate>Wed, 17 Oct 2018 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/photonic-neural-networks/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Spatio-temporal complexity in dual delay nonlinear laser dynamics: chimeras and dissipative solitons</title>
+      <link>https://penkovsky.com/publication/chimeras-and-dissipative-solitons/</link>
+      <pubDate>Tue, 09 Oct 2018 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/chimeras-and-dissipative-solitons/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Laser chimeras as a paradigm for multistable patterns in complex systems</title>
+      <link>https://penkovsky.com/publication/laser-chimeras/</link>
+      <pubDate>Tue, 14 Jul 2015 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/laser-chimeras/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Virtual Chimera States for Delayed-Feedback Systems</title>
+      <link>https://penkovsky.com/publication/virtual-chimera/</link>
+      <pubDate>Fri, 30 Aug 2013 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/virtual-chimera/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,1405 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&quot;
+&quot;It seems to be much less than state-of-the-art&quot;, I contemplate.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/day2/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/day2/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/day2/">
+  <meta property="og:title" content="Day 2: What Do Hidden Layers Do? | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
+&quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&quot;
+&quot;It seems to be much less than state-of-the-art&quot;, I contemplate."><meta property="og:image" content="https://penkovsky.com/img/posts/neural-networks/spirals-512.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2019-02-04T17:15:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2019-02-04T17:15:00&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Day 2: What Do Hidden Layers Do? | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/neural-networks/spirals-512.png" class="article-banner" itemprop="image">
+  
+
+  
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 2: What Do Hidden Layers Do?</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-02-04 17:15:00 &#43;0200 &#43;0200" itemprop="datePublished">
+    <time datetime="2019-02-04 17:15:00 &#43;0200 &#43;0200" itemprop="dateModified">
+      Feb 4, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    21 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>In the <a href="/neural-networks/day1/">previous article</a>,
+we have introduced the concept of learning in a single-layer neural network.
+Today, we will learn about the
+benefits of multi-layer neural networks,
+how to properly design and train them.</p>
+
+<p>Sometimes I discuss neural networks with students who
+have just started discovering machine learning techniques:</p>
+
+<p>&quot;I have built a
+<a href="https://en.wikipedia.org/wiki/MNIST_database">handwritten digits</a>
+recognition network.
+But my accuracy is only <strong>Y</strong>.&quot;</p>
+
+<p>&quot;<em>It seems to be much less than state-of-the-art</em>&quot;, I contemplate.</p>
+
+<p>&quot;Indeed. Maybe the reason is <strong>X</strong>?&quot;</p>
+
+<p>Usually <strong>X</strong> is not the reason.
+The real cause appears to be much more trivial:
+instead of a multi-layer neural network the student has built
+a single-layer neural network or its equivalent.
+This network acts as a
+<em><a href="https://en.wikipedia.org/wiki/Linear_classifier">linear classifier</a></em>,
+therefore it cannot learn non-linear relations
+between the input and the desired output.</p>
+
+<p>So what is a multi-layer neural network and
+how to avoid the linear classifier trap?</p>
+
+<h2 id="multilayer-neural-networks">Multilayer neural networks</h2>
+
+<p>Multilayer neural network can be formalized as:</p>
+
+<p>$$
+\begin{equation}
+\mathbf{y} = f_N \left( \mathbf{W}_N \cdot \left( \dots f_2 \left( \mathbf{W}_2 \cdot f_1( \mathbf{W}_1 \cdot \mathbf{x} + \mathbf{b}_1) + \mathbf{b}_2 \right) \dots \right) + \mathbf{b}_N \right),
+\end{equation}
+$$</p>
+
+<p>where $\mathbf{x}$ and $\mathbf{y}$ is an input and output vectors respectively,
+$\mathbf{W}_i, \mathbf{b}_i, i=1..N$ are weight matrices and bias vectors,
+and $f_i, i=1..N$ are activations functions in the $i$th layer.
+The nonlinear activation functions $f_i$ are applied elementwise.</p>
+
+<p>For the sake of illustration, today we will employ two-dimensional datasets
+as shown below.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/initial-data.png" width="590px" />
+
+
+</figure>
+
+<p>Both datasets feature two classes depicted by orange and blue dots, respectively.
+The goal of the neural network training will be to learn
+how to prescribe a class to
+a new dot by knowing its coordinates $(x_1, x_2)$.
+It turns out these simple tasks cannot be solved with a single-layer architecture,
+as it is only capable of drawing straight lines in the input space $(x_1, x_2)$.
+Let us bring in an additional layer.</p>
+
+<h3 id="two-layer-network">Two-layer network</h3>
+
+<figure>
+
+<img src="/img/posts/neural-network-2.png" alt="Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$." width="400px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Two-layer neural network.</h4>
+  <p>
+    Inputs $x_1$ and $x_2$ are multiplied by a weights matrix $W_1$, then activation function $f_1$ is applied element-wise. Finally, the data are transformed by $W_2$ followed by another activation $f_2$ (not depicted) to obtain the output $y$.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The figure above shows the single hidden layer network architecture,
+which we will interchangeably call a <em>two-layer network</em>:</p>
+
+<p>$$
+y = f_2 \left( \mathbf{W}_2 \cdot f_1 ( \mathbf{W}_1 \cdot \mathbf{x} + \mathbf{b}_1 ) + \mathbf{b}_2 \right),
+$$</p>
+
+<p>where $f_1(x) = \max(0, x)$ also known as <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">ReLU</a>
+will be the first activation
+function and sigmoid $f_2(x) = \sigma(x) = [1 + e^{-x}]^{-1}$
+will be the second activation function, which you already have seen in the
+previous article. The particularity of sigmoid is squashing its inputs
+between 0 and 1. This output tends to be useful in our case where
+we only have two classes: blue dots denoted by 0
+and orange dots, by 1.
+As a loss function to minimize during neural network training,
+we will use <em>binary cross-entropy</em>:</p>
+
+<p>$$
+L(y, \hat y) = - \frac 1 m \sum_{i=1}^m \left[ y_i \ln(\hat y_i) + (1 - y_i) \ln(1 - \hat y_i) \right],
+$$</p>
+
+<p>where $y$ is the target output and $\hat y$ is neural network's prediction.
+This loss function was
+<a href="http://neuralnetworksanddeeplearning.com/chap3.html#the_cross-entropy_cost_function">specifically designed</a> to efficiently train
+neural networks.
+Another perk of cross-entropy is that in conjunction with
+sigmoid activation, the error gradient
+is simply a difference between predicted and desired outputs.</p>
+
+<h3 id="how-to-initialize">How To Initialize?</h3>
+
+<p>The first mistake may creep in when you completely ignore the importance of the neural network
+<a href="https://medium.com/usf-msds/deep-learning-best-practices-1-weight-initialization-14e5c0295b94">weight initialization</a>.
+In essence, you want to create neurons capable of learning different features.
+Therefore, you should select neural network weights randomly.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/circles.png" alt="Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights." width="600px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>The circles problem.</h4>
+  <p>
+    Decision boundaries for neural networks trained using the gradient descent method and initialized with (1) zero weights, (2) identical weights, and (3) random weights.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Above we can see the <a href="https://en.wikipedia.org/wiki/Decision_boundary">decision boundaries</a>
+for three cases of initialization.
+First, when the weights are initialized as zeroes, the network cannot learn anything.
+In the second case, the weights are initialized as non-zero, but identical values.
+Even though the network becomes able to learn something,
+there is no distinction between individual neurons.
+Therefore, the entire network behaves like one big neuron.
+Finally, when the neural network is initialized with random weights,
+it becomes capable to learn.</p>
+
+<h3 id="how-to-train">How To Train?</h3>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">universal approximation theorem</a>
+claims that under certain assumptions, a single hidden layer architecture
+should be sufficient to approximate any reasonable function.
+However, it indicates nothing about how to obtain or how difficult is to obtain those
+neural network weights<sup class="footnote-ref" id="fnref:fn-0"><a href="#fn:fn-0">1</a></sup>.
+As we have seen from weights initialization example,
+using simple gradient descent training
+our network was able to distinguish between the two
+circles. Now, how about a more difficult example: spirals,
+which <a href="https://www.gwern.net/docs/ai/1988-lang.pdf"><em>is hard due to its extreme nonlinearity</em></a>.
+Check out the animation below, on the left, to see how
+a naive gradient descent training can get easily stuck in a suboptimal setting.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/spirals-gd-adam-boundary2.gif" alt="Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam." width="450px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>The spirals problem.</h4>
+  <p>
+    Both neural networks have identical single hidden layer architecture with 512 neurons. The first one is trained with a naive gradient descent (GD), the second one is trained with Adam.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The network fails to properly distinguish between the
+two classes. One may suggest that a more adequate neural network architecture is needed.
+That is partially true. However, the mentioned above
+<a href="https://en.wikipedia.org/wiki/Universal_approximation_theorem">theorem</a>
+hints that it might be not necessary.</p>
+
+<p>It turns out a lot of research in neural networks and deep learning is exactly about
+how to obtain those set of weights, that is about neural network training algorithms.
+The disadvantage of the naive
+gradient descent is that the algorithm often gets stuck
+far from an acceptable solution. One of the
+ways to alleviate this issue is to introduce momentum.
+Perhaps, the most popular among the algorithms
+with momentum is <a href="https://arxiv.org/abs/1412.6980">Adam</a>.
+As we can see from the diagram above, on the right, the <a href="https://www.youtube.com/watch?v=JXQT_vxqwIs">Adam</a> algorithm
+is able to efficiently build the appropriate decision boundary.
+I find it can be more illustrative if we visualize the neural network's output during its training.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/spirals-gd-adam-2.gif" alt="The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes." width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>The spirals problem.</h4>
+  <p>
+    The output of two trained models before thresholding. One may see that the one trained with gradient descent (GD) is practically stuck in a suboptimal condition, whereas Adam algorithm efficiently leads to the separation between two classes.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>This way we see the faster convergence of Adam on a more detailed level.
+If you want to learn more about different algorithms from the gradient descent family,
+<a href="http://ruder.io/optimizing-gradient-descent/">here</a>
+there is a nice comparison.</p>
+
+<h3 id="avoiding-the-linear-classifier-pitfall">Avoiding The Linear Classifier Pitfall</h3>
+
+<p>Now, what if by mistake we have provided linear activations.
+What happens?
+If activations $f_i$ were linear, then the model in formula (2)
+would reduce to a single-layer neural network:</p>
+
+<p>$$
+\mathbf{y} = c_N \cdot W_N \cdot \dots \cdot c_2 \cdot W_2 \cdot c_1 \cdot W_1 \cdot \mathbf{x} = W \mathbf{x},
+$$</p>
+
+<p>where $c_i$ denote constants.
+Thus, one obtains a linear classifier $W \mathbf{x}$. This can be seen
+from the resulting decision boundaries.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/linear-classifier.png" width="450px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Two-layer network with linear activation $f_1(x) = x$.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>We have used exactly the same architecture as above,
+except the activation $f_1(x) = x$. Now we see that the two-layer neural network
+acts as a simple single-layer one: it can only divide the input space using a straight line.
+To avoid this issue, all activation functions must remain nonlinear.</p>
+
+<h3 id="how-many-layers">How Many Layers?</h3>
+
+<p>We have solved the spirals problem with a single hidden layer network.
+Why add more layers?
+To address this question,
+let us animate the decision boundaries during neural network training for three different architectures.
+All the networks have <a href="https://en.wikipedia.org/wiki/Rectifier_(neural_networks)">ReLU</a> activations in non-terminal layers and sigmoid in the final layer.
+As can be seen from the image below, the
+network with three hidden layers and with fewer neurons in
+each layer, learns faster.
+The reason can be understood intuitively. A neural network
+<a href="http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/">performs topological transformations</a> of the input space.
+Composing several simple transformations leads to a more complex
+one. Therefore, for such non-linearly separated classes as in the spirals problem
+one benefits from adding more layers.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/spirals-adam.gif" alt="Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture." />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Neural network training convergence (Adam).</h4>
+  <p>
+    Architectures: (1) single hidden layer with 128 neurons (513 total parameters), (2) single hidden layer, 512 neurons (2049 parameters), (3) three hidden layers with 40, 25, and 10 neurons (1416 parameters). The fastest convergence is demonstrated by the last architecture.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>From the figure we may conclude that more neurons are not always the best option.
+The most contrasting border indicating the highest confidence in
+the least number of steps is achieved with
+the three hidden layers neural network. This network has 1416 parameters counting both weights and biases.
+This number is about 30 percent less than the second architecture with a single hidden layer.
+Indeed, one may need to carefully <a href="http://proceedings.mlr.press/v70/real17a/real17a.pdf">pick</a>
+<a href="https://github.com/JasperSnoek/spearmint">the</a> <a href="https://aip.scitation.org/doi/10.1063/1.5039826">architecture</a>
+taking into consideration different factors
+such as dataset size, variance, input dimensionality, kind of the task, and others.
+With more layers, neural network can more efficiently <a href="http://colah.github.io/posts/2014-03-NN-Manifolds-Topology/">represent complex relationships</a>.
+On the other hand, if the number of layers is very large, one may need to apply different
+tricks in order to avoid such problems as fading gradients.</p>
+
+<p>Given all the new information, how about experimenting with
+neural networks? In the rest of this post we will learn how to
+build multilayer networks in Haskell.</p>
+
+<h2 id="implementing-backpropagation">Implementing Backpropagation</h2>
+
+<p>In the <a href="/neural-networks/day1/">previous article</a>,
+we have implemented <em>backpropagation</em> (shortly <em>backprop</em>)
+for a single-layer (no hidden layer) network.
+This method easily extends towards the case of multiple layers.
+Here is a nice
+<a href="https://www.youtube.com/watch?v=d14TUNcbn1k&amp;index=4&amp;list=PLC1qU-LWwrF64f4QKQT-Vg5Wr4qEE1Zxk">video</a>
+to provide you with more technical details. Below, we remind
+how backprop works for each individual neuron.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/backprop.png" width="570px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Backprop for a neuron. A neuron's computation $y = f(\sum_i w_i \cdot x_i)$ known as the <em>forward pass</em> is illustrated in black using a computational graph. The <em>backward pass</em> propagating the gradients in the opposite direction is depicted in red.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>If you have ever found any other tutorial on backprop,
+chances are you will first implement the so-called
+<em>forward pass</em> and then, as a separate function,
+the <em>backward pass</em>.
+The forward pass calculates the neural network output,
+whereas the backward pass does the gradients bookkeeping.
+Last time we have provided an example of a forward
+pass in a single-layer architecture:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">w</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">h</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">w</span>
+      <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">h</span>
+  <span style="color:#66d9ef">in</span> [<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">y</span>]</code></pre></div>
+
+<p>where <code>h = x LA.&lt;&gt; w</code> calculates
+$\mathbf{h} = \mathbf{x \cdot W^{\intercal}}$<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">2</a></sup>
+and <code>y = sigmoid h</code> is an elementwise activation
+$\mathbf{y} = \sigma(\mathbf{h})$. Here we have provided both
+the result of neural network computation <code>y</code>
+and an intermediate value <code>h</code>, which was subsequently
+used in the backward pass to compute the weights gradient <code>dW</code>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">    <span style="color:#a6e22e">dE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">loss&#39;</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">y_target</span>
+    <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid&#39;</span> <span style="color:#a6e22e">h</span> <span style="color:#a6e22e">dE</span>
+    <span style="color:#a6e22e">dW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dY</span></code></pre></div>
+
+<p>If there are multiple layers, the two passes (forward and backward)
+are typically computing all the intermediate results
+$\mathbf{h}_i = \mathbf{x}_{i - 1} \mathbf{W}_i^{\intercal} + \mathbf{b}_i$
+and $\mathbf{y}_i = f(\mathbf{x}_i)$. Then, these intermediate results
+are used in reverse (backward) order to compute weight gradients <code>dW</code>.</p>
+
+<p>The strategy of storing intermediate
+results is typical for many
+tutorials in imperative languages (looking at you, Python).
+In fact, in functional languages you can do
+<a href="https://themonadreader.files.wordpress.com/2013/03/issue214.pdf">the same thing</a>.
+The disadvantage of separate forward and backward implementations
+is that it becomes tedious to keep track of all the intermediate
+results and may require more mental effort to implement the backprop.
+I also feel that such backprop
+explanation is not very intuitive.
+The whole pattern of forward and backward passes
+may seem strangely familiar. Hey, that is actually <a href="https://en.wikipedia.org/wiki/Recursion_(computer_science)">recursion</a>!
+Recursion is bread and butter of functional languages,
+so why not apply it to the backprop?
+Instead of defining two separate methods and manually managing all the intermediate results,
+we will define both in one place.</p>
+
+<p>To begin our new multilayer networks project,
+we start with data structures. First, we define a data type
+that will represent a single layer.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Neural network layer: weights, biases, and activation</span>
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Layer</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#a6e22e">a</span>) (<span style="color:#66d9ef">Matrix</span> <span style="color:#a6e22e">a</span>) <span style="color:#66d9ef">Activation</span></code></pre></div>
+
+<p>where the first <code>Matrix a</code> stands for
+$\mathbf{W}^{\intercal} \in \mathbb{R}^{\text{inp} \times \text{out}}$<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">2</a></sup>,
+the second <code>Matrix a</code> means $\mathbf{b} \in \mathbb{R}^{\text{1} \times \text{out}}$,
+and <code>Activation</code> is an algebraic data type, which
+in practice denotes known activation functions in a symbolic fashion:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Activation function:</span>
+<span style="color:#75715e">-- * Rectified linear unit (ReLU)</span>
+<span style="color:#75715e">-- * Sigmoid</span>
+<span style="color:#75715e">-- * Hyperbolic tangent</span>
+<span style="color:#75715e">-- * Identity (no activation)</span>
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Activation</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Relu</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Sigmoid</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Tanh</span> <span style="color:#f92672">|</span> <span style="color:#66d9ef">Id</span></code></pre></div>
+
+<p>Then, the neural network from Equation (2) can be
+serialized as a list of <code>Layer</code>s<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">3</a></sup>.
+This list will bear the type of</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">[<span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>]</code></pre></div>
+
+<p>indicating that each element in the list has to be
+a <code>Layer</code> operating on real numbers (<code>Double</code>).</p>
+
+<p>Now, we can easily update any <code>Layer</code>
+in a single gradient descent step</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">f</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#66d9ef">Double</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+<span style="color:#a6e22e">f</span> (<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">act</span>) (<span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">dW</span> <span style="color:#a6e22e">dB</span>) <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">Layer</span> (<span style="color:#a6e22e">w</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dW</span>) (<span style="color:#a6e22e">b</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dB</span>) <span style="color:#a6e22e">act</span></code></pre></div>
+
+<p>The signature <code>f :: Layer Double
+  -&gt; Gradients Double
+  -&gt; Layer Double</code> means nothing else but:
+<em>f is a function that can take an old layer
+and gradients and produce a new layer</em>.
+Here, <code>lr</code> is the learning
+rate and <code>scale</code> is a multiplication by a constant
+written in a fancy infix way<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">4</a></sup>.
+We also have to define the <code>Gradients</code> data type:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Gradients</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#a6e22e">a</span>) (<span style="color:#66d9ef">Matrix</span> <span style="color:#a6e22e">a</span>)</code></pre></div>
+
+<p>To update all layers in functional programming we would need
+an analog to the <code>for</code> loop construct known from imperative programming languages.
+Great news: there are different <code>for</code>-loops for different needs:
+<a href="https://www.haskell.org/hoogle/?hoogle=map"><code>map</code></a>,
+<a href="https://www.haskell.org/hoogle/?hoogle=zip"><code>zip</code></a>,
+<a href="https://www.haskell.org/hoogle/?hoogle=zipWith"><code>zipWith</code></a>,
+<a href="https://www.haskell.org/hoogle/?hoogle=foldl"><code>foldl</code></a>,
+<a href="https://www.haskell.org/hoogle/?hoogle=scanr"><code>scanr</code></a>,
+etc.
+And <a href="https://www.haskell.org/hoogle/?hoogle=zipWith"><code>zipWith</code></a>
+is exactly what we need.
+Its <a href="https://en.wikipedia.org/wiki/Polymorphism_(computer_science)"><em>polymorphic</em></a> type</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">zipWith</span> <span style="color:#f92672">::</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">c</span>) <span style="color:#f92672">-&gt;</span> [<span style="color:#a6e22e">a</span>] <span style="color:#f92672">-&gt;</span> [<span style="color:#a6e22e">b</span>] <span style="color:#f92672">-&gt;</span> [<span style="color:#a6e22e">c</span>]</code></pre></div>
+
+<p>in our context can be interpreted as</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">zipWith</span>
+  <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">a</span>)
+     <span style="color:#f92672">-&gt;</span> [<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">a</span>]
+     <span style="color:#f92672">-&gt;</span> [<span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">a</span>]
+     <span style="color:#f92672">-&gt;</span> [<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">a</span>]</code></pre></div>
+
+<p>where <code>(Layer a -&gt; Gradients a -&gt; Layer a)</code>
+denotes a function which takes a <code>Layer</code> and <code>Gradients</code>
+and produces a new <code>Layer</code>. This is the signature of <code>f</code>
+defined above with the only precision that the type <code>a</code> is <code>Double</code>.
+Therefore, <code>zipWith</code> can be interpreted as:
+<em>take a function <code>f</code> from above,
+take a list of layers and a list of gradients,
+then apply <code>f</code> to each <code>Layer</code> in the first list
+and each <code>Gradient</code> in the second list.
+Obtain a new list of <code>Layer</code>s</em>.
+The new list of layers <code>[Layer]</code> is our modified neural
+network after a single gradient descent step.
+Now, the complete gradient descent implementation is</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">optimize</span> <span style="color:#a6e22e">lr</span> <span style="color:#a6e22e">iterN</span> <span style="color:#a6e22e">net0</span> <span style="color:#a6e22e">dataSet</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">last</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">take</span> <span style="color:#a6e22e">iterN</span> (<span style="color:#a6e22e">iterate</span> <span style="color:#a6e22e">step</span> <span style="color:#a6e22e">net0</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">step</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">zipWith</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dW</span>
+      <span style="color:#66d9ef">where</span>
+        (<span style="color:#66d9ef">_</span>, <span style="color:#a6e22e">dW</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">pass</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dataSet</span>
+
+    <span style="color:#a6e22e">f</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#66d9ef">Double</span>
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+    <span style="color:#a6e22e">f</span> (<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">act</span>) (<span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">dW</span> <span style="color:#a6e22e">dB</span>) <span style="color:#f92672">=</span>
+      <span style="color:#66d9ef">Layer</span> (<span style="color:#a6e22e">w</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dW</span>) (<span style="color:#a6e22e">b</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dB</span>) <span style="color:#a6e22e">act</span></code></pre></div>
+
+<p>We now see how well previously defined <code>f</code> fits in.
+The resulting function <code>optimize</code> should look familiar from the
+<a href="/neural-networks/day1/">previous post</a>.
+Back then, it was called <code>descend</code>.
+Now, we generalize it to operate on a list of layers,
+instead of a single layer weights. Finally,
+we provide the <code>dataSet</code> as an argument.
+This last interface change is a matter of convenience.</p>
+
+<p>Now, as promised, we implement the backprop algorithm in a single
+<code>pass</code>.</p>
+
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">80
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">81
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">82
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">83
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">84
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">85
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">86
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">87
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">88
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">89
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">90
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">91
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">92
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">93
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">94
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">95
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">96
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">97
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">98
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">99
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">100
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">101
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">pass</span> <span style="color:#a6e22e">net</span> (<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">tgt</span>) <span style="color:#f92672">=</span> (<span style="color:#a6e22e">pred</span>, <span style="color:#a6e22e">grads</span>)
+  <span style="color:#66d9ef">where</span>
+    (<span style="color:#66d9ef">_</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#a6e22e">grads</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">net</span>
+
+    <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">inp</span> <span style="color:#66d9ef">[]</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">loss&#39;</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#66d9ef">[]</span>)
+      <span style="color:#66d9ef">where</span>
+        <span style="color:#a6e22e">pred</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">inp</span>
+        <span style="color:#75715e">-- Gradient of cross-entropy loss</span>
+        <span style="color:#75715e">-- after sigmoid activation</span>
+        <span style="color:#a6e22e">loss&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pred</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
+
+    <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">inp</span> (<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">sact</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">layers</span>) <span style="color:#f92672">=</span> (<span style="color:#a6e22e">dX</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">dW</span> <span style="color:#a6e22e">dB</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">t</span>)
+      <span style="color:#66d9ef">where</span>
+        <span style="color:#a6e22e">lin</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">inp</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">w</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+        <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getActivation</span> <span style="color:#a6e22e">sact</span> <span style="color:#a6e22e">lin</span>
+
+        (<span style="color:#a6e22e">dZ</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#a6e22e">t</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">layers</span>
+
+        <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getActivation&#39;</span> <span style="color:#a6e22e">sact</span> <span style="color:#a6e22e">lin</span> <span style="color:#a6e22e">dZ</span>
+        <span style="color:#a6e22e">dW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linearW&#39;</span> <span style="color:#a6e22e">inp</span> <span style="color:#a6e22e">dY</span>
+        <span style="color:#a6e22e">dB</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bias&#39;</span> <span style="color:#a6e22e">dY</span>
+        <span style="color:#a6e22e">dX</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linearX&#39;</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">dY</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>Let us break down what the code above does.
+First, the inputs are an initial neural network <code>net</code>
+and training data with corresponding targets <code>(x, tgt)</code>.
+The function will provide inference result and gradients
+<code>(pred, grads)</code> as the computation result.
+Line 82 launches the <code>_pass</code> function which accepts
+two arguments: initial input <code>x</code> and neural network <code>net</code>.</p>
+
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">91
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">92
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">93
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">94
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">95
+</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">96
+</span></span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">97
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">98
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">99
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">100
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">101
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">    <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">inp</span> (<span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">b</span> <span style="color:#a6e22e">sact</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">layers</span>) <span style="color:#f92672">=</span> (<span style="color:#a6e22e">dX</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#66d9ef">Gradients</span> <span style="color:#a6e22e">dW</span> <span style="color:#a6e22e">dB</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">t</span>)
+      <span style="color:#66d9ef">where</span>
+        <span style="color:#a6e22e">lin</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">inp</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">w</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">b</span>
+        <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getActivation</span> <span style="color:#a6e22e">sact</span> <span style="color:#a6e22e">lin</span>
+
+<span style="display:block;width:100%;background-color:#3c3d38">        (<span style="color:#a6e22e">dZ</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#a6e22e">t</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">layers</span>
+</span>
+        <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">getActivation&#39;</span> <span style="color:#a6e22e">sact</span> <span style="color:#a6e22e">lin</span> <span style="color:#a6e22e">dZ</span>
+        <span style="color:#a6e22e">dW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linearW&#39;</span> <span style="color:#a6e22e">inp</span> <span style="color:#a6e22e">dY</span>
+        <span style="color:#a6e22e">dB</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bias&#39;</span> <span style="color:#a6e22e">dY</span>
+        <span style="color:#a6e22e">dX</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linearX&#39;</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">dY</span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>This piece of code above performs computations with respect to
+the current layer.
+First, we perform pattern matching
+selecting current layer weights and biases <code>w b</code>
+and activation <code>sact</code> and also we get the tail of
+the layers list <code>layers</code> on line 91.
+Lines 93-94 perform the forward
+pass, i.e. the $f (\mathbf{W} \mathbf{x} + \mathbf{b})$ operation.
+Line 96 (highlighted) launches a recursive call
+to <code>_pass</code> providing the arguments of current layer computation
+<code>y</code> and the rest of the tail of the network <code>layers</code>.
+As a result of the recursive call we obtain
+gradient coming back from the layer <code>dZ</code>, prediction result <code>pred</code>, and
+partially computed weights gradients list <code>t</code>.
+Lines 98-101 compute new gradients, which <code>_pass</code> returns
+to its previous caller.</p>
+
+<p>Now, what happens when we finish our forward propagation?
+Lines 84-89 below contain the stop condition
+for the recursive call. The empty list <code>[]</code>
+on line 84 signifies that we have reached
+the end of the layers list. Now, we compute the network prediction:
+We apply sigmoid to squash the outputs between 0 and 1 on line 86.
+This, together with a binary cross-entropy loss function,
+will allow for a very
+<a href="https://deepnotes.io/softmax-crossentropy">simple gradient</a>
+in the final layer: <code>loss' = pred - tgt</code> on line 89
+(highlighted).</p>
+
+<div class="highlight"><div style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4">
+<table style="border-spacing:0;padding:0;margin:0;border:0;width:auto;overflow:auto;display:block;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">84
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">85
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">86
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">87
+</span><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">88
+</span><span style="display:block;width:100%;background-color:#3c3d38"><span style="margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7c7c79">89
+</span></span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">    <span style="color:#a6e22e">_pass</span> <span style="color:#a6e22e">inp</span> <span style="color:#66d9ef">[]</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">loss&#39;</span>, <span style="color:#a6e22e">pred</span>, <span style="color:#66d9ef">[]</span>)
+      <span style="color:#66d9ef">where</span>
+        <span style="color:#a6e22e">pred</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">inp</span>
+        <span style="color:#75715e">-- We calculate the gradient of cross-entropy loss</span>
+        <span style="color:#75715e">-- after sigmoid activation.</span>
+<span style="display:block;width:100%;background-color:#3c3d38">        <span style="color:#a6e22e">loss&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pred</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span></span></code></pre></td></tr></table>
+</div>
+</div>
+
+<p>The function <code>_pass</code> provides three results:
+the loss gradient <code>loss'</code>, the predicted result <code>pred</code>,
+and an empty list <code>[]</code> to accumulate the weight gradients
+in the backward pass (lines 96-101).
+Note that since <code>sigmoid</code> activation has been already
+calculated on line 86,
+the final layer must have no activation,
+i.e. we will specify the identity transformation <code>Id</code>
+of the final layer, when defining the network architecture.</p>
+
+<p>Now, the question: how can we calculate the forward
+pass separately, i.e. without the need to compute all the gradients?
+It turns out that Haskell has <em>lazy</em> evaluation:
+it computes only what we specifically ask for.
+In the <code>forward</code> implementation below, gradients are
+never asked, and therefore never computed.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fst</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">pass</span> <span style="color:#a6e22e">net</span> (<span style="color:#a6e22e">dta</span>, <span style="color:#a6e22e">undefined</span>)</code></pre></div>
+
+<p>Normally, <code>undefined</code> will return an error when encountered.
+However, since we never calculate the gradients,
+the undefined target is never evaluated.</p>
+
+<h3 id="putting-it-all-together">Putting It All Together</h3>
+
+<p>Now, we have all the necessary components to create a multilayer neural network.
+First, we generate our data. Then, we define the architecture
+and initialize the actual neural networks.
+Finally, we run our experiments.</p>
+
+<h4 id="train-and-validation-datasets">Train And Validation Datasets</h4>
+
+<p>We generate a random circles dataset for our experiments. We will provide
+the coordinate pairs $(x_1,x_2)$ as well as target class labels $y$.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">makeCircles</span>
+  <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Double</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Double</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+<span style="color:#a6e22e">makeCircles</span> <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">factor</span> <span style="color:#a6e22e">noise</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+
+  <span style="color:#75715e">-- Code omitted</span>
+
+  <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span>)</code></pre></div>
+
+<p>In general, it is a good idea to have at least two separate machine learning
+datasets: one used for training and another one
+for model validation. Therefore, we will create two of those
+with randomly generated samples.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#a6e22e">trainSet</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">makeCircles</span> <span style="color:#ae81ff">200</span> <span style="color:#ae81ff">0.6</span> <span style="color:#ae81ff">0.1</span>
+  <span style="color:#a6e22e">testSet</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">makeCircles</span> <span style="color:#ae81ff">100</span> <span style="color:#ae81ff">0.6</span> <span style="color:#ae81ff">0.1</span></code></pre></div>
+
+<p>We create the <code>trainSet</code> with 200
+and the <code>testSet</code> with 100 data samples.
+<code>0.6</code> and <code>0.1</code> are model parameters, for the full
+implementation feel free to check <a href="http://github.com/penkovsky/10-days-of-grad/tree/master/day2">Main.hs</a>.
+In a similar way we will create training and validation
+datasets for the spirals problem.</p>
+
+<h4 id="defining-the-architecture">Defining The Architecture</h4>
+
+<p>Below we define an architecture for a single hidden
+layer network.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#75715e">-- Initializing a single hidden layer network</span>
+  <span style="color:#66d9ef">let</span> (<span style="color:#a6e22e">nIn</span>, <span style="color:#a6e22e">hidden</span>, <span style="color:#a6e22e">nOut</span>) <span style="color:#f92672">=</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">1</span>)
+
+  <span style="color:#75715e">-- Generate weights/biases W1 and W2</span>
+  (<span style="color:#a6e22e">w1_rand</span>, <span style="color:#a6e22e">b1_rand</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">genWeights</span> (<span style="color:#a6e22e">nIn</span>, <span style="color:#a6e22e">hidden</span>)
+  (<span style="color:#a6e22e">w2_rand</span>, <span style="color:#a6e22e">b2_rand</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">genWeights</span> (<span style="color:#a6e22e">hidden</span>, <span style="color:#a6e22e">nOut</span>)
+
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> [ <span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w1_rand</span> <span style="color:#a6e22e">b1_rand</span> <span style="color:#66d9ef">Relu</span>
+            , <span style="color:#66d9ef">Layer</span> <span style="color:#a6e22e">w2_rand</span> <span style="color:#a6e22e">b2_rand</span> <span style="color:#66d9ef">Id</span> ]</code></pre></div>
+
+<p>Note that the activation of the final layer is calculated separately,
+therefore we leave no activation <code>Id</code>. <code>w*_rand</code> and <code>b*_rand</code> are
+randomly generated weights and biases.
+For convenience we define a <code>genNetwork</code> function which
+will combine the operations from above. This is how it is used:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">net</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">genNetwork</span> [<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">1</span>] [<span style="color:#66d9ef">Relu</span>, <span style="color:#66d9ef">Id</span>]</code></pre></div>
+
+<h4 id="initializing-weights">Initializing Weights</h4>
+
+<p>We remember that for the greatest benefit of a neural network,
+the weights should be initialized randomly.
+Here we employ a common initialization strategy
+from this <a href="https://arxiv.org/pdf/1502.01852.pdf">paper</a>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Generate new random weights and biases</span>
+<span style="color:#a6e22e">genWeights</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Int</span>, <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+<span style="color:#a6e22e">genWeights</span> (<span style="color:#a6e22e">nin</span>, <span style="color:#a6e22e">nout</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#a6e22e">w</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">_genWeights</span> (<span style="color:#a6e22e">nin</span>, <span style="color:#a6e22e">nout</span>)
+  <span style="color:#a6e22e">b</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">_genWeights</span> (<span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">nout</span>)
+  <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">w</span>, <span style="color:#a6e22e">b</span>)
+    <span style="color:#66d9ef">where</span>
+      <span style="color:#a6e22e">_genWeights</span> (<span style="color:#a6e22e">nin</span>, <span style="color:#a6e22e">nout</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+          <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">k</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sqrt</span> (<span style="color:#ae81ff">1.0</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">fromIntegral</span> <span style="color:#a6e22e">nin</span>)
+          <span style="color:#a6e22e">w</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randn</span> <span style="color:#a6e22e">nin</span> <span style="color:#a6e22e">nout</span>
+          <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">k</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">w</span>)</code></pre></div>
+
+<p>This strategy becomes more useful as soon as your neural network becomes &quot;deeper&quot;,
+i.e. gets more and more layers.</p>
+
+<h4 id="adam">Adam</h4>
+
+<p>Previously we have seen that naive gradient descent may
+easily get stuck in a suboptimal setting.
+Let us implement Adam optimization strategy,
+explained in this <a href="https://www.youtube.com/watch?v=JXQT_vxqwIs">video</a>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">adam</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">dataSet</span> <span style="color:#a6e22e">iterN</span> <span style="color:#a6e22e">w0</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">w</span>
+  <span style="color:#66d9ef">where</span>
+
+    <span style="color:#75715e">-- Some code omitted</span>
+
+        (<span style="color:#66d9ef">_</span>, <span style="color:#a6e22e">dW</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">pass</span> <span style="color:#a6e22e">dataSet</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">loss&#39;</span>
+
+        <span style="color:#a6e22e">sN</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">zipWith</span> <span style="color:#a6e22e">f2</span> <span style="color:#a6e22e">s</span> <span style="color:#a6e22e">dW</span>
+        <span style="color:#a6e22e">vN</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">zipWith</span> <span style="color:#a6e22e">f3</span> <span style="color:#a6e22e">v</span> <span style="color:#a6e22e">dW</span>
+        <span style="color:#a6e22e">wN</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">zipWith3</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">vN</span> <span style="color:#a6e22e">sN</span>
+
+        <span style="color:#a6e22e">f</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+          <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+          <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+          <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Layer</span> <span style="color:#66d9ef">Double</span>
+        <span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">w_</span>, <span style="color:#a6e22e">b_</span>, <span style="color:#a6e22e">sf</span>) (<span style="color:#a6e22e">vW</span>, <span style="color:#a6e22e">vB</span>) (<span style="color:#a6e22e">sW</span>, <span style="color:#a6e22e">sB</span>) <span style="color:#f92672">=</span>
+          ( <span style="color:#a6e22e">w_</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">vW</span> <span style="color:#f92672">/</span> ((<span style="color:#a6e22e">sqrt</span> <span style="color:#a6e22e">sW</span>) `<span style="color:#a6e22e">addC</span>` <span style="color:#a6e22e">epsilon</span>)
+          , <span style="color:#a6e22e">b_</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">vB</span> <span style="color:#f92672">/</span> ((<span style="color:#a6e22e">sqrt</span> <span style="color:#a6e22e">sB</span>) `<span style="color:#a6e22e">addC</span>` <span style="color:#a6e22e">epsilon</span>)
+          , <span style="color:#a6e22e">sf</span>)
+        <span style="color:#a6e22e">addC</span> <span style="color:#a6e22e">m</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">+</span> <span style="color:#a6e22e">c</span>) <span style="color:#a6e22e">m</span>
+
+        <span style="color:#a6e22e">f2</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+           <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#66d9ef">Double</span>
+           <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+        <span style="color:#a6e22e">f2</span> (<span style="color:#a6e22e">sW</span>, <span style="color:#a6e22e">sB</span>) (<span style="color:#a6e22e">dW</span>, <span style="color:#a6e22e">dB</span>) <span style="color:#f92672">=</span>
+          ( <span style="color:#a6e22e">beta2</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">sW</span> <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">beta2</span>) `<span style="color:#a6e22e">scale</span>` (<span style="color:#a6e22e">dW</span><span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>)
+          , <span style="color:#a6e22e">beta2</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">sB</span> <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">beta2</span>) `<span style="color:#a6e22e">scale</span>` (<span style="color:#a6e22e">dB</span><span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>))
+
+        <span style="color:#a6e22e">f3</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+           <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Gradients</span> <span style="color:#66d9ef">Double</span>
+           <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>, <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Double</span>)
+        <span style="color:#a6e22e">f3</span> (<span style="color:#a6e22e">vW</span>, <span style="color:#a6e22e">vB</span>) (<span style="color:#a6e22e">dW</span>, <span style="color:#a6e22e">dB</span>) <span style="color:#f92672">=</span>
+          ( <span style="color:#a6e22e">beta1</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">vW</span> <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">beta1</span>) `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dW</span>
+          , <span style="color:#a6e22e">beta1</span> `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">vB</span> <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">beta1</span>) `<span style="color:#a6e22e">scale</span>` <span style="color:#a6e22e">dB</span>)</code></pre></div>
+
+<p>The Adam implementation is a derived from <code>optimize</code>.
+The most prominent change is additional &quot;zipping&quot; with
+two new functions:
+<code>f2</code> embodies the <a href="https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf">RMSprop</a> strategy and
+<code>f3</code> performs momentum estimation.</p>
+
+<h4 id="running-the-experiments">Running the experiments</h4>
+
+<p>Now, we shall train our network:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">epochs</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+      <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.001</span>  <span style="color:#75715e">-- Learning rate</span>
+      <span style="color:#a6e22e">net&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">optimize</span> <span style="color:#a6e22e">lr</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">trainSet</span>
+      <span style="color:#a6e22e">netA</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">optimizeAdam</span> <span style="color:#a6e22e">adamParams</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">trainSet</span></code></pre></div>
+
+<p>It is time to compile and run our networks. Please check the output below.
+The <a href="http://github.com/penkovsky/10-days-of-grad/tree/master/day2">complete project</a> is available on <a href="http://github.com/penkovsky/10-days-of-grad/tree/master/day2">Github</a>.
+Feel free to play with neural network architecture and initialization strategies.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$ stack --resolver lts-10.6 --install-ghc ghc \
+  --package hmatrix-0.18.2.0 \
+  --package hmatrix-morpheus-0.1.1.2 \
+  -- -O2 Main.hs
+$ ./Main
+
+Circles problem, 1 hidden layer of 128 neurons, 1000 epochs
+---
+Training accuracy (gradient descent) 76.5
+Validation accuracy (gradient descent) 74.0
+
+Training accuracy (Adam) 100.0
+Validation accuracy (Adam) 96.0
+
+
+Spirals problem, Adam, 700 epochs
+---
+1 hidden layer, 128 neurons (513 parameters)
+Training accuracy 77.5
+Validation accuracy 72.0
+
+1 hidden layer, 512 neurons (2049 parameters)
+Training accuracy 97.2
+Validation accuracy 97.0
+
+3 hidden layers, 40, 25, and 10 neurons (1416 parameters)
+Training accuracy 100.0
+Validation accuracy 100.0</code></pre></div>
+
+<p>The first experiment shows the advantage of
+Adam over a naive gradient descent training
+algorithm on a simple circles dataset.
+The second experiment compares three
+architectures solving the spirals challenge.
+I had to reduce the number of training
+epochs to 700 to show which architecture
+will converge first.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>When designing and training neural networks one should
+keep in mind several simple heuristics.</p>
+
+<ul>
+<li>Initialize weights randomly.</li>
+<li>Keep activation functions nonlinear.
+Remember, a superposition of linear operators
+is a linear operator.</li>
+<li>Use more layers and more neurons if the application appears to be complex.
+Reduce the number of layers in the opposite case.</li>
+<li>Apply training strategies with momentum instead of naive gradient descent.</li>
+</ul>
+
+<p>The universal approximation theorem claims that
+a single hidden layer neural network architecture
+should be sufficient to approximate any reasonable map.
+However, how to obtain the weights is a much harder question.
+For instance, one of the <a href="https://www.gwern.net/docs/ai/1988-lang.pdf">first networks</a>
+solving the tough spirals challenge
+with backpropagation had not one, but three hidden layers.
+Indeed, we have seen that due to the highly nonlinear
+relationships in the dataset,
+a three-layer network with fewer parameters converges faster than
+the one with a single hidden layer.</p>
+
+<p>In the next posts we will take a look on <a href="/neural-networks/day3/">automatic differentiation</a> and regularization techniques.  We will also
+discuss how Haskell compiler can help ensure that our neural network is
+correct. And we will ramp it up to <a href="/neural-networks/day5/">convolutional networks</a>
+allowing us to solve some interesting challenges.  Stay tuned.</p>
+
+<hr />
+
+<p>I would like to dedicate this article to Maxence Ernoult for
+his early feedback and constructive criticism. I would also
+like to thank Elena Prokopets for proofreading the article.</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2019,
+ title   = "What Do Hidden Layers Do?",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2019",
+ month   = "February",
+ url     = "https://penkovsky.com/neural-networks/day2/"
+}
+</pre>
+
+<h2 id="further-reading">Further Reading</h2>
+
+<h3 id="haskell">Haskell</h3>
+
+<ul>
+<li><a href="http://learnyouahaskell.com/">A great start to learning Haskell</a></li>
+<li><a href="https://tryhaskell.org/">Try Haskell tutorial</a></li>
+<li><a href="https://github.com/saschagrunert/nn">Another example NN in Haskell</a></li>
+<li><a href="https://github.com/quickdudley/hfnn">Yet one more</a></li>
+</ul>
+
+<h3 id="neural-networks-and-backpropagation">Neural Networks And Backpropagation</h3>
+
+<ul>
+<li><a href="http://cs231n.stanford.edu/slides/2018/cs231n_2018_ds02.pdf">A brief tutorial on backprop</a></li>
+<li><a href="http://cs231n.github.io/optimization-2/">More intuition on backprop</a> and <a href="http://cs231n.stanford.edu/slides/2017/cs231n_2017_lecture4.pdf">slides</a></li>
+<li><a href="http://arunmallya.github.io/writeups/nn/backprop.html">Derivation of gradients</a></li>
+<li><a href="http://cs231n.stanford.edu/handouts/derivatives.pdf">Another tutorial on derivatives</a></li>
+<li><a href="https://deepnotes.io/softmax-crossentropy">Notes on softmax and crossentropy</a></li>
+<li><a href="http://neuralnetworksanddeeplearning.com/">A more or less complete introduction to deep learning</a></li>
+<li><a href="http://web.archive.org/web/20160706105446/http://benmargolis.com/compsci/ai/two_spirals_problem.htm">More about the spirals challenge</a></li>
+</ul>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-0">Such a cheeky theorem!
+ <a class="footnote-return" href="#fnref:fn-0"><sup>^</sup></a></li>
+<li id="fn:fn-1">The attentive reader may have noticed that in the code we apply $\mathbf{x W^{\intercal}}$ rather than $\mathbf{W x}$, which is a matter of convenience. In many libraries you will find this transposition is done in order to keep data samples index in 0-th dimension (e.g. matrix rows). Also we have introduced biases $\mathbf{b}$ as in $\mathbf{W x} + \mathbf{b}$ or $\mathbf{x W^{\intercal}} + \mathbf{b}$, which were last time omitted for brevity.
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+<li id="fn:fn-2">For now, there is nothing that prevents us from mismatching matrix dimensions, however, we will revisit this issue in the future.
+ <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
+<li id="fn:fn-3">To put simply, <code>a `f` b</code> is the same as <code>f a b</code>, or $f(a,b)$.
+ <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+        
+        <li><a href="/talk/icee2018/">Towards Binarized Neural Networks Hardware</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

@@ -1,0 +1,20 @@
+User-agent: *
+Disallow: /
+
+User-agent: GPTBot
+Disallow: /
+
+User-agent: Googlebot
+Allow: /neural-networks/
+
+User-agent: DuckDuckBot
+Allow: /neural-networks/
+
+User-agent: Bingbot
+Allow: /neural-networks/
+
+User-agent: ia_archiver
+Disallow: /
+
+User-agent: ia_archiver
+Allow: /neural-networks/

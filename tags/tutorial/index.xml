@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tutorial on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/tags/tutorial/</link>
+    <description>Recent content in Tutorial on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Sun, 21 Mar 2021 18:40:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/tags/tutorial/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
+      <link>https://penkovsky.com/homelab/beatle/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/homelab/beatle/</guid>
+      <description>&lt;p&gt;Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Day 5: Convolutional Neural Networks Tutorial</title>
+      <link>https://penkovsky.com/neural-networks/day5/</link>
+      <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day5/</guid>
+      <description>Today we will talk about one of the most important deep learning architectures, the &amp;quot;master algorithm&amp;quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.</description>
+    </item>
+    
+  </channel>
+</rss>

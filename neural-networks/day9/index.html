@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Imagine you are a designer and you want a new font: A little bit heavier, with rounder letters, more casual or a little bit more fancy. Could this font be created just by tuning a handful of parameters? Or imagine that you are a fashion designer and you would like to create a new collection as a mix of previous seasons? Or that you are a musician desperately looking for inspiration.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/day9/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/day9/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/day9/">
+  <meta property="og:title" content="Day 9: Roaming The Latent Space | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Imagine you are a designer and you want a new font: A little bit heavier, with rounder letters, more casual or a little bit more fancy. Could this font be created just by tuning a handful of parameters? Or imagine that you are a fashion designer and you would like to create a new collection as a mix of previous seasons? Or that you are a musician desperately looking for inspiration."><meta property="og:image" content="https://penkovsky.com/img/posts/neural-networks/latent_space_mnist.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2022-08-11T10:00:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2022-08-19T00:57:00&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Day 9: Roaming The Latent Space | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/neural-networks/latent_space_mnist.png" class="article-banner" itemprop="image">
+  
+
+  <span class="article-header-caption">Uncovering the latent space of handwritten digits</span>
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 9: Roaming The Latent Space</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+        Last updated on
+    
+    <meta content="2022-08-11 10:00:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2022-08-19 00:57:00 &#43;0200 CEST" itemprop="dateModified">
+      Aug 19, 2022
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    13 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>Imagine you are a designer and you want a new font: A little bit heavier, with
+rounder letters, more casual or a little bit more fancy. Could
+this font be created just by tuning a handful of parameters?  Or imagine
+that you are a fashion designer and you would like to create a new collection
+as a mix of previous seasons?  Or that you are a musician desperately looking
+for inspiration. How about a new song that mixes your mood and
+Beethoven's Symphony No 3? It turns out, all this is actually possible.  To
+better illustrate the concept, here is some music
+interpolation:</p>
+
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube-nocookie.com/embed/G5JT16flZwM" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+
+<hr />
+
+<p><strong>Don't forget to check out</strong></p>
+
+<ul>
+<li><a href="/neural-networks/day8/">Day 8: Model Uncertainty Estimation</a></li>
+<li><a href="/neural-networks/day7/">Day 7: Real World Deep Learning</a></li>
+</ul>
+
+<p>The complete project is also available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day9">on Github</a>.</p>
+
+<hr />
+
+<h2 id="the-secret-space">The Secret Space</h2>
+
+<blockquote>
+<p><em>latent</em> - present and capable of emerging or developing but not now visible, obvious, active, or symptomatic</p>
+
+<p>—Webster's Dictionary</p>
+</blockquote>
+
+<h3 id="autoencoders">Autoencoders</h3>
+
+<figure>
+
+<img src="/img/posts/neural-networks/ae_mlp.png" alt="A simple autoencoder with latent dimension $L$." width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    A simple autoencoder with latent dimension $L$.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>How do we implement an autoencoder? Let us take a multilayer network from the
+image above: $784 \rightarrow 400 \rightarrow L \rightarrow 400 \rightarrow
+784$. Where the latent space dimension $L$ is some smaller number such as $20$
+or maybe even $2$. The $L$-sized <em>latent</em> vector $z$ is often called a
+<em>bottleneck</em>. The left part from the bottleck is called an <em>encoder</em>
+$q_{\phi}$ and the part on the right, a <em>decoder</em> $p_{\theta}$. Where
+$\phi$ and $\theta$ are trainable parameters of encoder and decoder,
+respectively.</p>
+
+<p>The encoder takes an input (like an image) and generates a compact
+representation, typically a vector. It is also not a mistake to call it a
+<em>compressed representation</em>. The decoder takes this compact representation and
+creates an output as close as possible to the original input. Hence the name,
+autoencoder. Of course, some information is lost due to the dimensionality
+reduction. Therefore, the goal of a autoencoder is to find the most relevant
+features to preserve as much information about the input object as possible.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">AE</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">AE</span>
+  { <span style="color:#75715e">-- Encoder parameters</span>
+    <span style="color:#a6e22e">l1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">l2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#75715e">-- Decoder parameters</span>
+    <span style="color:#a6e22e">l3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">l4</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Parameterized</span>)</code></pre></div>
+
+<p>Then, the whole autoencoder network is</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">ae</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">AE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>)
+<span style="color:#a6e22e">ae</span> <span style="color:#66d9ef">AE</span> {<span style="color:#f92672">..</span>} <span style="color:#f92672">=</span>
+  <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l1</span>
+  <span style="color:#75715e">-- Encoder</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l2</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+  <span style="color:#75715e">-- Decoder</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l3</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l4</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">sigmoid</span></code></pre></div>
+
+<p>We can also specify the exact dimensions</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">aeConfig</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">AESpec</span>
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">784</span> <span style="color:#ae81ff">400</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">400</span> <span style="color:#a6e22e">latent_size</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">latent_size</span> <span style="color:#ae81ff">400</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">400</span> <span style="color:#ae81ff">784</span>)</code></pre></div>
+
+<p>Of course, a smaller $L$ (<code>latent_size</code>), the more information is lost.
+Therefore, depending on the application we may want to change this value.
+As a rule of thumb, $L$ contains the smallest number of neurons to enforce the
+compression. In this article we set $L=2$ so that we can simply reveal our
+latent space in two dimensions.</p>
+
+<h3 id="variational-autoencoder">Variational autoencoder</h3>
+
+<p>The principal difference of variational autoencoders (VAE)
+from normal autoencoders is in the bottleneck. Instead of
+a compressed input, it estimates a <em>distribution</em>. In practice, VAE estimates
+the mean $\mu$ and the standard deviation $\sigma$ -- normal distribution
+parameters. By sampling from that distribution, a new unseen before object can
+be generated. Like a new font or a new piece of cloth. Or a face. Or a melody.
+Isn't that nice?</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/vae_mlp.png" width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Variational autoencoder. Arrows signify fully-connected layers and vertical bars are data vectors.</h4>
+  
+</figcaption>
+
+</figure>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">VAESpec</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">VAESpec</span>
+  {
+    <span style="color:#75715e">-- Encoder trainable parameters (phi)</span>
+    <span style="color:#a6e22e">fc1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+    <span style="color:#a6e22e">fcMu</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+    <span style="color:#a6e22e">fcSigma</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+
+    <span style="color:#75715e">-- Decoder trainable parameters (theta)</span>
+    <span style="color:#a6e22e">fc5</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+    <span style="color:#a6e22e">fc6</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Eq</span>)
+
+<span style="color:#a6e22e">myConfig</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">VAESpec</span>
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">784</span> <span style="color:#ae81ff">400</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">400</span> <span style="color:#a6e22e">latent_size</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">400</span> <span style="color:#a6e22e">latent_size</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">latent_size</span> <span style="color:#ae81ff">400</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#ae81ff">400</span> <span style="color:#ae81ff">784</span>)
+
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">VAE</span>
+  { <span style="color:#a6e22e">l1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">lMu</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">lSigma</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">l4</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">l5</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Parameterized</span>)</code></pre></div>
+
+<p>It can be useful to have separate <code>encode</code> $q_{\phi}(z|x)$
+and <code>decode</code> $p_{\theta}(x|z)$ functions.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">encode</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>)
+<span style="color:#a6e22e">encode</span> <span style="color:#66d9ef">VAE</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">x0</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">enc_</span> <span style="color:#f92672">=</span>
+        <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l1</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+
+      <span style="color:#a6e22e">x1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">enc_</span> <span style="color:#a6e22e">x0</span>
+      <span style="color:#a6e22e">mu</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">lMu</span> <span style="color:#a6e22e">x1</span>
+      <span style="color:#a6e22e">logSigma</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">lSigma</span> <span style="color:#a6e22e">x1</span>
+  <span style="color:#66d9ef">in</span> (<span style="color:#a6e22e">mu</span>, <span style="color:#a6e22e">logSigma</span>)
+
+<span style="color:#a6e22e">decode</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">decode</span> <span style="color:#66d9ef">VAE</span> {<span style="color:#f92672">..</span>} <span style="color:#f92672">=</span>
+  <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l4</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l5</span>
+  <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">sigmoid</span></code></pre></div>
+
+<p>Then, the complete variational autoencoder will be</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">vaeForward</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Bool</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>)
+<span style="color:#a6e22e">vaeForward</span> <span style="color:#a6e22e">net</span><span style="color:#f92672">@</span>(<span style="color:#66d9ef">VAE</span> {<span style="color:#f92672">..</span>}) <span style="color:#66d9ef">_</span> <span style="color:#a6e22e">x0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> (<span style="color:#a6e22e">mu</span>, <span style="color:#a6e22e">logSigma</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">encode</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">x0</span>
+      <span style="color:#a6e22e">sigma</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">exp</span> (<span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">logSigma</span>)
+
+  <span style="color:#a6e22e">eps</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">randnLikeIO</span> <span style="color:#a6e22e">sigma</span>
+
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">z</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">eps</span> `<span style="color:#a6e22e">mul</span>` <span style="color:#a6e22e">sigma</span>) `<span style="color:#a6e22e">add</span>` <span style="color:#a6e22e">mu</span>
+      <span style="color:#a6e22e">reconstruction</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">decode</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">z</span>
+
+  <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">reconstruction</span>, <span style="color:#a6e22e">mu</span>, <span style="color:#a6e22e">logSigma</span>)</code></pre></div>
+
+<p>Pay a special attention to the <em>reparametrization</em>:</p>
+
+<p>$$\varepsilon \sim \mathcal{N}(0,\,1)$$
+$$z = \varepsilon \odot \sigma + \mu$$</p>
+
+<p>Where $z$ is our latent vector, noise $\varepsilon$ is sampled from the normal
+distribution (<code>randnLikeIO</code><sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">1</a></sup>), and $\odot$ is elementwise product. Thanks
+to this trick, we can backpropagate through a stochastic layer. See this
+excellent <a href="https://gregorygundersen.com/blog/2018/04/29/reparameterization/">post</a> for more details.  There are two differences
+between variational and ordinary autoencoder training: (1) the
+reparametrization and (2) the loss function, which we cover below.</p>
+
+<h3 id="vae-loss-function">VAE Loss Function</h3>
+
+<p>The loss function consists of two parts:</p>
+
+<p>$$ \rm{loss} = \mathbb{L}(x, \hat x) + \rm{D}_\rm{KL} \left(q_\phi(z) || p_\theta(z) \right).$$</p>
+
+<p>$\mathbb{L}(x, \hat x)$ is the <em>reconstruction loss</em>.  It decreases
+when the decoded output $\hat x$ is closer to the original input $x$.  This is
+basically the loss of an ordinary autoencoder. For instance, it can be binary
+cross-entropy loss or L2 loss.</p>
+
+<p>And the second term $\rm{D_{KL}}( \cdot )$ is the <a href="https://en.wikipedia.org/wiki/Kullback%E2%80%93Leibler_divergence">Kullback-Leibner
+divergence</a>. It tells how much the distribution $p_\theta(z)$ <a href="https://blog.evjang.com/2016/08/variational-bayes.html">is
+different</a> from the distribution $q_\phi(z)$.  Or even more
+informative is to say that KL divergence tells how much information is lost if
+the distribution $p_\theta$ is used to represent $q_\phi$.  From the
+original <a href="https://arxiv.org/abs/1312.6114">paper</a>,</p>
+
+<p>$$ -\rm{D_{KL}}\left(q_\phi(z) || p_\theta(z) \right) =\frac 1 2 \sum_{j=1}^J \left( 1 + \log(\sigma_j^2) - \mu_j^2 - \sigma_j^2  \right).$$</p>
+
+<p>Therefore, the complete VAE loss is</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">vaeLoss</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">vaeLoss</span> <span style="color:#a6e22e">beta</span> <span style="color:#a6e22e">recon_x</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">logSigma</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">reconLoss</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">asTensor</span> <span style="color:#a6e22e">beta</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">kld</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">reconLoss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">bceLoss</span> <span style="color:#a6e22e">recon_x</span> <span style="color:#a6e22e">x</span>
+    <span style="color:#a6e22e">kld</span> <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">sumAll</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">logSigma</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">pow</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span>) <span style="color:#a6e22e">mu</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">exp</span> <span style="color:#a6e22e">logSigma</span>)</code></pre></div>
+
+<p>We also include the $\beta \ge 0$ term. When $\beta = 0$ the networks is trained as an
+ordinary autoencoder. When $\beta = 1$, we have a classical VAE. And when
+$\beta &gt; 1$, we force latent vector <a href="https://openreview.net/pdf?id=Sy2fzU9gl">representations
+disentanglement</a>. As we can see from the image below, in case of
+disentanglement, there are separate latent variables that encode position,
+rotation, and scale. Whereas entangled variables tend to encode all object
+properties at the same time. I recommend the excellent <a href="https://arxiv.org/abs/1606.05579">article by Higgins et
+al.</a>, which is featuring some insights from neuroscience.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/articles/Higgins16.png" alt="Disentangled vs entangled latent representations. &lt;small&gt;Image source: [Higgins et al. 2016](https://arxiv.org/abs/1606.05579).&lt;/small&gt;" width="600px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Disentangled vs entangled latent representations. <small>Image source: <a href="https://arxiv.org/abs/1606.05579">Higgins et al. 2016</a>.</small>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The binary cross-entropy loss is defined as</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">bceLoss</span> <span style="color:#a6e22e">target</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span>
+  <span style="color:#f92672">-</span><span style="color:#a6e22e">sumAll</span> (<span style="color:#a6e22e">x</span> <span style="color:#f92672">*</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>(<span style="color:#ae81ff">1e-10</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">target</span>) <span style="color:#f92672">+</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">x</span>) <span style="color:#f92672">*</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span>(<span style="color:#ae81ff">1e-10</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">target</span>))</code></pre></div>
+
+<p>We add a small term $10^{-10}$ to avoid numerical errors due to $\log(0)$.</p>
+
+<h2 id="visualizing-the-latent-space">Visualizing the Latent Space</h2>
+
+<p>Here is how our latent space looks for different values of $\beta$.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/vae_beta_0.png" width="500px" />
+
+
+</figure>
+
+<figure>
+
+<img src="/img/posts/neural-networks/vae_beta_1.png" width="500px" />
+
+
+</figure>
+
+<figure>
+
+<img src="/img/posts/neural-networks/vae_beta_4.png" alt="Test data distributions for different $\beta$ values." width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Test data distributions for different $\beta$ values.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>And here is how we compute that</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">main</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+    (<span style="color:#a6e22e">trainData</span>, <span style="color:#a6e22e">testData</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">initMnist</span> <span style="color:#e6db74">&#34;data&#34;</span>
+    <span style="color:#a6e22e">net0</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">myConfig</span>
+
+    <span style="color:#a6e22e">beta_</span><span style="color:#66d9ef">:</span> <span style="color:#66d9ef">_</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getArgs</span>
+    <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;beta = &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">beta_</span>
+
+    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">beta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">read</span> <span style="color:#a6e22e">beta_</span>
+        <span style="color:#a6e22e">trainMnistStream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> { <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">128</span>, <span style="color:#a6e22e">mnistData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">trainData</span> }
+        <span style="color:#a6e22e">testMnistStream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> { <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">128</span>, <span style="color:#a6e22e">mnistData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">testData</span> }
+        <span style="color:#a6e22e">epochs</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
+        <span style="color:#a6e22e">cpt</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">printf</span> <span style="color:#e6db74">&#34;VAE-Aug2022-beta_%s.ht&#34;</span> <span style="color:#a6e22e">beta_</span>
+        <span style="color:#a6e22e">logname</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">printf</span> <span style="color:#e6db74">&#34;beta_%s.log&#34;</span> <span style="color:#a6e22e">beta_</span>
+
+    <span style="color:#a6e22e">putStrLn</span> <span style="color:#e6db74">&#34;Starting training...&#34;</span>
+    <span style="color:#a6e22e">net&#39;</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">time</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">train</span> <span style="color:#a6e22e">beta</span> <span style="color:#a6e22e">trainMnistStream</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net0</span>
+    <span style="color:#a6e22e">putStrLn</span> <span style="color:#e6db74">&#34;Done&#34;</span>
+
+    <span style="color:#75715e">-- Saving the trained model</span>
+    <span style="color:#a6e22e">save&#39;</span> <span style="color:#a6e22e">net&#39;</span> <span style="color:#a6e22e">cpt</span>
+
+    <span style="color:#75715e">-- Restoring the model</span>
+    <span style="color:#a6e22e">net</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">load&#39;</span> <span style="color:#a6e22e">cpt</span>
+
+    <span style="color:#75715e">-- Test data distribution in the latent space</span>
+    <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Saving test dataset distribution to &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">logname</span>
+    <span style="color:#66d9ef">_</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">testLatentSpace</span> <span style="color:#a6e22e">logname</span> <span style="color:#a6e22e">testMnistStream</span> <span style="color:#a6e22e">net</span></code></pre></div>
+
+<p>Where</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">testLatentSpace</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">FilePath</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> <span style="color:#66d9ef">IO</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">testLatentSpace</span> <span style="color:#a6e22e">fn</span> <span style="color:#a6e22e">testStream</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#a6e22e">runContT</span> (<span style="color:#a6e22e">streamFromMap</span> (<span style="color:#a6e22e">datasetOpts</span> <span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">testStream</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">recordPoints</span> <span style="color:#a6e22e">fn</span> <span style="color:#a6e22e">net</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">fst</span>
+
+<span style="color:#a6e22e">recordPoints</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">FilePath</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">ListT</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">recordPoints</span> <span style="color:#a6e22e">logname</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">P</span><span style="color:#f92672">.</span><span style="color:#a6e22e">foldM</span> <span style="color:#a6e22e">step</span> <span style="color:#a6e22e">begin</span> <span style="color:#a6e22e">done</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">enumerateData</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">step</span> <span style="color:#f92672">::</span> () <span style="color:#f92672">-&gt;</span> ((<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>), <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+    <span style="color:#a6e22e">step</span> () <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> ((<span style="color:#a6e22e">input</span>, <span style="color:#a6e22e">labels</span>), <span style="color:#a6e22e">i</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#a6e22e">args</span>
+          (<span style="color:#a6e22e">encMu</span>, <span style="color:#66d9ef">_</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">encode</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">input</span>
+          <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">head</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">shape</span> <span style="color:#a6e22e">encMu</span>
+
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">toStr</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cat</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) [<span style="color:#a6e22e">reshape</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>] <span style="color:#a6e22e">labels</span>, <span style="color:#a6e22e">encMu</span>]
+      <span style="color:#a6e22e">appendFile</span> <span style="color:#a6e22e">logname</span> <span style="color:#a6e22e">s</span>
+
+      <span style="color:#a6e22e">return</span> ()
+
+    <span style="color:#a6e22e">done</span> () <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> ()
+    <span style="color:#a6e22e">begin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> ()
+
+<span style="color:#a6e22e">toStr</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">String</span>
+<span style="color:#a6e22e">toStr</span> <span style="color:#a6e22e">dec</span> <span style="color:#f92672">=</span>
+    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">asValue</span> <span style="color:#a6e22e">dec</span> <span style="color:#f92672">::</span> [[<span style="color:#66d9ef">Float</span>]]
+        <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">map</span> (<span style="color:#a6e22e">unwords</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">map</span> <span style="color:#a6e22e">show</span>) <span style="color:#a6e22e">a</span>
+     <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">unlines</span> <span style="color:#a6e22e">b</span></code></pre></div>
+
+<p>Now, let's take a walk around our latent space to get an idea how it looks like inside.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">main</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+    <span style="color:#a6e22e">net</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">load&#39;</span> <span style="color:#e6db74">&#34;VAE-Aug2022-beta_1.ht&#34;</span>
+
+    <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">xs</span> <span style="color:#f92672">=</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">2.7</span><span style="color:#f92672">..</span><span style="color:#ae81ff">3</span><span style="color:#f92672">::</span><span style="color:#66d9ef">Float</span>]
+
+        <span style="color:#75715e">-- 2D latent space as a Cartesian product</span>
+        <span style="color:#a6e22e">zs</span> <span style="color:#f92672">=</span> [ [<span style="color:#a6e22e">x</span>,<span style="color:#a6e22e">y</span>] <span style="color:#f92672">|</span> <span style="color:#a6e22e">x</span><span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">xs</span>, <span style="color:#a6e22e">y</span><span style="color:#f92672">&lt;-</span><span style="color:#a6e22e">xs</span> ]
+
+        <span style="color:#a6e22e">decoded</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cat</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">$</span>
+                    <span style="color:#a6e22e">map</span> (<span style="color:#a6e22e">decode</span> <span style="color:#a6e22e">net</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">toLocalModel&#39;</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">asTensor</span><span style="color:#f92672">.</span> (<span style="color:#66d9ef">:[]</span>)) <span style="color:#a6e22e">zs</span>
+
+    <span style="color:#a6e22e">writeFile</span> <span style="color:#e6db74">&#34;latent_space_2D.txt&#34;</span> (<span style="color:#a6e22e">toStr</span> <span style="color:#a6e22e">decoded</span>)</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/neural-networks/latent_space_21x21.png" alt="Some examples from 2D latent space." width="600px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Some examples from 2D latent space.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Pretty neat! We see gradual transitions between different
+digits. Note that these digits are actually <em>generated</em> by VAE.</p>
+
+<h2 id="convnet-vae">ConvNet VAE</h2>
+
+<p>While we have built a simple variational autoencoder based on
+MLP (<a href="/neural-networks/day2/">multilayer perceptron</a>), nothing prevents us
+from using other architectures. In fact, let's build a
+<a href="/neural-networks/day5/">convolutional</a> VAE!</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">VAESpec</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">VAESpec</span>
+  {
+    <span style="color:#75715e">-- Encoder trainable parameters</span>
+    <span style="color:#a6e22e">conv1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2dSpec</span>,
+    <span style="color:#a6e22e">conv2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2dSpec</span>,
+    <span style="color:#a6e22e">conv3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2dSpec</span>,
+    <span style="color:#a6e22e">fcMu</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+    <span style="color:#a6e22e">fcSigma</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+
+    <span style="color:#75715e">-- Decoder trainable parameters</span>
+    <span style="color:#a6e22e">fc</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LinearSpec</span>,
+    <span style="color:#a6e22e">deconv1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2dSpec</span>,
+    <span style="color:#a6e22e">deconv2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2dSpec</span>,
+    <span style="color:#a6e22e">deconv3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2dSpec</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Eq</span>)
+
+<span style="color:#a6e22e">myConfig</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">VAESpec</span>
+    (<span style="color:#66d9ef">Conv2dSpec</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">32</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">4</span>)    <span style="color:#75715e">-- 1 -&gt; 32 channels; 4 x 4 kernel</span>
+    (<span style="color:#66d9ef">Conv2dSpec</span> <span style="color:#ae81ff">32</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">4</span>)   <span style="color:#75715e">-- 32 -&gt; 64 channels; 4 x 4 kernel</span>
+    (<span style="color:#66d9ef">Conv2dSpec</span> <span style="color:#ae81ff">64</span> <span style="color:#ae81ff">128</span> <span style="color:#ae81ff">3</span> <span style="color:#ae81ff">3</span>)  <span style="color:#75715e">-- 64 -&gt; 128 channels; 3 x 3 kernel</span>
+    (<span style="color:#66d9ef">LinearSpec</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">128</span>) <span style="color:#a6e22e">latent_size</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">128</span>) <span style="color:#a6e22e">latent_size</span>)
+    (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">latent_size</span> <span style="color:#ae81ff">1024</span>)
+    (<span style="color:#66d9ef">ConvTranspose2dSpec</span> <span style="color:#ae81ff">1024</span> <span style="color:#ae81ff">256</span> <span style="color:#ae81ff">4</span> <span style="color:#ae81ff">4</span>)
+    (<span style="color:#66d9ef">ConvTranspose2dSpec</span> <span style="color:#ae81ff">256</span> <span style="color:#ae81ff">128</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">6</span>)
+    (<span style="color:#66d9ef">ConvTranspose2dSpec</span> <span style="color:#ae81ff">128</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">6</span>)
+
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">VAE</span>
+  { <span style="color:#a6e22e">c1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2d</span>,
+    <span style="color:#a6e22e">c2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2d</span>,
+    <span style="color:#a6e22e">c3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Conv2d</span>,
+    <span style="color:#a6e22e">lMu</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">lSigma</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">l</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>,
+    <span style="color:#a6e22e">t1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2d</span>,
+    <span style="color:#a6e22e">t2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2d</span>,
+    <span style="color:#a6e22e">t3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">ConvTranspose2d</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Parameterized</span>)
+
+<span style="color:#66d9ef">instance</span> <span style="color:#66d9ef">Randomizable</span> <span style="color:#66d9ef">VAESpec</span> <span style="color:#66d9ef">VAE</span> <span style="color:#66d9ef">where</span>
+  <span style="color:#a6e22e">sample</span> <span style="color:#66d9ef">VAESpec</span> {<span style="color:#f92672">..</span>} <span style="color:#f92672">=</span>
+    <span style="color:#66d9ef">VAE</span>
+      <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">conv1</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">conv2</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">conv3</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">fcMu</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">fcSigma</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">fc</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">deconv1</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">deconv2</span>
+      <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">deconv3</span>
+
+<span style="color:#a6e22e">encode</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>)
+<span style="color:#a6e22e">encode</span> <span style="color:#66d9ef">VAE</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">x0</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">enc_</span> <span style="color:#f92672">=</span>
+          <span style="color:#75715e">-- Reshape vectors [batch_size x 784]</span>
+          <span style="color:#75715e">-- into grayscale images of [batch_size x 1 x 28 x 28]</span>
+          <span style="color:#a6e22e">reshape</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>]
+          <span style="color:#75715e">-- Stride 2, padding 0</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">conv2dForward</span> <span style="color:#a6e22e">c1</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">conv2dForward</span> <span style="color:#a6e22e">c2</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">conv2dForward</span> <span style="color:#a6e22e">c3</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">flatten</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) (<span style="color:#66d9ef">Dim</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>))
+
+      <span style="color:#a6e22e">x1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">enc_</span> <span style="color:#a6e22e">x0</span>
+      <span style="color:#a6e22e">mu</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">lMu</span> <span style="color:#a6e22e">x1</span>
+      <span style="color:#a6e22e">logSigma</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">lSigma</span> <span style="color:#a6e22e">x1</span>
+   <span style="color:#66d9ef">in</span> (<span style="color:#a6e22e">mu</span>, <span style="color:#a6e22e">logSigma</span>)
+
+<span style="color:#a6e22e">decode</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">decode</span> <span style="color:#66d9ef">VAE</span> {<span style="color:#f92672">..</span>} <span style="color:#f92672">=</span>
+         <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">reshape</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1024</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>]
+         <span style="color:#75715e">-- Stride 2, padding 0</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">convTranspose2dForward</span> <span style="color:#a6e22e">t1</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">convTranspose2dForward</span> <span style="color:#a6e22e">t2</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">convTranspose2dForward</span> <span style="color:#a6e22e">t3</span> (<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>) (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">sigmoid</span>
+         <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">reshape</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">784</span>]  <span style="color:#75715e">-- Reshape back</span></code></pre></div>
+
+<p>And that is all we need.</p>
+
+<p>Here is the latent space for $\beta=1$ (normal VAE) using our CNN architecture:</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/latent_space_cnn_beta_1.png" width="500px" />
+
+
+</figure>
+
+<h3 id="disentanglement">Disentanglement</h3>
+
+<p>To better illustrate how parameter $\beta$ encourages disentanglement between
+latent representations, let us first increase the latent dimension to $L=10$.
+For $\beta=1$ and $\beta=4$ we perform scan along each individual $z$ coordinate.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/latent_space_cnn_beta_1_z10.png" width="500px" />
+
+
+</figure>
+
+<figure>
+
+<img src="/img/posts/neural-networks/latent_space_cnn_beta_4_z10.png" width="500px" />
+
+
+</figure>
+
+<p>Indeed, the latent space under $\beta=4$ looks more disentangled compared to
+$\beta=1$. We can see e.g. that $z_1$ is the parameter that defines how
+&quot;light&quot; or how &quot;bold&quot; is the digit, whereas $z_2$ controls how wide is the
+digit. Whereas such individual components for $\beta=1$ are hard to identify.
+For instance when $\beta=1$, $z_4$ controls not only how &quot;bold&quot; is the digit,
+but also its shape.</p>
+
+<p>For more details, see this <a href="https://github.com/penkovsky/10-days-of-grad/blob/master/day9/data/cnn/visualize.ipynb">notebook</a>.</p>
+
+<hr />
+
+<p>Find the complete project and associated data on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day9">Github</a>. For
+suggestions about the content feel free to open a
+<a href="https://github.com/penkovsky/10-days-of-grad/issues">new issue</a>.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>Variational autoencoder is a great tool in modern deep learning. Manipulating
+the latent space allows us not only to &quot;interpolate&quot; between different images
+or other objects, but also to perform <a href="https://openaccess.thecvf.com/content/CVPR2021/papers/Peng_Generating_Diverse_Structure_for_Image_Inpainting_With_Hierarchical_VQ-VAE_CVPR_2021_paper.pdf">inpainting</a> (adding details to
+incomplete images) or even <a href="https://arxiv.org/abs/1606.05579">zero shot learning</a>. The last one is
+crucial for the so-called <em>artificial general intelligence</em>.</p>
+
+<p>The loss function is important for VAE training.
+If your VAE does not work as expected, the odds
+are that the loss function is not implemented correctly. Also check if the
+random noise $\varepsilon$ is drawn from the normal distribution.</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2022VAE,
+ title   = "Roaming The Latent Space",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2022",
+ month   = "August",
+ url     = "https://penkovsky.com/neural-networks/day9/"
+}
+</pre>
+
+<h2 id="learn-more">Learn More</h2>
+
+<ul>
+<li><a href="https://arxiv.org/abs/1312.6114">Auto-Encoding Variational Bayes</a></li>
+<li><a href="https://blog.evjang.com/2016/08/variational-bayes.html">A Beginner's Guide to Variational Methods: Mean-Field Approximation</a></li>
+<li><a href="https://arxiv.org/abs/1606.05579">Early Visual Concept Learning with Unsupervised Deep Learning</a></li>
+<li><a href="https://github.com/pytorch/examples/blob/main/vae/main.py">Pytorch VAE Implementation</a></li>
+<li><a href="https://magenta.tensorflow.org/music-vae">Interpolating Music</a></li>
+<li><a href="https://openreview.net/pdf?id=Sy2fzU9gl">β-VAE: Learning Basic Visual Concepts With A Constrained Variational Framework</a></li>
+<li><a href="https://gregorygundersen.com/blog/2018/04/29/reparameterization/">The Reparameterization Trick</a></li>
+<li><a href="https://arxiv.org/abs/1906.00446">Generating Diverse High-Fidelity Images with VQ-VAE-2</a></li>
+<li><a href="https://openaccess.thecvf.com/content/CVPR2021/papers/Peng_Generating_Diverse_Structure_for_Image_Inpainting_With_Hierarchical_VQ-VAE_CVPR_2021_paper.pdf">Generating Diverse Structure for Image Inpainting With Hierarchical VQ-VAE</a></li>
+<li><a href="https://vincentcartillier.github.io/papers/variational-image-inpainting.pdf">Variational Image Inpainting</a></li>
+</ul>
+
+<hr />
+
+<h2 id="a-technical-sidenote">A Technical Sidenote</h2>
+
+<p>Compared to the previous <a href="/neural-networks/day8/">day</a>, the <code>trainLoop</code> is
+slightly modified: First, we rescale the images between 0 and 1.  Second, we
+include our new loss function in the <code>step</code> function.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">    <span style="color:#a6e22e">step</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Optimizer</span> <span style="color:#a6e22e">o</span> <span style="color:#f92672">=&gt;</span> (<span style="color:#66d9ef">VAE</span>, <span style="color:#a6e22e">o</span>) <span style="color:#f92672">-&gt;</span> ((<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>), <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">VAE</span>, <span style="color:#a6e22e">o</span>)
+    <span style="color:#a6e22e">step</span> (<span style="color:#a6e22e">model</span>, <span style="color:#a6e22e">opt</span>) <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> ((<span style="color:#a6e22e">x</span>, <span style="color:#66d9ef">_</span>), <span style="color:#a6e22e">iter</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#a6e22e">args</span>
+          <span style="color:#75715e">-- Rescale pixel values [0, 255] -&gt; [0, 1.0].</span>
+          <span style="color:#75715e">-- This is important as the sigmoid activation in decoder can</span>
+          <span style="color:#75715e">-- reach values only between 0 and 1.</span>
+          <span style="color:#a6e22e">x&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">255.0</span>
+      (<span style="color:#a6e22e">recon_x</span>, <span style="color:#a6e22e">mu</span>, <span style="color:#a6e22e">logSigma</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">vaeForward</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">False</span> <span style="color:#a6e22e">x&#39;</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">loss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">vaeLoss</span> <span style="color:#a6e22e">beta</span> <span style="color:#a6e22e">recon_x</span> <span style="color:#a6e22e">x&#39;</span> <span style="color:#a6e22e">mu</span> <span style="color:#a6e22e">logSigma</span>
+      <span style="color:#75715e">-- Print loss every 100 batches</span>
+      <span style="color:#a6e22e">when</span> (<span style="color:#a6e22e">iter</span> `<span style="color:#a6e22e">mod</span>` <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">$</span> <span style="color:#66d9ef">do</span>
+        <span style="color:#a6e22e">putStrLn</span>
+          <span style="color:#f92672">$</span> <span style="color:#a6e22e">printf</span> <span style="color:#e6db74">&#34;Batch: %d | Loss: %.2f&#34;</span> <span style="color:#a6e22e">iter</span> (<span style="color:#a6e22e">asValue</span> <span style="color:#a6e22e">loss</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Float</span>)
+      <span style="color:#a6e22e">runStep</span> <span style="color:#a6e22e">model</span> <span style="color:#a6e22e">opt</span> <span style="color:#a6e22e">loss</span> <span style="color:#a6e22e">lr</span></code></pre></div>
+
+<p>The <code>train</code> function now uses Adam optimizer from <code>Torch.Optim.CppOptim</code>, which
+tends to be faster compared to <code>mkAdam</code> we used previously.  This is not very
+different from mkAdam-based training, except that the learning rate is
+specified as <code>Cpp.adamLr</code> parameter and not as a <code>trainLoop</code> parameter (ignored
+when passed to <code>runStep</code>).</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">train</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> <span style="color:#66d9ef">IO</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">VAE</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">VAE</span>
+<span style="color:#a6e22e">train</span> <span style="color:#a6e22e">beta</span> <span style="color:#a6e22e">trainMnist</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+    <span style="color:#a6e22e">optimizer</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">initOptimizer</span> <span style="color:#a6e22e">adamOpt</span> <span style="color:#a6e22e">net0</span>
+
+    (<span style="color:#a6e22e">net&#39;</span>, <span style="color:#66d9ef">_</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">foldLoop</span> (<span style="color:#a6e22e">net0</span>, <span style="color:#a6e22e">optimizer</span>) <span style="color:#a6e22e">epochs</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span>(<span style="color:#a6e22e">net&#39;</span>, <span style="color:#a6e22e">optState</span>) <span style="color:#66d9ef">_</span> <span style="color:#f92672">-&gt;</span>
+      <span style="color:#a6e22e">runContT</span> (<span style="color:#a6e22e">streamFromMap</span> <span style="color:#a6e22e">dsetOpt</span> <span style="color:#a6e22e">trainMnist</span>)
+      <span style="color:#f92672">$</span> <span style="color:#a6e22e">trainLoop</span> <span style="color:#a6e22e">beta</span> (<span style="color:#a6e22e">net&#39;</span>, <span style="color:#a6e22e">optState</span>) <span style="color:#ae81ff">0.0</span> <span style="color:#f92672">.</span> <span style="color:#a6e22e">fst</span>
+
+    <span style="color:#a6e22e">return</span> <span style="color:#a6e22e">net&#39;</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">dsetOpt</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">datasetOpts</span> <span style="color:#a6e22e">workers</span>
+    <span style="color:#a6e22e">workers</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+    <span style="color:#75715e">-- Adam optimizer parameters</span>
+    <span style="color:#a6e22e">adamOpt</span> <span style="color:#f92672">=</span>
+        <span style="color:#a6e22e">def</span>
+          { <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">adamLr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">learningRate</span>,
+            <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">adamBetas</span> <span style="color:#f92672">=</span> (<span style="color:#ae81ff">0.9</span>, <span style="color:#ae81ff">0.999</span>),
+            <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">adamEps</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-8</span>,
+            <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">adamWeightDecay</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>,
+            <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#a6e22e">adamAmsgrad</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+          } <span style="color:#f92672">::</span>
+          <span style="color:#66d9ef">Cpp</span><span style="color:#f92672">.</span><span style="color:#66d9ef">AdamOptions</span></code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">learningRate</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Double</span>
+<span style="color:#a6e22e">learningRate</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-3</span></code></pre></div>
+
+<p>I used a compiled version instead of a notebook since the network training
+worked much faster (the bottleneck was in training data mini-batches loading).
+Also I have trained networks with <code>Torch.Optim.CppOptim</code>. It is slightly faster
+compared to <code>mkAdam</code>.</p>
+
+<p>I was also wondering why I get large values out of the encoder. It turns out
+that this is because <code>relu</code> function is unbounded. You may want to replace
+<code>relu</code> with <code>Torch.tanh</code> and visualize the latent space again.</p>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-2">We use <code>sigma</code> as an argument to <code>randnLikeIO</code> so that the resulting random tensor has the same shape as <code>sigma</code>.
+ <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/neural-networks/beyond/">Day 10: Beyond Supervised Learning</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/neural-networks/day8/">Day 8: Model Uncertainty Estimation</a></li>
+        
+        <li><a href="/neural-networks/day7/">Day 7: Real World Deep Learning</a></li>
+        
+        <li><a href="/neural-networks/day6/">Day 6: Saving Energy with Binarized Neural Networks</a></li>
+        
+        <li><a href="/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></li>
+        
+        <li><a href="/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

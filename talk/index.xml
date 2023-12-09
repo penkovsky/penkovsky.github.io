@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Recent &amp; Upcoming Talks on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/talk/</link>
+    <description>Recent content in Recent &amp; Upcoming Talks on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/talk/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Towards Autonomous Synthesis With Deep Reinforcement Learning</title>
+      <link>https://penkovsky.com/talk/towards-autonomous-synthesis2022/</link>
+      <pubDate>Wed, 31 Aug 2022 20:05:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/towards-autonomous-synthesis2022/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Optical Computing Applications</title>
+      <link>https://penkovsky.com/talk/optical-computing-applications2021/</link>
+      <pubDate>Wed, 21 Apr 2021 15:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/optical-computing-applications2021/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Medical Applications of Low Precision Neuromorphic Systems</title>
+      <link>https://penkovsky.com/talk/us-french-symposium2019/</link>
+      <pubDate>Sun, 22 Sep 2019 15:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/us-french-symposium2019/</guid>
+      <description>The advent of deep learning has substantially accelerated machine learning development during the last decade impacting computer vision, natural language processing, and other domains. However, those deep learning implementations require almost two orders of magnitude more power compared to the human brain, requiring thus constant connection to dedicated data centers. With new memories available, emerging Binarized Neural Networks (BNNs) are promising to reduce the energy impact of the forthcoming machine learning hardware generation, enabling machine learning on the edge devices and avoiding data transfer over the network.</description>
+    </item>
+    
+    <item>
+      <title>Coupled Delay Systems For Brain-Inspired Computing</title>
+      <link>https://penkovsky.com/talk/ictp2019/</link>
+      <pubDate>Tue, 07 May 2019 13:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/ictp2019/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Towards Binarized Neural Networks Hardware</title>
+      <link>https://penkovsky.com/talk/icee2018/</link>
+      <pubDate>Sat, 24 Nov 2018 13:00:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/talk/icee2018/</guid>
+      <description>B. Penkovsky, M. Bocquet, T. Hirztlin, J.-O. Klein, E. Nowak, E. Vianello, J.-M. Portal and D. Querlioz
+The advent of deep learning has substantially accelerated machine learning development during the last decade. Multiple tasks such as computer vision have been drastically improved and even outperformed the human accuracy. However, those deep learning implementations require almost two orders of magnitude more power comparing to the human brain. Moreover, with the end of the Moore’s law, new hardware insights are necessary to keep steady the progress.</description>
+    </item>
+    
+    <item>
+      <title>Chimera States in Nonlinear Systems with Multiple Delayed Feedbacks</title>
+      <link>https://penkovsky.com/talk/ddays2018/</link>
+      <pubDate>Wed, 15 Aug 2018 13:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/ddays2018/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>On Theory and Modeling of Complex Nonlinear Delay Dynamics</title>
+      <link>https://penkovsky.com/talk/juelich2018/</link>
+      <pubDate>Sat, 02 Jun 2018 13:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/talk/juelich2018/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

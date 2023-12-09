@@ -1,0 +1,1161 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across the neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/day1/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/day1/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/day1/">
+  <meta property="og:title" content="Day 1: Learning Neural Networks The Hard Way | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &quot;intelligent&quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across the neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3."><meta property="og:image" content="https://penkovsky.com/img/posts/GoogLeNet_iterative_places.jpg">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2018-12-11T16:22:28&#43;01:00">
+  
+  <meta property="article:modified_time" content="2023-06-06T21:20:35&#43;01:00">
+  
+
+  
+
+  
+
+  <title>Day 1: Learning Neural Networks The Hard Way | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/GoogLeNet_iterative_places.jpg" class="article-banner" itemprop="image">
+  
+
+  <span class="article-header-caption"><a href="https://www.flickr.com/photos/55049135@N00/19038712376/">Image credit</a></span>
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 1: Learning Neural Networks The Hard Way</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+        Last updated on
+    
+    <meta content="2018-12-11 16:22:28 &#43;0100 CET" itemprop="datePublished">
+    <time datetime="2023-06-06 21:20:35 &#43;0100 &#43;0100" itemprop="dateModified">
+      Jun 6, 2023
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    15 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>Neural networks is a topic that recurrently appears throughout my life.
+Once, when I was a BSc student,
+I got obsessed with the idea to build an &quot;intelligent&quot; machine<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.
+I spent a couple of sleepless nights thinking. I read a few essays
+shedding some light on this philosophical subject,
+among which the most prominent, perhaps, stand Marvin Minsky's writings<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup>.
+As a result, I came across the neural networks idea.
+It was 2010, and <em>deep learning</em> was not nearly as popular as
+it is now<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>.
+Moreover, no one made much effort linking to neural networks
+in calculus or linear algebra curricula. Even folks doing classical
+optimization and statistics sometimes
+seemed puzzled when hearing about neural nets.</p>
+
+<p>This may seem surprising given that the most of the concepts we use today were
+already known in early 90s. However, before the advent of GPUs and sufficiently
+large and diverse datasets, neural networks remained a realm of a relatively
+small academic community.</p>
+
+<p>I was lucky enough to implement my first neural net as a part of
+the AI curriculum. It was a simple network made of what is called <em>fully-connected
+layers</em> and <em>sigmoid activations</em>, which we shall study today. At the time I
+realized that existing state of our knowledge was still lacking to really build
+&quot;thinking computers&quot;<sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup>.</p>
+
+<p>It was 2012, the conference in Crimea, Ukraine where I attended a brilliant
+talk by Prof. Laurent Larger.  He explained how to build a high-speed hardware
+for speech recognition using a laser. The talk has inspired me, and a year
+later I started a PhD training with an aim to develop <em>reservoir computing</em>
+methods, that is recurrent neural networks implemented directly in hardware.
+Finally, now I am using deep neural networks as a part of my daily job
+(still true in 2023).</p>
+
+<p>In <a href="https://penkovsky.com/neural-networks/">this series</a> I will highlight some curious
+details of problem solving with neural networks. I will try to avoid an
+unnecessary long introduction and go straight to the subject. (Otherwise feel
+free to check Chapter 1.2 of my <a href="https://hal.archives-ouvertes.fr/tel-01591441/file/PhD_thesis-Penkovsky-arch.pdf">thesis</a>). Briefly, (artificial) neural
+networks are to some extent inspired by biological neurons.
+Similarly to its biological counterpart,
+artificial neuron receives many inputs, performs
+a nonlinear transformation, and produces
+an output. The equation below formalizes this kind of behavior:</p>
+
+<p>$$
+\begin{equation}
+y = f(w_1 x_1 + w_2 x_2 + \dots + w_N x_N) = f(\sum_i w_i x_i),
+\end{equation}
+$$</p>
+
+<p>where $N$ is the number of inputs $x_i$,
+$w_i$ are synaptic weights<sup class="footnote-ref" id="fnref:fn-5"><a href="#fn:fn-5">5</a></sup>,
+and $y$ is the result. Surprising as it may appear,
+in a modern neural network
+$f$ can be practically any nonlinear function.
+This nonlinear function is often called an <em>activation function</em>.
+Congratulations, we have arrived at a
+<a href="https://en.wikipedia.org/wiki/Perceptron">neural network from 1950-s</a>.
+Curiously, at the time it was
+<a href="https://journals.sagepub.com/doi/10.1177/030631296026003005">reported</a> that
+the <em>perceptron</em> will be &quot;the embryo of an electronic computer that expects
+will be able to walk, talk, see, write, reproduce itself and be conscious of
+its existence&quot;. Today, we can say it was a bit of an over statement.
+Nevertheless, it is not the first hype over the so-called &quot;AI&quot; that we
+experience nowadays. Later it was an &quot;AI winter&quot;, when everyone lost the
+interest. And it happened twice.</p>
+
+<p>To continue reading
+this article, some mathematical background is useful, but not mandatory.
+Anyone can develop an intuition about neural networks!</p>
+
+<h2 id="a-word-on-haskell">A Word On Haskell</h2>
+
+<p>This series of posts practically illustrate all the concepts
+in Haskell programming language.
+To motivate you, here are some Q &amp; A you always wanted to know.</p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az">Q:</a>
+Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?</strong></p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4vn2t">A:</a></strong>
+Neural networks are very &quot;function objects&quot;. A network is just a big composition of functions. These kinds of things are very natural in a functional language.</p>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebmlhrx">Q:</a>
+As I am completely new to Haskell, would like to know what are the benefits of using Haskell vs python or other languages?</strong></p>
+
+<p><strong>A:</strong> The benefits of using Haskell:</p>
+
+<ol>
+<li>It is much easier to reason about what your program is doing.</li>
+<li>Great when refactoring existing code base.</li>
+<li>Haskell shapes your thinking towards problem solving
+in a pragmatic way.</li>
+<li>Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast">fast</a>.</li>
+</ol>
+
+<p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9">Q:</a>
+I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.</strong></p>
+
+<p><strong>A:</strong> Thank you. I find Haskell to be very intuitive
+when explaining neural nets.</p>
+
+<p><strong>Edit 2023</strong>: There are several Haskell-based projects that have recently evolved.
+For instance, you may want to check <a href="https://google-research.github.io/dex-lang/examples/tutorial.html">Dex</a>, <em>'a functional, statically
+typed language for array processing'</em>, by Google Research. There also exist
+<a href="https://www.purescript.org">PureScript</a> and <a href="https://elm-lang.org/">Elm</a> aimed
+at JavaScript. And <a href="https://clash-lang.org/">Clash</a> that translates to
+hardware (VHDL, Verilog, System Verilog).</p>
+
+<h2 id="gradient-descent-a-cs-freshman-year">Gradient Descent: A CS Freshman Year</h2>
+
+<figure>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/f/ff/Gradient_descent.svg" width="590px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Gradient Descent. <a href="https://commons.wikimedia.org/wiki/File:Gradient_descent.svg">Image credit</a></h4>
+  
+</figcaption>
+
+</figure>
+
+<p>The very basic idea behind neural networks
+training and deep learning is a local optimization method known
+as <a href="https://en.wikipedia.org/wiki/Gradient_descent"><em>gradient descent</em></a>.
+For those who have hard time remembering their freshman year,
+just watch an <a href="https://www.youtube.com/watch?v=jc2IthslyzM">introductory video</a>
+explaining the idea.</p>
+
+<p>How does a concept as simple as gradient descent work for a neural network?
+Well, a neural network is only a function<sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup>, mapping an input to some output.
+By comparing the neural network's output to some desired output, one can obtain
+another function known as an <em>error function</em>. This error function
+has a certain <em>error landscape</em>, like in the mountains.
+By using gradient descent, we modify our neural network
+in such a way that we are descending this landscape.
+Therefore, we aim at finding an error minimum.
+The key concept of the optimization method is that the
+error gradients give us a direction in which to change the neural network.
+In a similar way one would be able to descend a hill
+covered with a thick fog. In both cases only a local gradient (slope)
+is available.</p>
+
+<p>Gradient descent can be described by a formula:</p>
+
+<p>$$\begin{equation}
+x_{n+1} = x_n - \gamma \cdot \nabla F(x_n),
+\end{equation}
+$$</p>
+
+<p>where constant $\gamma$ is what is referred to in deep learning as
+the <em>learning rate</em>, i.e. the amount of learning per iteration $n$.
+In the simplest case, $x$ is a scalar variable. Below is an interactive
+visualization for gradient descent in case of a one-dimensional function,
+e.g. $f(x) = (x - 3)^2$, starting from an initial guess $x_0 = 0$:</p>
+
+<style>
+  #vis-form-1 {
+    display: flex;
+    align-items: center;
+  }
+
+  #vis-form-1 label {
+    margin-right: 8px;
+  }
+
+  #vis-form-1 input {
+    width: 3em;
+  }
+
+  #vis-form-1 button {
+    padding: 4px;
+    font-size: 16px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+  }
+
+  #vis-form-1 button {
+    background-color: #4CAF50;
+    color: white;
+    cursor: pointer;
+  }
+
+  #vis-form-1 button:hover {
+    background-color: #45a049;
+  }
+</style>
+
+<div>
+  <form id="vis-form-1">
+    <label for="gamma">$\gamma=$</label>
+    <input id="gamma" value="0.4">
+    <span>&nbsp;</span>
+    <label for="x0">$x_0=$</label>
+    <input id="x0" value="0.0">
+    <span>&nbsp;</span>
+    <button type="submit">Run</button>
+  </form>
+  <svg id="visualization"></svg>
+</div>
+
+<script src="https://d3js.org/d3.v7.min.js"></script>
+<script>
+
+const width = 650;
+const height = 500;
+
+const svg = d3.select("#visualization")
+  .attr("width", width)
+  .attr("height", height);
+
+const xScale = d3.scaleLinear()
+  .domain([-2, 8])
+  .range([0, width]);
+const yScale = d3.scaleLinear()
+  .domain([0, 16])
+  .range([height - 31, 5]);
+
+const xAxis = d3.axisBottom(xScale);
+const yAxis = d3.axisLeft(yScale);
+
+function target(x) {
+  return Math.pow(x - 3, 2);
+}
+
+function grad_target(x) {
+  return 2 * (x - 3);
+}
+
+function static_plot() {
+  
+  svg.append("g")
+    .attr("transform", `translate(0, ${15 * height / 16})`)
+    .call(xAxis);
+  svg.append("g")
+    .attr("transform", `translate(${width / 5}, 0)`)  
+    .call(yAxis);
+
+  
+  
+  
+  const xValues = d3.range(-0.8, 6.8, 0.1);
+
+  
+  const yValues = xValues.map(target);
+
+  
+  const line = d3.line()
+    .x((d, i) => xScale(xValues[i]))
+    .y(d => yScale(d));
+
+  
+  svg.append("path")
+    .datum(yValues)
+    .attr("d", line)
+    .attr("stroke", "gray")
+    .attr("stroke-width", 2)
+    .attr("fill", "none");
+}
+
+function descend(gradF, gamma, x0) {
+  let result = [];
+  let x = x0;
+  let prevX = x0;
+  const convergenceThreshold = 0.001;
+  const maxSteps = 100;
+
+  let step = 0;
+  while (step < maxSteps) {
+    result.push(x);
+    prevX = x;
+    x = stepFunction(x);
+
+    if (Math.abs(x - prevX) < convergenceThreshold) {
+      break;
+    }
+
+    step++;
+  }
+
+  return result;
+
+  function stepFunction(x) {
+    const grad = gradF(x);
+    const dx = -gamma * grad;
+    return x + dx;
+  }
+}
+
+const form = document.querySelector("form");
+form.addEventListener("submit", function (event) {
+  event.preventDefault();
+  const gammaInput = document.getElementById("gamma");
+  const gamma = parseFloat(gammaInput.value);
+  const x0Input = document.getElementById("x0");
+  const x0 = parseFloat(x0Input.value);
+  updateVisualization(gamma, x0);
+});
+
+function updateVisualization(gamma, x0) {
+  const points = descend(grad_target, gamma, x0);
+
+  svg.selectAll("circle").remove();
+  svg.selectAll("path").remove();
+
+  const arrowPaths = svg.selectAll("path")
+    .data(points.slice(0, -1))
+    .enter()
+    .append("path")
+    .attr("d", (d, i) => {
+      const startX = xScale(d);
+      const endX = xScale(points[i + 1]);
+      const startY = yScale(target(d));
+      const endY = yScale(target(points[i + 1]));
+      return `M ${startX}, ${startY} L ${endX},${endY}`;
+    })
+    .attr("stroke", "orange")
+    .attr("stroke-width", "5px")
+    .style("opacity", 0);
+
+  const circle = svg.selectAll("circle")
+    .data(points)
+    .enter()
+    .append("circle")
+    .attr("cx", (d) => xScale(d))
+    .attr("cy", (x) => yScale(target(x)))
+    .attr("r", 6.5)
+    .attr("fill", "steelblue")
+    .style("opacity", 0);
+
+  circle.transition()
+    .delay((_, i) => i * 1000)
+    .duration(500)
+    .style("opacity", 1);
+
+  arrowPaths.each(function (_, i) {
+    const currentPath = d3.select(this);
+    const pathLength = currentPath.node().getTotalLength();
+    currentPath
+      .attr("stroke-dasharray", pathLength)
+      .attr("stroke-dashoffset", pathLength)
+      .style("opacity", 1)
+      .transition()
+      .delay(i * 1000 + 500)
+      .duration(500)
+      .attr("stroke-dashoffset", 0);
+  });
+
+  static_plot();
+}
+
+static_plot();
+
+</script>
+
+
+<p>Try different values of learning rate $\gamma$ (e.g. 0.2, 0.1, 0.7, 1.1) and
+see how fast the method converges (and if converges at all). When learning rate
+is too large, the algorithm may <em>overshoot</em> and not converge! Thus it might be
+challenging to find the best learning rate $\gamma$. Keep this in mind when
+training neural networks. Also learn about Adam during
+<a href="/neural-networks/day2/">Day 2</a>. Yet another challenge is that the optimized
+function is rarely convex and nice (unlike the one above). As a result, the naive
+gradient descent method might struggle. We will address this challenge during
+<a href="/neural-networks/day4/">Day 4</a> using <em>batch normalization</em>.</p>
+
+<p>The gradient descent
+method can be implemented in a few lines of code.
+Play with the <a href="https://repl.it/@penkovsky/Grad">code snippet</a>.
+Press the green triangle button below to run the code.</p>
+
+<iframe height="400px" width="100%" src="https://repl.it/@penkovsky/Grad?lite=true" scrolling="no" frameborder="no" allowtransparency="true" allowfullscreen="true" sandbox="allow-forms allow-pointer-lock allow-popups allow-same-origin allow-scripts allow-modals"></iframe>
+
+<p>That outputs the following sequence:
+$0.0,2.4,2.88,2.976,2.9952,2.99904,2.999808,2.9999616,\dots$
+Indeed, the value minimizing function $f(x)$ is $3$,
+i.e. $\min f(x) = f(3) = (x-3)^2 = 0$.
+And the sequence is gradually converging towards that number.
+Let us look more carefully what does the code above do.</p>
+
+<p>Lines 1-3: We define the gradient descent method, which
+iteratively applies the function <code>step</code> implementing equation (2).
+We provide the intermediate results taking the first <code>iterN</code> values.</p>
+
+<p>Line 5: Suppose, we would like to optimize a function $f(x) = (x-3)^2$.
+Its gradient <code>gradF_test</code> is then $\nabla f(x) = 2\cdot(x-3)$.</p>
+
+<p>Lines 7-10: Finally, we run our gradient descent using
+learning rate $\gamma = 0.4$.</p>
+
+<p>It is crucial to realize that the value of $\gamma$ affects
+the convergence.
+When $\gamma$ is too small, the algorithm will take many more
+iterations to converge, however,
+when $\gamma$ is too large the algorithm will never converge.
+At the moment, I am not aware of a good way how to determine
+the best $\gamma$ for a given problem. Therefore, often different
+$\gamma$ values have to be tried. Feel free to modify the code above
+and see what comes out!
+The method is generalizable to $N$ dimensions. Essentially, we would
+replace the <code>gradF_test</code> function with the one operating on vectors
+rather than scalars.</p>
+
+<h2 id="neural-network-ingredients-for-classification">Neural Network Ingredients For Classification</h2>
+
+<figure>
+
+<img src="/img/posts/Irises-van_Gogh.jpg" width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Les Iris (Irises) by <a href="https://en.wikipedia.org/wiki/Irises_(painting)">Vincent van Gogh</a></h4>
+  
+</figcaption>
+
+</figure>
+
+<p>Now that we realize how the gradient descent works, we may want to
+train a moderately useful network. Let's say we want to perform
+<em>Iris</em> flower classification using four distinctive features<sup class="footnote-ref" id="fnref:fn-7"><a href="#fn:fn-7">7</a></sup>:
+sepal length, sepal width, petal length, petal width.
+There are three classes of flowers we want to be able to recognize:
+<em>Setosa</em>, <em>Versicolour</em>, and <em>Virginica</em>.
+Now, there is a problem: how do we encode those three
+classes so that our neural network can handle them?</p>
+
+<h3 id="naive-solution-and-why-it-does-not-work">Naive Solution And Why It Does Not Work</h3>
+
+<p>The most simple solution to indicate each species
+would be using <a href="https://en.wikipedia.org/wiki/Natural_number">natural numbers</a>.
+For instance, <em>Iris Setosa</em> can be encoded as <code>1</code>,
+<em>Versicolour</em>, as <code>2</code>, and <em>Virginica</em>, as <code>3</code>.
+There is, however, a problem with this kind of encoding:
+we impose a <em>bias</em>. First, by encoding those classes
+as numbers, we impose a <em>linear order</em> over those three
+classes. It means, we start our count with <em>Setosa</em>, then, <em>Versicolour</em>,
+and then we arrive at <em>Virginica</em>. However, in reality it doesn't really matter
+if we end with <em>Virginica</em> or <em>Vernicolour</em>.
+Second, we also assume that the distance between
+<em>Virginica</em> and <em>Setosa</em> <code>3 - 1 = 2</code> is larger than between
+<em>Virginica</em> and <em>Versicolor</em> <code>3 - 2 = 1</code>,
+which is a priory wrong.</p>
+
+<h3 id="one-hot-encoding">One-Hot Encoding</h3>
+
+<p>So which kind of encoding do we need?
+First, we want not to impose any restriction on ordering and second,
+we want the distances between classes to be equal.
+Therefore, we would prefer encoding each class to be orthogonal,
+i.e. independent from the other two.
+That becomes possible if we use vectors of three dimensions
+(as there are three classes).
+Therefore, now <em>Setosa</em> class is encoded as $[1, 0, 0]$,
+<em>Versicolour</em>, as $[0, 1, 0]$, and <em>Virginica</em> as $[0, 0, 1]$.
+The <a href="https://en.wikipedia.org/wiki/Euclidean_distance">Euclidean distance</a>
+between any pair of classes is equal to $\sqrt 2$.
+<strong>Update<sup class="footnote-ref" id="fnref:fn-6a"><a href="#fn:fn-6a">8</a></sup></strong>: For example, the distance between
+<em>Setosa</em> and <em>Versicolour</em> is computed as</p>
+
+<p>$$\sqrt{(1-0)^2 + (0-1)^2 + (0-0)^2}=\sqrt{2}.$$</p>
+
+<h3 id="putting-it-all-together">Putting It All Together</h3>
+
+<p>Now that we are familiar with basic neural networks and gradient descent
+and also have some data to play with<sup class="footnote-ref" id="fnref:fn-7"><a href="#fn:fn-7">7</a></sup>, let the fun begin!</p>
+
+<p>First, we create a network of three neurons.
+To do that, we generalize formula (1):</p>
+
+<p>$$\begin{equation}
+y_{i}=f (\sum_k w_{ik} x_k),
+\end{equation}
+$$
+where $(x_1, x_2, x_3, x_4) = \mathbf{x}$ is a 4D input vector,
+$w_{ik} \in \mathbf{W}, i=1 \dots 3, k=1 \dots 4$ is synaptic weights matrix,
+and result $(y_1, y_2, y_3) = \mathbf{y}$ is a 3D vector.
+Generally speaking, we perform a matrix-vector multiplication
+with a subsequent element-wise activation:</p>
+
+<p>$$\begin{equation}
+\mathbf y = f (\mathbf {W x}).
+\end{equation}
+$$</p>
+
+<p>As a nonlinear activation function $f$ we will use the <em>sigmoid</em> function<sup class="footnote-ref" id="fnref:fn-8"><a href="#fn:fn-8">9</a></sup>
+$\sigma(x) = [1 + e^{-x}]^{-1}$.
+We will exploit <a href="http://hackage.haskell.org/package/hmatrix"><code>hmatrix</code></a>
+Haskell library for linear algebra operations
+such as matrix multiplication. With <code>hmatrix</code>,
+Equation (4) can be written as:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">import</span> Numeric.LinearAlgebra <span style="color:#66d9ef">as</span> LA
+
+<span style="color:#a6e22e">sigmoid</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> <span style="color:#a6e22e">f</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">recip</span> <span style="color:#f92672">$</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">exp</span> (<span style="color:#f92672">-</span><span style="color:#a6e22e">x</span>)
+
+<span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">w</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">h</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">w</span>
+      <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">h</span>
+  <span style="color:#66d9ef">in</span> [<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">y</span>]</code></pre></div>
+
+<p>where <code>&lt;&gt;</code> denotes the matrix product function from <code>LA</code> module.
+Note that <code>x</code> can be a vector, but it can be also a dataset matrix.
+In the latter case, <code>forward</code> will transform our entire dataset.
+Notice that we provide not only the result of our computation <code>y</code>,
+but also an intermediate step <code>h</code> since it will be later
+reused for <code>w</code> gradient computation.</p>
+
+<p>Each neuron $y_i$
+is supposed to fire when it 'thinks' that it has detected one of the three
+species. E.g. when we have an output [0.89, 0.1, 0.2], we would
+assume that the fist neuron is the most 'confident',
+i.e. we interpret the result as <em>Setosa</em>.
+In other words, this output is treated as similar to [1, 0, 0].
+As you can see, the maximal
+element was set to one and others, to zero.
+This is a so-called 'winner takes all' rule.</p>
+
+<p>Before training the neural network, we need some
+measure of error or <em>loss function</em> to minimize.
+For instance, we can use
+the <a href="http://arunmallya.github.io/writeups/nn/backprop.html#l2_loss_layer">Euclidean loss</a>
+$\text{loss} = \sum_i (\hat y_i - y_i)^2$
+where $\hat y_i$ is a prediction and $y_i$ is a real answer from our
+dataset:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">loss</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">tgt</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
+  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">sumElements</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">diff</span></code></pre></div>
+
+<p>For the sake of gradient descend illustration,
+we will reuse the <code>descend</code> function defined above.
+Now, we have to specify the gradient function for our neural
+network equation (4).
+We use what is called a <em>backpropagation</em>
+or shortly <em>backprop</em> method, which is essentially a
+<a href="https://idontgetoutmuch.wordpress.com/2013/10/13/backpropogation-is-just-steepest-descent-with-automatic-differentiation-2/">result</a>
+of the <a href="https://en.wikipedia.org/wiki/Chain_rule">chain rule</a> and is illustrated
+for an individual neuron in the figure below<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">10</a></sup>.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/backprop.png" alt="First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$" width="570px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Backpropation for a single neuron.</h4>
+  <p>
+    First, in the forward pass, initial output $y$ is calculated. Then, this output is compared to some desired output and the error gradient $dy$ is passed back. Afterwards, the activation function gradient $df$ is obtained using $dy$. That ultimately leads to the remaining gradients $dw_1$, $dx_1$, $dw_2$, $dx_2, \dots .$
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Now we can calculate the weights gradient <code>dW</code> using the <em>backprop</em> method from above:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">grad</span> (<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">y</span>) <span style="color:#a6e22e">w</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dW</span>
+  <span style="color:#66d9ef">where</span>
+    [<span style="color:#a6e22e">h</span>, <span style="color:#a6e22e">y_pred</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">w</span>
+    <span style="color:#a6e22e">dE</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">loss&#39;</span> <span style="color:#a6e22e">y_pred</span> <span style="color:#a6e22e">y</span>
+    <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid&#39;</span> <span style="color:#a6e22e">h</span> <span style="color:#a6e22e">dE</span>
+    <span style="color:#a6e22e">dW</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dY</span></code></pre></div>
+
+<p>Here <code>linear'</code>, <code>sigmoid'</code>, <code>loss'</code>
+are gradients of linear operation (multiplication),
+sigmoid activation $\sigma(x)$,
+and the loss function.
+Note that by operating on matrices rather than scalar values
+we calculate the gradients vector <code>dW</code>
+denoting every synaptic weight gradient $dw_i$.
+Below are those &quot;<a href="https://en.wikipedia.org/wiki/Array_programming"><em>vectorized</em></a>&quot;
+functions definitions in Haskell using <code>hmatrix</code> library<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">11</a></sup>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">linear&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">/</span> <span style="color:#a6e22e">m</span>) (<span style="color:#a6e22e">tr&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#66d9ef">LA</span><span style="color:#f92672">.&lt;&gt;</span> <span style="color:#a6e22e">dy</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">m</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fromIntegral</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">rows</span> <span style="color:#a6e22e">x</span>
+
+<span style="color:#a6e22e">sigmoid&#39;</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dY</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">dY</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">ones</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">y</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">sigmoid</span> <span style="color:#a6e22e">x</span>
+    <span style="color:#a6e22e">ones</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">rows</span> <span style="color:#a6e22e">y</span>) <span style="color:#f92672">&gt;&lt;</span> (<span style="color:#a6e22e">cols</span> <span style="color:#a6e22e">y</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">repeat</span> <span style="color:#ae81ff">1.0</span>
+
+<span style="color:#a6e22e">loss&#39;</span> <span style="color:#a6e22e">y</span> <span style="color:#a6e22e">tgt</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">diff</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">tgt</span>
+  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">cmap</span> (<span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">diff</span></code></pre></div>
+
+<p>To test our network, we download the dataset from <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day1">here</a>
+(there are two files: x.dat and y.dat) and the code
+<a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day1">here</a>.
+As instructed in the comments,
+we run our program:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">$ stack --resolver lts-10.6 --install-ghc runghc --package hmatrix-0.18.2.0 Iris.hs
+Initial loss 169.33744797846379
+Loss after training 61.41242708538934
+Some predictions by an untrained network:
+(5&gt;&lt;3)
+[ 8.797633210095851e-2, 0.15127581829026382, 0.9482351750129188
+,  0.11279346747947296,  0.1733431584272155, 0.9502442520696124
+,  0.10592462402394615, 0.17057190568339017, 0.9367875655363787
+,  0.10167941966201806, 0.20651101803783944, 0.9300343579182122
+, 8.328154248684484e-2, 0.15568011758813116,  0.940816298954776 ]
+Some predictions by a trained network:
+(5&gt;&lt;3)
+[ 0.6989749292681016, 0.14916793398555747,  0.1442697900857393
+,  0.678406436711954,  0.1691062984304366,  0.2052955124240905
+, 0.6842327447503195, 0.16782087736820395, 0.16721778476233148
+, 0.6262988163006756, 0.19656943129188192, 0.17521133197774072
+, 0.6905553549763312, 0.15299944611286123, 0.12910826989854146 ]
+Targets
+(5&gt;&lt;3)
+[ 1.0, 0.0, 0.0
+, 1.0, 0.0, 0.0
+, 1.0, 0.0, 0.0
+, 1.0, 0.0, 0.0
+, 1.0, 0.0, 0.0 ]</code></pre></div>
+
+<p>That's all for today. Please feel free to play with the <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day1">code</a>.
+<strong>Hint</strong>: you may have noticed that <code>grad</code> calls <code>sigmoid</code> twice on the same
+data: once in <code>forward</code> and once in <code>sigmoid'</code>. Try optimizing
+the code to avoid this redundancy.</p>
+
+<p>As soon as you understand the basics of neural networks,
+make sure you continue to <a href="/neural-networks/day2/">Day 2</a>.
+In the <a href="/neural-networks/day2/">next post</a> you will learn how to make your neural network operational.
+First of all, we will highlight the importance of multilayer structure.
+We will also show that nonlinear activations are crucial.
+Finally, we will improve neural network training
+and discuss weights initialization.</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2023NN,
+ title   = "Learning Neural Networks The Hard Way",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2023",
+ month   = "January",
+ url     = "https://penkovsky.com/neural-networks/day1/"
+}
+</pre>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-1">There even exists a <a href="https://en.wikipedia.org/wiki/Artificial_general_intelligence">term</a> describing exactly what I dreamed to achieve.
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+<li id="fn:fn-2">For instance, check <a href="https://web.media.mit.edu/~minsky/papers/ComputersCantThink.txt">Why people think computers can't</a>.
+ <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
+<li id="fn:fn-3">With Google Trends in hand, we can witness the raise of global <a href="https://trends.google.com/trends/explore?date=all&amp;q=deep%20learning">deep learning</a> interest.
+ <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
+<li id="fn:fn-4">Despite people have fantasized about it long before Alan Turing.
+ <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
+<li id="fn:fn-5">Essentially, a synaptic weight $w_i$ determines the strength of connection to the $i$-th input.
+ <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
+<li id="fn:fn-6">With recurrent neural networks it is not true. Those have an internal state, making such networks equivalent to computer programs, i.e. potentially more complex than maps.
+ <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
+<li id="fn:fn-7">Here we refer to the classical <a href="https://archive.ics.uci.edu/ml/datasets/iris">Iris dataset</a>. If you prefer another light dataset please let me know.
+ <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
+<li id="fn:fn-6a">Kudos to Peter Harpending who spotted a typo in Euclidean distance.
+ <a class="footnote-return" href="#fnref:fn-6a"><sup>^</sup></a></li>
+<li id="fn:fn-8">In this example nonlinear activation is not essential. However, as we will see in future posts, in multilayer neural networks nonlinear activations are strongly required.
+ <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
+<li id="fn:fn-10">We look closer at the backpropagation mechanics <a href="/neural-networks/day3/">here</a>.
+ <a class="footnote-return" href="#fnref:fn-10"><sup>^</sup></a></li>
+<li id="fn:fn-9">And <a href="http://arunmallya.github.io/writeups/nn/backprop.html">here</a> are their mathematical derivations.
+ <a class="footnote-return" href="#fnref:fn-9"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/talk/icee2018/">Towards Binarized Neural Networks Hardware</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+
