@@ -1,0 +1,1680 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Wouldn&#39;t it be nice if the model also told us which predictions are not reliable? Can this be done even on unseen data? The good news is yes, and even on new, completely unseen data. It is also simple to implement in practice. A canonical example is in a medical setting. By measuring model uncertainty, the doctor can learn how reliable is their AI-assisted patient&#39;s diagnosis. This allows the doctor to make a better informed decision whether to trust the model or not.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/day8/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/day8/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/day8/">
+  <meta property="og:title" content="Day 8: Model Uncertainty Estimation | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Wouldn&#39;t it be nice if the model also told us which predictions are not reliable? Can this be done even on unseen data? The good news is yes, and even on new, completely unseen data. It is also simple to implement in practice. A canonical example is in a medical setting. By measuring model uncertainty, the doctor can learn how reliable is their AI-assisted patient&#39;s diagnosis. This allows the doctor to make a better informed decision whether to trust the model or not."><meta property="og:image" content="https://penkovsky.com/img/posts/neural-networks/predictions_mnist.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2022-04-23T17:20:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2022-04-23T17:20:00&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Day 8: Model Uncertainty Estimation | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/neural-networks/predictions_mnist.png" class="article-banner" itemprop="image">
+  
+
+  
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 8: Model Uncertainty Estimation</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+    <meta content="2022-04-23 17:20:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2022-04-23 17:20:00 &#43;0200 CEST" itemprop="dateModified">
+      Apr 23, 2022
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    21 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>Wouldn't it be nice if the model also told us which predictions are not
+reliable? Can this be done even on unseen data? The good news is yes, and even
+on new, completely unseen data. It is also simple to implement in
+practice.  A canonical example is in a medical setting. By measuring model
+uncertainty, the doctor can learn how reliable is their AI-assisted patient's
+diagnosis.  This allows the doctor to make a better informed decision whether
+to trust the model or not. And potentially save someone's life.</p>
+
+<p>Today we build upon <a href="/neural-networks/day7/">Day 7</a> and we continue our
+journey with Hasktorch:</p>
+
+<ol>
+<li>We will introduce a Dropout layer.</li>
+<li>We will compute on a graphics processing unit (GPU).</li>
+<li>We will also show how to load and save models.</li>
+<li>We will train with <a href="https://penkovsky.com/neural-networks/day2">Adam</a> optimizer.</li>
+<li>And finally we will talk about model uncertainty estimation.</li>
+</ol>
+
+<p>The complete project is also available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day8">on Github</a>.</p>
+
+<h2 id="dropout-layer">Dropout Layer</h2>
+
+<p>Neural networks, as any other model with many parameters, tend to overfit. By overfitting I mean
+&quot;<a href="https://en.wikipedia.org/wiki/Overfitting">fail to fit to additional data or predict future observations reliably</a>&quot;. Let us consider a classical example below.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/Overfitting.png" alt="Overfitting. &lt;small&gt;Credit [Ignacio Icke](https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Overfitting.svg/480px-Overfitting.svg.png), [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/)&lt;/small&gt;" width="400px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Overfitting. <small>Credit <a href="https://upload.wikimedia.org/wikipedia/commons/thumb/1/19/Overfitting.svg/480px-Overfitting.svg.png">Ignacio Icke</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a></small>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The green line is a decision boundary created by an overfitted model.
+We see that the model tries to memorize every possible data point.
+However, it fails to generalize. To ameliorate the situation, we perform
+a so-called <em>regularization</em>. That is a technique that helps to prevent
+overfitting. In the image above, the black line is a decision boundary of a
+regularized model.</p>
+
+<p>One of regularization techniques for artificial neural networks is called
+<a href="https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">dropout</a>
+or <a href="https://en.wikipedia.org/wiki/Dilution_(neural_networks)">dilution</a>.
+Its principle of operation is quite simple.  During neural network training, we
+randomly disconnect a fraction of neurons with some probability.  It turns out
+that dropout conditioning results in more reliable neural network models.</p>
+
+<h2 id="a-neural-network-with-dropout">A Neural Network with Dropout</h2>
+
+<p>The data structures <code>MLP</code> (learnable parameters) and <code>MLPSpec</code> (number of
+neurons) remain unchanged.  However, we will need to modify the <code>mlp</code> function
+(full network) to include a Dropout layer. If we inspect
+<code>dropout :: Double -&gt; Bool -&gt; Tensor -&gt; IO Tensor</code>
+type, we see that it accepts three arguments: a <code>Double</code> probability of
+dropout, a <code>Bool</code> that turns this layer on or off, and a data <code>Tensor</code>.
+Typically, we turn the dropout on during the training and off during the
+inference stage.</p>
+
+<p>However, the biggest distinction between e.g. <code>relu</code>
+function and <code>dropout</code> is that <code>relu :: Tensor -&gt; Tensor</code>
+is a <em>pure</em> function, i.e. it does not have any 'side-effects'.
+This means that every time when we call a pure function,
+the result will be the same.
+This is not the case with <code>dropout</code> that relies on an
+(external) random number generator, and therefore returns
+a new result each time.
+Therefore, its outcome is an <code>IO Tensor</code>.</p>
+
+<p>One has to pay a particular attention to those <code>IO</code> functions, because they can
+change the state in the external world. This can be printing text on the
+screen, deleting a file, or launching missiles. Typically, we prefer to keep
+functions pure whenever possible, as function purity improves the reasoning
+about the program: It is a child's play to refactor (reorganize) a program
+consisting only of pure functions.</p>
+
+<p>I find the so-called <em>do-notation</em> to be the most natural way to combine both
+pure functions and those with side-effects.  The pure equations can be grouped
+under <code>let</code> keyword(s), while the side-effects are summoned with a special <code>&lt;-</code>
+glue. This is how we integrate <code>dropout</code> in <code>mlp</code>. Note that now the
+outcome of <code>mlp</code> also becomes an <code>IO Tensor</code>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">mlp</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Bool</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">mlp</span> <span style="color:#66d9ef">MLP</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">isStochastic</span> <span style="color:#a6e22e">x0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#75715e">-- This subnetwork encapsulates the composition</span>
+  <span style="color:#75715e">-- of pure functions</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">sub1</span> <span style="color:#f92672">=</span>
+          <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">fc1</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">fc2</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+
+  <span style="color:#75715e">-- The dropout is applied to the output</span>
+  <span style="color:#75715e">-- of the subnetwork</span>
+  <span style="color:#a6e22e">x1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">dropout</span>
+          <span style="color:#ae81ff">0.1</span>   <span style="color:#75715e">-- Dropout probability</span>
+          <span style="color:#a6e22e">isStochastic</span>  <span style="color:#75715e">-- Activate Dropout when in stochastic mode</span>
+          (<span style="color:#a6e22e">sub1</span> <span style="color:#a6e22e">x0</span>)  <span style="color:#75715e">-- Apply dropout to</span>
+                     <span style="color:#75715e">-- the output of `relu` in layer 2</span>
+
+  <span style="color:#75715e">-- Another linear layer</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">x2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">fc3</span> <span style="color:#a6e22e">x1</span>
+
+  <span style="color:#75715e">-- Finally, logSoftmax, which is numerically more stable</span>
+  <span style="color:#75715e">-- compared to simple log(softmax(x2))</span>
+  <span style="color:#a6e22e">return</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">logSoftmax</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) <span style="color:#a6e22e">x2</span></code></pre></div>
+
+<p>For model uncertainty estimation, it is empirically recommended to keep the
+dropout probability anywhere between 0.1 and 0.2.</p>
+
+<h2 id="computing-on-a-gpu">Computing on a GPU</h2>
+
+<p>To transfer data onto a GPU, we use <code>toDevice :: ... =&gt; Device -&gt; a -&gt; a</code>.
+Below are helper methods to traverse data structures containing tensors
+(e.g. <code>MLP</code>) to convert those between devices.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">toLocalModel</span> <span style="color:#f92672">::</span> <span style="color:#a6e22e">forall</span> <span style="color:#a6e22e">a</span><span style="color:#f92672">.</span> <span style="color:#66d9ef">HasTypes</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Device</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">DType</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">a</span>
+<span style="color:#a6e22e">toLocalModel</span> <span style="color:#a6e22e">device&#39;</span> <span style="color:#a6e22e">dtype&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">over</span> (<span style="color:#a6e22e">types</span> <span style="color:#f92672">@</span><span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">@</span><span style="color:#a6e22e">a</span>) (<span style="color:#a6e22e">toDevice</span> <span style="color:#a6e22e">device&#39;</span>)
+
+<span style="color:#a6e22e">fromLocalModel</span> <span style="color:#f92672">::</span> <span style="color:#a6e22e">forall</span> <span style="color:#a6e22e">a</span><span style="color:#f92672">.</span> <span style="color:#66d9ef">HasTypes</span> <span style="color:#a6e22e">a</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">=&gt;</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">a</span>
+<span style="color:#a6e22e">fromLocalModel</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">over</span> (<span style="color:#a6e22e">types</span> <span style="color:#f92672">@</span><span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">@</span><span style="color:#a6e22e">a</span>) (<span style="color:#a6e22e">toDevice</span> (<span style="color:#66d9ef">Device</span> <span style="color:#66d9ef">CPU</span> <span style="color:#ae81ff">0</span>))</code></pre></div>
+
+<p>Below is a shortcut to transfer data to <code>cuda:0</code> device, assuming the <code>Float</code>
+type.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">toLocalModel</span> (<span style="color:#66d9ef">Device</span> <span style="color:#66d9ef">CUDA</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">Float</span> </code></pre></div>
+
+<p>The train loop is almost the same as in the previous post, except a few changes.
+First, we convert training data to GPU with <code>toLocalModel'</code> (assuming that the
+model itself was already converted to GPU).
+Second, <code>predic &lt;- mlp model isTrain input</code> is an <code>IO</code> action.
+Third, we manage optimizer's internal state<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">trainLoop</span>
+  <span style="color:#f92672">::</span> <span style="color:#66d9ef">Optimizer</span> <span style="color:#a6e22e">o</span>
+  <span style="color:#f92672">=&gt;</span> (<span style="color:#66d9ef">MLP</span>, <span style="color:#a6e22e">o</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">LearningRate</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">ListT</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">MLP</span>, <span style="color:#a6e22e">o</span>)
+<span style="color:#a6e22e">trainLoop</span> (<span style="color:#a6e22e">model0</span>, <span style="color:#a6e22e">opt0</span>) <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">P</span><span style="color:#f92672">.</span><span style="color:#a6e22e">foldM</span> <span style="color:#a6e22e">step</span> <span style="color:#a6e22e">begin</span> <span style="color:#a6e22e">done</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">enumerateData</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">isTrain</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+    <span style="color:#a6e22e">step</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Optimizer</span> <span style="color:#a6e22e">o</span> <span style="color:#f92672">=&gt;</span> (<span style="color:#66d9ef">MLP</span>, <span style="color:#a6e22e">o</span>) <span style="color:#f92672">-&gt;</span> ((<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>), <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">MLP</span>, <span style="color:#a6e22e">o</span>)
+    <span style="color:#a6e22e">step</span> (<span style="color:#a6e22e">model</span>, <span style="color:#a6e22e">opt</span>) <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> ((<span style="color:#a6e22e">input</span>, <span style="color:#a6e22e">label</span>), <span style="color:#a6e22e">iter</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#a6e22e">args</span>
+      <span style="color:#a6e22e">predic</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">model</span> <span style="color:#a6e22e">isTrain</span> <span style="color:#a6e22e">input</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">loss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">nllLoss&#39;</span> <span style="color:#a6e22e">label</span> <span style="color:#a6e22e">predic</span>
+      <span style="color:#75715e">-- Print loss every 100 batches</span>
+      <span style="color:#a6e22e">when</span> (<span style="color:#a6e22e">iter</span> `<span style="color:#a6e22e">mod</span>` <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">$</span> <span style="color:#66d9ef">do</span>
+        <span style="color:#a6e22e">putStrLn</span>
+          <span style="color:#f92672">$</span> <span style="color:#a6e22e">printf</span> <span style="color:#e6db74">&#34;Batch: %d | Loss: %.2f&#34;</span> <span style="color:#a6e22e">iter</span> (<span style="color:#a6e22e">asValue</span> <span style="color:#a6e22e">loss</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Float</span>)
+      <span style="color:#a6e22e">runStep</span> <span style="color:#a6e22e">model</span> <span style="color:#a6e22e">opt</span> <span style="color:#a6e22e">loss</span> <span style="color:#a6e22e">lr</span>
+    <span style="color:#a6e22e">done</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span>
+    <span style="color:#a6e22e">begin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> (<span style="color:#a6e22e">model0</span>, <span style="color:#a6e22e">opt0</span>)</code></pre></div>
+
+<p>We also modify the <code>train</code> function to use Adam optimizer with <code>mkAdam</code>:</p>
+
+<ol>
+<li><code>0</code> is the initial iteration number (then internally increased by the optimizer).</li>
+<li>We provide <code>beta1</code> and <code>beta2</code> values.</li>
+<li><code>flattenParameters net0</code> are needed to get the shapes of the trained parameters momenta. See also <a href="https://penkovsky.com/neural-networks/day2">Day 2</a> for more details.</li>
+</ol>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">train</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> <span style="color:#66d9ef">IO</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">MLP</span>
+<span style="color:#a6e22e">train</span> <span style="color:#a6e22e">trainMnist</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+    (<span style="color:#a6e22e">net&#39;</span>, <span style="color:#66d9ef">_</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">foldLoop</span> (<span style="color:#a6e22e">net0</span>, <span style="color:#a6e22e">optimizer</span>) <span style="color:#a6e22e">epochs</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span>(<span style="color:#a6e22e">net&#39;</span>, <span style="color:#a6e22e">optState</span>) <span style="color:#66d9ef">_</span> <span style="color:#f92672">-&gt;</span>
+      <span style="color:#a6e22e">runContT</span> (<span style="color:#a6e22e">streamFromMap</span> <span style="color:#a6e22e">dsetOpt</span> <span style="color:#a6e22e">trainMnist</span>)
+      <span style="color:#f92672">$</span> <span style="color:#a6e22e">trainLoop</span> (<span style="color:#a6e22e">net&#39;</span>, <span style="color:#a6e22e">optState</span>) <span style="color:#a6e22e">lr</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">fst</span>
+    <span style="color:#a6e22e">return</span> <span style="color:#a6e22e">net&#39;</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">dsetOpt</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">datasetOpts</span> <span style="color:#a6e22e">workers</span>
+    <span style="color:#a6e22e">workers</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span>
+    <span style="color:#a6e22e">lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-4</span>  <span style="color:#75715e">-- Learning rate</span>
+    <span style="color:#a6e22e">optimizer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mkAdam</span> <span style="color:#ae81ff">0</span> <span style="color:#a6e22e">beta1</span> <span style="color:#a6e22e">beta2</span> (<span style="color:#a6e22e">flattenParameters</span> <span style="color:#a6e22e">net0</span>)
+    <span style="color:#a6e22e">beta1</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.9</span>
+    <span style="color:#a6e22e">beta2</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.999</span></code></pre></div>
+
+<p>Here is a function to get model accuracy:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">accuracy</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">ListT</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">accuracy</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">P</span><span style="color:#f92672">.</span><span style="color:#a6e22e">foldM</span> <span style="color:#a6e22e">step</span> <span style="color:#a6e22e">begin</span> <span style="color:#a6e22e">done</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">enumerateData</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">step</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Int</span>, <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> ((<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>), <span style="color:#66d9ef">Int</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Int</span>, <span style="color:#66d9ef">Int</span>)
+    <span style="color:#a6e22e">step</span> (<span style="color:#a6e22e">ac</span>, <span style="color:#a6e22e">total</span>) <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> ((<span style="color:#a6e22e">input</span>, <span style="color:#a6e22e">labels</span>), <span style="color:#66d9ef">_</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#a6e22e">args</span>
+      <span style="color:#75715e">-- Compute predictions</span>
+      <span style="color:#a6e22e">predic</span> <span style="color:#f92672">&lt;-</span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">stochastic</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+                <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">argmax</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">RemoveDim</span> 
+                     <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">stochastic</span> <span style="color:#a6e22e">input</span>
+
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">correct</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">asValue</span>
+                        <span style="color:#75715e">-- Sum those elements</span>
+                        <span style="color:#f92672">$</span> <span style="color:#a6e22e">sumDim</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">RemoveDim</span> <span style="color:#66d9ef">Int64</span>
+                        <span style="color:#75715e">-- Find correct predictions</span>
+                        <span style="color:#f92672">$</span> <span style="color:#a6e22e">predic</span> `<span style="color:#a6e22e">eq</span>` <span style="color:#a6e22e">labels</span>
+
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">head</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">shape</span> <span style="color:#a6e22e">predic</span>
+      <span style="color:#a6e22e">return</span> (<span style="color:#a6e22e">ac</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">correct</span>, <span style="color:#a6e22e">total</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">batchSize</span>)
+
+    <span style="color:#75715e">-- When done folding, compute the accuracy</span>
+    <span style="color:#a6e22e">done</span> (<span style="color:#a6e22e">ac</span>, <span style="color:#a6e22e">total</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">fromIntegral</span> <span style="color:#a6e22e">ac</span> <span style="color:#f92672">/</span> <span style="color:#a6e22e">fromIntegral</span> <span style="color:#a6e22e">total</span>
+
+    <span style="color:#75715e">-- Initial errors and totals</span>
+    <span style="color:#a6e22e">begin</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>)
+
+<span style="color:#a6e22e">testAccuracy</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> <span style="color:#66d9ef">IO</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">testAccuracy</span> <span style="color:#a6e22e">testStream</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+    <span style="color:#a6e22e">runContT</span> (<span style="color:#a6e22e">streamFromMap</span> (<span style="color:#a6e22e">datasetOpts</span> <span style="color:#ae81ff">2</span>) <span style="color:#a6e22e">testStream</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">accuracy</span> <span style="color:#a6e22e">net</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">fst</span></code></pre></div>
+
+<p>Below we provide the MLP specification: number of neurons in each layer.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">spec</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">MLPSpec</span> <span style="color:#ae81ff">784</span> <span style="color:#ae81ff">300</span> <span style="color:#ae81ff">50</span> <span style="color:#ae81ff">10</span></code></pre></div>
+
+<h2 id="saving-and-loading-the-model">Saving and Loading the Model</h2>
+
+<p>Before we can save the model, we have to make the weight tensors dependent
+first:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">save&#39;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">FilePath</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">save&#39;</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">save</span> (<span style="color:#a6e22e">map</span> <span style="color:#a6e22e">toDependent</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">flattenParameters</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">net</span>)</code></pre></div>
+
+<p>The inverse is true for model loading. We also replace
+parameters in a newly generated model with the one we
+have just loaded:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">load&#39;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">FilePath</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">MLP</span>
+<span style="color:#a6e22e">load&#39;</span> <span style="color:#a6e22e">fpath</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#a6e22e">params</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mapM</span> <span style="color:#a6e22e">makeIndependent</span> <span style="color:#f92672">&lt;=&lt;</span> <span style="color:#a6e22e">load</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">fpath</span>
+  <span style="color:#a6e22e">net0</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">spec</span>
+  <span style="color:#a6e22e">return</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">replaceParameters</span> <span style="color:#a6e22e">net0</span> <span style="color:#a6e22e">params</span></code></pre></div>
+
+<p>Load the MNIST data:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(<span style="color:#a6e22e">trainData</span>, <span style="color:#a6e22e">testData</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">initMnist</span> <span style="color:#e6db74">&#34;data&#34;</span></code></pre></div>
+
+<p>Train a new model:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- A train &#34;loader&#34;</span>
+<span style="color:#a6e22e">trainMnistStream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> { <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">256</span>, <span style="color:#a6e22e">mnistData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">trainData</span> }
+<span style="color:#a6e22e">net0</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">toLocalModel&#39;</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">spec</span>
+
+<span style="color:#a6e22e">epochs</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">5</span>
+<span style="color:#a6e22e">net&#39;</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">train</span> <span style="color:#a6e22e">trainMnistStream</span> <span style="color:#a6e22e">epochs</span> <span style="color:#a6e22e">net0</span></code></pre></div>
+
+<p>Saving the model:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">save&#39;</span> <span style="color:#a6e22e">net&#39;</span> <span style="color:#e6db74">&#34;weights.bin&#34;</span></code></pre></div>
+
+<p>To load a pretrained model:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">net</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">load&#39;</span> <span style="color:#e6db74">&#34;weights.bin&#34;</span></code></pre></div>
+
+<p>We can verify the model's accuracy:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- A test &#34;loader&#34;</span>
+<span style="color:#a6e22e">testMnistStream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> { <span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>, <span style="color:#a6e22e">mnistData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">testData</span> }
+
+<span style="color:#a6e22e">ac</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">testAccuracy</span> <span style="color:#a6e22e">testMnistStream</span> <span style="color:#a6e22e">net</span>
+<span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Accuracy &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">ac</span></code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">Accuracy 0.9245</code></pre></div>
+
+<p>The accuracy is not tremendous, but it can be improved by introducing
+<a href="https://penkovsky.com/neural-networks/day4">batch norm</a>,
+<a href="https://penkovsky.com/neural-networks/day5">convolutional layers</a>, and
+training longer. We are about to discuss model uncertainty estimation and
+this accuracy is good enough.</p>
+
+<h2 id="predictive-entropy">Predictive Entropy</h2>
+
+<p>Model uncertainties are obtained as:</p>
+
+<p>$$
+\begin{equation}
+\mathbb{H}(y|\mathbf{x}) = -\sum_c p(y = c|\mathbf{x}) \log p(y = c|\mathbf{x}),
+\end{equation}
+$$</p>
+
+<p>where $y$ is label, $\mathbf{x}$ – input image, $c$ – class, $p$ – probability.</p>
+
+<p>We call $\mathbb{H}$ <a href="https://towardsdatascience.com/2-easy-ways-to-measure-your-image-classification-models-uncertainty-1c489fefaec8">predictive entropy</a>.
+And it is the very dropout technique that helps us to estimate those
+uncertainties.  All we need to do is to collect several predictions in the
+stochastic mode (i.e. dropout enabled) and apply the formula from above.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">predictiveEntropy</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">predictiveEntropy</span> <span style="color:#a6e22e">predictions</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">epsilon</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-45</span>
+      <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">meanDim</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#66d9ef">RemoveDim</span> <span style="color:#66d9ef">Float</span> <span style="color:#a6e22e">predictions</span>
+      <span style="color:#a6e22e">b</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">log</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">epsilon</span>
+  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">asValue</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">negate</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">sumAll</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">b</span></code></pre></div>
+
+<h2 id="visualizing-softmax-predictions">Visualizing Softmax Predictions</h2>
+
+<p>To get a better feeling what model outputs look like, it would be nice to
+visualize the softmax output as a histogram or a bar chart. For instance</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">bar</span> [<span style="color:#e6db74">&#34;apples&#34;</span>, <span style="color:#e6db74">&#34;oranges&#34;</span>, <span style="color:#e6db74">&#34;kiwis&#34;</span>] [<span style="color:#ae81ff">50</span>, <span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">25</span>]</code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">apples  ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 50.00
+oranges ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 100.00
+kiwis   ▉▉▉▉▉▉▉▉▉▉▉▉▋ 25.00</code></pre></div>
+
+<p>Now, we would like to display an image, the predictive entropy, and the softmax
+output, followed by prediction and ground truth.  To transform logSoftmax into
+softmax, we use the following identity:</p>
+
+<p>$$
+\begin{equation}
+e^{\ln(\rm{softmax}(x))} = \rm{softmax}(x),
+\end{equation}
+$$</p>
+
+<p>that is <code>softmax = exp. logSoftmax</code>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">displayImage</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">displayImage</span> <span style="color:#a6e22e">model</span> (<span style="color:#a6e22e">testImg</span>, <span style="color:#a6e22e">testLabel</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">repeatN</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">20</span>
+      <span style="color:#a6e22e">stochastic</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">True</span>
+  <span style="color:#a6e22e">preds</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">forM</span> [<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#a6e22e">repeatN</span>] <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span><span style="color:#66d9ef">_</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">exp</span>  <span style="color:#75715e">-- logSoftmax -&gt; softmax</span>
+                                     <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">model</span> <span style="color:#a6e22e">stochastic</span> <span style="color:#a6e22e">testImg</span>
+  <span style="color:#a6e22e">pred0</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">model</span> (<span style="color:#a6e22e">not</span> <span style="color:#a6e22e">stochastic</span>) <span style="color:#a6e22e">testImg</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">entropy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">predictiveEntropy</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cat</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#a6e22e">preds</span>
+
+  <span style="color:#75715e">-- Select only the images with high entropy</span>
+  <span style="color:#a6e22e">when</span> (<span style="color:#a6e22e">entropy</span> <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.9</span>) <span style="color:#f92672">$</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#a6e22e">dispImage</span> <span style="color:#a6e22e">testImg</span>
+      <span style="color:#a6e22e">putStr</span> <span style="color:#e6db74">&#34;Entropy &#34;</span>
+      <span style="color:#a6e22e">print</span> <span style="color:#a6e22e">entropy</span>
+      <span style="color:#75715e">-- exp. logSoftmax = softmax</span>
+      <span style="color:#a6e22e">bar</span> (<span style="color:#a6e22e">map</span> <span style="color:#a6e22e">show</span> [<span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#ae81ff">9</span>]) (<span style="color:#a6e22e">asValue</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">flattenAll</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">exp</span> <span style="color:#a6e22e">pred0</span> <span style="color:#f92672">::</span> [<span style="color:#66d9ef">Float</span>])
+      <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Model        : &#34;</span> <span style="color:#f92672">++</span> (<span style="color:#a6e22e">show</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">argmax</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">RemoveDim</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">exp</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">pred0</span>)
+      <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Ground Truth : &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">testLabel</span></code></pre></div>
+
+<p>Note that below we show only some of those images the model is uncertain about
+(entropy &gt; 0.9)</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">testMnistStream</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#66d9ef">MNIST</span> {<span style="color:#a6e22e">batchSize</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">mnistData</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">testData</span>}
+<span style="color:#a6e22e">forM_</span> [<span style="color:#ae81ff">0</span> <span style="color:#f92672">..</span> <span style="color:#ae81ff">200</span>] <span style="color:#f92672">$</span> <span style="color:#a6e22e">displayImage</span> (<span style="color:#a6e22e">fromLocalModel</span> <span style="color:#a6e22e">net</span>) <span style="color:#f92672">&lt;=&lt;</span> <span style="color:#a6e22e">getItem</span> <span style="color:#a6e22e">testMnistStream</span></code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">     +%       
+     %        
+     *        
+    #-  +%%=  
+    %  %%  %  
+    % %+   #  
+    % %    *  
+    %  % :%   
+    #*:=%#    
+     -%=.     
+              
+              
+Entropy 1.044228
+0 ▉▏ 0.01
+1 ▏ 0.00
+2 ▋ 0.01
+3 ▏ 0.00
+4 ▉ 0.01
+5 ▍ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.70
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.21
+9 ▉▉▉▋ 0.05
+Model        : Tensor Int64 [1] [ 6]
+Ground Truth : Tensor Int64 [1] [ 6]
+              
+              
+      .#%#.   
+    %%+:      
+     %        
+     %..      
+    ##-#%.    
+         -%   
+          :%  
+           +  
+    -     .%  
+    @%+*%%+   
+              
+              
+Entropy 1.2909155
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▍ 0.00
+3 ▉▉▉▉▉▉▉▉ 0.07
+4 ▏ 0.00
+5 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.44
+6 ▏ 0.00
+7 ▍ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.47
+9 ▉▏ 0.01
+Model        : Tensor Int64 [1] [ 8]
+Ground Truth : Tensor Int64 [1] [ 5]
+              
+              
+              
+     =-     = 
+     #-    =# 
+     %-    #  
+    +%     %  
+    %.    .%  
+   ##     .*  
+   %%%%%#%#.  
+   .      %   
+              
+              
+              
+Entropy 1.3325933
+0 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.19
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.46
+5 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▊ 0.18
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▊ 0.16
+7 ▏ 0.00
+8 ▏ 0.00
+9 ▏ 0.00
+Model        : Tensor Int64 [1] [ 4]
+Ground Truth : Tensor Int64 [1] [ 4]
+              
+              
+       *:     
+     :%%*     
+    #- -+     
+       -      
+       #      
+      +:      
+      #    =. 
+     #.  =%:  
+     *.*%-    
+    #%%:      
+              
+              
+Entropy 1.2533671
+0 ▉ 0.01
+1 ▉▉▍ 0.03
+2 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.38
+3 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.54
+4 ▏ 0.00
+5 ▋ 0.01
+6 ▏ 0.00
+7 ▏ 0.00
+8 ▉▉▋ 0.03
+9 ▏ 0.00
+Model        : Tensor Int64 [1] [ 3]
+Ground Truth : Tensor Int64 [1] [ 2]
+              
+              
+              
+     +##-     
+     *   :    
+     =        
+     %  =     
+     %  %     
+     -= @     
+      = %     
+        %     
+        %     
+        %     
+              
+Entropy 0.9308149
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▉ 0.01
+4 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.29
+5 ▍ 0.00
+6 ▏ 0.00
+7 ▎ 0.00
+8 ▉▎ 0.02
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.67
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 9]
+              
+              
+              
+        #     
+      % #     
+      % *     
+      % =     
+     %%@%     
+     *  %     
+        %     
+        %     
+        %     
+        =     
+              
+Entropy 1.39582
+0 ▏ 0.00
+1 ▉▍ 0.01
+2 ▏ 0.00
+3 ▉▉▉▉▉▊ 0.06
+4 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.48
+5 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▋ 0.17
+6 ▉▉▉▉ 0.04
+7 ▏ 0.00
+8 ▉▋ 0.02
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.22
+Model        : Tensor Int64 [1] [ 4]
+Ground Truth : Tensor Int64 [1] [ 4]
+              
+              
+              
+      .#%@    
+      %%%%=   
+     +%. %#   
+      %%%%:   
+       %%%    
+      -%%     
+     -%%      
+    .%%       
+    %%-       
+    %*        
+              
+Entropy 1.0009595
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▉▊ 0.02
+4 ▏ 0.00
+5 ▎ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.35
+8 ▉ 0.01
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.62
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 9]
+              
+              
+              
+              
+     %##%     
+    :%+%%.    
+    -%  %:    
+    -%  %+    
+     +  %+    
+        %+    
+        %+    
+        %#    
+        %%    
+        .+    
+Entropy 1.0057298
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▉▉▍ 0.03
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.33
+8 ▏ 0.00
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.63
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 7]
+              
+              
+              
+   %%%%%      
+      .%      
+      %.      
+    =%%%+     
+    %   %# -  
+         %%.  
+        *%-   
+       %:%    
+      %-%=    
+      %%-     
+              
+Entropy 1.0500848
+0 ▉▉▉▉▍ 0.07
+1 ▎ 0.00
+2 ▎ 0.00
+3 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.79
+4 ▉▉▊ 0.04
+5 ▉▉▉▎ 0.05
+6 ▏ 0.00
+7 ▍ 0.01
+8 ▎ 0.00
+9 ▉▊ 0.03
+Model        : Tensor Int64 [1] [ 3]
+Ground Truth : Tensor Int64 [1] [ 3]
+              
+              
+              
+     :*       
+      %       
+      %%      
+      :%      
+       %*     
+       +*     
+        %     
+        %     
+        %     
+        =     
+              
+Entropy 1.590256
+0 ▏ 0.00
+1 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.36
+2 ▏ 0.00
+3 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.10
+4 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.32
+5 ▉▉▉▎ 0.02
+6 ▏ 0.00
+7 ▎ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.12
+9 ▉▉▉▉▉▉▉▉▉▉▍ 0.07
+Model        : Tensor Int64 [1] [ 1]
+Ground Truth : Tensor Int64 [1] [ 1]
+              
+              
+              
+    =   =     
+    %%%%%.    
+      :%%     
+       %*     
+    .%%%%%%%%+
+      %%%*:   
+      %%      
+      %%      
+      %%      
+      %%      
+              
+Entropy 0.9592192
+0 ▏ 0.00
+1 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▊ 0.28
+2 ▋ 0.01
+3 ▍ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▍ 0.01
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.67
+8 ▏ 0.00
+9 ▉▉▏ 0.03
+Model        : Tensor Int64 [1] [ 7]
+Ground Truth : Tensor Int64 [1] [ 7]
+              
+              
+              
+      =%#*    
+    :%%- .#   
+    %%   :%   
+   .%    #=   
+         %    
+       %%#    
+     -%%%%    
+     %%%.%    
+     #%  *+   
+          :   
+              
+Entropy 1.0005924
+0 ▍ 0.00
+1 ▏ 0.00
+2 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.48
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.47
+8 ▉▉▉▋ 0.03
+9 ▉▎ 0.01
+Model        : Tensor Int64 [1] [ 2]
+Ground Truth : Tensor Int64 [1] [ 2]
+              
+              
+      -       
+    :%%%-     
+   :%   %     
+   +:   :%-   
+  -%     *%   
+  *:      %*  
+  ==      *%  
+   *      :%  
+   #::..:*%%  
+    :%*%%-:   
+              
+              
+Entropy 1.3647958
+0 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.50
+1 ▏ 0.00
+2 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.23
+3 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.23
+4 ▏ 0.00
+5 ▉▉▉▏ 0.03
+6 ▏ 0.00
+7 ▏ 0.00
+8 ▏ 0.00
+9 ▉▍ 0.01
+Model        : Tensor Int64 [1] [ 0]
+Ground Truth : Tensor Int64 [1] [ 0]
+              
+              
+              
+      %-      
+       :%     
+        #     
+    -%#%*     
+   ::  @%.    
+   *  %  #.   
+    %%    %   
+           %  
+            % 
+              
+              
+Entropy 1.1518966
+0 ▉▉▉▎ 0.06
+1 ▍ 0.01
+2 ▊ 0.01
+3 ▏ 0.00
+4 ▉▉▊ 0.05
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▏ 0.00
+8 ▍ 0.01
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.86
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 2]
+              
+              
+              
+    =%%%%+    
+   .#. =#%    
+   %*   %#    
+   #.   .%    
+   .#   *%:   
+    .%%%- =   
+           #  
+           #  
+      -%% =%  
+       =%%#   
+              
+Entropy 1.1256037
+0 ▉▊ 0.02
+1 ▏ 0.00
+2 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▏ 0.29
+3 ▎ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.59
+9 ▉▉▉▉▉▉▉▉▎ 0.10
+Model        : Tensor Int64 [1] [ 8]
+Ground Truth : Tensor Int64 [1] [ 9]
+              
+              
+      --%:    
+     .   %    
+         %:   
+     ** .%    
+      *%%.    
+      %%*%    
+     %*  %    
+     %   %    
+     %  %:    
+     %%%:     
+              
+              
+Entropy 1.0862491
+0 ▏ 0.00
+1 ▉▉▋ 0.03
+2 ▉▉▉▉▉ 0.05
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▋ 0.01
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.42
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.50
+9 ▏ 0.00
+Model        : Tensor Int64 [1] [ 8]
+Ground Truth : Tensor Int64 [1] [ 8]
+              
+              
+              
+        %%    
+        %%    
+       *%#    
+      :%%-    
+      .%%     
+      %%+     
+     +%%      
+     *%+      
+     =%=      
+      =:      
+              
+Entropy 1.0085171
+0 ▏ 0.00
+1 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.81
+2 ▎ 0.00
+3 ▍ 0.01
+4 ▎ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▏ 0.16
+8 ▎ 0.01
+9 ▍ 0.01
+Model        : Tensor Int64 [1] [ 1]
+Ground Truth : Tensor Int64 [1] [ 1]
+              
+              
+              
+    -@@:      
+   -#  +:     
+   #-   %     
+    %: ..-    
+     +%=*%    
+       .%%    
+        %*    
+        %%    
+        %%    
+        %.    
+              
+Entropy 1.5438546
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▉▉▉▉ 0.03
+3 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.14
+4 ▉▉▉▉▉▊ 0.05
+5 ▊ 0.01
+6 ▏ 0.00
+7 ▉▉▉▉▊ 0.04
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▎ 0.31
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.42
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 9]</code></pre></div>
+
+<p>Reflecting on softmax outputs above we can state that</p>
+
+<ol>
+<li>Softmax output alone is not enough to estimate the model uncertainty. We can observe wrong predictions even when the margin between the top and second-best guess is large.</li>
+<li>Sometimes prediction and ground truth coincide. So why the entropy is high? We actually need to inspect such cases in more details.</li>
+</ol>
+
+<p>The first point is well illustrated by this example:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">              
+              
+              
+      %-      
+       :%     
+        #     
+    -%#%*     
+   ::  @%.    
+   *  %  #.   
+    %%    %   
+           %  
+            % 
+              
+              
+Entropy 1.1518966
+0 ▉▉▉▎ 0.06
+1 ▍ 0.01
+2 ▊ 0.01
+3 ▏ 0.00
+4 ▉▉▊ 0.05
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▏ 0.00
+8 ▍ 0.01
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.86
+Model        : Tensor Int64 [1] [ 9]
+Ground Truth : Tensor Int64 [1] [ 2]</code></pre></div>
+
+<p>To illustrate the last point, let us take a closer look at cases with high
+entropy. By running several realizations of the stochatic model, we can verify
+if the model has any &quot;doubt&quot; by selecting different answers.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">displayImage&#39;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">MLP</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">displayImage&#39;</span> <span style="color:#a6e22e">model</span> (<span style="color:#a6e22e">testImg</span>, <span style="color:#a6e22e">testLabel</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">repeatN</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span>
+  <span style="color:#a6e22e">pred&#39;</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">forM</span> [<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#a6e22e">repeatN</span>] <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span><span style="color:#66d9ef">_</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">exp</span>  <span style="color:#75715e">-- logSoftmax -&gt; softMax</span>
+                                     <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">True</span> <span style="color:#a6e22e">testImg</span>
+  <span style="color:#a6e22e">pred0</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mlp</span> <span style="color:#a6e22e">model</span> <span style="color:#66d9ef">False</span> <span style="color:#a6e22e">testImg</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">entropy</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">predictiveEntropy</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">cat</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#a6e22e">pred&#39;</span>
+
+  <span style="color:#66d9ef">V</span><span style="color:#f92672">.</span><span style="color:#a6e22e">dispImage</span> <span style="color:#a6e22e">testImg</span>
+  <span style="color:#a6e22e">putStr</span> <span style="color:#e6db74">&#34;Entropy &#34;</span>
+  <span style="color:#a6e22e">print</span> <span style="color:#a6e22e">entropy</span>
+  <span style="color:#a6e22e">forM_</span> <span style="color:#a6e22e">pred&#39;</span> ( <span style="color:#a6e22e">\pred</span> <span style="color:#f92672">-&gt;</span>
+      <span style="color:#a6e22e">putStrLn</span> <span style="color:#e6db74">&#34;&#34;</span>
+      <span style="color:#f92672">&gt;&gt;</span> <span style="color:#a6e22e">bar</span> (<span style="color:#a6e22e">map</span> <span style="color:#a6e22e">show</span> [<span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#ae81ff">9</span>]) (<span style="color:#a6e22e">asValue</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">flattenAll</span> <span style="color:#a6e22e">pred</span> <span style="color:#f92672">::</span> [<span style="color:#66d9ef">Float</span>]) )
+  <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Model        : &#34;</span> <span style="color:#f92672">++</span> (<span style="color:#a6e22e">show</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">argmax</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>) <span style="color:#66d9ef">RemoveDim</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">exp</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">pred0</span>)
+  <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Ground Truth : &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">testLabel</span></code></pre></div>
+
+<p>The first example from above (dataset index <code>11</code>) gives this:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(<span style="color:#a6e22e">displayImage&#39;</span> (<span style="color:#a6e22e">fromLocalModel</span> <span style="color:#a6e22e">net</span>) <span style="color:#f92672">&lt;=&lt;</span> <span style="color:#a6e22e">getItem</span> <span style="color:#a6e22e">testMnistStream</span>) <span style="color:#ae81ff">11</span></code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">              
+              
+     +%       
+     %        
+     *        
+    #-  +%%=  
+    %  %%  %  
+    % %+   #  
+    % %    *  
+    %  % :%   
+    #*:=%#    
+     -%=.     
+              
+              
+Entropy 1.1085687
+
+0 ▎ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.90
+7 ▏ 0.00
+8 ▉▉▉▉▉▍ 0.10
+9 ▏ 0.00
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▎ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.74
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.20
+9 ▉▉▋ 0.04
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▎ 0.01
+4 ▉▉▉▏ 0.05
+5 ▏ 0.00
+6 ▉▉▎ 0.04
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.86
+9 ▉▎ 0.02
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▎ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.74
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.20
+9 ▉▉▋ 0.04
+
+0 ▉▉▉▉▍ 0.04
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▉▉▉▉▉▉▉▉▉▉▏ 0.09
+5 ▉▏ 0.01
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▋ 0.30
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.12
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.43
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▎ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.74
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.20
+9 ▉▉▋ 0.04
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▎ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.74
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.20
+9 ▉▉▋ 0.04
+
+0 ▋ 0.01
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▎ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.74
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.20
+9 ▉▉▋ 0.04
+
+0 ▉▏ 0.02
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▋ 0.01
+5 ▏ 0.00
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.80
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▋ 0.10
+9 ▉▉▉▉▎ 0.07
+
+0 ▉▉▉▉▍ 0.04
+1 ▏ 0.00
+2 ▎ 0.00
+3 ▏ 0.00
+4 ▉▉▉▉▉▉▉▉▉▉▏ 0.09
+5 ▉▏ 0.01
+6 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▋ 0.30
+7 ▏ 0.00
+8 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▍ 0.12
+9 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 0.43
+Model        : Tensor Int64 [1] [ 6]
+Ground Truth : Tensor Int64 [1] [ 6]</code></pre></div>
+
+<p>Wow! The model sometimes &quot;sees&quot; digit 6, sometimes digit 8, and sometimes digit
+9! For the contrast, here is how predictions with low entropy typically look
+like.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(<span style="color:#a6e22e">displayImage&#39;</span> (<span style="color:#a6e22e">fromLocalModel</span> <span style="color:#a6e22e">net</span>) <span style="color:#f92672">&lt;=&lt;</span> <span style="color:#a6e22e">getItem</span> <span style="color:#a6e22e">testMnistStream</span>) <span style="color:#ae81ff">0</span></code></pre></div>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">              
+              
+              
+   #%%*****   
+      ::: %   
+         %:   
+        :%    
+        #:    
+       :%     
+       %.     
+      #=      
+     :%.      
+     =#       
+Entropy 4.8037423e-4
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+
+0 ▏ 0.00
+1 ▏ 0.00
+2 ▏ 0.00
+3 ▏ 0.00
+4 ▏ 0.00
+5 ▏ 0.00
+6 ▏ 0.00
+7 ▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉▉ 1.00
+8 ▏ 0.00
+9 ▏ 0.00
+Model        : Tensor Int64 [1] [ 7]
+Ground Truth : Tensor Int64 [1] [ 7]</code></pre></div>
+
+<p>The model always &quot;sees&quot; digit 7. That is why the predictive entropy is low.
+Note that the results are model-dependent. Therefore we also
+share the weights for reproducibility. However, every realization of the
+stochastic model might still be different, especially in those cases where the
+entropy is high.</p>
+
+<p>Find the complete project on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day8">Github</a>. For suggestions about the content
+feel free to open a
+<a href="https://github.com/penkovsky/10-days-of-grad/issues">new issue</a>.</p>
+
+<h2 id="summary">Summary</h2>
+
+<p>I hope you are now convinced that model's uncertainty estimation is an invaluable tool. This simple technique is essential when applying deep learning for real-life decision making. This post also develops on how to use Hasktorch library in practice. Notably, it is very straightforward to run computations on a GPU. Overall, Hasktorch can be used for real-world deep learning. The code is well-structured and relies on a mature Torch library. On the other hand, it would be desirable to capture high-level patterns so that the user does not need to think about low-level concepts such as dependent and independent tensors, for example. The end user should be able to simply apply <code>save net &quot;weights.bin&quot;</code> and <code>mynet &lt;- load &quot;weights.bin&quot;</code> without any indirections. The same reasoning applies to the <code>trainLoop</code>, i.e. the user does not need to reinvent it every time. Eventually, a higher-level package on top of Hasktorch should capture the best practices, similar to <a href="https://www.pytorchlightning.ai/">PyTorch Lightning</a> or <a href="https://github.com/fastai/fastai">fast.ai</a>.</p>
+
+<p>Now your turn: explore image recognition with <a href="https://github.com/hasktorch/hasktorch/blob/master/examples/alexNet/AlexNet.hs">AlexNet</a> convolutional network and have fun!</p>
+
+<p><strong>Edit 27/04/2022:</strong> The original version from 23/04 did not correctly handle
+optimizer's internal state. Therefore, <code>train</code> and <code>trainLoop</code> were fixed.
+You will find the updated notebook on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day8">Github</a>.</p>
+
+<h2 id="learn-more">Learn More</h2>
+
+<ul>
+<li><a href="https://arxiv.org/pdf/1207.0580.pdf">Improving neural networks by preventing
+co-adaptation of feature detectors</a></li>
+<li><a href="https://www.jmlr.org/papers/volume15/srivastava14a/srivastava14a.pdf">Dropout: A Simple Way to Prevent Neural Networks from
+Overfitting</a></li>
+<li><a href="https://xuwd11.github.io/Dropout_Tutorial_in_PyTorch/">Tutorial: Dropout as Regularization and Bayesian Approximation</a></li>
+<li><a href="https://towardsdatascience.com/2-easy-ways-to-measure-your-image-classification-models-uncertainty-1c489fefaec8">Two Simple Ways To Measure Your Model’s Uncertainty</a></li>
+<li><a href="http://mlg.eng.cam.ac.uk/yarin/thesis/thesis.pdf">Uncertainty in Deep Learning, Yarin Gal</a></li>
+<li><a href="https://github.com/hasktorch/hasktorch/tree/master/examples/alexNet">AlexNet example in Hasktorch</a></li>
+</ul>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-1">Previously, there was no need to handle <code>GD</code> optimizer's internal state. This is not true in a more general case. For instance, <a href="https://hasktorch.github.io/hasktorch/html/src/Torch.Optim.html#adam">Adam</a> keeps track of momenta and iterations for bias adjustment.
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/neural-networks/day9/">Day 9: Roaming The Latent Space</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/neural-networks/day7/">Day 7: Real World Deep Learning</a></li>
+        
+        <li><a href="/neural-networks/day6/">Day 6: Saving Energy with Binarized Neural Networks</a></li>
+        
+        <li><a href="/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></li>
+        
+        <li><a href="/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></li>
+        
+        <li><a href="/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

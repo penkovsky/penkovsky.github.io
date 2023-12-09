@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Tags on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/tags/</link>
+    <description>Recent content in Tags on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Sun, 09 May 2021 11:33:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/tags/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>3D Printing</title>
+      <link>https://penkovsky.com/tags/3d-printing/</link>
+      <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/3d-printing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Chimera</title>
+      <link>https://penkovsky.com/tags/chimera/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/chimera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DDE</title>
+      <link>https://penkovsky.com/tags/dde/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/dde/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>DIY</title>
+      <link>https://penkovsky.com/tags/diy/</link>
+      <pubDate>Thu, 17 Feb 2022 00:10:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/diy/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Deep Learning</title>
+      <link>https://penkovsky.com/tags/deep-learning/</link>
+      <pubDate>Thu, 11 May 2023 21:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/deep-learning/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Dissipative Solitons</title>
+      <link>https://penkovsky.com/tags/dissipative-solitons/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/dissipative-solitons/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Drone</title>
+      <link>https://penkovsky.com/tags/drone/</link>
+      <pubDate>Thu, 17 Feb 2022 00:10:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/drone/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>EEG</title>
+      <link>https://penkovsky.com/tags/eeg/</link>
+      <pubDate>Mon, 15 Jun 2020 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/eeg/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Haskell</title>
+      <link>https://penkovsky.com/tags/haskell/</link>
+      <pubDate>Thu, 11 May 2023 21:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/haskell/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>RNN</title>
+      <link>https://penkovsky.com/tags/rnn/</link>
+      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/rnn/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Raspi</title>
+      <link>https://penkovsky.com/tags/raspi/</link>
+      <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/raspi/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Reservoir Computing</title>
+      <link>https://penkovsky.com/tags/reservoir-computing/</link>
+      <pubDate>Tue, 24 Aug 2021 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/reservoir-computing/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Tutorial</title>
+      <link>https://penkovsky.com/tags/tutorial/</link>
+      <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/tutorial/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>chimera</title>
+      <link>https://penkovsky.com/tags/chimera/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/chimera/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>machine learning</title>
+      <link>https://penkovsky.com/tags/machine-learning/</link>
+      <pubDate>Mon, 20 Aug 2018 10:01:19 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/tags/machine-learning/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

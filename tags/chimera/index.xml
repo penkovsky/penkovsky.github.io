@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>chimera on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/tags/chimera/</link>
+    <description>Recent content in chimera on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Tue, 30 Oct 2018 11:00:10 +0200</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/tags/chimera/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Syncronization patterns</title>
+      <link>https://penkovsky.com/project/sync/</link>
+      <pubDate>Tue, 30 Oct 2018 11:00:10 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/project/sync/</guid>
+      <description>We study chimera states and dissipative solitons syncronization patterns in delayed feedback systems. High dynamics multistability and robustness of those self-regenerating systems makes them suitable for photonic memory applications. Based on existing hardware, this memory is compatible with photonic reservoir computing.</description>
+    </item>
+    
+    <item>
+      <title>Laser chimeras as a paradigm for multistable patterns in complex systems</title>
+      <link>https://penkovsky.com/publication/laser-chimeras/</link>
+      <pubDate>Tue, 14 Jul 2015 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/laser-chimeras/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Virtual Chimera States for Delayed-Feedback Systems</title>
+      <link>https://penkovsky.com/publication/virtual-chimera/</link>
+      <pubDate>Fri, 30 Aug 2013 00:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/publication/virtual-chimera/</guid>
+      <description></description>
+    </item>
+    
+  </channel>
+</rss>

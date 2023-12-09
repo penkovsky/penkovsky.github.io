@@ -1,0 +1,1800 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Today we will talk about one of the most important deep learning architectures, the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/day5/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/day5/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/day5/">
+  <meta property="og:title" content="Day 5: Convolutional Neural Networks Tutorial | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Today we will talk about one of the most important deep learning architectures, the &quot;master algorithm&quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights."><meta property="og:image" content="https://penkovsky.com/img/posts/neural-networks/rural.jpg">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2019-11-24T18:20:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2019-11-24T18:20:00&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Day 5: Convolutional Neural Networks Tutorial | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/neural-networks/rural.jpg" class="article-banner" itemprop="image">
+  
+
+  <span class="article-header-caption">Hay rolls. Scanned from Neopan Acros 100 film.</span>
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 5: Convolutional Neural Networks Tutorial</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+    <meta content="2019-11-24 18:20:00 &#43;0200 &#43;0200" itemprop="datePublished">
+    <time datetime="2019-11-24 18:20:00 &#43;0200 &#43;0200" itemprop="dateModified">
+      Nov 24, 2019
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    34 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      
+
+<p>Today we will talk about one of the most important deep learning architectures,
+the &quot;master algorithm&quot; in computer vision.  That is how François Chollet,
+author of <a href="https://github.com/keras-team/keras">Keras</a>, calls convolutional
+neural networks (CNNs).  Convolutional network is an architecture that, like
+other artificial neural networks, has a neuron as its core building block.  It
+is also differentiable, so the network is conveniently trained via backpropagation.
+The distinctive feature of CNNs, however, is the connection topology, resulting
+in sparsely connected <em>convolutional</em> layers with neurons sharing their
+weights.</p>
+
+<p>First, we are going to build an intuition behind CNNs.
+Then, we are taking a close look at a classic CNN architecture. After
+discussing the differences between convolutional layer types,
+we are going to implement a convolutional network in Haskell.
+We will see that on <a href="/neural-networks/day4/">handwritten digits</a> our CNN
+achieves a twice lower test error, compared to the fully-connected
+architecture. We will build up on what we have learned during
+the previous days, so do not hesitate to refresh your memory first.</p>
+
+<p><strong>Previous posts</strong></p>
+
+<ul>
+<li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+<li><a href="/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></li>
+<li><a href="/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></li>
+<li><a href="/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></li>
+</ul>
+
+<h2 id="convolution-operator">Convolution operator</h2>
+
+<p>Previously, we have learned about fully-connected neural networks.
+Although, theoretically those can approximate any reasonable
+function, they have certain limitations.
+One of the challenges is to achieve the <em>translation symmetry</em>.
+To explain this, let us take a look at the two cat pictures below.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/translation-symmetry.png" alt="Translation symmetry: Same object in different locations." width="590px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Translation symmetry: Same object in different locations.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>For us, humans,
+it does not matter if a cat is in the right lower corner of it is
+somewhere in the top part of an image. In both cases we find a cat.
+So we can say that our human cat detector is <em>translation invariant</em>.</p>
+
+<p>However, if we look at the architecture of a typical fully-connected network,
+we may realize that there is actually nothing that prevents this network
+to work correctly only on some part of an image. The question we ask:
+Is there a way to make a neural network translation invariant?</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/fully-connected.png" alt="Fully-connected neural network with two hidden layers. Image credit: Wikimedia." width="300px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Fully-connected neural network with two hidden layers. Image credit: Wikimedia.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Let us take a closer look at the cat image.
+Soon we realize that pixels representing cat's head are more contextually related to each other
+than they are related to pixels representing cat's tail. Therefore,
+we also want to make
+our neural network <em>sparse</em> so that neurons in the next layer are
+connected only to the <em>relevant</em> neighboring pixels. This way, each neuron
+in the next layer would be responsible only for a
+small <em>feature</em> in the original image.
+The area that a neuron &quot;sees&quot; is called a <em>receptive field</em>.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/cat-head-pixels.png" alt="Zoom into the cats figure." width="400px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Neighboring pixels give more relevant information than distant ones.</h4>
+  <p>
+    Zoom into the cats figure.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Convolutional neural networks (CNNs) or simply <em>ConvNets</em> were
+designed to address those two issues: translation symmetry
+and image locality. First, let us give an intuitive explanation
+of a convolution operator.</p>
+
+<p>You may not be aware, but it is very likely you have
+already encountered convolution filters.
+Recall when you have first played with a (raster) graphics editor like GIMP or Photoshop.
+Probably you have been delighted obtaining effects such as sharpening, blur, or
+edge detection. If you haven't, then you probably should :).
+The secret of all those filters is the convolutional application of an <em>image kernel</em>.
+The image kernel is typically a $3 \times 3$ matrix such as below.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/kernel-dot-product.png" alt="Dot product between pixel values and a kernel. Image credit: [GIMP](https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png)." width="475px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>A single convolution step:</h4>
+  <p>
+    Dot product between pixel values and a kernel. Image credit: <a href="https://docs.gimp.org/2.8/en/images/filters/examples/convolution-calculate.png">GIMP</a>.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Here is shown a single convolution step. This step is a dot product
+between the kernel and pixel values. Since all the kernel values except
+the second one in the first row are zeros, the result is equal
+to the second value in the first row of the green frame, i.e.
+$40 \cdot 0 + 42 \cdot 1 + 46 \cdot 0 + \dotsc + 58 \cdot 0 = 42$.
+The convolution operator takes an image and acts within the green &quot;sliding
+window&quot;<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup> to perform dot product over every part of that image.
+The result is a new, filtered image.
+Mathematically, the (discrete) convolution operator $(*)$ between
+an image $A \in \mathbb{R}^{D_{F_1} \times D_{F_2}}$
+and a kernel $K \in \mathbb{R}^{D_{K_1} \times D_{K_2}}$
+can be formalized as
+\begin{equation}
+A * K = \sum_{m=0}^{D_{K_1} - 1} \sum_{n=0}^{D_{K_2} - 1} K_{m, n} \cdot A_{i-m, j-n},
+\end{equation}
+where
+$0 \le i &lt; D_{K_1} + D_{F_1} - 1$
+and $0 \le i &lt; D_{K_2} + D_{F_2} - 1$.
+To better understand how convolution with a kernel
+changes the original image, you can play with different <a href="http://setosa.io/ev/image-kernels/">image kernels</a>.</p>
+
+<p>What is the motivation behind the sliding window/convolution operator approach?
+Actually, it has a biological background.
+In fact, human eye has a relatively narrow <a href="https://en.wikipedia.org/wiki/Visual_field"><em>visual field</em></a>.
+We perceive objects as a whole by constantly moving eyes around them.
+These rapid <a href="https://upload.wikimedia.org/wikipedia/commons/e/e9/This_shows_a_recording_of_the_eye_movements_of_a_participant_looking_freely_at_a_picture.webm">eye movements</a>
+are called <a href="https://en.wikipedia.org/wiki/Saccade"><em>saccades</em></a>.
+Therefore, convolution operator may be regarded as a simplified model of
+image scanning that occurs naturally. The important point
+is that convolutions achieve translation invariance
+thanks to the sliding window method. Moreover,
+since every dot product result is connected - through the kernel - only to a very
+limited number of pixels in the initial image, convolution connections
+are very sparse. Therefore, by using convolutions
+in neural networks we achieve both translation invariance and connection sparsity. Let us see how that works in practice.</p>
+
+<h2 id="convolutional-neural-network-architecture">Convolutional Neural Network Architecture</h2>
+
+<blockquote>
+<p>An interesting property of convolutional layers is that if the input image is shifted, the feature map output will be shifted by the same amount, but it will be left unchanged otherwise. This property is at the basis of the robustness of convolutional networks to shifts and distortions of the input.</p>
+
+<p>Once a feature has been detected, its exact location becomes less important. Only its approximate position relative to other features is relevant.</p>
+
+<p><small>Lecun <em>et al.</em> Gradient-based learning applied to document recognition (1998)</small></p>
+</blockquote>
+
+<p>The <a href="http://www.scholarpedia.org/article/Neocognitron">prototype</a> of what we call today convolutional neural
+networks has been first proposed back <a href="https://en.wikipedia.org/wiki/Convolutional_neural_network#History">in late
+1970s</a> <a href="http://www.scholarpedia.org/article/Neocognitron">by
+Fukushima</a>. There were proposed many unsupervised and supervised training
+methods, but today CNNs are trained almost exclusively with backpropagation.
+Let us take a look at one of the famous ConvNet architectures known as LeNet-5.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/LeNet.png" alt="LeNet-5 architecture from [Lecun _et al._ Gradient-based learning applied to document recognition](http://doi.org/10.1109/5.726791)." width="760px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    LeNet-5 architecture from <a href="http://doi.org/10.1109/5.726791">Lecun <em>et al.</em> Gradient-based learning applied to document recognition</a>.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The architecture is very close to modern CNNs.
+LeNet-5 was designed to perform handwritten digit recognition
+from $32 \times 32$ black and white images.
+The two main building blocks, as we call them now,
+are a <em>feature extractor</em> and a <em>classifier</em>.</p>
+
+<blockquote>
+<p><big>With local receptive fields neurons can extract elementary visual features such as oriented edges, endpoints, corners...</big></p>
+
+<p><small>Lecun <em>et al.</em> Gradient-based learning applied to document recognition (1998)</small></p>
+</blockquote>
+
+<p>The <em>feature extractor</em> consists of
+two convolutional layers. The first convolutional
+layer has six convolutional filters with $5 \times 5$ kernels.
+Application of those filters with subsequent bias additions and
+hyperbolic tangent activations<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup> produces <em>feature maps</em>,
+essentially new, slightly smaller ($28 \times 28$) images.
+By convention, we describe the result as a volume of
+$28 \times 28 \times 6$.
+To reduce the spatial resolution,
+a <em>subsampling</em> is then performed<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup>.
+That outputs $14 \times 14 \times 6$ feature maps.</p>
+
+<blockquote>
+<p><big>All the units in a feature map share the same set of 25 weights and the same bias, so they detect the same feature at all possible locations on the input.</big></p>
+
+<p><small>Lecun <em>et al.</em> Gradient-based learning applied to document recognition (1998)</small></p>
+</blockquote>
+
+<p>The next convolutions round results already in
+$10 \times 10 \times 16$ feature maps.
+Note that unlike the first convolutional layer,
+we apply $5 \times 5 \times 6$ kernels.
+That means that each of sixteen convolutions simultaneously processes
+all six feature maps obtained from the previous step.
+After subsampling we obtain
+a resulting volume of $5 \times 5 \times 16$.</p>
+
+<p>The <em>classifier</em> consists of three densely connected layers
+with 120, 84, and 10 neurons each. The last layer
+provides a one-hot-encoded<sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup> answer. The slight difference
+from modern archictures is in the
+final layer, which consists of ten Euclidean radial basis function
+units, whereas today this would be a normal
+fully-connected layer followed by a softmax layer.</p>
+
+<p>It is important to understand that a single convolution filter
+is able to detect only a single feature.
+For instance, it may be able to detect
+horizontal edges.
+Therefore, we use several more filters with different kernels
+to have get features such as vertical edges, simple textures, or corners.
+As you have seen, the number of filters is typically represented in ConvNet diagrams
+as volume.
+Interestingly, layers deeper in the network will combine the most basic
+features detected in the first layers into more abstract representations such
+as eyes, ears, or even complete figures. To better understand this mechanism
+let us inspect receptive fields visualization below.</p>
+
+<canvas id="myCanvas" width="400" height="400" style="border:0;">
+  Your browser does not support HTML5 canvas.
+</canvas>
+
+<p>Receptive field visualization derived from <a href="http://arunmallya.github.io">Arun Mallya</a>.
+Hover the mouse cursor over any neuron in top layers to see
+how extends its receptive field in previous (bottom) layers.
+<!-- TODO: make it horizontal left-to-right. --></p>
+
+<p>As we can see by checking neurons in
+last layers, even a small $3 \times 3$ receptive field
+grows as one moves towards first layers.
+Indeed, we may anticipate that &quot;deeper&quot; neurons
+will have better overall view on what happens in the image.</p>
+
+<p>The beauty and the biggest achievement of deep learning
+is that filter kernels are self-learned by the network<sup class="footnote-ref" id="fnref:fn-5"><a href="#fn:fn-5">5</a></sup>,
+achieving even better accuracies compared to human-engineered features.
+A peculiarity of convolutional layers is that
+the result is obtained after repetitive application of
+a small number of weights as defined by a kernel.
+Thanks to this <em>weight sharing</em>, convolutional layers
+have drastically reduced number of trainable parameters<sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup>,
+compared to fully-connected layers.</p>
+
+<h2 id="convolution-types">Convolution Types</h2>
+
+<p>I decided to include this section for curious readers.
+If this is the first time you encounter CNNs, feel
+free to skip the section and revisit it later.</p>
+
+<p>There is a lot of hype around convolutions nowadays. However, it is not made
+clear that low-level convolutions for computer vision are often different from
+those exploited by ConvNets. Yet, even in ConvNets there is a variety of
+convolutional layers inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf">Inception</a> ConvNet architecture
+and shaped by <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception</a> and <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet</a> works. I
+believe that you deserve to know that there exist multiple kinds of
+convolutions applied in different contexts and here I shall provide a general
+roadmap<sup class="footnote-ref" id="fnref:fn-7"><a href="#fn:fn-7">7</a></sup>.</p>
+
+<h3 id="1-computer-vision-style-convolution">1. Computer Vision-Style Convolution</h3>
+
+<figure>
+
+<img src="/img/posts/neural-networks/conv-cv.png" width="480px" />
+
+
+</figure>
+
+<p>Low-level computer vision (CV), for instance graphics editors, typically operate
+one, three, or four channels images (e.g.  red, green, blue, and transparency).
+An individual kernel is typically applied to each channel. In this case,
+usually there are as many resulting channels as there are channels in the input
+image. A special case of this style convolution is when <em>the same</em> convolution
+kernel is applied to each channel (e.g. blurring). Sometimes, resulting
+channels are summed producing a one-channel image (e.g. edge detection).</p>
+
+<h3 id="2-lenet-like-convolution">2. LeNet-like Convolution</h3>
+
+<figure>
+
+<img src="/img/posts/neural-networks/conv.png" width="500px" />
+
+
+</figure>
+
+<p>A pure CV-style convolution is different from those in ConvNets due to two
+reasons: (1) in CV kernels are manually defined, whereas the power of neural
+networks comes from training, and (2) in neural networks we build
+a deep structure by stacking multiple convolutions on top of each other.
+Therefore, we need to recombine the information coming from previous
+layers. That allows us to train higher-level feature detections<sup class="footnote-ref" id="fnref:fn-8"><a href="#fn:fn-8">8</a></sup>.
+Finally, convolutions in neural networks may contain bias terms, i.e.
+constants added to results of each convolution.</p>
+
+<p>Recombination of features coming from earlier layers was previously illustrated
+in LeNet-5 example. As you remember, in the second convolutional layer we would
+apply 3D kernels of size $5 \times 5 \times 6$ computing dot products
+simultaneously on all six feature maps from the first layer. There were sixteen
+different kernels thus producing sixteen new channels.</p>
+
+<figure>
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/1/1e/Convolutional_Neural_Network_NeuralNetworkFeatureLayers.gif" alt="Each pixel in the feature map is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia." width="520px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Convolution filter with three input channels.</h4>
+  <p>
+    Each pixel in the feature map is obtained as a dot product between the RGB color channels and the sliding kernel. Image credit: Wikimedia.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>To summarize, a single LeNet-like convolution operates simultaneously on all
+input channels and produces a single channel. By having an arbitrary number of
+kernels, any number of output channels is obtained. It is not uncommon to operate
+on volumes of 512 channels! The computation cost of such convolution is
+$D_K \times D_K \times M \times N \times D_F \times D_F$
+where $M$ is the number of input channels,
+$N$ is the number of output channels,
+$D_K \times D_K$ is the kernel size and $D_F \times D_F$ is
+the feature map size<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">9</a></sup>.</p>
+
+<h3 id="3-depthwise-separable-convolution">3. Depthwise Separable Convolution</h3>
+
+<figure>
+
+<img src="/img/posts/neural-networks/conv-depthwise-separable.png" width="610px" />
+
+
+</figure>
+
+<p>LeNet-style convolution requires a large number of operations.
+But do we really need all of them? For instance, can spatial and cross-channel
+correlations be somehow decoupled? The <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception
+paper</a> largely inspired by <a href="https://arxiv.org/pdf/1409.4842.pdf">Inception</a> architecture
+shows that indeed, one can build more efficient convolutions by assuming that
+spatial correlations and cross-channel correlations can be mapped
+independently. This principle was also applied in <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet</a>
+architectures.</p>
+
+<p>The depthwise separable convolution works the following way. First, like in
+low-level computer vision, individual kernels are applied to each individual channel.
+Then, after optional activation<sup class="footnote-ref" id="fnref:fn-10"><a href="#fn:fn-10">10</a></sup>,
+there is another convolution, but this time
+exclusively in-between channels. That is typically achieved by applying
+a $1 \times 1$ convolution kernel. Finally, there is a (ReLU) activation.</p>
+
+<p>This way, depthwise separable convolution has two distinct steps: a space-only
+convolution and a channel recombination. This reduces the number of operations
+to
+$D_K \times D_K \times M \times D_F \times D_F + M \times N \times D_F \times D_F$<sup class="footnote-ref" id="fnref:fn-9"><a href="#fn:fn-9">9</a></sup>.</p>
+
+<p>To summarize, the main difference between low-level image
+processing (Photoshop) and neural networks is that
+image processing operates on lots of pixels,
+but the image depth remains unchanged
+(three-four channels). On the other hand,
+convolutional neural networks
+tend to operate on images of moderate width
+and height (e.g. $230 \times 230$ pixels),
+but can achieve depth of thousands of
+channels, while simultaneously decreasing the number of
+&quot;pixels&quot; in feature maps towards to the end
+of processing pipeline.</p>
+
+<h2 id="implementing-convolutional-networks-in-haskell">Implementing Convolutional Networks in Haskell</h2>
+
+<p>Today, we will implement and train a convolutional
+network inspired by LeNet-5.
+We will witness that indeed this ConvNet
+has about twice lower error on the MNIST
+handwritten digit recognition task,
+while being four times smaller compared to the <a href="/neural-networks/day4/">previous model</a>!
+The source code from this post is available <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day5">on Github</a>.</p>
+
+<h3 id="convolutional-layer-gradients">Convolutional Layer Gradients</h3>
+
+<p>First of all, we need to know
+how to obtain convolutional layer gradients.
+Although convolution in neural networks is technically
+performed by the cross-correlation operator<sup class="footnote-ref" id="fnref:fn-11"><a href="#fn:fn-11">11</a></sup>,
+this does not matter since kernel parameters are learnable.
+To understand gradient derivation, let us take
+a look at the cross-correlation operation in single dimension:</p>
+
+<p>$$
+\begin{equation}
+(X * W)_i = \sum_{j=1}^{k} x_{i+j-1} w_j,
+i=1 \dots n.
+\end{equation}
+$$</p>
+
+<p>For instance, if we fix 1D kernel $W$ size to be $k=3$,
+equation above would simply mean that vector
+$X \in \mathbb{R}^{n+2}$
+produces an output $Y \in \mathbb{R}^{n}$:
+$$y_1 = x_1 w_1 + x_2 w_2 + x_3 w_3,$$
+$$y_2 = x_2 w_1 + x_3 w_2 + x_4 w_3,$$
+$$y_3 = x_3 w_1 + x_4 w_2 + x_5 w_3,$$
+$$y_4 = x_4 w_1 + x_5 w_2 + x_6 w_3,$$
+$$y_5 = x_5 w_1 + x_6 w_2 + x_7 w_3,$$
+$$\dots$$
+$$y_n = x_n w_1 + x_{n+1} w_2 + x_{n+2} w_3.$$</p>
+
+<p>Denoting error from the previous layer as $\delta$,
+convolutional layer gradients w.r.t. input $X$ are</p>
+
+<p>$$ \frac{\partial L}{\partial x_1} = w_1 \delta_1, $$
+$$ \frac{\partial L}{\partial x_2} = w_2 \delta_1 + w_1
+\delta_2, $$
+$$ \frac{\partial L}{\partial x_3} = w_3 \delta_1 + w_2
+\delta_2 + w_1 \delta_3, $$
+$$ \frac{\partial L}{\partial x_4} = w_3 \delta_2 + w_2
+\delta_3 + w_1 \delta_4, $$
+$$\dots$$
+$$ \frac{\partial L}{\partial x_{n}} = w_3 \delta_{n-2} + w_2 \delta_{n-1} + w_1 \delta_{n}. $$
+$$ \frac{\partial L}{\partial x_{n+1}} = w_3 \delta_{n-1} + w_2 \delta_{n}, $$
+$$ \frac{\partial L}{\partial x_{n+2}} = w_3 \delta_n. $$</p>
+
+<p>So it can be seen that it is a cross-correlation operation again,
+but with flipped kernel. Hence</p>
+
+<p>\begin{equation}
+\boxed{
+    \frac{\partial L}{\partial X} = \delta * W_{flip}.
+}
+\end{equation}</p>
+
+<p>Similarly, gradients w.r.t. kernel $W$ are
+computed as</p>
+
+<p>$$\frac{\partial L}{\partial w_1} = \delta_1 x_1 + \delta_2 x_2 + \dots + \delta_n x_n,$$
+$$
+\frac{\partial L}{\partial w_2} = \delta_1 x_2 + \delta_2 x_3 + \dots + \delta_n x_{n+1},$$
+$$
+\frac{\partial L}{\partial w_3} = \delta_1 x_3 + \delta_2 x_4 + \dots + \delta_n x_{n+2}.$$</p>
+
+<p>Thus we have yet another cross-correlation</p>
+
+<p>\begin{equation}
+\boxed{
+    \frac{\partial L}{\partial W} = X * \delta.
+}
+\end{equation}</p>
+
+<p>These formulas will become handy when implementing
+the backward pass from convolutional layers.</p>
+
+<h3 id="convolutions-in-haskell">Convolutions in Haskell</h3>
+
+<p>First, let us start with two most relevant imports:
+modules from array library <code>massiv</code> and
+automatic differentiation tools from <code>backprop</code>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Multidimensional arrays to store learnable</span>
+<span style="color:#75715e">-- parameters and represent image data</span>
+<span style="color:#66d9ef">import</span>           Data.Massiv.Array <span style="color:#66d9ef">hiding</span> ( <span style="color:#a6e22e">map</span>, <span style="color:#a6e22e">zip</span>, <span style="color:#a6e22e">zipWith</span>, <span style="color:#a6e22e">flatten</span> )
+<span style="color:#66d9ef">import</span> <span style="color:#66d9ef">qualified</span> Data.Massiv.Array <span style="color:#66d9ef">as</span> A
+<span style="color:#75715e">-- Automatic heterogeneous back-propagation library</span>
+<span style="color:#66d9ef">import</span>           Numeric.Backprop</code></pre></div>
+
+<p>Let us brush up our data structures to match our convolutional needs.
+First, we need to represent a batch of images.
+We will use the following convention:
+$\text{batch size} \times \text{channels} \times \text{height} \times \text{width}$.
+For instance, if we have a batch of 16 RGB images with dimensions $32 \times 32$,
+then we get a volume of $16 \times 3 \times 32 \times 32$.
+Here we have a <code>Volume4</code> type:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">type</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Array</span> <span style="color:#66d9ef">U</span> <span style="color:#66d9ef">Ix4</span> <span style="color:#a6e22e">a</span></code></pre></div>
+
+<p>It is just an alias to a four-dimensional unboxed Array
+coming from the <code>massiv</code> package.
+In deep learning frameworks those n-dimensional arrays
+are conventionally called
+<a href="https://en.wikipedia.org/wiki/Tensor"><em>tensors</em></a>.
+Note that during transformation in a neural network,
+the shape of data will change, except the batch dimension that will always remain the same.
+Similarly, we need a way to represent our convolutional filters.
+In LeNet, for instance, we can represent the first convolutional
+layer as a volume of $6 \times 1 \times 5 \times 5$. In order to be
+able to distinguish between parameter and data volumes,
+we will introduce <code>Conv2d</code> data structure:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Conv2d</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Conv2d</span> { <span style="color:#a6e22e">_kernels</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Volume4</span> <span style="color:#a6e22e">a</span>) }</code></pre></div>
+
+<p>Note that for the sake of simplicity we decided not to implement
+biases.
+As previously, <code>Linear</code> will represent fully-connected layer parameters:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Linear</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Linear</span> { <span style="color:#a6e22e">_weights</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Matrix</span> <span style="color:#a6e22e">a</span>)
+                       , <span style="color:#a6e22e">_biases</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Vector</span> <span style="color:#a6e22e">a</span>)
+                       }</code></pre></div>
+
+<p>As usual, type parameter <code>a</code> means that we may later decide whether we
+need a <code>Float</code>, a <code>Double</code> or some other weights encoding.
+Now, we have everything to describe learnable parameters (weights) in LeNet:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">LeNet</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span>
+    <span style="color:#66d9ef">LeNet</span> { <span style="color:#a6e22e">_conv1</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Conv2d</span> <span style="color:#a6e22e">a</span>)
+          , <span style="color:#a6e22e">_conv2</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Conv2d</span> <span style="color:#a6e22e">a</span>)
+          , <span style="color:#a6e22e">_fc1</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Linear</span> <span style="color:#a6e22e">a</span>)
+          , <span style="color:#a6e22e">_fc2</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Linear</span> <span style="color:#a6e22e">a</span>)
+          , <span style="color:#a6e22e">_fc3</span> <span style="color:#f92672">::</span> <span style="color:#f92672">!</span>(<span style="color:#66d9ef">Linear</span> <span style="color:#a6e22e">a</span>)
+          }</code></pre></div>
+
+<p>Now, it becomes obvious that with every new layer type
+managing backpropagation data structures
+as we did on Days 2 and 4 quickly becomes tedious.
+Moreover, last time when we introduced a <code>Batchnorm1d</code> layer,
+our forward-backward <code>pass</code> function already oversized 100 lines of code.
+Today, we will make use of the <code>backprop</code> library
+introduced on <a href="/neural-networks/day3/">Day 3</a> to better structure
+our project. Thus, LeNet can be represented as a differentiable
+function <code>lenet</code>, which is nothing more than a composition
+of other functions <em>aka</em> neural network layers:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">lenet</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Reifies</span> <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">W</span>)
+      <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span>)
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Batch of images</span>
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>)
+<span style="color:#a6e22e">lenet</span> <span style="color:#a6e22e">l</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">constVar</span>
+
+          <span style="color:#75715e">-- Feature extractor</span>
+          <span style="color:#75715e">-- Layer (layer group) #1</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">sameConv2d</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">^^.</span> <span style="color:#a6e22e">conv1</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">maxpool</span>
+          <span style="color:#75715e">-- Layer #2</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">validConv2d</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">^^.</span> <span style="color:#a6e22e">conv2</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">maxpool</span>
+
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">flatten</span>
+
+          <span style="color:#75715e">-- Classifier</span>
+          <span style="color:#75715e">-- Layer #3</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">^^.</span> <span style="color:#a6e22e">fc1</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#75715e">-- Layer #4</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">^^.</span> <span style="color:#a6e22e">fc2</span>)
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">relu</span>
+          <span style="color:#75715e">-- Layer #5</span>
+          <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> (<span style="color:#a6e22e">l</span> <span style="color:#f92672">^^.</span> <span style="color:#a6e22e">fc3</span>)</code></pre></div>
+
+<p>This description pretty much talks for itself. The <code>(~&gt;)</code> operator
+is a function composition, i.e. <code>f ~&gt; g = \x -&gt; g(f(x))</code>.
+This could be written in other forms, though. We prefer the
+so-called <a href="https://wiki.haskell.org/Pointfree"><em>pointfree</em></a> notation:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">(<span style="color:#f92672">~&gt;</span>) <span style="color:#f92672">::</span> (<span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">b</span>) <span style="color:#f92672">-&gt;</span> (<span style="color:#a6e22e">b</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">c</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">c</span>
+<span style="color:#a6e22e">f</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">g</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">g</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">f</span></code></pre></div>
+
+<p>That simply reverses the order of composition, i.e. first
+is applied <code>f</code>, and only then <code>g</code><sup class="footnote-ref" id="fnref:fn-12"><a href="#fn:fn-12">12</a></sup>.
+I find this &quot;backward composition&quot; notation consistent with
+major neural network frameworks. Compare how an
+equivalent network can be represented in <a href="https://pytorch.org">PyTorch</a>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> torch.nn <span style="color:#f92672">as</span> nn
+
+<span style="color:#66d9ef">class</span> <span style="color:#a6e22e">LeNet</span>(nn<span style="color:#f92672">.</span>Module):
+    <span style="color:#66d9ef">def</span> __init__(self, num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+        super(LeNet, self)<span style="color:#f92672">.</span>__init__()
+        <span style="color:#75715e"># Feature extractor: a (sequential) composition of convolutional,</span>
+        <span style="color:#75715e"># activation, and pooling layers</span>
+        self<span style="color:#f92672">.</span>features <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+            nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">6</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, bias<span style="color:#f92672">=</span>False),
+            nn<span style="color:#f92672">.</span>ReLU(),
+            nn<span style="color:#f92672">.</span>MaxPool2d(kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>),
+            nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">16</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>, bias<span style="color:#f92672">=</span>False),
+            nn<span style="color:#f92672">.</span>ReLU(),
+            nn<span style="color:#f92672">.</span>MaxPool2d(kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)
+        )
+
+        <span style="color:#75715e"># Classifier: a composition of linear and activation layers</span>
+        self<span style="color:#f92672">.</span>classifier <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">16</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">120</span>, bias<span style="color:#f92672">=</span>True),
+            nn<span style="color:#f92672">.</span>ReLU(),
+            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">120</span>, <span style="color:#ae81ff">84</span>, bias<span style="color:#f92672">=</span>True),
+            nn<span style="color:#f92672">.</span>ReLU(),
+            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">84</span>, num_classes, bias<span style="color:#f92672">=</span>True)
+        )
+
+    <span style="color:#75715e"># Composition of feature extractor and classifier</span>
+    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>features(x)
+        <span style="color:#75715e"># Flatten</span>
+        x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>view(x<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>classifier(x)
+        <span style="color:#66d9ef">return</span> x</code></pre></div>
+
+<p>Despite some noise in the Python code above<sup class="footnote-ref" id="fnref:fn-13"><a href="#fn:fn-13">13</a></sup>,
+we see that <code>nn.Sequential</code> object acts simply as a function
+composition with <code>(~&gt;)</code> combinators.
+Now, let us return back to <code>lenet</code> signature:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">lenet</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Reifies</span> <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">W</span>)
+      <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span>)
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Batch of images</span>
+      <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>)</code></pre></div>
+
+<p>We have <a href="/neural-networks/day3/">already seen</a> the <code>BVar s</code>
+(&quot;backprop variable&quot;) type meaning that we deal with a differentiable
+structure. The first argument has type
+<code>BVar s (LeNet Float)</code>. That conventionally means that <code>LeNet</code>
+is the model optimized by backpropagation
+and shortly we will show how to achieve that.
+The second function argument is a batch of images (<code>Volume4</code>), and finally
+the result is a bunch of vectors (<code>Matrix</code>)
+containing classification results performed by our model.</p>
+
+<p>Functions <code>constVar</code> and <code>(^^.)</code> are special ones. Both are coming
+from the <code>Numeric.Backprop</code> import. The first function
+&quot;lifts&quot; a batch to be consumed by the sequence of differentiable functions.
+The second one (<code>^^.</code>)
+allows us to conveniently access records from
+our <code>LeNet</code> data type. For instance, <code>sameConv2d (l ^^. conv1)</code>
+means that <code>sameConv2d</code> has access to the <code>_conv1</code> field.</p>
+
+<p>Layers known from the previous days (linear, ReLU) will be
+<a href="https://github.com/penkovsky/10-days-of-grad/commit/d0227d1926b59e6ba1cd7818763ad275ee04093b#diff-c1c24ef04502030b9519852fc0620935R352">reused</a>
+in accordance to <a href="https://backprop.jle.im/06-manual-gradients.html"><code>backprop</code> conventions</a>.
+What is left to implement are <code>sameConv2d</code>, <code>validConv2d</code>, and <code>maxpool</code> layers.
+To be able to do that simply and efficiently
+we will learn a neat tool called
+<a href="https://en.wikipedia.org/wiki/Stencil_code"><em>stencils</em></a>.</p>
+
+<h3 id="fun-with-stencils">Fun With Stencils</h3>
+
+<p>Let us come back to 1D convolution from Equation (2).
+If we look closer, we notice a pattern
+in convolution/cross-correlation, i.e.
+$$y = \bullet w_1 + \bullet w_2 + \bullet w_3.$$
+Indeed, every time we multiply the same set of weights
+and the only thing that changes is source data
+(masked with bullets above).
+Therefore, to implement convolutions we only need
+to define some sort of pattern that processes given points.
+This fixed pattern applied to array elements is called a <em>stencil</em>.
+The stencil convolution approach can be also used to perform
+subsampling operations, e.g. max pooling.
+Moreover, the method allows for efficient data parallelism.</p>
+
+<p>Previously, we have introduced <a href="http://hackage.haskell.org/package/massiv">Massiv</a> library
+featuring parallel arrays computation.
+This library was preferable to <code>hmatrix</code>
+due to two reasons: multidimensional arrays and
+parallel computation. Today, we have yet one more
+reason: stencils.
+Good news: <code>massiv</code> already implements them for us!
+Those are based on <a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf">this work</a>.</p>
+
+<p>First, we warm up with a 1D cross-correlation from Equation (2).
+Suppose, we have a &quot;delay&quot; kernel $[1, 0, 0]$.
+Here is how this can be applied in an interactive shell
+(<em>aka REPL</em>):</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">import</span> Data.Massiv.Array
+<span style="color:#f92672">&gt;</span> <span style="color:#66d9ef">type</span> <span style="color:#66d9ef">Vector</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Array</span> <span style="color:#66d9ef">U</span> <span style="color:#66d9ef">Ix1</span> <span style="color:#a6e22e">a</span>  <span style="color:#75715e">-- Convenience alias</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">k</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fromList</span> <span style="color:#66d9ef">Par</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>] <span style="color:#f92672">::</span> <span style="color:#66d9ef">Vector</span> <span style="color:#66d9ef">Int</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">sten</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">makeCorrelationStencilFromKernel</span> <span style="color:#a6e22e">k</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">dta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fromList</span> <span style="color:#66d9ef">Par</span> [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>] <span style="color:#f92672">::</span> <span style="color:#66d9ef">Vector</span> <span style="color:#66d9ef">Int</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">mapStencil</span> (<span style="color:#66d9ef">Fill</span> <span style="color:#ae81ff">0</span>) <span style="color:#a6e22e">sten</span> <span style="color:#a6e22e">dta</span>
+<span style="color:#66d9ef">Array</span> <span style="color:#66d9ef">DW</span> <span style="color:#66d9ef">Par</span> (<span style="color:#66d9ef">Sz1</span> <span style="color:#ae81ff">8</span>)
+  [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span> ]</code></pre></div>
+
+<p>Note that the first value was replaced with zero since we have
+applied <code>mapStencil (Fill 0)</code>
+that uses zero-filling padding strategy to preserve the size of the array.
+Our array was processed to look internally like this:
+$[0,1,2,5,6,2,-1,3,-2,0]$, with fake zeros inserted.
+Alternatively, we could use <code>applyStencil noPadding</code> as below:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">applyStencil</span> <span style="color:#a6e22e">noPadding</span> <span style="color:#a6e22e">sten</span> <span style="color:#a6e22e">dta</span>
+<span style="color:#66d9ef">Array</span> <span style="color:#66d9ef">DW</span> <span style="color:#66d9ef">Par</span> (<span style="color:#66d9ef">Sz1</span> <span style="color:#ae81ff">6</span>)
+  [ <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> ]
+
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">dta&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">fromList</span> <span style="color:#66d9ef">Par</span> [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">0</span>] <span style="color:#f92672">::</span> <span style="color:#66d9ef">Vector</span> <span style="color:#66d9ef">Int</span>
+<span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">applyStencil</span> <span style="color:#a6e22e">noPadding</span> <span style="color:#a6e22e">sten</span> <span style="color:#a6e22e">dta&#39;</span>
+<span style="color:#66d9ef">Array</span> <span style="color:#66d9ef">DW</span> <span style="color:#66d9ef">Par</span> (<span style="color:#66d9ef">Sz1</span> <span style="color:#ae81ff">8</span>)
+  [ <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">2</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span> ]</code></pre></div>
+
+<p>Here is a more interesting computer
+<a href="https://github.com/lehins/massiv/blob/master/massiv-examples/app/Vision.hs">vision example</a>. For comparison, we define an identity
+(no transformation) stencil and a box stencil (blurring effect).
+The identity kernel has one in its center
+(coordinate <code>0 :. 0</code>) and zeroes everywhere else.
+The box transformation computes
+averaged value over nine neighboring pixels including the center
+pixel itself (see also <a href="https://github.com/pjreddie/vision-hw1">this</a>
+for more information), therefore the kernel has weights 1/9
+everywhere.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">import</span> Data.Massiv.Array
+<span style="color:#66d9ef">import</span> Data.Massiv.Array.IO
+<span style="color:#66d9ef">import</span> Graphics.ColorSpace
+
+<span style="color:#a6e22e">identity</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Elevator</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix2</span> (<span style="color:#66d9ef">Pixel</span> <span style="color:#66d9ef">RGB</span> <span style="color:#a6e22e">a</span>) (<span style="color:#66d9ef">Pixel</span> <span style="color:#66d9ef">RGB</span> <span style="color:#a6e22e">a</span>)
+<span style="color:#a6e22e">identity</span> <span style="color:#f92672">=</span>
+  <span style="color:#a6e22e">makeStencil</span> <span style="color:#a6e22e">sz</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\get</span> <span style="color:#f92672">-&gt;</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>)
+  <span style="color:#75715e">-- `get` is a function that receives a coordinate relative to the</span>
+  <span style="color:#75715e">-- stencil&#39;s center, i.e. (0 :. 0) is the center itself.</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">sz</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sz</span> (<span style="color:#ae81ff">3</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">3</span>)  <span style="color:#75715e">-- Kernel size: 3 x 3</span>
+    <span style="color:#a6e22e">c</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>  <span style="color:#75715e">-- Center coordinate</span>
+<span style="color:#75715e">{-# INLINE identity #-}</span>
+
+<span style="color:#a6e22e">box</span> <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Elevator</span> <span style="color:#a6e22e">a</span>, <span style="color:#66d9ef">Fractional</span> <span style="color:#a6e22e">a</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix2</span> (<span style="color:#66d9ef">Pixel</span> <span style="color:#66d9ef">RGB</span> <span style="color:#a6e22e">a</span>) (<span style="color:#66d9ef">Pixel</span> <span style="color:#66d9ef">RGB</span> <span style="color:#a6e22e">a</span>)
+<span style="color:#a6e22e">box</span> <span style="color:#f92672">=</span>
+  <span style="color:#a6e22e">makeStencil</span> <span style="color:#a6e22e">sz</span> <span style="color:#a6e22e">c</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\get</span> <span style="color:#f92672">-&gt;</span>
+    ( <span style="color:#a6e22e">get</span>  (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span>  (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span> (<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>)
+    <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span>  (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span>  (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>)
+    <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span>  (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span>  (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">+</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>)) <span style="color:#f92672">/</span> <span style="color:#ae81ff">9</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">sz</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Sz</span> (<span style="color:#ae81ff">3</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">3</span>)
+    <span style="color:#a6e22e">c</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>
+<span style="color:#75715e">{-# INLINE box #-}</span>
+
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#a6e22e">frog</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">readImageAuto</span> <span style="color:#e6db74">&#34;files/frog.jpg&#34;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Image</span> <span style="color:#66d9ef">S</span> <span style="color:#66d9ef">RGB</span> <span style="color:#66d9ef">Double</span>)
+
+  <span style="color:#75715e">-- Identity transformation</span>
+  <span style="color:#a6e22e">writeImageAuto</span> <span style="color:#e6db74">&#34;files/frog_clone.png&#34;</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">S</span> (<span style="color:#a6e22e">mapStencil</span> <span style="color:#66d9ef">Edge</span> <span style="color:#a6e22e">identity</span> <span style="color:#a6e22e">frog</span>)
+  <span style="color:#75715e">-- Box filtering (blur)</span>
+  <span style="color:#a6e22e">writeImageAuto</span> <span style="color:#e6db74">&#34;files/frog_blurred.png&#34;</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">S</span> (<span style="color:#a6e22e">mapStencil</span> <span style="color:#66d9ef">Edge</span> <span style="color:#a6e22e">box</span> <span style="color:#a6e22e">frog</span>)</code></pre></div>
+
+<p>In <code>main</code> function, we load an image and apply those two stencils.
+All we need to do is to specify the stencil pattern,
+i.e. convolution kernel, and <code>massiv</code> takes care to apply it.
+This is what we get:</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/frog_blurred.png" width="670px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Original frog (left) and blurred (right). <a href="https://www.wallpaperflare.com/green-and-blue-frog-on-leaf-in-closeup-photography-wallpaper-27429">Image credit</a>.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>While in the last example above we have defined stencils manually with
+<code>makeStencil</code>, in practice we may prefer to use</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">makeCorrelationStencilFromKernel</span>
+  <span style="color:#f92672">::</span> (<span style="color:#66d9ef">Manifest</span> <span style="color:#a6e22e">r</span> <span style="color:#a6e22e">ix</span> <span style="color:#a6e22e">e</span>, <span style="color:#66d9ef">Num</span> <span style="color:#a6e22e">e</span>) <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Array</span> <span style="color:#a6e22e">r</span> <span style="color:#a6e22e">ix</span> <span style="color:#a6e22e">e</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#a6e22e">ix</span> <span style="color:#a6e22e">e</span> <span style="color:#a6e22e">e</span></code></pre></div>
+
+<p>The function has a single argument, stencil's kernel.</p>
+
+<h3 id="convolutional-layers-with-stencils">Convolutional Layers With Stencils</h3>
+
+<p>Before actually diving into implementation, we have to understand
+that convolution decreases the number of &quot;pixels&quot; in the image,
+similar to the &quot;delayed&quot; 1D kernel above.
+Moreover, some information next to the image border is lost
+due to the fact that the sliding window &quot;visits&quot; bordering pixels
+less than those closer to the center. To avoid the information loss,
+often the area around the image is &quot;padded&quot; (filled) with zeros.
+Thus we can perform a &quot;same&quot; convolution, i.e. one that does not change
+the convolved dimensions. As of version 0.4.3,
+<code>Massiv</code> stencils already support different padding modes.
+In case of LeNet $5 \times 5$ kernels,
+we define padding of 2 pixels on every side (top, right, bottom, and left)
+using top left and bottom right corners:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">sameConv2d</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d</span> (<span style="color:#66d9ef">Padding</span> (<span style="color:#66d9ef">Sz2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span>) (<span style="color:#66d9ef">Sz2</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span>) (<span style="color:#66d9ef">Fill</span> <span style="color:#ae81ff">0.0</span>))</code></pre></div>
+
+<p>&quot;Valid&quot; convolution is a convolution with no padding:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">validConv2d</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d</span> (<span style="color:#66d9ef">Padding</span> (<span style="color:#66d9ef">Sz2</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>) (<span style="color:#66d9ef">Sz2</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0</span>) (<span style="color:#66d9ef">Fill</span> <span style="color:#ae81ff">0.0</span>))</code></pre></div>
+
+<p>In both cases, we will use generic <code>conv2d</code> function with a padding
+argument.
+Supporting automatic differentiation, our <code>conv2d</code> combines both
+forward and backward passes:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Reifies</span> <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">W</span>
+       <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">Padding</span> <span style="color:#66d9ef">Ix2</span> <span style="color:#66d9ef">Float</span>
+       <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Conv2d</span> <span style="color:#66d9ef">Float</span>)
+       <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>)
+       <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>)</code></pre></div>
+
+<p>The signature tells us that it is a differential
+function that takes a padding, <code>Conv2d</code> parameters,
+and a batch of images <code>Volume4</code> and produces
+another batch of images.
+The most efficient way to define the function
+is to manually specify both forward and backward
+passes; although it is also possible
+to specify only the forward pass composing
+smaller functions operating on <code>BVar</code>s and
+letting <code>backprop</code> to figure out
+their gradients.
+The general pattern in <code>backprop</code> is
+to provide the forward pass <code>\(Conv2d w) x -&gt; ...</code>
+and the backward pass using a lambda expression containing
+previously computed gradients <code>dz</code> as an argument.
+Those forward and backward passes are glued together
+with <code>liftOp2. op2</code> (or <code>liftOp1. op1</code> for layers with no
+learnable parameters) as below:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d</span> <span style="color:#a6e22e">p</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">liftOp2</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">op2</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span>(<span style="color:#66d9ef">Conv2d</span> <span style="color:#a6e22e">w</span>) <span style="color:#a6e22e">x</span> <span style="color:#f92672">-&gt;</span>
+  (<span style="color:#a6e22e">conv2d_</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">\dz</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">dw</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d&#39;&#39;</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dz</span>
+                             <span style="color:#75715e">-- ... Compute padding p1</span>
+                             <span style="color:#a6e22e">dx</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d&#39;</span> <span style="color:#a6e22e">p1</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">dz</span>
+                         <span style="color:#66d9ef">in</span> (<span style="color:#66d9ef">Conv2d</span> <span style="color:#a6e22e">dw</span>, <span style="color:#a6e22e">dx</span>) )</code></pre></div>
+
+<p>Now, forward pass is a cross-correlation
+between the input channels and a kernel set from the filter bank.
+Recall that the number of kernel sets defines
+the number of output channels.
+We simultaneously perform cross-correlation operations
+on all images in the batch, therefore we concatenate
+the results over the channel dimension <code>3</code>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d_</span> <span style="color:#a6e22e">pad</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">res</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#75715e">-- Some code omitted for simplicity</span>
+
+    <span style="color:#75715e">-- Create a stencil (&#34;sliding window&#34;) from the given set</span>
+    <span style="color:#75715e">-- in the filter bank</span>
+    <span style="color:#a6e22e">sten</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">makeCorrelationStencilFromKernel</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">resize&#39;</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">cin</span> <span style="color:#a6e22e">w1</span> <span style="color:#a6e22e">w2</span>)<span style="color:#f92672">.</span> (<span style="color:#a6e22e">w</span> <span style="color:#f92672">!&gt;</span>)
+
+    <span style="color:#75715e">-- For each kernel set, create and run stencils on all images in the batch.</span>
+    <span style="color:#75715e">-- Finally, concatenate (append) the results over the channel dimension</span>
+    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">foldl&#39;</span> (<span style="color:#a6e22e">\prev</span> <span style="color:#a6e22e">ch</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">conv</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">U</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">applyStencil</span> <span style="color:#a6e22e">pad4</span> (<span style="color:#a6e22e">sten</span> <span style="color:#a6e22e">ch</span>) <span style="color:#a6e22e">x</span>
+                              <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">U</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">append&#39;</span> <span style="color:#ae81ff">3</span> <span style="color:#a6e22e">prev</span> <span style="color:#a6e22e">conv</span>) <span style="color:#a6e22e">empty</span> [<span style="color:#ae81ff">0</span><span style="color:#f92672">..</span><span style="color:#a6e22e">cout</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>]</code></pre></div>
+
+<p>To better illustrate how this works on a batch of images,
+here is a visualization what is going on in the first convolutional layer.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/conv1.png" alt="Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right." width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Folding over six filter sets in the first convolutional layer. Currently active convolutional filter set (highlighted in red) contributes to so far processed results (in color) on the right.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>In MNIST we have black and white images, thus a single-channel input.
+During each step in <code>foldl'</code>, a single filter is applied
+to all images. There are six filters hence resulting in
+six new channels in each convolved image on the right.
+A similar operation is performed in the second convolutional
+layer, this time resulting in 16-channel images (see
+also <em>Convolution Types. LeNet-like Convolution</em> above for
+the illustration on a single image).
+Below is a Python/NumPy equivalent of <code>foldl'</code>/<code>applyStencil</code>
+combo from above.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#75715e"># ... Get current batch, stride, and padding parameters</span>
+<span style="color:#75715e"># ... Using those parameters, determine</span>
+<span style="color:#75715e"># output image width, height, and number of channels</span>
+
+<span style="color:#75715e"># Initialize resulting array</span>
+res <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros([len(batch), out_channels, out_im_height, out_im_width])
+
+<span style="color:#75715e"># Iterate over all four dimensions</span>
+<span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(len(batch)):
+    <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(out_im_height):
+        <span style="color:#66d9ef">for</span> k <span style="color:#f92672">in</span> range(out_im_width):
+            <span style="color:#66d9ef">for</span> c <span style="color:#f92672">in</span> range(out_channels):
+                <span style="color:#75715e"># Define the sliding window position</span>
+                y1 <span style="color:#f92672">=</span> j <span style="color:#f92672">*</span> stride
+                y2 <span style="color:#f92672">=</span> y1 <span style="color:#f92672">+</span> kernel_height
+                x1 <span style="color:#f92672">=</span> k <span style="color:#f92672">*</span> stride
+                x2 <span style="color:#f92672">=</span> x1 <span style="color:#f92672">+</span> kernel_width
+                im_slice <span style="color:#f92672">=</span> batch[i, :, y1:y2, x1:x2]
+
+                <span style="color:#75715e"># Get current channel weights</span>
+                Wcur <span style="color:#f92672">=</span> W[:,c,:,:]
+
+                <span style="color:#75715e"># Out pixel = dot product</span>
+                res[i, c, j, k] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sum(im_slice <span style="color:#f92672">*</span> Wcur)
+
+<span style="color:#66d9ef">return</span> res</code></pre></div>
+
+<p>Now that we have accomplished convolution in the forward direction,
+we need to compute gradients for the backward pass.</p>
+
+<h3 id="gradients-are-also-convolutions">Gradients Are Also Convolutions</h3>
+
+<p>The image plane gradients are obtained by formulas (3) and (4).
+However, in practice we also have to take into account
+that we deal with multiple images that have multiple channels.
+In fact, I leave it to you to figure out exact formulas.
+Those can be inferred from Haskell equations below.
+Yes, any Haskell line is already
+written in a mathematical notation.
+That is essentially what Haskell &quot;purity&quot; is about.
+You might have realized by now that programming
+in Haskell is all about finding your own patterns.
+Now, let us compute gradients w.r.t. input
+$\frac{\partial L}{\partial X}$:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d&#39;</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">w</span> <span style="color:#a6e22e">dz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">conv2d_</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">w&#39;</span> <span style="color:#a6e22e">dz</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">w&#39;</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">compute</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">rot180</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">transposeInner</span>) <span style="color:#a6e22e">w</span>
+
+    <span style="color:#75715e">-- Rotate kernels by 180 degrees. This is expressed in terms</span>
+    <span style="color:#75715e">-- of tensor reversal along width and height dimensions.</span>
+    <span style="color:#a6e22e">rot180</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">reverse&#39;</span> <span style="color:#ae81ff">1</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">reverse&#39;</span> <span style="color:#ae81ff">2</span></code></pre></div>
+
+<p>Let us remind that these <code>compute</code> functions evaluate
+<em>delayed arrays</em> into actual representation in memory.
+Please do not hesitate to find <code>reverse</code> and <code>transposeInner</code> in
+<a href="http://hackage.haskell.org/package/massiv/docs/Data-Massiv-Array.html"><code>massiv</code> documentation</a>.
+Finally, here we have gradients w.r.t. convolution kernel
+weights $\frac{\partial L}{\partial W}$:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">conv2d&#39;&#39;</span>
+  <span style="color:#f92672">::</span> <span style="color:#66d9ef">Padding</span> <span style="color:#66d9ef">Ix2</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#75715e">-- Iterate over images in a batch</span>
+<span style="color:#a6e22e">conv2d&#39;&#39;</span> <span style="color:#a6e22e">p</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">dz</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">res</span>  <span style="color:#75715e">-- computeMap (/fromIntegral bs) res</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#75715e">-- Batch size</span>
+    <span style="color:#66d9ef">Sz</span> (<span style="color:#a6e22e">bs</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#66d9ef">_</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">size</span> <span style="color:#a6e22e">x</span>
+
+    <span style="color:#75715e">-- Code omitted</span>
+
+    <span style="color:#a6e22e">res</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">foldl&#39;</span> (<span style="color:#a6e22e">\acc</span> <span style="color:#a6e22e">im</span> <span style="color:#f92672">-&gt;</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">cur</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_conv2d&#39;&#39;</span> <span style="color:#a6e22e">p</span> (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">dzd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>) (<span style="color:#a6e22e">compute</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">xd</span> <span style="color:#f92672">!&gt;</span> <span style="color:#a6e22e">im</span>)
+       <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">acc</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">cur</span>) <span style="color:#a6e22e">base</span> [<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#a6e22e">bs</span><span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]</code></pre></div>
+
+<p>We simply accumulate gradients from individual images
+in the batch using left strict fold. Finally,
+we generalize Equation (4) to get those transformations:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">_conv2d&#39;&#39;</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Padding</span> <span style="color:#66d9ef">Ix2</span> <span style="color:#66d9ef">Float</span>
+          <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Gradients \delta (dz)</span>
+          <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ X</span>
+          <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ dL/dW</span>
+<span style="color:#a6e22e">_conv2d&#39;&#39;</span> (<span style="color:#66d9ef">Padding</span> (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp1</span>) (<span style="color:#66d9ef">Sz</span> <span style="color:#a6e22e">szp2</span>) <span style="color:#a6e22e">pb</span>) <span style="color:#a6e22e">dz</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> <span style="color:#f92672">...</span></code></pre></div>
+
+<h3 id="more-stencils-max-pooling-layers">More Stencils: Max Pooling Layers</h3>
+
+<p>Stencils are handy not only for convolutional layers.
+Another use case are pooling (subsampling) layers.
+To be able to perform max pooling, first we have to define
+the corresponding stencil pattern
+(or just use <a href="http://hackage.haskell.org/package/massiv-0.4.4.0/docs/Data-Massiv-Array-Stencil.html#v:maxStencil"><code>maxStencil</code></a>
+from the library instead).</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Stencil</span> <span style="color:#66d9ef">Ix4</span> <span style="color:#66d9ef">Float</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">maxpoolStencil2x2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">makeStencil</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">2</span> <span style="color:#ae81ff">2</span>) <span style="color:#ae81ff">0</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\</span> <span style="color:#a6e22e">get</span> <span style="color:#f92672">-&gt;</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">max4</span> <span style="color:#a6e22e">x1</span> <span style="color:#a6e22e">x2</span> <span style="color:#a6e22e">x3</span> <span style="color:#a6e22e">x4</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">max</span> (<span style="color:#a6e22e">max</span> (<span style="color:#a6e22e">max</span> <span style="color:#a6e22e">x1</span> <span style="color:#a6e22e">x2</span>) <span style="color:#a6e22e">x3</span>) <span style="color:#a6e22e">x4</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">max4</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>)
+           <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>)
+           <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">1</span>)
+           <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">get</span> (<span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">0</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">0</span>)</code></pre></div>
+
+<p>Here <code>max4</code> is a function that receives four values and computes
+the maximal one. This function is applied to a patch of
+four neighboring pixels. Do not forget that we operate
+in a 4D space, therefore each point in the
+given patch has four coordinates. Here is how we interpret
+a coordinate:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-none" data-lang="none"> (0 :&gt; 0 :&gt; 0 :. 0)
+  ^    ^    ^    ^
+  4    |    |    1
+       3    2
+1 and 2 are coordinates in the image plane,
+3 is the channel dimension, and
+4 is the batch dimension.</code></pre></div>
+
+<p>Note the <code>:.</code> and <code>:&gt;</code> operators. The first one <code>:.</code> constructs
+a coordinates (index) &quot;list&quot; with two elements
+and <code>:&gt;</code> just adds more coordinates for higher dimensions.
+To learn more about
+<code>&lt;$&gt;</code> and <code>&lt;*&gt;</code> functions, see
+<a href="http://learnyouahaskell.com/functors-applicative-functors-and-monoids">Applicative Functors</a>.</p>
+
+<p>We would like to have non-overlapping sliding windows in max pooling,
+therefore, we want to use $2 \times 2$ stride in the image plane.
+However, we would like to perform the same operation
+over every channel in every image.
+Therefore, we use <code>computeWithStride</code>
+and the stride is <code>1 :&gt; 1 :&gt; 2 :. 2</code>
+($\text{batch dim} \times \text{channel dim} \times \text{height} \times \text{width}$). Note that we do not want any padding since
+the goal of pooling is actually to reduce the number of pixels:
+four times in this case.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpool_</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">maxpool_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">computeWithStride</span> (<span style="color:#66d9ef">Stride</span> (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">2</span>))<span style="color:#f92672">.</span>
+             <span style="color:#a6e22e">applyStencil</span> <span style="color:#a6e22e">noPadding</span> <span style="color:#a6e22e">maxpoolStencil2x2</span></code></pre></div>
+
+<p>Finally, we compute
+<a href="https://datascience.stackexchange.com/questions/11699/backprop-through-max-pooling-layers">gradients</a>
+using pixels that had maximal values in the forward pass.
+And we obtain a differentiable <code>maxpool</code> function
+lifting forward-backward passes with <code>liftOp1. op1</code>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">maxpool</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Reifies</span> <span style="color:#a6e22e">s</span> <span style="color:#66d9ef">W</span>
+        <span style="color:#f92672">=&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>)
+        <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">BVar</span> <span style="color:#a6e22e">s</span> (<span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>)
+<span style="color:#a6e22e">maxpool</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">liftOp1</span><span style="color:#f92672">.</span> <span style="color:#a6e22e">op1</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">\x</span> <span style="color:#f92672">-&gt;</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">out</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">maxpool_</span> <span style="color:#a6e22e">x</span>
+      <span style="color:#a6e22e">s</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Stride</span> (<span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">:&gt;</span> <span style="color:#ae81ff">2</span> <span style="color:#66d9ef">:.</span> <span style="color:#ae81ff">2</span>)
+      <span style="color:#a6e22e">outUp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">U</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">zoom</span> <span style="color:#a6e22e">s</span> <span style="color:#a6e22e">out</span>
+      <span style="color:#a6e22e">maxima</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">A</span><span style="color:#f92672">.</span><span style="color:#a6e22e">zipWith</span> (<span style="color:#a6e22e">\a</span> <span style="color:#a6e22e">b</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">if</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">==</span> <span style="color:#a6e22e">b</span> <span style="color:#66d9ef">then</span> <span style="color:#ae81ff">1</span> <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>) <span style="color:#a6e22e">outUp</span> <span style="color:#a6e22e">x</span>
+  <span style="color:#66d9ef">in</span> (<span style="color:#a6e22e">out</span>, <span style="color:#a6e22e">\dz</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">dzUp</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">computeAs</span> <span style="color:#66d9ef">U</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">zoom</span> <span style="color:#a6e22e">s</span> <span style="color:#a6e22e">dz</span>
+                  <span style="color:#75715e">-- Elementwise product</span>
+                  <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">maybe</span> (<span style="color:#a6e22e">error</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Dimensions problem&#34;</span>) <span style="color:#a6e22e">compute</span> (<span style="color:#a6e22e">maxima</span> <span style="color:#f92672">.*.</span> <span style="color:#a6e22e">delay</span> <span style="color:#a6e22e">dzUp</span>))</code></pre></div>
+
+<h3 id="putting-it-all-together">Putting It All Together</h3>
+
+<p>First, we fetch the MNIST data and randomly generate the initial model:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">main</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#a6e22e">trainS</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mnistStream</span> <span style="color:#ae81ff">64</span> <span style="color:#e6db74">&#34;data/train-images-idx3-ubyte&#34;</span> <span style="color:#e6db74">&#34;data/train-labels-idx1-ubyte&#34;</span>
+  <span style="color:#a6e22e">testS</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mnistStream</span> <span style="color:#ae81ff">1000</span> <span style="color:#e6db74">&#34;data/t10k-images-idx3-ubyte&#34;</span> <span style="color:#e6db74">&#34;data/t10k-labels-idx1-ubyte&#34;</span>
+
+  <span style="color:#a6e22e">net</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randNetwork</span></code></pre></div>
+
+<p>As previously, data streams are loaded from
+binary MNIST files; however, the initial model generation
+has to take into account the new structure, <code>LeNet</code>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">randNetwork</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span>)
+<span style="color:#a6e22e">randNetwork</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#75715e">-- Generate a new conv layer weights:</span>
+  <span style="color:#75715e">-- 6 out channels, 1 input channel, kernel size: 5 x 5</span>
+  <span style="color:#a6e22e">_conv1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randConv2d</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">5</span>)
+  <span style="color:#75715e">-- 16 out channels, 6 input channels, kernel size: 5 x 5</span>
+  <span style="color:#a6e22e">_conv2</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randConv2d</span> (<span style="color:#66d9ef">Sz4</span> <span style="color:#ae81ff">16</span> <span style="color:#ae81ff">6</span> <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">5</span>)
+  <span style="color:#66d9ef">let</span> [<span style="color:#a6e22e">i</span>, <span style="color:#a6e22e">h1</span>, <span style="color:#a6e22e">h2</span>, <span style="color:#a6e22e">o</span>] <span style="color:#f92672">=</span> [<span style="color:#ae81ff">16</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">120</span>, <span style="color:#ae81ff">84</span>, <span style="color:#ae81ff">10</span>]
+  <span style="color:#a6e22e">_fc1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randLinear</span> (<span style="color:#66d9ef">Sz2</span> <span style="color:#a6e22e">i</span> <span style="color:#a6e22e">h1</span>)
+  <span style="color:#a6e22e">_fc2</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randLinear</span> (<span style="color:#66d9ef">Sz2</span> <span style="color:#a6e22e">h1</span> <span style="color:#a6e22e">h2</span>)
+  <span style="color:#a6e22e">_fc3</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">randLinear</span> (<span style="color:#66d9ef">Sz2</span> <span style="color:#a6e22e">h2</span> <span style="color:#a6e22e">o</span>)
+  <span style="color:#a6e22e">return</span> <span style="color:#f92672">$</span>
+    <span style="color:#66d9ef">LeNet</span> { <span style="color:#a6e22e">_conv1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_conv1</span>
+          , <span style="color:#a6e22e">_conv2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_conv2</span>
+          , <span style="color:#a6e22e">_fc1</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_fc1</span>
+          , <span style="color:#a6e22e">_fc2</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_fc2</span>
+          , <span style="color:#a6e22e">_fc3</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_fc3</span>
+          }</code></pre></div>
+
+<p>Finally, we train our model</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell">  <span style="color:#75715e">-- ... `main` function</span>
+  <span style="color:#a6e22e">net&#39;</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">train</span> <span style="color:#66d9ef">TrainSettings</span> { <span style="color:#a6e22e">_printEpochs</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span>
+                              , <span style="color:#a6e22e">_lr</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+                              , <span style="color:#a6e22e">_totalEpochs</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">30</span>
+                              } <span style="color:#a6e22e">net</span> (<span style="color:#a6e22e">trainS</span>, <span style="color:#a6e22e">testS</span>)</code></pre></div>
+
+<p>The <code>train</code> function is essentially a wraper
+around the <code>sgd</code> stochastic gradient descent function.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">train</span> <span style="color:#66d9ef">TrainSettings</span> { <span style="color:#a6e22e">_printEpochs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">printEpochs</span>
+                    , <span style="color:#a6e22e">_lr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">lr</span>
+                    , <span style="color:#a6e22e">_totalEpochs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">totalEpochs</span>
+                    } <span style="color:#a6e22e">net</span> (<span style="color:#a6e22e">trainS</span>, <span style="color:#a6e22e">testS</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  (<span style="color:#a6e22e">net&#39;</span>, <span style="color:#66d9ef">_</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">iterN</span> (<span style="color:#a6e22e">totalEpochs</span> `<span style="color:#a6e22e">div</span>` <span style="color:#a6e22e">printEpochs</span>) (<span style="color:#a6e22e">\</span>(<span style="color:#a6e22e">net0</span>, <span style="color:#a6e22e">j</span>) <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">do</span>
+    <span style="color:#a6e22e">net1</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">sgd</span> <span style="color:#a6e22e">lr</span> <span style="color:#a6e22e">printEpochs</span> <span style="color:#a6e22e">net0</span> <span style="color:#a6e22e">trainS</span>
+
+    <span style="color:#75715e">-- ... Compute and print accuracies</span>
+
+    ) (<span style="color:#a6e22e">net</span>, <span style="color:#ae81ff">1</span>)
+  <span style="color:#a6e22e">return</span> <span style="color:#a6e22e">net&#39;</span></code></pre></div>
+
+<p>In <code>sgd</code> we compute gradients
+over a mini-batch and subtract them to optimize
+the model parameters.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">sgd</span> <span style="color:#a6e22e">lr</span> <span style="color:#a6e22e">n</span> <span style="color:#a6e22e">net0</span> <span style="color:#a6e22e">dataStream</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">iterN</span> <span style="color:#a6e22e">n</span> <span style="color:#a6e22e">epochStep</span> <span style="color:#a6e22e">net0</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#75715e">-- Fold over the stream of all batches</span>
+    <span style="color:#a6e22e">epochStep</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">S</span><span style="color:#f92672">.</span><span style="color:#a6e22e">foldl&#39;</span> <span style="color:#a6e22e">_trainStep</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dataStream</span>
+    <span style="color:#75715e">-- Update gradients based on a single batch</span>
+    <span style="color:#a6e22e">_trainStep</span> <span style="color:#a6e22e">net</span> (<span style="color:#a6e22e">x</span>, <span style="color:#a6e22e">targ</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">trainStep</span> <span style="color:#a6e22e">lr</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">targ</span> <span style="color:#a6e22e">net</span></code></pre></div>
+
+<p>Now, the training step is a few lines of code
+thanks to <code>Numeric.Backprop.gradBP</code> function that applies
+the chain rule, thus replacing the entire <code>pass</code> function
+we had before.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">trainStep</span>
+  <span style="color:#f92672">::</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Learning rate</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Images batch</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Targets</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span>  <span style="color:#75715e">-- ^ Initial network</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">trainStep</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">x</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">targ</span> <span style="color:#f92672">!</span><span style="color:#a6e22e">n</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">n</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">lr</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">gradBP</span> (<span style="color:#a6e22e">crossEntropyLoss</span> <span style="color:#a6e22e">x</span> <span style="color:#a6e22e">targ</span>) <span style="color:#a6e22e">n</span>)</code></pre></div>
+
+<p>If we ever want to actually use our model to identify
+a handwritten digit, we call <code>evalBP</code>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">forward</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">LeNet</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Volume4</span> <span style="color:#66d9ef">Float</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Matrix</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">forward</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">dta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">evalBP</span> (`<span style="color:#a6e22e">lenet</span>` <span style="color:#a6e22e">dta</span>) <span style="color:#a6e22e">net</span></code></pre></div>
+
+<p>Now, we compile and run our program:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-none" data-lang="none">$ ./run.sh
+1 Training accuracy 10.4  Validation accuracy 10.3
+2 Training accuracy 85.7  Validation accuracy 86.3
+3 Training accuracy 95.9  Validation accuracy 96.2
+4 Training accuracy 97.6  Validation accuracy 97.4
+5 Training accuracy 98.4  Validation accuracy 98.1
+6 Training accuracy 98.3  Validation accuracy 98.0
+7 Training accuracy 99.0  Validation accuracy 98.8
+8 Training accuracy 99.0  Validation accuracy 98.7
+9 Training accuracy 99.1  Validation accuracy 98.7
+...
+26 Training accuracy 99.8  Validation accuracy 99.0
+27 Training accuracy 99.8  Validation accuracy 98.7
+28 Training accuracy 99.9  Validation accuracy 98.9
+29 Training accuracy 99.7  Validation accuracy 98.6
+30 Training accuracy 99.9  Validation accuracy 98.9</code></pre></div>
+
+<p>Thus, after 30 training epochs,
+we have obtained a $\sim 1\%$ validation error, which
+is about twice as low compared to
+the simple fully-connected architecture.
+See the complete project on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day5">Github</a>.</p>
+
+<!--
+* Learned conv filters visualization
+-->
+
+<h3 id="model-parameters-comparison">Model Parameters Comparison</h3>
+
+<p>Our three-layer model from <a href="/neural-networks/day4/">Day 4</a>
+consumed</p>
+
+<p>$$(784+1) \cdot 300 + (300+1) \cdot 50 + (50+1) \cdot 10 = 251,060$$</p>
+
+<p>learnable parameters (not counting batchnorm parameters).
+In contrast, the convolutional neural network model that we have implemented
+today requires only</p>
+
+<p>$$1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 + (400+1) \cdot 120 + (120+1) \cdot 84 +  $$
+$$ + (84+1) \cdot 10 = 61,684~\text{parameters.}$$</p>
+
+<p>Note also that $1\ \cdot 5 \cdot5 \cdot 6 + 16 \cdot 6 \cdot 5 \cdot 5 = 2,550$ are
+convolutional layers parameters, whereas
+the majority ($59,134$) reside in classifier's fully-connected
+layers.</p>
+
+<p>Although, we did not apply batch normalization today,
+like was in the original LeNet,
+feel free to experiment with adding batchnorm layers.
+Please also note that there is a difference between batch normalization
+after convolution and after fully-connected layers (see the <a href="https://arxiv.org/abs/1502.03167">batchnorm article</a>).</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2019CNN,
+ title   = "Convolutional Neural Networks Tutorial",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2019",
+ month   = "November",
+ url     = "https://penkovsky.com/neural-networks/day5/"
+}
+</pre>
+
+<h2 id="summary">Summary</h2>
+
+<p>Convolutional neural networks <em>aka</em> ConvNets achieve translation invariance
+and connection sparsity.  Thanks to weight sharing, ConvNets dramatically
+reduce the number of trained parameters.  The power of ConvNet comes from
+training convolution filters, in contrast to manual feature engineering.
+In future posts, we will <a href="/neural-networks/day8/">gain the power of GPU</a>
+to face bigger challenges.
+We will <a href="/neural-networks/day6/">save the planet</a>. And we might even try to
+<a href="https://penkovsky.com/publication/medical-bnn/">read someone's mind</a> with
+convolutional networks.
+Stay tuned!</p>
+
+<h2 id="acknowledgment">Acknowledgment</h2>
+
+<p>I would like to acknowledge <a href="https://github.com/lehins/">Alexey Kuleshevich</a>
+for his help with <code>massiv</code> array library, upon which this
+convolutional neural network was built.</p>
+
+<h2 id="further-reading">Further reading</h2>
+
+<p>Learned today:</p>
+
+<ul>
+<li><a href="http://setosa.io/ev/image-kernels/">Interactive Image Kernels</a></li>
+<li><a href="http://cs231n.github.io/convolutional-networks/">Excellent tutorial on ConvNets</a></li>
+<li><a href="https://pjreddie.com/courses/computer-vision/">The Ancient Secrets of Computer Vision (online course)</a></li>
+<li><a href="https://morgenthum.dev/articles/why-prefer-fp">Why I prefer functional programming</a></li>
+<li><a href="http://benl.ouroborus.net/papers/2011-stencil/stencil-haskell2011.pdf">Efficient Parallel Stencil Convolution in Haskell</a></li>
+</ul>
+
+<p>Deeper into neural networks:</p>
+
+<ul>
+<li><a href="http://yann.lecun.com/exdb/publis/pdf/lecun-98.pdf">LeNet-5 paper</a></li>
+<li><a href="https://arxiv.org/pdf/1409.4842.pdf">Inception paper</a></li>
+<li><a href="https://arxiv.org/pdf/1610.02357.pdf">Xception paper</a></li>
+<li><a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet paper</a></li>
+</ul>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+
+<script src="/js/receptive-field.js"></script>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-1">A sliding window analogy can be for example a photo scanner.
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+<li id="fn:fn-2">The actual &quot;squashing&quot; activation was $f(x) = 1.7159 \tanh(\frac{2}{3} x)$.
+ <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
+<li id="fn:fn-3">By subsampling LeNet authors mean local averaging in $2 \times 2$ squares with subsequent scaling by a constant, bias addition, and sigmoid activation. In modern CNNs, a simple max-pooling is performed instead.
+ <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
+<li id="fn:fn-4">We have discussed one-hot encoding on <a href="/neural-networks/day1/">Day 1</a>.
+ <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
+<li id="fn:fn-5">To refresh your memory about backprop algorithm, check out <a href="/neural-networks/day1/">previous</a> <a href="/neural-networks/day3/">days</a>.
+ <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
+<li id="fn:fn-6">Typically, for each convolutional layer the number of parameters is equal to the number of kernel weights plus a trainable bias. For instance, for a $5 \times 5 \times 6$ kernel, this number is equal to 151.
+ <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
+<li id="fn:fn-7">Whereas I discuss mostly 2D convolutions that are useful for image-like objects, those convolutions can be generalized to 1D and 3D.
+ <a class="footnote-return" href="#fnref:fn-7"><sup>^</sup></a></li>
+<li id="fn:fn-8">By higher-level features I mean features detected by layers deeper in the network, such as geometric shapes, eyes, ears, or even complete figures.
+ <a class="footnote-return" href="#fnref:fn-8"><sup>^</sup></a></li>
+<li id="fn:fn-9">For the details, see <a href="https://arxiv.org/pdf/1704.04861.pdf">Mobilenet paper</a>.
+ <a class="footnote-return" href="#fnref:fn-9"><sup>^</sup></a></li>
+<li id="fn:fn-10">In <a href="https://arxiv.org/pdf/1610.02357.pdf">Xception</a> architecture a better result was achieved without an intermediate activation (on ImageNet classification challenge). In addition, activations - when they are present - are preceded by <a href="/neural-networks/day4/">batch normalization</a>. Batch normalization results in no added bias term after convolutions.
+ <a class="footnote-return" href="#fnref:fn-10"><sup>^</sup></a></li>
+<li id="fn:fn-11">Convolution has flipped kernel whereas cross-correlation operator does not flip the kernel.
+ <a class="footnote-return" href="#fnref:fn-11"><sup>^</sup></a></li>
+<li id="fn:fn-12">Yet another equivalent definition you may encounter is <code>(~&gt;) = flip (.)</code>. While it might look puzzling at first, this line just means that <code>(~&gt;)</code> is a composition operator <code>(.)</code> with flipped arguments.
+ <a class="footnote-return" href="#fnref:fn-12"><sup>^</sup></a></li>
+<li id="fn:fn-13">And yet you complain about cognitive overhead in Haskell (:
+ <a class="footnote-return" href="#fnref:fn-13"><sup>^</sup></a></li>
+</ol>
+</div>
+
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/tutorial/">Tutorial</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/neural-networks/day6/">Day 6: Saving Energy with Binarized Neural Networks</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/neural-networks/day4/">Day 4: The Importance Of Batch Normalization</a></li>
+        
+        <li><a href="/neural-networks/day3/">Day 3: Haskell Guide To Neural Networks</a></li>
+        
+        <li><a href="/neural-networks/day2/">Day 2: What Do Hidden Layers Do?</a></li>
+        
+        <li><a href="/neural-networks/day1/">Day 1: Learning Neural Networks The Hard Way</a></li>
+        
+        <li><a href="/talk/us-french-symposium2019/">Medical Applications of Low Precision Neuromorphic Systems</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

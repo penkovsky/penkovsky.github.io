@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Ever wondered how machines defeated the best human Go player Lee Sedol in 2016?
+A historical moment for the game that was previously considered to be very
+tough. What is reinforcement learning that generates so much buzz recently?
+Superhuman performance playing arcade Atari games, real-time Tokamak
+plasma control, Google data center cooling, and
+autonomous chemical synthesis are all the recent achievements behind
+the approach. Let&#39;s dive to learn what empowers deep reinforcement learning.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/neural-networks/beyond/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/neural-networks/beyond/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/neural-networks/beyond/">
+  <meta property="og:title" content="Day 10: Beyond Supervised Learning | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Ever wondered how machines defeated the best human Go player Lee Sedol in 2016?
+A historical moment for the game that was previously considered to be very
+tough. What is reinforcement learning that generates so much buzz recently?
+Superhuman performance playing arcade Atari games, real-time Tokamak
+plasma control, Google data center cooling, and
+autonomous chemical synthesis are all the recent achievements behind
+the approach. Let&#39;s dive to learn what empowers deep reinforcement learning."><meta property="og:image" content="https://penkovsky.com/img/posts/neural-networks/alphago_sedol2016.jpg">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2023-05-11T21:00:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2023-05-31T23:42:30&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Day 10: Beyond Supervised Learning | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/neural-networks/alphago_sedol2016.jpg" class="article-banner" itemprop="image">
+  
+
+  <span class="article-header-caption">AlphaGo vs Lee Sedol. <a href="https://www.youtube.com/watch?v=HT-UZkiOLv8">Source</a></span>
+</div>
+
+
+
+  <div class="article-container">
+    <h1><a href="/neural-networks">10 Days Of Grad: Deep Learning From The First Principles</a></h1>
+
+    <h2 itemprop="name">Day 10: Beyond Supervised Learning</h2>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+        Last updated on
+    
+    <meta content="2023-05-11 21:00:00 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2023-05-31 23:42:30 &#43;0200 CEST" itemprop="dateModified">
+      May 31, 2023
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    27 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/10-days-of-grad/">10 Days Of Grad</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      <p>Ever wondered how machines defeated the best human Go player Lee Sedol in 2016?
+A historical moment for the game that was previously considered to be very
+tough. What is reinforcement learning that generates so much buzz recently?
+Superhuman performance playing arcade <a href="https://arxiv.org/abs/1312.5602">Atari games</a>, real-time <a href="https://www.nature.com/articles/s41586-021-04301-9">Tokamak
+plasma control</a>, Google <a href="https://arxiv.org/abs/2211.07357">data center cooling</a>, and
+<a href="https://www.linkedin.com/feed/update/urn:li:activity:7029011854383284224/">autonomous chemical synthesis</a> are all the recent achievements behind
+the approach. Let's dive to learn what empowers <em>deep reinforcement learning</em>.</p>
+
+<hr />
+
+<p><strong>Table of Contents</strong></p>
+
+<ol>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#reinforcement-learning-concepts">Reinforcement Learning Concepts</a></li>
+<li><a href="#reinforcement-learning-hints">Reinforcement Learning Hints</a></li>
+<li><a href="#reinforce">REINFORCE Algorithm</a></li>
+<li><a href="#proximal-policy-optimization">Proximal Policy Optimization</a></li>
+<li><a href="#alphago-vs-lee-sedol">AlphaGo vs Lee Sedol</a></li>
+<li><a href="#goodbye">Goodbye?</a></li>
+<li><a href="#learn-more">Learn More</a></li>
+</ol>
+
+<hr />
+
+<h2 id="introduction">Introduction</h2>
+
+<p>Reinforcement learning (RL) is a machine learning technique that is all about
+<em>repetitive</em> decision making. Well, just like when you go camping. During
+your first trip you realize that you need more food and you lack some tools. Next
+time, you take some more cereals and dried fruit, a better knife, and a pot.
+And after yet several more attempts you invest in better shoes or a backpack
+and learn how to arrange your stuff in a neat way. The journeys become longer
+and more enjoyable. As you can see, you iterate. You learn from experience. And
+you get rewarded.</p>
+
+<p>No matter how much you can relate yourself to the experiences above, they
+contain everything that reinforcement learning has. An <em>agent</em> is learning from
+experience (or from mistakes if you want) by interacting with its environment.
+The agent receives some sort of a reward signal in response to its actions. And
+that is basically the idea. An idea from psychology? Perhaps.</p>
+
+<p>In a <a href="https://en.wikipedia.org/wiki/Supervised_learning">supervised learning</a>
+setting<sup class="footnote-ref" id="fnref:fn-1"><a href="#fn:fn-1">1</a></sup> you would be instructed what equipment to take with you. And you
+would need to act exactly as instructed. However, the real life is not like
+that. You might have watched a camping channel on YouTube and still struggle to
+start a fire. Trying different kinds of approaches yourself, however, improves
+your survival skills over time.</p>
+
+<p>You may also notice that reinforcement learning is actually more general than
+supervised learning. Indeed, in supervised learning we usually talk about a
+single iteration and apply some sort of ground truth or target signal. However,
+let's take a look at the following example. Imagine, you are a director of AI
+at Tesla (those hipsterish cars, you know) and your team trains a self-driving
+car based on videos that were previously recorded. Sounds like a supervised
+problem with images and labels, right? The car performs well during the same
+day, but tomorrow it rains and the car refuses to drive well. What do you do?
+You say, perhaps the distribution of images has changed. Let's collect some
+more for a rainy weather. And the model training is repeated. The third day is
+very foggy and your team has to collect the data again. And train the model
+again. So what happens? Exactly! Iteration. You have an implicit reinforcement
+learning loop where it is <em>you</em> who acts as an agent trying to outsmart the
+weather conditions<sup class="footnote-ref" id="fnref:fn-2"><a href="#fn:fn-2">2</a></sup>.</p>
+
+<p>More often than not present decisions will influence the situation, and thus
+they will influence <em>future decisions</em> too. This is perhaps <strong>the biggest
+difference from supervised learning</strong>. Supervised learning conveniently omits
+to confess that its main goal is to help <em>making decisions</em> in <em>real</em> world.
+The most boring vision task you have encountered, classifying <a href="/neural-networks/day4/">MNIST
+images</a>, at some point was actually useful for post
+offices to automate mail delivery. Similarly, predicting time series might be
+helpful getting an idea about climate change or predicting economic downturns.
+Whatever supervised learning benchmark you take, in its origin there is some
+sort of implication in the real world.</p>
+
+<p>Unlike supervised learning, reinforcement learning is all about decisions. It
+explicitly states the goal of achieving the best overall consequences -- by
+maximizing total reward. For instance, to arrive from point A to point B you
+may take a car. Depending on which route you will take and how frequently you
+will rest, this will affect your trip duration and how tired you will arrive.
+Those circumstances may further affect your plans. Decisions almost never occur
+in isolation. They will inevitably lead to new decisions. That is why real-life
+challenges are often accompanied by reinforcement learning in some form.</p>
+
+<p><em>A quick note.</em> People often talk about <em>deep</em> reinforcement learning. This is
+to highlight the presence of neural networks. The fact does not change the
+essence of the method. These days almost everyone is doing <em>deep</em> reinforcement
+learning anyway, so I prefer to omit the term. Just wanted to make sure we
+stay on the same page. Now, we will focus our attention on the nitty-gritty
+details of reinforcement learning.</p>
+
+<h2 id="reinforcement-learning-concepts">Reinforcement Learning Concepts</h2>
+
+<p>By interacting with environment, an RL agent actually creates its <em>own</em> unique
+dataset, whereas in supervised learning the dataset is predefined.  As the
+agent explores its environment and the dataset is being created we apply
+backprop to teach our agent similarly to <em>supervised learning</em>. It turns out
+there is a large variety of ways how to do that. The concepts below will give
+you a taste about the key ideas from reinforcement learning.</p>
+
+<h3 id="policies-states-observations">Policies, States, Observations</h3>
+
+<p>A <em>policy</em> (denoted by $\pi$) is simply a strategy that an agent uses when
+responding to changes in the environment. The following notation reads &quot;a policy
+parametrized by parameters $\phi$ to take an action $a$ given a state $s$&quot;:</p>
+
+<p>$$ \pi_{\phi}(a|s). $$</p>
+
+<p>Typically $\phi$ signifies weights in a neural network (the <em>deep</em> reinforcement
+learning story). In the notation above, by $s$ people usually mean &quot;state&quot;. And
+sometimes they actually mean &quot;observations&quot; $o$. The difference between the two
+is that <em>observations</em> are a projection of the complete <em>state</em>
+describing the environment. For example, when learning robotic manipulations
+from camera pixels, observations of a robotic hand are only a representation of
+the actual environment state from a certain angle. Sometimes people talk about
+&quot;completely observable&quot; environments, then $s = o$. The distinction between
+$s$ and $o$ does not affect the RL algorithms we are learning about today.</p>
+
+<h3 id="on-policy-vs-off-policy">On-policy vs Off-policy</h3>
+
+<p>Reinforcement learning algorithms can be split between on-policy and
+off-policy. The first ones use <em>trajectories</em> (experiences)<sup class="footnote-ref" id="fnref:fn-3"><a href="#fn:fn-3">3</a></sup> generated by the
+policy itself, while the second ones use trajectories from some other policies.
+For instance, algorithms that use a <em>replay buffer</em> (such as <a href="https://arxiv.org/abs/1312.5602">deep Q networks
+playing Atari games</a>) to store transitions are off-policy algorithms.
+Typically, off-policy algorithms have better <em>sample efficiency</em> compared to
+on-policy ones, which makes them attractive when it is costly to generate new
+experiences. For instance, when training a physical robot. On the other hand,
+on-policy algorithms are often used when acquiring new experiences are cheap. For
+instance, in simulation.</p>
+
+<h3 id="offline-reinforcement-learning">Offline Reinforcement Learning</h3>
+
+<p>Offline RL is a family of algorithms where an RL agent observes past
+experiences and tries to figure out a <em>better</em> policy without interaction with
+an environment. Of course this is a very challenging task. Nevertheless, it
+has many real-world applications where it could be dangerous or illegal to
+apply reinforcement learning experiments. For instance, finding the best
+treatment in the medical setting. A doctor would not experiment on a patient
+using different drugs because this can lead to health deterioration. Instead,
+they may use reinforcement learning techniques applied to <em>previous</em> records of
+other patients to figure out the best prescription (offline setting).</p>
+
+<h3 id="discrete-vs-continuous-actions">Discrete vs Continuous Actions</h3>
+
+<p>Playing an arcade game using a manipulator with four buttons implies a discrete
+action setting (four possible actions). However, in reality there are settings
+with infinite or very large number of actions. For instance, robot joints
+positions. Certain algorithms can be applicable only to one action type
+(<a href="https://stable-baselines3.readthedocs.io/en/master/modules/dqn.html">DQN</a> can be applied only for discrete and <a href="https://stable-baselines3.readthedocs.io/en/master/modules/ddpg.html">DDPG</a> only for
+continuous actions), whereas certain others can be used for both (e.g.
+<a href="https://stable-baselines3.readthedocs.io/en/master/modules/a2c.html">A2C</a>, <a href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">PPO</a>).</p>
+
+<h3 id="deterministic-vs-stochastic-policies">Deterministic vs Stochastic Policies</h3>
+
+<p>Certain policies inherently produce deterministic actions (<a href="https://stable-baselines3.readthedocs.io/en/master/modules/dqn.html">DQN</a>), while
+others sample from a learned distribution producing stochastic actions
+(<a href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">PPO</a>). Of course, it is possible to make a deterministic algorithm to
+produce stochastic actions (epsilon-greedy exploration) and vice versa. Why
+use a stochastic policy? Actually, under stochastic environments optimal policies
+are often stochastic. The simplest example is
+<a href="https://en.wikipedia.org/wiki/Rock_paper_scissors">Rock-Paper-Scissors</a> game.</p>
+
+<h3 id="model-free-vs-model-based">Model-free vs Model-based</h3>
+
+<p>Model-based approaches assume a certain environment model. The advantage of this
+approach is better <em>sample efficiency</em>. On the other hand, model-free approaches
+may better generalize to unknown environments. In some cases, environment's
+model is learned.</p>
+
+<h3 id="sample-efficiency">Sample Efficiency</h3>
+
+<p>By sample efficiency we mean using less examples for training.</p>
+
+<h2 id="reinforcement-learning-hints">Reinforcement Learning Hints</h2>
+
+<p>The goal of reinforcement learning is typically to solve a real-life
+challenge. For that purpose you will need to define some interaction protocol
+between your agent and its environment and also a reward function.  The reward
+function provides a score how well your agent performs.  Typically, it is
+beneficial having a &quot;dense&quot; reward so that the agent gets some
+information at every time step. This is not always possible and there are
+<a href="https://stable-baselines3.readthedocs.io/en/master/modules/her.html">methods</a> to circumvent this issue.  One way to look at <em>reward shaping</em>
+is that RL is your &quot;compiler&quot; and the reward is your understanding of the
+problem you are trying to solve.</p>
+
+<p>To gain some expertise, you may want to start with existing
+<a href="https://github.com/openai/gym">environments</a><sup class="footnote-ref" id="fnref:fn-4"><a href="#fn:fn-4">4</a></sup> and <a href="https://stable-baselines3.readthedocs.io">RL
+algorithms</a>. If your goal is to train a physically embodied robot, you
+may want to create your own environment to try out some ideas in simulation.
+This will save you some time since running a simulator is typically faster than
+real-time robot training.</p>
+
+<p>The more accurate is the simulator, the better the agent is likely to perform in
+real-world. For instance, in <a href="https://arxiv.org/abs/1804.10332">Sim-to-Real: Learning Agile Locomotion For
+Quadruped Robots</a> the authors have obtained better results by
+creating accurate actuator models and performing latency modeling.</p>
+
+<p>However, there is always a difference between running an agent on any simulator
+and reality. The problem known as <em>reality gap</em>. There are different techniques
+how to reduce this difference. One of them is <a href="https://arxiv.org/abs/1703.06907">domain
+randomization</a>. The idea is to train the agent using environments
+with randomized parameters. In <a href="https://proceedings.mlr.press/v100/mehta20a.html">active domain randomization</a>, the
+<em>active learning</em> approach is combined: agents are trained more often on environments
+where they performed poorly.</p>
+
+<p>Another technique <em>domain adaptation</em> suggests making <a href="https://openaccess.thecvf.com/content_CVPR_2019/papers/James_Sim-To-Real_via_Sim-To-Sim_Data-Efficient_Robotic_Grasping_via_Randomized-To-Canonical_Adaptation_Networks_CVPR_2019_paper.pdf">real data look like
+those in simulation</a> or vice versa. You may also want to perform
+parameters <em><a href="https://journals.sagepub.com/doi/pdf/10.1177/0278364919887447">fine-tuning</a></em> on your <a href="https://arxiv.org/abs/1810.05687">real</a> robot.</p>
+
+<p>Note also that if you are training an agent in a simulated environment,
+the agent may &quot;overfit&quot; to the environment. That is, it may exhibit unrealistic
+(and often undesired) behaviors that still lead to high reward scores.
+The agent may try to exploit environment glitches if there are any.</p>
+
+<p>Having those practical strategies in mind, we are going to the meat of RL.
+Below we are discussing an algorithm which constitutes the basis to many modern RL
+strategies such as TRPO and <a href="https://stable-baselines3.readthedocs.io/en/master/modules/ppo.html">PPO</a>.</p>
+
+<h2 id="reinforce">REINFORCE</h2>
+
+<p><em>REINFORCE</em>, also called Monte Carlo Policy Gradient, is the simplest from the
+<em>policy gradient</em> algorithms family. The advantage of policy gradients is that
+they can learn stochastic policies. This also addresses the
+exploration-exploitation dilemma.</p>
+
+<p><strong>REINFORCE algorithm:</strong></p>
+
+<ol>
+<li>Initialize policy parameters $\phi$.</li>
+<li>Generate trajectories $s_0, a_0, r_1,...,s_{T-1}, a_{T-1}, r_T$ by interacting with environment.</li>
+<li>For every step $t = 0,1,...,T-1$, estimate returns $R_t = \sum_{k=t+1}^T \gamma^{k-t-1} r_k.$</li>
+<li>Optimize agent parameters $\phi \leftarrow \phi + \alpha R_t \nabla \log \pi_{\phi}(a_t|s_t)$.</li>
+<li>Repeat steps 2-5 until convergence.</li>
+</ol>
+
+<p>Note that when using universal function approximators (that is neural
+networks), convergence is not guaranteed. However, in practice
+you still have a good chance to train your agent.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">numEpisodes</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">400</span>
+
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">IO</span> ()
+<span style="color:#a6e22e">main</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Num episodes &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">numEpisodes</span>
+
+  <span style="color:#75715e">-- Seed Torch for reproducibility.</span>
+  <span style="color:#75715e">-- Feel free to remove.</span>
+  <span style="color:#a6e22e">manual_seed_L</span> <span style="color:#ae81ff">10</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">seed</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">42</span>  <span style="color:#75715e">-- Environment seed</span>
+
+  <span style="color:#75715e">-- Step 1: Initialize policy parameters</span>
+  <span style="color:#a6e22e">agent</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">mkAgent</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">actionDim</span>
+  <span style="color:#75715e">-- We also initialize the optimizer</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">trainer</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mkTrainer</span> <span style="color:#a6e22e">agent</span>
+
+  <span style="color:#75715e">-- Repeat steps 2-4 for the number of episodes (trajectories)</span>
+  (<span style="color:#a6e22e">agent&#39;</span>, <span style="color:#a6e22e">trainer&#39;</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">foldM</span> (<span style="color:#a6e22e">\at</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">-&gt;</span> (<span style="color:#a6e22e">reinforce</span> <span style="color:#a6e22e">conf</span>) <span style="color:#a6e22e">seed</span> <span style="color:#a6e22e">at</span> <span style="color:#a6e22e">i</span>) (<span style="color:#a6e22e">agent</span>, <span style="color:#a6e22e">trainer</span>) [<span style="color:#ae81ff">1</span><span style="color:#f92672">..</span><span style="color:#a6e22e">numEpisodes</span>]
+
+  <span style="color:#a6e22e">return</span> ()
+
+<span style="color:#a6e22e">reinforce</span> <span style="color:#a6e22e">cfg</span><span style="color:#f92672">@</span><span style="color:#66d9ef">Config</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">seed</span> (<span style="color:#a6e22e">agent</span>, <span style="color:#a6e22e">trainer</span>) <span style="color:#a6e22e">i</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#75715e">-- Step 2: Trajectories generation (rollout)</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">s0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">reset</span> (<span style="color:#a6e22e">seed</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">i</span>)
+  (<span style="color:#66d9ef">_</span>, <span style="color:#66d9ef">_</span>, <span style="color:#f92672">!</span><span style="color:#a6e22e">rs</span>, <span style="color:#f92672">!</span><span style="color:#a6e22e">logprobs_t</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">rollout</span> <span style="color:#a6e22e">maxSteps</span> <span style="color:#a6e22e">agent</span> <span style="color:#a6e22e">s0</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">logprobs&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">cat</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#a6e22e">logprobs_t</span>
+  <span style="color:#a6e22e">putStrLn</span> <span style="color:#f92672">$</span> <span style="color:#e6db74">&#34;Episode &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> <span style="color:#a6e22e">i</span> <span style="color:#f92672">++</span> <span style="color:#e6db74">&#34; - Score &#34;</span> <span style="color:#f92672">++</span> <span style="color:#a6e22e">show</span> (<span style="color:#a6e22e">sum</span> <span style="color:#a6e22e">rs</span>)
+
+  <span style="color:#75715e">-- Step 3: Estimating returns</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">returns_t</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">asTensor</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">returns</span> <span style="color:#a6e22e">γ</span> <span style="color:#a6e22e">rs</span>
+      <span style="color:#a6e22e">returnsNorm</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">returns_t</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">mean</span> <span style="color:#a6e22e">returns_t</span>) <span style="color:#f92672">/</span> (<span style="color:#a6e22e">std</span> <span style="color:#a6e22e">returns_t</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-8</span>)
+
+  <span style="color:#75715e">-- Step4: Optimize</span>
+  <span style="color:#a6e22e">optimize</span> <span style="color:#a6e22e">cfg</span> <span style="color:#a6e22e">logprobs&#39;</span> <span style="color:#a6e22e">returnsNorm</span> (<span style="color:#a6e22e">agent</span>, <span style="color:#a6e22e">trainer</span>)</code></pre></div>
+
+<h3 id="trajectory-generation">Trajectory Generation</h3>
+
+<p>The agent generates a trajectory by interacting with the environment. We call
+this a <em>rollout</em>. By observing the function signature below, we can tell that
+the function consumes an integer number, an agent, and environment state. This
+integer is simply the maximal number of steps per episode. As a result, the
+function will provide the trajectory: observations, actions, and rewards. In
+addition, it also provides log probabilities, which we will use to compute our
+objective (or loss) before we can optimize parameters in Step 4.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">rollout</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Agent</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#66d9ef">State</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> ([<span style="color:#66d9ef">Observation</span>], [[<span style="color:#66d9ef">Int</span>]], [<span style="color:#66d9ef">Reward</span>], [<span style="color:#66d9ef">Tensor</span>])
+  <span style="color:#75715e">-- ^ Observations, actions, rewards, log probabilities</span></code></pre></div>
+
+<p>Here is how we implement it: we benefit from the excellent <code>unfoldM</code> function that
+has type <code>Monad m =&gt; (s -&gt; m (Maybe (a, s))) -&gt; s -&gt; m [a]</code>. That is we iterate
+as long as the function in the first argument <code>(s -&gt; m (Maybe (a, s)))</code>
+provides a <code>Just</code> value (and stop when <code>Nothing</code>).</p>
+
+<blockquote>
+<p>Haskell libraries provide lots of &quot;pieces of code&quot; or &quot;programming templates&quot;:
+functions like <code>map</code>, <code>foldl</code>, <code>scanr</code>, <code>unfoldr</code>, <code>zip</code>, <code>zipWith</code>, etc.
+All those are compact versions of loops!
+Some of those concepts gradually diffuse into
+imperative languages (such as C++ and Python).</p>
+</blockquote>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">rollout</span> <span style="color:#a6e22e">_maxSteps</span> <span style="color:#a6e22e">agent</span> <span style="color:#a6e22e">s0</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">L</span><span style="color:#f92672">.</span><span style="color:#a6e22e">unzip4</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">unfoldM</span> <span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">_maxSteps</span>, <span style="color:#a6e22e">agent</span>, <span style="color:#a6e22e">s0</span>)
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#75715e">-- Reached max number of steps. Nothing = stop.</span>
+    <span style="color:#a6e22e">f</span> (<span style="color:#ae81ff">0</span>, <span style="color:#66d9ef">_</span>, <span style="color:#66d9ef">_</span>) <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> <span style="color:#66d9ef">Nothing</span>
+
+    <span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">_maxSteps</span>, <span style="color:#a6e22e">_agent</span><span style="color:#f92672">@</span><span style="color:#66d9ef">Agent</span>{<span style="color:#f92672">..</span>}, <span style="color:#a6e22e">_s</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">if</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">isDone</span> <span style="color:#a6e22e">_s</span>
+        <span style="color:#75715e">-- The environment is done: stop.</span>
+        <span style="color:#66d9ef">then</span> <span style="color:#66d9ef">do</span>
+           <span style="color:#a6e22e">pure</span> <span style="color:#66d9ef">Nothing</span>
+        <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">do</span>
+          <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">ob</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">observations</span> <span style="color:#a6e22e">_s</span>
+          (<span style="color:#a6e22e">ac</span><span style="color:#f92672">@</span>(<span style="color:#66d9ef">Action</span> <span style="color:#a6e22e">ac_</span>), <span style="color:#a6e22e">logprob</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getAction</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">ob</span>
+          <span style="color:#66d9ef">let</span> (<span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">s&#39;</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">step</span> <span style="color:#a6e22e">ac</span> <span style="color:#a6e22e">_s</span>
+
+          <span style="color:#a6e22e">pure</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Just</span> ((<span style="color:#a6e22e">ob</span>, <span style="color:#a6e22e">ac_</span>, <span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">logprob</span>), (<span style="color:#a6e22e">_maxSteps</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">_agent</span>, <span style="color:#a6e22e">s&#39;</span>))</code></pre></div>
+
+<p>The heart of iteration is in the end: First, observe the environment and
+sample actions.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">let</span> <span style="color:#a6e22e">ob</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">observations</span> <span style="color:#a6e22e">_s</span>
+(<span style="color:#a6e22e">ac</span><span style="color:#f92672">@</span>(<span style="color:#66d9ef">Action</span> <span style="color:#a6e22e">ac_</span>), <span style="color:#a6e22e">logprob</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">getAction</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">ob</span></code></pre></div>
+
+<p>Then, simulate the environment step:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">let</span> (<span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">s&#39;</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">Env</span><span style="color:#f92672">.</span><span style="color:#a6e22e">step</span> <span style="color:#a6e22e">ac</span> <span style="color:#a6e22e">_s</span></code></pre></div>
+
+<p>And finally, prepare the next iteration step by reducing the maximal
+number of steps and passing the agent and the new environment state.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">pure</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Just</span> ((<span style="color:#a6e22e">ob</span>, <span style="color:#a6e22e">ac_</span>, <span style="color:#a6e22e">r</span>, <span style="color:#a6e22e">logprob</span>), (<span style="color:#a6e22e">_maxSteps</span> <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>, <span style="color:#a6e22e">_agent</span>, <span style="color:#a6e22e">s&#39;</span>))</code></pre></div>
+
+<p>Here is how we get an action and a log probability.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">getAction</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">obs_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unsqueeze</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">asTensor</span> <span style="color:#a6e22e">obs</span>
+  (<span style="color:#a6e22e">ac</span>, <span style="color:#a6e22e">logprob</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">evaluate</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs_</span> <span style="color:#66d9ef">Nothing</span>
+
+  <span style="color:#75715e">-- Return a single discrete action</span>
+  <span style="color:#a6e22e">return</span> (<span style="color:#66d9ef">Action</span> [<span style="color:#a6e22e">asValue</span> <span style="color:#a6e22e">ac</span>], <span style="color:#a6e22e">logprob</span>)</code></pre></div>
+
+<p>Evaluate the policy $\pi_{\phi}$:
+If no action provided, sample a new action from the learned distribution.
+Also get log probabilities for the action.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">evaluate</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">probs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">policy</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs</span>
+          <span style="color:#a6e22e">dist</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Categorical</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fromProbs</span> <span style="color:#a6e22e">probs</span>
+      <span style="color:#a6e22e">action</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">_getAct</span> <span style="color:#a6e22e">a</span> <span style="color:#a6e22e">dist</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">logProb</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">D</span><span style="color:#f92672">.</span><span style="color:#a6e22e">logProb</span> <span style="color:#a6e22e">dist</span> <span style="color:#a6e22e">action</span>
+      <span style="color:#a6e22e">pure</span> (<span style="color:#a6e22e">action</span>, <span style="color:#a6e22e">logProb</span>)
+  <span style="color:#66d9ef">where</span>
+      <span style="color:#75715e">-- Sample from the categorical distribution:</span>
+      <span style="color:#75715e">-- get a tensor of integer values (one sample per observation).</span>
+      <span style="color:#a6e22e">_getAct</span> <span style="color:#66d9ef">Nothing</span> <span style="color:#a6e22e">dist</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">D</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">dist</span> [<span style="color:#a6e22e">head</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">shape</span> <span style="color:#a6e22e">obs</span>]
+      <span style="color:#a6e22e">_getAct</span> (<span style="color:#66d9ef">Just</span> <span style="color:#a6e22e">a&#39;</span>) <span style="color:#66d9ef">_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> <span style="color:#a6e22e">a&#39;</span></code></pre></div>
+
+<h3 id="estimating-returns">Estimating Returns</h3>
+
+<p>After a rollout we (retrospectively) compute how good were our decisions during
+the whole trajectory.  The trick is that we start from the last step. That is,
+our return $R$ at time step $t$ is our current reward plus a discounted
+<em>future</em> return.</p>
+
+<p>$$
+R_t = r_t + \gamma R_{t+1}.
+$$</p>
+
+<p>This expands into</p>
+
+<p>$$
+R_t = r_t + \gamma (r_{t+1} + \gamma (r_{t+2} + \gamma( ... ))).
+$$</p>
+
+<p>where $r_t$ is the reward at time $t$. The meaning of this expression is the
+essence of policy gradient: We evaluate how good were our past decisions with
+respect to the future outcomes.</p>
+
+<blockquote>
+<p>An intriguing way to look at discount factor $\gamma$ is by using the concept
+of terminal state (to put simply, death). At each future step,
+the agent can get a reward with probability $\gamma$ and can
+die with probability $1 - \gamma$. Therefore, discounting the reward
+is akin to incorporating the &quot;fear of death&quot; into RL.
+In his <a href="https://www.youtube.com/watch?v=JHrlF10v2Og&amp;list=PL_iWQOsE6TfX7MaC6C3HcdOf1g337dlC9">lectures</a>, S. Levine gives an example of receiving 1000 dollars today
+or in million years. In the latter case, the reward is hugely discounted
+as it is unlikely that we will be able to receive it.</p>
+</blockquote>
+
+<p>We compute the returns as a function of rewards <code>rs</code>.  We also use next
+terminal states indicators and future value estimators in special cases.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">returns</span> <span style="color:#a6e22e">γ</span> <span style="color:#a6e22e">rs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">rs</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">r</span><span style="color:#66d9ef">:[]</span>) <span style="color:#f92672">=</span> [<span style="color:#a6e22e">r</span>]
+
+    <span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">r</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">xs</span>) <span style="color:#f92672">=</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">xs</span>
+       <span style="color:#75715e">-- Discounting a future return</span>
+       <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">γ</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">head</span> <span style="color:#a6e22e">y</span>) <span style="color:#66d9ef">:</span> <span style="color:#a6e22e">y</span></code></pre></div>
+
+<blockquote>
+<p>In policy gradient algorithms we evaluate how good are our past decisions
+with respect to the future outcomes.</p>
+</blockquote>
+
+<p>Note that we compute the return recursively as in equation above: reward
+plus a discounted <em>future</em> return. Since Haskell is a <em>lazy</em> programming
+language, it is not critical that this value does not exist yet.
+Essentially, we promise to compute the list of <em>future</em> values <code>y = f xs</code>.
+Finally, we prepend current return to the list of future returns
+<code>r + γ * (head y) : y</code>. Fascinating!</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">f</span> (<span style="color:#a6e22e">r</span><span style="color:#66d9ef">:</span><span style="color:#a6e22e">xs</span>) <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">y</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">xs</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">γ</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">head</span> <span style="color:#a6e22e">y</span>) <span style="color:#66d9ef">:</span> <span style="color:#a6e22e">y</span></code></pre></div>
+
+<h3 id="optimizing-parameters">Optimizing parameters</h3>
+
+<ol>
+<li>Computing the loss.</li>
+<li>Running a gradient step.</li>
+</ol>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">optimize</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Config</span>
+         <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+         <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Agent</span>, <span style="color:#66d9ef">Trainer</span>)
+         <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Agent</span>, <span style="color:#66d9ef">Trainer</span>)
+<span style="color:#a6e22e">optimize</span> <span style="color:#66d9ef">Config</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">logprobs_t</span> <span style="color:#a6e22e">returns_t</span> (<span style="color:#66d9ef">Agent</span> {<span style="color:#f92672">..</span>}, <span style="color:#66d9ef">Trainer</span> {<span style="color:#f92672">..</span>}) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">loss</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Torch</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sumAll</span> <span style="color:#f92672">$</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">logprobs_t</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">returns_t</span>
+  (<span style="color:#a6e22e">ϕ&#39;</span>, <span style="color:#a6e22e">opt&#39;</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">runStep</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">opt</span> <span style="color:#a6e22e">loss</span> (<span style="color:#a6e22e">asTensor</span> <span style="color:#a6e22e">lr</span>)
+  <span style="color:#a6e22e">pure</span> (<span style="color:#66d9ef">Agent</span> <span style="color:#a6e22e">ϕ&#39;</span>, <span style="color:#66d9ef">Trainer</span> <span style="color:#a6e22e">opt&#39;</span>)</code></pre></div>
+
+<h3 id="final-bits">Final Bits</h3>
+
+<p>There are still a few other things to complete the project. Let's define our
+policy network type $\Phi$. Here we have three fully-connected layers. In other
+words, two hidden layers.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Phi</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Phi</span>
+  { <span style="color:#a6e22e">pl1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  , <span style="color:#a6e22e">pl2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  , <span style="color:#a6e22e">pl3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Parameterized</span>)</code></pre></div>
+
+<p>Now we can implement the forward pass in a Policy Network:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">policy</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Phi</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">policy</span> <span style="color:#66d9ef">Phi</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">x</span> <span style="color:#f92672">=</span> (   <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">pl1</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">tanh</span>
+           <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">pl2</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">tanh</span>
+           <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">pl3</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">softmax</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">1</span>)) <span style="color:#a6e22e">state</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">x</span></code></pre></div>
+
+<p>An agent is simply a policy network in Reinforce.
+We will update this data type to also accommodate the <em>critic</em> network
+in improved policy gradient later on:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Agent</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Agent</span>
+  { <span style="color:#a6e22e">ϕ</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Phi</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>)</code></pre></div>
+
+<p>REINFORCE Trainer type is a single optimizer.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Trainer</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Trainer</span>
+  { <span style="color:#a6e22e">opt</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Adam</span>
+  }
+  <span style="color:#66d9ef">deriving</span> <span style="color:#66d9ef">Generic</span></code></pre></div>
+
+<p>A new, untrained agent with random weights</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">mkAgent</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Agent</span>
+<span style="color:#a6e22e">mkAgent</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">actDim</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#f92672">=</span> <span style="color:#ae81ff">16</span>
+  <span style="color:#a6e22e">ϕ</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">samplePhi</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">actDim</span> <span style="color:#a6e22e">hiddenDim</span>
+  <span style="color:#a6e22e">pure</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">Agent</span> <span style="color:#a6e22e">ϕ</span></code></pre></div>
+
+<p>Parameters $\phi \in \Phi$ initialization</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">samplePhi</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Phi</span>
+<span style="color:#a6e22e">samplePhi</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">actDim</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">Phi</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">hiddenDim</span>)
+     <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#a6e22e">hiddenDim</span>)
+     <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#a6e22e">actDim</span>)</code></pre></div>
+
+<p>Initializing the trainer</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">mkTrainer</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Agent</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Trainer</span>
+<span style="color:#a6e22e">mkTrainer</span> <span style="color:#66d9ef">Agent</span> {<span style="color:#f92672">..</span>} <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">par</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">flattenParameters</span> <span style="color:#a6e22e">ϕ</span>
+      <span style="color:#a6e22e">opt</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mkAdam</span> <span style="color:#ae81ff">0</span> <span style="color:#ae81ff">0.9</span> <span style="color:#ae81ff">0.999</span> <span style="color:#a6e22e">par</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#66d9ef">Trainer</span> <span style="color:#a6e22e">opt</span></code></pre></div>
+
+<p>Now, let's train the agent to solve the classic CartPole environment!
+See the complete REINFORCE project on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day10/Reinforce.lhs">Github</a>.</p>
+
+<h2 id="proximal-policy-optimization">Proximal Policy Optimization</h2>
+
+<p>REINFORCE algorithm is nice because it is simple. On the other hand,
+in practice it has a problem: finding the best meta-parameters, such
+as learning rate. Choose a value to low and training needs more samples,
+too high and it does not converge. To alleviate this training instability
+multiple variations of this algorithm have been proposed. One popular
+variation is called Proximal Policy Optimization (PPO). Below we upgrade
+REINFORCE to PPO.</p>
+
+<h3 id="actor-critic-style">Actor-Critic Style</h3>
+
+<p>In REINFORCE we only had a policy network $\pi_{\phi}$. A more advanced
+version would be not only to use a policy network (so-called <em>actor</em>),
+but also a value network (<em>critic</em>). This value network would estimate
+how good is the state we are currently in. Naturally, the output of the
+critic network is a scalar with this estimated state value.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- Value (Critic) Network type: Three fully-connected layers</span>
+<span style="color:#66d9ef">data</span> <span style="color:#66d9ef">Theta</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Theta</span>
+  { <span style="color:#a6e22e">l1</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  , <span style="color:#a6e22e">l2</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  , <span style="color:#a6e22e">l3</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Linear</span>
+  }
+  <span style="color:#66d9ef">deriving</span> (<span style="color:#66d9ef">Generic</span>, <span style="color:#66d9ef">Show</span>, <span style="color:#66d9ef">Parameterized</span>)
+
+<span style="color:#75715e">-- | Forward pass in a Critic Network</span>
+<span style="color:#a6e22e">critic</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Theta</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+<span style="color:#a6e22e">critic</span> <span style="color:#66d9ef">Theta</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">state</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">net</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l1</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">tanh</span>
+            <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l2</span> <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">tanh</span>
+            <span style="color:#f92672">~&gt;</span> <span style="color:#a6e22e">linear</span> <span style="color:#a6e22e">l3</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">net</span> <span style="color:#a6e22e">state</span></code></pre></div>
+
+<p>Here is how we will sample initial network weights:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">sampleTheta</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Int</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Theta</span>
+<span style="color:#a6e22e">sampleTheta</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">Theta</span> <span style="color:#f92672">&lt;$&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">obsDim</span> <span style="color:#a6e22e">hiddenDim</span>)
+     <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#a6e22e">hiddenDim</span>)
+     <span style="color:#f92672">&lt;*&gt;</span> <span style="color:#a6e22e">sample</span> (<span style="color:#66d9ef">LinearSpec</span> <span style="color:#a6e22e">hiddenDim</span> <span style="color:#ae81ff">1</span>)</code></pre></div>
+
+<p>To make our life a bit simpler, we can also use the following wrapper when
+dealing with raw observations.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- | Get value: Convenience wrapper around `critic` function.</span>
+<span style="color:#a6e22e">value</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Theta</span> <span style="color:#f92672">-&gt;</span> [<span style="color:#66d9ef">Float</span>] <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Float</span>
+<span style="color:#a6e22e">value</span> <span style="color:#a6e22e">θ</span> <span style="color:#a6e22e">ob</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">ob_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">unsqueeze</span> (<span style="color:#66d9ef">Dim</span> <span style="color:#ae81ff">0</span>) <span style="color:#f92672">$</span> <span style="color:#a6e22e">asTensor</span> <span style="color:#a6e22e">ob</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">asValue</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">critic</span> <span style="color:#a6e22e">θ</span> <span style="color:#a6e22e">ob_</span></code></pre></div>
+
+<p>The state value given by the critic network will be used for <em>advantage</em>
+estimation, instead of simply calculating discounted returns.</p>
+
+<h3 id="advantage-estimation">Advantage Estimation</h3>
+
+<p>As you remember, in policy gradients we optimize neural network
+parameters using $\mathbf{A} \cdot \nabla \log \pi_{\phi}(a_t|s_t)$.
+In REINFORCE, this term $\mathbf{A} = R_t$ is discounted returns.
+This totally makes sense. However, this is not the only option<sup class="footnote-ref" id="fnref:fn-5"><a href="#fn:fn-5">5</a></sup>.</p>
+
+<p>Let me introduce advantage $A = r - v$ where $r$ is reward and $v$ is value,
+i.e. how good is our action. The advantage tells us how current action is
+better than an <em>average</em> action. Therefore, by optimizing our policy with
+respect to advantage, we would improve our actions compared to average. This
+would help to reduce <em>variance</em> of policy gradient.</p>
+
+<p>In PPO, we typically use a fancy way to estimate the advantage called
+generalized advantage estimator (GAE).</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">advantages</span> <span style="color:#a6e22e">γ</span> <span style="color:#a6e22e">γ&#39;</span> <span style="color:#a6e22e">rs</span> <span style="color:#a6e22e">dones</span> <span style="color:#a6e22e">vs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">f</span> <span style="color:#f92672">$</span> <span style="color:#66d9ef">L</span><span style="color:#f92672">.</span><span style="color:#a6e22e">zip4</span> <span style="color:#a6e22e">rs</span> (<span style="color:#66d9ef">L</span><span style="color:#f92672">.</span><span style="color:#a6e22e">drop</span> <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">dones</span>) <span style="color:#a6e22e">vs</span> (<span style="color:#66d9ef">L</span><span style="color:#f92672">.</span><span style="color:#a6e22e">drop</span> <span style="color:#ae81ff">1</span> <span style="color:#a6e22e">vs</span>)
+<span style="color:#75715e">-- vs are current values (denoted by v) and</span>
+<span style="color:#75715e">-- (L.drop 1 vs) are future values (denoted by v&#39;)</span>
+  <span style="color:#66d9ef">where</span>
+    <span style="color:#75715e">-- Not necessary to reverse the list if using lazy evaluation</span>
+    <span style="color:#a6e22e">f</span> <span style="color:#f92672">::</span> [(<span style="color:#66d9ef">Float</span>, <span style="color:#66d9ef">Bool</span>, <span style="color:#66d9ef">Float</span>, <span style="color:#66d9ef">Float</span>)] <span style="color:#f92672">-&gt;</span> [<span style="color:#66d9ef">Float</span>]
+    <span style="color:#75715e">-- End of list to be reached: same as terminal (auxiliary value)</span>
+    <span style="color:#a6e22e">f</span> ((<span style="color:#a6e22e">r</span>, <span style="color:#66d9ef">_</span>, <span style="color:#a6e22e">v</span>, <span style="color:#66d9ef">_</span>)<span style="color:#66d9ef">:[]</span>) <span style="color:#f92672">=</span> [<span style="color:#a6e22e">r</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">v</span>]
+
+    <span style="color:#75715e">-- Next state terminal</span>
+    <span style="color:#a6e22e">f</span> ((<span style="color:#a6e22e">r</span>, <span style="color:#66d9ef">True</span>, <span style="color:#a6e22e">v</span>, <span style="color:#66d9ef">_</span>)<span style="color:#66d9ef">:</span><span style="color:#a6e22e">xs</span>) <span style="color:#f92672">=</span> (<span style="color:#a6e22e">r</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">v</span>) <span style="color:#66d9ef">:</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">xs</span>
+
+    <span style="color:#75715e">-- Next state non-terminal</span>
+    <span style="color:#a6e22e">f</span> ((<span style="color:#a6e22e">r</span>, <span style="color:#66d9ef">False</span>, <span style="color:#a6e22e">v</span>, <span style="color:#a6e22e">v&#39;</span>)<span style="color:#66d9ef">:</span><span style="color:#a6e22e">xs</span>) <span style="color:#f92672">=</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">f</span> <span style="color:#a6e22e">xs</span>
+          <span style="color:#a6e22e">delta</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">r</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">γ</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">v&#39;</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">v</span>
+       <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">delta</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">γ</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">γ&#39;</span> <span style="color:#f92672">*</span> (<span style="color:#a6e22e">head</span> <span style="color:#a6e22e">a</span>) <span style="color:#66d9ef">:</span> <span style="color:#a6e22e">a</span></code></pre></div>
+
+<h3 id="ppo-specifics">PPO Specifics</h3>
+
+<p>In REINFORCE, the policy gradient loss function was simply</p>
+
+<p>$$L(\phi) = -\sum_{t} \log \pi_{\phi}(a_t|s_t) \cdot R_t.$$</p>
+
+<p>Note the negation sign in front: without it, the loss (to be minimized) becomes
+an objective (to be maximized) - earning highest returns<sup class="footnote-ref" id="fnref:fn-6"><a href="#fn:fn-6">6</a></sup>:</p>
+
+<p>$$L(\phi) = \sum_{t} \log \pi_{\phi}(a_t|s_t) \cdot R_t.$$</p>
+
+<p>Now, what distinguishes PPO, it its objective. It consists of three
+components: a clipped policy gradient objective (actor network), value loss (critic network),
+and entropy bonus. Since the value function is a loss term, it has a minus sign:</p>
+
+<p>$$L_t^{PPO} = L_t^{CLIP} - c_1 L^{VF} + c_2 S,$$</p>
+
+<p>where $c_1 = 0.5$ and $c_2=0.01$ are constants. If we are going to minimize
+loss instead,</p>
+
+<p>$$L_t^{PPO} = -L_t^{CLIP} + c_1 L^{VF} - c_2 S = $$
+$$ = L_t^{PG} + c_1 L^{VF} - c_2 S.$$</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">loss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pg</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">vfC</span> `<span style="color:#a6e22e">mulScalar</span>` <span style="color:#a6e22e">vLoss</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">entC</span> `<span style="color:#a6e22e">mulScalar</span>` <span style="color:#a6e22e">entropyLoss</span></code></pre></div>
+
+<p>Now, the most interesting part of PPO. If we denote $r_t(\phi)$
+the probability ratio
+$r_t(\phi) = \frac{\pi_{\phi}(a_t|s_t)}{\pi_{\phi_{\text{old}}}(a_t|s_t)}$.
+Then PPO is maximizing the following objective</p>
+
+<p>$$ L^{CLIP}(\phi) = \mathbb{\hat E}_t \left( \min \left( r_t(\phi) \hat A_t, \text{clip}(r_t(\phi), 1 - \epsilon, 1 + \epsilon) \hat A_t \right) \right).$$</p>
+
+<p>First, let's take a look at the clipped objective
+$\text{clip}(r_t(\phi), 1 - \epsilon, 1 + \epsilon) \hat A_t$.
+Here, we try to restrict how far our policy will move during the policy
+gradient update. If advantage $A$ is positive, the objective is clipped at
+value $1 + \epsilon$. If advantage $A$ is negative, then the objective is
+clipped at $1 - \epsilon$. Finally, we take a min between a clipped and
+unclipped objective. Therefore, the final objective is a pessimistic bound on
+the unclipped objective (see <a href="http://arxiv.org/abs/1707.06347">Schulman et al.</a>).</p>
+
+<p>Now, transforming the objective into a loss: we add a minus sign and
+replace min with max:</p>
+
+<p>$$ L^{PG}(\phi) = \sum_t \max \left( -r_t(\phi) \hat A_t, -\text{clip}(r_t(\phi), 1 - \epsilon, 1 + \epsilon) \hat A_t \right).$$</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">pgLoss</span> <span style="color:#a6e22e">clipC</span> <span style="color:#a6e22e">logratio</span> <span style="color:#a6e22e">advNorm</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">ratio</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">exp</span> <span style="color:#a6e22e">logratio</span>
+      <span style="color:#a6e22e">ratio&#39;</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">clamp</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">clipC</span>) (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">clipC</span>) <span style="color:#a6e22e">ratio</span>
+
+      <span style="color:#a6e22e">pgLoss1</span> <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">advNorm</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">ratio</span>
+      <span style="color:#a6e22e">pgLoss2</span> <span style="color:#f92672">=</span> <span style="color:#f92672">-</span><span style="color:#a6e22e">advNorm</span> <span style="color:#f92672">*</span> <span style="color:#a6e22e">ratio&#39;</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">mean</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">max&#39;</span> <span style="color:#a6e22e">pgLoss1</span> <span style="color:#a6e22e">pgLoss2</span></code></pre></div>
+
+<p>Note that for better numerical properties we typically use <code>logratio</code>, instead
+of <code>ratio</code> (a log of a ratio is the difference of logs):</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">logratio</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">newlogprobs</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">logprobs_t</span></code></pre></div>
+
+<p>where <code>newlogprobs</code> are calculated by evaluating the new policy.</p>
+
+<p>Next term $L_t^{VF}$ is often a squared-error loss
+$(V_{\theta}(s_t) - V_t^{\text{targ}})^2$.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">vLoss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span> (<span style="color:#a6e22e">newvalues</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">returns</span>)<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span></code></pre></div>
+
+<p>However, we use <a href="https://arxiv.org/pdf/2005.12729.pdf">clipped value loss</a>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">clippedValueLoss</span> <span style="color:#a6e22e">clipC</span> <span style="color:#a6e22e">val</span> <span style="color:#a6e22e">newval</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span>
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">lossUnclipped</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">newval</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">ret</span>)<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>
+      <span style="color:#a6e22e">clipped</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">val</span> <span style="color:#f92672">+</span> (<span style="color:#a6e22e">clamp</span> (<span style="color:#f92672">-</span><span style="color:#a6e22e">clipC</span>) <span style="color:#a6e22e">clipC</span> (<span style="color:#a6e22e">newval</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">val</span>))
+      <span style="color:#a6e22e">lossClipped</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">clipped</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">ret</span>)<span style="color:#f92672">^</span><span style="color:#ae81ff">2</span>
+      <span style="color:#a6e22e">lossMax</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">max&#39;</span> <span style="color:#a6e22e">lossUnclipped</span> <span style="color:#a6e22e">lossClipped</span>
+   <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">mean</span> <span style="color:#a6e22e">lossMax</span></code></pre></div>
+
+<p>Finally, the entropy bonus $S$ is used in order to stimulate exploration,
+i.e. performing the same task by as many ways as possible.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">entropyLoss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span> <span style="color:#a6e22e">entropy</span></code></pre></div>
+
+<p>Here is updated <code>evaluate</code> function:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#75715e">-- | Get action, logProb, and entropy tensors</span>
+<span style="color:#a6e22e">evaluate</span>
+  <span style="color:#f92672">::</span> <span style="color:#66d9ef">Phi</span>  <span style="color:#75715e">-- ^ Policy weights</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>  <span style="color:#75715e">-- ^ Observations</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Maybe</span> <span style="color:#66d9ef">Tensor</span>  <span style="color:#75715e">-- ^ Action</span>
+  <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>, <span style="color:#66d9ef">Tensor</span>)
+<span style="color:#a6e22e">evaluate</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs</span> <span style="color:#a6e22e">a</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">probs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">policy</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs</span>
+          <span style="color:#a6e22e">dist</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">Categorical</span><span style="color:#f92672">.</span><span style="color:#a6e22e">fromProbs</span> <span style="color:#a6e22e">probs</span>
+      <span style="color:#a6e22e">action</span> <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">_getAct</span> <span style="color:#a6e22e">a</span> <span style="color:#a6e22e">dist</span>
+      <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">logProb</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">D</span><span style="color:#f92672">.</span><span style="color:#a6e22e">logProb</span> <span style="color:#a6e22e">dist</span> <span style="color:#a6e22e">action</span>
+          <span style="color:#a6e22e">entropy</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">D</span><span style="color:#f92672">.</span><span style="color:#a6e22e">entropy</span> <span style="color:#a6e22e">dist</span>
+      <span style="color:#a6e22e">pure</span> (<span style="color:#a6e22e">action</span>, <span style="color:#a6e22e">logProb</span>, <span style="color:#a6e22e">entropy</span>)
+  <span style="color:#66d9ef">where</span>
+      <span style="color:#a6e22e">_getAct</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Maybe</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Categorical</span><span style="color:#f92672">.</span><span style="color:#66d9ef">Categorical</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> <span style="color:#66d9ef">Tensor</span>
+      <span style="color:#a6e22e">_getAct</span> <span style="color:#66d9ef">Nothing</span> <span style="color:#a6e22e">dist</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">D</span><span style="color:#f92672">.</span><span style="color:#a6e22e">sample</span> <span style="color:#a6e22e">dist</span> [<span style="color:#a6e22e">head</span> <span style="color:#f92672">$</span> <span style="color:#a6e22e">shape</span> <span style="color:#a6e22e">obs</span>]
+      <span style="color:#a6e22e">_getAct</span> (<span style="color:#66d9ef">Just</span> <span style="color:#a6e22e">a&#39;</span>) <span style="color:#66d9ef">_</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pure</span> <span style="color:#a6e22e">a&#39;</span></code></pre></div>
+
+<p>Putting it all together, we get this <code>optimize</code> function:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-haskell" data-lang="haskell"><span style="color:#a6e22e">optimize</span> <span style="color:#f92672">::</span> <span style="color:#66d9ef">Config</span>
+         <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span> <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">Tensor</span>
+         <span style="color:#f92672">-&gt;</span> (<span style="color:#66d9ef">Agent</span>, <span style="color:#66d9ef">Trainer</span>)
+         <span style="color:#f92672">-&gt;</span> <span style="color:#66d9ef">IO</span> (<span style="color:#66d9ef">Agent</span>, <span style="color:#66d9ef">Trainer</span>)
+<span style="color:#a6e22e">optimize</span> <span style="color:#66d9ef">Config</span> {<span style="color:#f92672">..</span>} <span style="color:#a6e22e">obs_t</span> <span style="color:#a6e22e">acs_t</span> <span style="color:#a6e22e">val_t</span> <span style="color:#a6e22e">logprobs_t</span> <span style="color:#a6e22e">advantages_t</span> <span style="color:#a6e22e">returns_t</span> (<span style="color:#66d9ef">Agent</span> {<span style="color:#f92672">..</span>}, <span style="color:#66d9ef">Trainer</span> {<span style="color:#f92672">..</span>}) <span style="color:#f92672">=</span> <span style="color:#66d9ef">do</span>
+  (<span style="color:#66d9ef">_</span>, <span style="color:#a6e22e">newlogprobs</span>, <span style="color:#a6e22e">entropy</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">evaluate</span> <span style="color:#a6e22e">ϕ</span> <span style="color:#a6e22e">obs_t</span> (<span style="color:#66d9ef">Just</span> <span style="color:#a6e22e">acs_t</span>)
+
+  <span style="color:#66d9ef">let</span> <span style="color:#a6e22e">newvalues</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">critic</span> <span style="color:#a6e22e">θ</span> <span style="color:#a6e22e">obs_t</span>
+      <span style="color:#a6e22e">logratio</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">newlogprobs</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">logprobs_t</span>
+      <span style="color:#75715e">-- Normalized advantages</span>
+      <span style="color:#a6e22e">advNorm</span> <span style="color:#f92672">=</span> (<span style="color:#a6e22e">advantages_t</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">mean</span> <span style="color:#a6e22e">advantages_t</span>) <span style="color:#f92672">/</span> (<span style="color:#a6e22e">std</span> <span style="color:#a6e22e">advantages_t</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-8</span>)
+
+      <span style="color:#a6e22e">pg</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pgLoss</span> <span style="color:#a6e22e">clipC</span> <span style="color:#a6e22e">logratio</span> <span style="color:#a6e22e">advNorm</span>
+
+      <span style="color:#a6e22e">vLoss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">clippedValueLoss</span> <span style="color:#a6e22e">clipC</span> <span style="color:#a6e22e">val_t</span> <span style="color:#a6e22e">newvalues</span> <span style="color:#a6e22e">returns_t</span>
+
+      <span style="color:#a6e22e">entropyLoss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">mean</span> <span style="color:#a6e22e">entropy</span>
+
+      <span style="color:#a6e22e">loss</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">pg</span> <span style="color:#f92672">+</span> <span style="color:#a6e22e">vfC</span> `<span style="color:#a6e22e">mulScalar</span>` <span style="color:#a6e22e">vLoss</span> <span style="color:#f92672">-</span> <span style="color:#a6e22e">entC</span> `<span style="color:#a6e22e">mulScalar</span>` <span style="color:#a6e22e">entropyLoss</span>
+
+  ((<span style="color:#a6e22e">θ&#39;</span>, <span style="color:#a6e22e">ϕ&#39;</span>), <span style="color:#a6e22e">opt&#39;</span>) <span style="color:#f92672">&lt;-</span> <span style="color:#a6e22e">runStep</span> (<span style="color:#a6e22e">θ</span>, <span style="color:#a6e22e">ϕ</span>) <span style="color:#a6e22e">opt</span> <span style="color:#a6e22e">loss</span> (<span style="color:#a6e22e">asTensor</span> <span style="color:#a6e22e">lr</span>)
+
+  <span style="color:#a6e22e">pure</span> (<span style="color:#66d9ef">Agent</span> <span style="color:#a6e22e">θ&#39;</span> <span style="color:#a6e22e">ϕ&#39;</span>, <span style="color:#66d9ef">Trainer</span> <span style="color:#a6e22e">opt&#39;</span>)</code></pre></div>
+
+<p>See the complete code on <a href="https://github.com/penkovsky/10-days-of-grad/tree/master/day10/Ppo.hs">Github</a>.</p>
+
+<h2 id="alphago-vs-lee-sedol">AlphaGo vs Lee Sedol</h2>
+
+<p>We started this article with the defeated Go champion Lee Sedol. He played
+against software called AlphaGo (version Lee, after him). How <em>actually</em> did
+AlphaGo win? What is <em>self-play</em> and how does it relate to reinforcement
+learning? Below we will address those questions.</p>
+
+<h3 id="overview">Overview</h3>
+
+<p>AlphaGo generates data by playing games against an opponent (since the game of
+Go is a two-player game). This opponent is another machine player randomly
+chosen from a pool of opponents. In the end of the game one player
+wins (reward $r = +1$) and another loses (reward $r = -1$).</p>
+
+<p>After several games have been played, the player is updated. Then, this new
+player is compared to the old one. If the new one wins sufficiently often, it
+is then accepted. Iteration by iteration, and the AlphaGo is improved by
+playing against itself. This is called a <em>self-play</em>. Below, we are going into
+mode details.</p>
+
+<h3 id="monte-carlo-tree-search">Monte Carlo Tree Search</h3>
+
+<p>We should introduce a new concept called Monte Carlo Tree Search. Monte Carlo,
+if you didn't know, is the area in the city-state of Monaco. It is also the
+European gambling capital. Some rich people like to waste money in the Monte
+Carlo casino. The author had a chance to visit it once and can confirm that is
+absolutely true.</p>
+
+<p>Anyway, I digress. Statisticians simply love calling everything <em>Monte Carlo</em>
+when there are random simulations involved. For example, have you noticed that
+REINFORCE is also named Monte Carlo Policy Gradient? This is related to
+stochastic trajectories generated during rollouts.</p>
+
+<figure>
+
+<img src="/img/posts/neural-networks/mcts.jpg" alt="Monte Carlo Tree Search. Source: [Silver *et al.*](http://dx.doi.org/10.1038/nature16961)" width="690px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4><strong>Figure 1</strong></h4>
+  <p>
+    Monte Carlo Tree Search. Source: <a href="http://dx.doi.org/10.1038/nature16961">Silver <em>et al.</em></a>
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Monte Carlo Tree Search (MCTS) explores a tree of possible moves and is
+continuously refining its understanding of the game state by simulating random
+rollouts (also called playouts because of the game aspect). In Monte Carlo
+tree, each node is a board state (see Fig. 1). For each board state, we
+estimate the <em>value</em> of this state $Q$. That is how good it is or, in other
+words, whether we believe this board position is leading to a win or loss.  The
+innovation behind AlphaGo was in combining MCTS with convolutional neural
+networks for state value estimation and for selecting the move to play.</p>
+
+<p>In the first MCTS stage called <em>Selection</em> (Fig. 1<strong>a</strong>),
+an action is selected to maximize the value $Q$ plus some bonus $u(P)$
+that encourages exploration. This bonus is designed such that in the beginning
+the algorithm prefers actions with high prior probability $P$ and low
+visit count; and eventually it prefers actions with high action value $Q$.
+This is achieved by weighting the bonus term by an exploration constant.</p>
+
+<p>After a certain depth of Monte Carlo tree is reached, the second stage
+<em>Evaluation</em> (Fig. 1<strong>c</strong>) is performed: current position (leaf node in tree)
+is evaluated using the value network. And the actions (game moves) are selected
+according to the policy network $\pi$ until the end of the game (terminal state),
+which leads to the <em>outcome</em> $\pm r$.</p>
+
+<p>Finally, the <em>Backup</em> is performed (Fig. 1<strong>d</strong>): the rollout statistics are
+updated by adding the outcome in a backward pass through the Monte Carlo tree.
+In the end, the value estimate $Q(s,a)$ becomes a weighted sum of the value
+network and just obtained rollout statistics. At the end of the search the
+algorithm selects an action with the maximum visit count. The authors state
+that this is less sensitive to outliers as compared to maximizing action value.</p>
+
+<p>One more thing: when the number of certain node visits is frequent, the
+successor state is added to the tree. This is called <em>Expansion</em> (Fig. 1<strong>b</strong>).</p>
+
+<p>Coming back to the neural networks you might be pleased to learn that the
+policy network $\pi$ was trained using the REINFORCE algorithm you already
+know. Each iteration consisted of a minibatch of several games played between
+the current policy network $\pi_{\phi}$ and an opponent $\pi_{\phi}-$ using
+parameters from the previous iteration. Every 500 iterations, parameters
+$\phi$ were saved to the opponent pool (so that there is always a variety
+of opponents to choose from).</p>
+
+<p>The value network was trained to approximate the value function of the RL
+policy network $\pi_{\phi}$. This was a regression task. The network was
+trained on a dataset of 30 million positions drawn from the self-play.  There
+are many interesting technical aspects I suggest to read about in the <a href="http://dx.doi.org/10.1038/nature16961">original
+publication</a>. <!-- For instance, invalid game moves are masked out
+during the MCTS simulation so that they are never selected. --></p>
+
+<p>To summarize, Monte Carlo Tree Search was employed in AlphaGo because an
+exhaustive search is simply impossible as the game tree quickly grows too
+large. The idea of MCTS combined with neural networks is conceptually simple
+and provided sufficient computational resources, it wins.</p>
+
+<h3 id="instead-of-conclusion">Instead of Conclusion</h3>
+
+<p>Beating the strongest human player is an amazing feat by the DeepMind team.
+However, we should not forget that behind the scenes there was operating a
+whole data center to support AlphaGo computation. This is about six orders of
+magnitude more power consumption compared to the human brain (~20W)!
+Devising energy-efficient AI hardware is therefore our
+<a href="/project/edge-ai/">next milestone</a> we are heading to.</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2023RL,
+ title   = "Beyond Supervised Learning",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2023",
+ month   = "May",
+ url     = "https://penkovsky.com/neural-networks/beyond/"
+}
+</pre>
+
+<p>If you like the article please consider sharing it.</p>
+
+<h2 id="goodbye">Goodbye?</h2>
+
+<p>I have to admit that after all these days we have barely scratched the surface.
+Yet, I am happy about the journey we have made.  We have seen how to create
+neural networks and to benefit from them; how to estimate model uncertainty;
+how to generate new things. And today we have learned how to continuously make
+decisions. There are so many more ideas to explore! Reinforcement learning is a
+rabbit hole in itself. By the way, did you know that ChatGPT is secretly using
+PPO to get better answers?</p>
+
+<p>Let me know if you have any remarks.</p>
+
+<h2 id="learn-more">Learn More</h2>
+
+<ul>
+<li><a href="https://www.davidsilver.uk/wp-content/uploads/2020/03/pg.pdf">D. Silver. Policy Gradient - Lecture</a></li>
+<li><a href="https://stats.stackexchange.com/questions/221402/understanding-the-role-of-the-discount-factor-in-reinforcement-learning">Understanding the role of the discount factor</a></li>
+<li><a href="https://huggingface.co/learn/deep-rl-course">Hugging Face Deep RL Course</a></li>
+<li><a href="https://journals.sagepub.com/doi/pdf/10.1177/0278364919887447">Learning dexterous in-hand manipulation</a></li>
+<li><a href="https://arxiv.org/abs/1810.05687">Closing the Sim-to-Real Loop: Adapting Simulation Randomization with Real World Experience</a></li>
+<li><a href="https://cse-robotics.engr.tamu.edu/dshell/cs689/papers/jakobi95noise.pdf">Noise and The Reality Gap</a></li>
+<li><a href="https://huggingface.co/blog/deep-rl-pg">Policy Gradient with PyTorch</a></li>
+<li><a href="http://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a></li>
+<li><a href="https://arxiv.org/pdf/2005.12729.pdf">Implementation matters in deep policy gradients</a></li>
+<li><a href="http://dx.doi.org/10.1038/nature16961">Mastering the game of Go with deep neural networks and tree search</a></li>
+<li><a href="http://dx.doi.org/10.1038/nature24270">Mastering the game of Go without human knowledge</a></li>
+</ul>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-1">This is what we were doing all the days before. Supervised learning. That is how it is called. One of my favourite teachers used to quote Molière, &quot;<em>Par ma foi, il y a plus de quarante ans que je dis de la prose, sans que j'en susse rien</em>&quot; (&quot;These forty years now I've been speaking in prose without knowing it!&quot;).
+ <a class="footnote-return" href="#fnref:fn-1"><sup>^</sup></a></li>
+<li id="fn:fn-2">Honestly, I have no clue how a director of AI works at Tesla. But if you Andrej Karpathy and you are reading this, please share your past experiences. I would appreciate.
+ <a class="footnote-return" href="#fnref:fn-2"><sup>^</sup></a></li>
+<li id="fn:fn-3">A trajectory is a repetitive sequence of observations and actions.
+ <a class="footnote-return" href="#fnref:fn-3"><sup>^</sup></a></li>
+<li id="fn:fn-4">In Haskell it is possible to benefit from existing OpenAI Gym environments via <a href="https://github.com/stites/gym-http-api">Gym HTTP API</a>.
+ <a class="footnote-return" href="#fnref:fn-4"><sup>^</sup></a></li>
+<li id="fn:fn-5">See D. Silver's Lecture about <a href="https://www.davidsilver.uk/wp-content/uploads/2020/03/pg.pdf">Policy Gradients</a>.
+ <a class="footnote-return" href="#fnref:fn-5"><sup>^</sup></a></li>
+<li id="fn:fn-6">PyTorch seems to be better at minimizing rather than maximizing.
+ <a class="footnote-return" href="#fnref:fn-6"><sup>^</sup></a></li>
+</ol>
+</div>
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/deep-learning/">Deep Learning</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/haskell/">Haskell</a>
+  
+</div>
+
+
+
+
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/neural-networks/day9/">Day 9: Roaming The Latent Space</a></li>
+        
+        <li><a href="/neural-networks/day8/">Day 8: Model Uncertainty Estimation</a></li>
+        
+        <li><a href="/neural-networks/day7/">Day 7: Real World Deep Learning</a></li>
+        
+        <li><a href="/neural-networks/day6/">Day 6: Saving Energy with Binarized Neural Networks</a></li>
+        
+        <li><a href="/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+    
+    <script>
+      const search_index_filename = "/search.json";
+      const i18n = {
+        'placeholder': "Search...",
+        'no_results': "No results found"
+      };
+      const content_type = {
+        'post': "Posts",
+        'project': "Projects",
+        'publication' : "Publications",
+        'talk' : "Talks"
+        };
+    </script>
+    
+
+    
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/3.2.1/fuse.min.js" integrity="sha256-VzgmKYmhsGNNN4Ph1kMW+BjoYJM2jV5i4IlFoeZA9XI=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/jquery.mark.min.js" integrity="sha256-4HLtjeVgH0eIB3aZ9mLYF6E8oU5chNdjU6p6rrXpl9U=" crossorigin="anonymous"></script>
+    <script src="/js/search.js"></script>
+    
+
+    
+    
+
+  </body>
+</html>
+

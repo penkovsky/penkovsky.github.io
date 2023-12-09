@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>10 Days Of Grad on Bogdan Penkovsky, PhD</title>
+    <link>https://penkovsky.com/categories/10-days-of-grad/</link>
+    <description>Recent content in 10 Days Of Grad on Bogdan Penkovsky, PhD</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>&amp;copy; Bogdan Penkovsky 2023</copyright>
+    <lastBuildDate>Thu, 11 May 2023 21:00:00 +0200</lastBuildDate>
+    
+	<atom:link href="https://penkovsky.com/categories/10-days-of-grad/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Day 10: Beyond Supervised Learning</title>
+      <link>https://penkovsky.com/neural-networks/beyond/</link>
+      <pubDate>Thu, 11 May 2023 21:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/beyond/</guid>
+      <description>&lt;p&gt;Ever wondered how machines defeated the best human Go player Lee Sedol in 2016?
+A historical moment for the game that was previously considered to be very
+tough. What is reinforcement learning that generates so much buzz recently?
+Superhuman performance playing arcade &lt;a href=&#34;https://arxiv.org/abs/1312.5602&#34;&gt;Atari games&lt;/a&gt;, real-time &lt;a href=&#34;https://www.nature.com/articles/s41586-021-04301-9&#34;&gt;Tokamak
+plasma control&lt;/a&gt;, Google &lt;a href=&#34;https://arxiv.org/abs/2211.07357&#34;&gt;data center cooling&lt;/a&gt;, and
+&lt;a href=&#34;https://www.linkedin.com/feed/update/urn:li:activity:7029011854383284224/&#34;&gt;autonomous chemical synthesis&lt;/a&gt; are all the recent achievements behind
+the approach. Let&#39;s dive to learn what empowers &lt;em&gt;deep reinforcement learning&lt;/em&gt;.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Day 9: Roaming The Latent Space</title>
+      <link>https://penkovsky.com/neural-networks/day9/</link>
+      <pubDate>Thu, 11 Aug 2022 10:00:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day9/</guid>
+      <description>Imagine you are a designer and you want a new font: A little bit heavier, with rounder letters, more casual or a little bit more fancy. Could this font be created just by tuning a handful of parameters? Or imagine that you are a fashion designer and you would like to create a new collection as a mix of previous seasons? Or that you are a musician desperately looking for inspiration.</description>
+    </item>
+    
+    <item>
+      <title>Day 8: Model Uncertainty Estimation</title>
+      <link>https://penkovsky.com/neural-networks/day8/</link>
+      <pubDate>Sat, 23 Apr 2022 17:20:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day8/</guid>
+      <description>Wouldn&#39;t it be nice if the model also told us which predictions are not reliable? Can this be done even on unseen data? The good news is yes, and even on new, completely unseen data. It is also simple to implement in practice. A canonical example is in a medical setting. By measuring model uncertainty, the doctor can learn how reliable is their AI-assisted patient&#39;s diagnosis. This allows the doctor to make a better informed decision whether to trust the model or not.</description>
+    </item>
+    
+    <item>
+      <title>Day 7: Real World Deep Learning</title>
+      <link>https://penkovsky.com/neural-networks/day7/</link>
+      <pubDate>Mon, 18 Apr 2022 22:55:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day7/</guid>
+      <description>So far we have explored neural networks almost in the vacuum. Although we have provided some illustrations for better clarity, relying an existing framework would allow us to benefit from the knowledge of previous contributors. One such framework is called Hasktorch. Among the practical reasons to use Hasktorch is relying on a mature Torch Tensor library. Another good reason is strong GPU acceleration, which is necessary for almost any serious deep learning project.</description>
+    </item>
+    
+    <item>
+      <title>Day 6: Saving Energy with Binarized Neural Networks</title>
+      <link>https://penkovsky.com/neural-networks/day6/</link>
+      <pubDate>Wed, 22 Jan 2020 07:30:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day6/</guid>
+      <description>Last week Apple has acquired XNOR.ai startup for amazing $200 million. The startup is known for promoting binarized neural network algorithms to save the energy and computational resources. That is definitely a way to go for mobile devices, and Apple just acknowledged that it is a great deal for them too. I feel now is a good time to explain what binarized neural networks are so that you can better appreciate their value for the industry.</description>
+    </item>
+    
+    <item>
+      <title>Day 5: Convolutional Neural Networks Tutorial</title>
+      <link>https://penkovsky.com/neural-networks/day5/</link>
+      <pubDate>Sun, 24 Nov 2019 18:20:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day5/</guid>
+      <description>Today we will talk about one of the most important deep learning architectures, the &amp;quot;master algorithm&amp;quot; in computer vision. That is how François Chollet, author of Keras, calls convolutional neural networks (CNNs). Convolutional network is an architecture that, like other artificial neural networks, has a neuron as its core building block. It is also differentiable, so the network is conveniently trained via backpropagation. The distinctive feature of CNNs, however, is the connection topology, resulting in sparsely connected convolutional layers with neurons sharing their weights.</description>
+    </item>
+    
+    <item>
+      <title>Day 4: The Importance Of Batch Normalization</title>
+      <link>https://penkovsky.com/neural-networks/day4/</link>
+      <pubDate>Sat, 29 Jun 2019 15:01:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day4/</guid>
+      <description>Which purpose do neural networks serve for? Neural networks are learnable models. Their ultimate goal is to approach or even surpass human cognitive abilities. As Richard Sutton puts it, &#39;The biggest lesson that can be read from 70 years of AI research is that general methods that leverage computation are ultimately the most effective&#39;. In his essay, Sutton argues that only models without encoded human-knowledge can outperform human-centeric approaches. Indeed, neural networks are general enough and they leverage computation.</description>
+    </item>
+    
+    <item>
+      <title>Day 3: Haskell Guide To Neural Networks</title>
+      <link>https://penkovsky.com/neural-networks/day3/</link>
+      <pubDate>Sun, 17 Feb 2019 01:10:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day3/</guid>
+      <description>Now that we have seen how neural networks work, we realize that understanding of the gradients flow is essential for survival. Therefore, we will revise our strategy on the lowest level. However, as neural networks become more complicated, calculation of gradients by hand becomes a murky business. Yet, fear not young padawan, there is a way out! I am very excited that today we will finally get acquainted with automatic differentiation, an essential tool in your deep learning arsenal.</description>
+    </item>
+    
+    <item>
+      <title>Day 2: What Do Hidden Layers Do?</title>
+      <link>https://penkovsky.com/neural-networks/day2/</link>
+      <pubDate>Mon, 04 Feb 2019 17:15:00 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day2/</guid>
+      <description>In the previous article, we have introduced the concept of learning in a single-layer neural network. Today, we will learn about the benefits of multi-layer neural networks, how to properly design and train them.
+Sometimes I discuss neural networks with students who have just started discovering machine learning techniques:
+&amp;quot;I have built a handwritten digits recognition network. But my accuracy is only Y.&amp;quot;
+&amp;quot;It seems to be much less than state-of-the-art&amp;quot;, I contemplate.</description>
+    </item>
+    
+    <item>
+      <title>Day 1: Learning Neural Networks The Hard Way</title>
+      <link>https://penkovsky.com/neural-networks/day1/</link>
+      <pubDate>Tue, 11 Dec 2018 16:22:28 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/day1/</guid>
+      <description>Neural networks is a topic that recurrently appears throughout my life. Once, when I was a BSc student, I got obsessed with the idea to build an &amp;quot;intelligent&amp;quot; machine1. I spent a couple of sleepless nights thinking. I read a few essays shedding some light on this philosophical subject, among which the most prominent, perhaps, stand Marvin Minsky&#39;s writings2. As a result, I came across the neural networks idea. It was 2010, and deep learning was not nearly as popular as it is now3.</description>
+    </item>
+    
+  </channel>
+</rss>
