@@ -13,6 +13,20 @@
     
     
     <item>
+      <title>Meta-Learning</title>
+      <link>https://penkovsky.com/neural-networks/meta-learning/</link>
+      <pubDate>Sat, 16 Dec 2023 14:20:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/meta-learning/</guid>
+      <description>&lt;p&gt;Breaking news! Artificial intelligence is taking over the world. Or it
+is not? Here is what you need to know about a deeper concept
+of meta-learning.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Meta-learning&lt;/em&gt; is learning about learning.
+Learning how to learn belongs here too.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>Day 10: Beyond Supervised Learning</title>
       <link>https://penkovsky.com/neural-networks/beyond/</link>
       <pubDate>Thu, 11 May 2023 21:00:00 +0200</pubDate>

@@ -11,6 +11,191 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Meta-Learning</title>
+      <link>https://penkovsky.com/neural-networks/meta-learning/</link>
+      <pubDate>Sat, 16 Dec 2023 14:20:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/meta-learning/</guid>
+      <description>&lt;p&gt;Breaking news! Artificial intelligence is taking over the world. Or it
+is not? Here is what you need to know about a deeper concept
+of meta-learning.&lt;/p&gt;
+
+&lt;p&gt;&lt;em&gt;Meta-learning&lt;/em&gt; is learning about learning.
+Learning how to learn belongs here too.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Table of Contents&lt;/strong&gt;&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#models-analyzing-other-models&#34;&gt;Models Analyzing Other Models&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#updating-neural-network-during-run&#34;&gt;Updating Neural Network During
+Run&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#self-modifying-learning-algorithms&#34;&gt;Self-Modifying Learning Algorithms&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#conclusion&#34;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The first thing that pops to mind is &lt;a href=&#34;https://en.wikipedia.org/wiki/Automated_machine_learning&#34;&gt;AutoML&lt;/a&gt;,
+a search for the best model architecture. It often includes
+data preparation, feature engineering, and hyperparameter search.
+Companies like Google adore this approach: First, AutoML requires
+a lot of computational resources, and companies like Google have it.
+Second, AutoML can make machine learning accessible to non-experts,
+enabling companies like Google to sell their compute power to
+more customers.&lt;/p&gt;
+
+&lt;p&gt;However, meta-learning is more than AutoML. It is a broad subject.
+Here are the articles that have marked my thinking.&lt;/p&gt;
+
+&lt;h2 id=&#34;models-analyzing-other-models&#34;&gt;Models Analyzing Other Models&lt;/h2&gt;
+
+&lt;p&gt;In &lt;a href=&#34;https://openreview.net/pdf?id=cmJiEqniEc&#34;&gt;this work&lt;/a&gt;, Langosco and colleagues
+detect whether a &lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;neural network&lt;/a&gt; has a &lt;em&gt;backdoor&lt;/em&gt;.
+A backdoor is a way to modify the input to force a network
+to produce an undesirable output. As an extreme example, imagine
+a self-driving car that crashes into another car after seeing a malicious
+drawing on the road. That drawing would be a neural network&#39;s input
+that was misinterpreted to cause a bad decision, which itself led to a crash.
+And a backdoor in this case could be a susceptibility of a neural
+network to a particular form or texture.&lt;/p&gt;
+
+&lt;p&gt;Therefore, you see, it could be quite hard to manually design such an algorithm
+that would detect if a neural network has a backdoor in it.
+So it seems natural to use another neural network (which we call a
+&lt;em&gt;meta-model&lt;/em&gt;) to analyze the weights of the first one and to detect whether
+there is a built-in backdoor or not.&lt;/p&gt;
+
+&lt;p&gt;I think the importance of this work is not only
+technical, it also raises the awareness about the
+challenges that we &lt;em&gt;will&lt;/em&gt; face when relying on AI. In 2023 AI is
+often defined as &amp;quot;allowing computers to learn and solve problems
+almost like a person&amp;quot; (&lt;a href=&#34;https://www.bbc.com/news/technology-65855333&#34;&gt;BBC, 01/11/2023&lt;/a&gt;). Which, to be honest, has
+almost nothing to do with intelligence&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;. And even though
+there is no imminent &lt;a href=&#34;https://en.wikipedia.org/wiki/The_Terminator&#34;&gt;Terminator&lt;/a&gt; danger, we need
+to beware of malicious human actors out there.&lt;/p&gt;
+
+&lt;p&gt;Here are a &lt;a href=&#34;https://arxiv.org/abs/2301.12780&#34;&gt;few&lt;/a&gt; &lt;a href=&#34;https://arxiv.org/abs/2002.05688&#34;&gt;more&lt;/a&gt; &lt;a href=&#34;https://arxiv.org/abs/2110.15288&#34;&gt;examples&lt;/a&gt;
+&lt;a href=&#34;https://arxiv.org/abs/2002.11448&#34;&gt;of&lt;/a&gt; models analyzing other models.&lt;/p&gt;
+
+&lt;h2 id=&#34;updating-neural-network-during-run&#34;&gt;Updating Neural Network During Run&lt;/h2&gt;
+
+&lt;p&gt;From the perspective of &lt;a href=&#34;https://penkovsky.com/neural-networks/beyond/&#34;&gt;reinforcement learning&lt;/a&gt;,
+meta-learning is about agents that learn from ongoing experience. For instance,
+a robotic dog was trained to walk on the grass. Now, as it crosses a patch of
+sandy terrain, can it adapt its walking gait?
+&lt;a href=&#34;https://arxiv.org/abs/2007.02686&#34;&gt;Najarro and Risi&lt;/a&gt; suggest a recipe of an agent that
+modifies its behavior based on &lt;em&gt;local&lt;/em&gt; learning. That is, based on the
+&lt;a href=&#34;https://penkovsky.com/neural-networks/day1/&#34;&gt;neural network&lt;/a&gt; &lt;a href=&#34;https://penkovsky.com/neural-networks/day2/&#34;&gt;layers&#39;&lt;/a&gt;
+inputs &lt;em&gt;and&lt;/em&gt; outputs. Using the Hebbian rule (&amp;quot;what fires together wires
+together&amp;quot;), the network is updated on the fly. Evolutionary techniques
+are employed to train such agents. In a remarkable demonstration, a robot
+manages to walk despite one of its legs being damaged. This would be hardly
+possible with neural networks having static weights (that is, &amp;quot;normal&amp;quot; neural
+networks).&lt;/p&gt;
+
+&lt;p&gt;To capture invariant object representations, &lt;a href=&#34;https://www.nature.com/articles/s41593-023-01460-y&#34;&gt;Halvagal and Zenke&lt;/a&gt;
+propose to augment the Hebbian rule to include a predictive term. &amp;quot;It cancels
+when the neural activity does not change and, therefore, accurately predicts
+future activity,&amp;quot; the authors explain.
+The idea resonates with HTM neurons from &lt;a href=&#34;https://link.springer.com/content/pdf/10.1007/s42452-021-04715-0.pdf&#34;&gt;thousand brains theory&lt;/a&gt;,
+originally conceptualized by &lt;a href=&#34;https://www.youtube.com/watch?v=-EVqrDlAqYo&amp;amp;t=2075s&#34;&gt;Jeff Hawkins&lt;/a&gt;. Each HTM neuron
+predicts its activation. The hypothesis claims that these predictions
+of expected inputs allow brains to filter out what has changed in the
+environment and what is immediately important to notice. Like a branch cracking.
+Suddenly, a wild animal detects a threat in the jungle. Such alertness is
+essential for survival in a complex environment.&lt;/p&gt;
+
+&lt;p&gt;&amp;quot;So how about &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;transformers&lt;/a&gt;?&amp;quot; you might ask, &amp;quot;They use attention.&amp;quot;
+Yes, transformers technically belong to the category of dynamic neural networks,
+too. What happens with GPT models (&lt;em&gt;T&lt;/em&gt; is for transformer of course) is that
+when you provide a text prompt, it serves as a context. The &lt;em&gt;attention&lt;/em&gt;
+mechanism underpinning the transformer architecture is transforming the neural
+network weights, as a function of that context. And that is what makes
+transformers flexible.&lt;/p&gt;
+
+&lt;p&gt;By the way don&#39;t be misled thinking that the attention mechanism/dynamically
+updated weights is the reason why transformer models are called &lt;em&gt;generative&lt;/em&gt;!
+Generative models already exist for decades. Other examples are generative
+adversarial networks (GANs), auto-encoders,
+&lt;a href=&#34;https://penkovsky.com/neural-networks/day9/&#34;&gt;variational auto-encoders&lt;/a&gt; (VAEs), Hidden Markov
+models, etc. The actual reason why all those models are called generative is
+learning a &lt;a href=&#34;https://en.wikipedia.org/wiki/Generative_model&#34;&gt;joint distribution&lt;/a&gt;.
+Combining a generative model with neural networks is now called
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Generative_artificial_intelligence&#34;&gt;Generative AI&lt;/a&gt; (not so elegant, as you can see).
+It just happens that the transformer architecture is popular,
+and is the first thing associated with &amp;quot;Generative AI&amp;quot; these days.&lt;/p&gt;
+
+&lt;p&gt;Coming back to transformers, &lt;a href=&#34;https://arxiv.org/abs/2109.02869&#34;&gt;Tang and Ha&lt;/a&gt; demonstrate what they call
+a &lt;em&gt;sensory neuron&lt;/em&gt;. Based on the attention mechanism, their agents
+trained by reinforcement learning are able to quickly re-adapt to the
+change of order of sensory stimuli. That is, it does not matter in which
+order the observation inputs are provided. Moreover, their agent is not confused
+even when the majority of the inputs are masked out.&lt;/p&gt;
+
+&lt;h2 id=&#34;self-modifying-learning-algorithms&#34;&gt;Self-Modifying Learning Algorithms&lt;/h2&gt;
+
+&lt;p&gt;Perhaps this concept is the pinnacle of meta-learning. What can be more
+appealing than learning algorithms that modify themselves?
+If updating a neural network during run was a &lt;em&gt;first-order&lt;/em&gt; meta-learning,
+then updating neural networks that update neural networks would be
+already a &lt;em&gt;second-order&lt;/em&gt;. And by induction, neural networks that update their own
+weights, as is done for example by &lt;a href=&#34;https://arxiv.org/abs/2202.05780&#34;&gt;Irie and colleagues&lt;/a&gt;, can be
+considered an &lt;em&gt;infinite-order&lt;/em&gt; meta-learning.&lt;/p&gt;
+
+&lt;p&gt;Don&#39;t agree? Then shoot me an email!&lt;/p&gt;
+
+&lt;h2 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h2&gt;
+
+&lt;p&gt;The family of meta-learning concepts is vast. This article has
+touched a few notable examples. However, as the field continues to
+evolve, more interesting work is to appear.
+I don&#39;t know how far we are from the so-called &amp;quot;artificial general
+intelligence&amp;quot;, however, its distinctive characteristic is extreme adaptivity.
+And adaptivity is something that is currently explored by meta-learning
+researchers.&lt;/p&gt;
+
+&lt;h2 id=&#34;citation&#34;&gt;Citation&lt;/h2&gt;
+
+&lt;pre&gt;
+@article{penkovsky2023meta,
+ title   = &#34;Meta-Learning&#34;,
+ author  = &#34;Penkovsky, Bogdan&#34;,
+ journal = &#34;penkovsky.com&#34;,
+ year    = &#34;2023&#34;,
+ month   = &#34;December&#34;,
+ url     = &#34;https://penkovsky.com/neural-networks/meta-learning/&#34;
+}
+&lt;/pre&gt;
+
+&lt;!-- https://www.bbc.com/news/technology-65855333 https://archive.is/BUSha --&gt;
+
+&lt;!--
+
+--&gt;
+
+&lt;!-- https://archive.is/J2QPq --&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-1&#34;&gt;&lt;p&gt;I believe, a truly &amp;quot;intelligent&amp;quot; machine has to be adaptive at least.
+And probably it has—in some sense—to be &lt;em&gt;embodied&lt;/em&gt; as well.
+What we witness today with ChatGPT is a &lt;em&gt;text-to-text&lt;/em&gt; engine. It&#39;s more
+about machine translation than intelligence. Once I asked it to create a
+personal training plan for swimming. I&#39;ve got some result, quite far from
+what I specified. Does ChatGPT even &lt;em&gt;know&lt;/em&gt; about how to be immersed in the
+water and what it may feel like? Certainly not. It managed to
+&amp;quot;translate&amp;quot; existing articles and compile a training plan of some kind.
+I doubt it could ever substitute a coach who can actually swim.&lt;/p&gt;
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description>
+    </item>
+    
+    <item>
       <title>Day 10: Beyond Supervised Learning</title>
       <link>https://penkovsky.com/neural-networks/beyond/</link>
       <pubDate>Thu, 11 May 2023 21:00:00 +0200</pubDate>
@@ -5135,159 +5320,6 @@ a message.&lt;/p&gt;
       <guid>https://penkovsky.com/publication/medical-bnn/</guid>
       <description>&lt;p&gt;The results are very encouraging to reduce efficiently
 memory requirement of edge devices and thus to obtain low energy hardware. This is particularly useful for medical applications where little energy is available.&lt;/p&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Connecting To Raspberry Pi Over WiFi</title>
-      <link>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</link>
-      <pubDate>Sat, 25 Apr 2020 16:03:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</guid>
-      <description>
-
-&lt;p&gt;Raspberry Pi is great. It is a small and cheap computer that can be used for a
-variety of projects.  Sometimes you may wish to remotely control a Rasperry Pi
-that is in your local WiFi network. This is possible and even quite easy.&lt;/p&gt;
-
-&lt;p&gt;We will use a Secure Shell aka &lt;a href=&#34;https://en.wikipedia.org/wiki/Secure_Shell&#34;&gt;SSH&lt;/a&gt;
-to establish a remote connection. I assume that you have
-&lt;a href=&#34;https://gist.github.com/masterdezign/5370fdfb113e84d39314f71281d3d7cb&#34;&gt;previously connected&lt;/a&gt;
-your Raspberry Pi board to a WiFi network. I also assume
-that you are connecting from a Linux or OS X machine.&lt;/p&gt;
-
-&lt;h2 id=&#34;step-1-enable-ssh-on-raspberry-pi&#34;&gt;Step 1: Enable SSH On Raspberry Pi&lt;/h2&gt;
-
-&lt;p&gt;There are several methods to &lt;a href=&#34;https://www.raspberrypi.org/documentation/remote-access/ssh/&#34;&gt;enable SSH access&lt;/a&gt;,
-including graphical user interface (GUI).
-However, I find the easiest method is without even turning on your Raspi board.
-This also does not require any GUI to be installed.
-We enable SSH simply by creating a blank
-file named &lt;code&gt;ssh&lt;/code&gt; on the Raspbian OS boot partition.
-That is on the memory card where Raspbian OS is intalled.&lt;/p&gt;
-
-&lt;p&gt;So insert the Raspi SD card in your computer.
-Assuming that the SD card maps to two devices&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;, &lt;code&gt;/dev/mmcblk0p1&lt;/code&gt; and
-&lt;code&gt;/dev/mmcblk0p2&lt;/code&gt;, the first of them usually corresponds to the &lt;code&gt;/boot&lt;/code&gt;
-partition. Below, we mount the partition to an existing directory
-&lt;code&gt;/mnt/usbstick&lt;/code&gt;. Finally, we create (&amp;quot;touch&amp;quot;) a blank file &lt;code&gt;ssh&lt;/code&gt; within the directory.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;sudo mount /dev/mmcblk0p1 /mnt/usbstick
-cd /mnt/usbstick
-sudo touch ssh&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Afterwards, before inserting the memory card back into Raspberry Pi,
-we unmount the partition:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;cd
-sudo umount /dev/mmcblk0p1&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Done. Now, during its boot, Raspbian will find the &lt;code&gt;ssh&lt;/code&gt; file
-and will allow SSH access.&lt;/p&gt;
-
-&lt;h2 id=&#34;step-2-discover-ip-address-of-raspberry-pi&#34;&gt;Step 2: Discover IP Address of Raspberry Pi&lt;/h2&gt;
-
-&lt;p&gt;One way is to boot your Raspi, open terminal
-and type:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ hostname -I
-192.168.0.13&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;If this works for you, note the address and skip
-directly to &lt;a href=&#34;#step-3-connect-to-raspi&#34;&gt;Step 3&lt;/a&gt;.
-However, if there is no monitor connected to your Raspi board
-this is not a problem at all. You can discover connected devices on
-your WiFi network. First, learn your network address range
-and then scan it for connected devices.&lt;/p&gt;
-
-&lt;h3 id=&#34;network-information&#34;&gt;Network Information&lt;/h3&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;ip addr&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Note that on some machines &lt;code&gt;ip addr&lt;/code&gt; command is called &lt;code&gt;ifconfig&lt;/code&gt;.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;This will provide the information about network interfaces.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;1: lo: &amp;lt;LOOPBACK,UP,LOWER_UP&amp;gt; mtu 65536 qdisc noqueue state UNKNOWN group default qlen 1000
-    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
-    inet 127.0.0.1/8 scope host lo
-       valid_lft forever preferred_lft forever
-    inet6 ::1/128 scope host 
-       valid_lft forever preferred_lft forever
-2: wlp2s0: &amp;lt;BROADCAST,MULTICAST,UP,LOWER_UP&amp;gt; mtu 1500 qdisc noqueue state UP group default qlen 1000
-    link/ether 9c:b6:d0:8e:ad:19 brd ff:ff:ff:ff:ff:ff
-    inet 192.168.0.11/24 brd 192.168.0.255 scope global dynamic noprefixroute wlp2s0
-       valid_lft 85985sec preferred_lft 85985sec
-    inet6 fe80::42f4:2e5a:a6b2:9232/64 scope link noprefixroute 
-       valid_lft forever preferred_lft forever
-...&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Our computer has local IP address 192.168.0.11.
-Therefore, our WiFi network has IPs starting with &lt;code&gt;192.168.0.&lt;/code&gt;.&lt;/p&gt;
-
-&lt;h3 id=&#34;scan-your-wifi-network&#34;&gt;Scan Your WiFi Network&lt;/h3&gt;
-
-&lt;p&gt;Install &lt;a href=&#34;https://nmap.org/&#34;&gt;nmap&lt;/a&gt; using your system&#39;s package manager.
-For example, on Arch Linux:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;sudo pacman -S nmap&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Scan with&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ nmap -sn 192.168.0.0/24
-...
-Nmap done: 256 IP addresses (3 hosts up) scanned in 2.52 seconds&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;If your Raspi board was off, boot it now, wait until it connects
-and scan the network again.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ nmap -sn 192.168.0.0/24
-Starting Nmap 7.80 ( https://nmap.org ) at 2020-04-25 16:03 CEST
-Nmap scan report for 192.168.0.1
-Host is up (0.044s latency).
-Nmap scan report for 192.168.0.5
-Host is up (0.019s latency).
-Nmap scan report for 192.168.0.11
-Host is up (0.000066s latency).
-Nmap scan report for 192.168.0.13
-Host is up (0.016s latency).
-Nmap done: 256 IP addresses (4 hosts up) scanned in 2.37 seconds&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;The newly appeared host is your board.&lt;/p&gt;
-
-&lt;h2 id=&#34;step-3-connect-to-raspi&#34;&gt;Step 3: Connect To Raspi&lt;/h2&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ ssh pi@192.168.0.13
-pi@192.168.0.13&amp;#39;s password: 
-Linux raspberrypi 4.19.75-v7+ #1270 SMP Tue Sep 24 18:45:11 BST 2019 armv7l
-
-The programs included with the Debian GNU/Linux system are free software;
-the exact distribution terms for each program are described in the
-individual files in /usr/share/doc/*/copyright.
-
-Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
-permitted by applicable law.
-Last login: Sat Apr 25 16:03:26 2020&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Now, we can control the board or even exchange files with &lt;code&gt;scp&lt;/code&gt;.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;$ pi@raspberrypi:~ $ whoami
-pi&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Hint: do not forget to change the default user password:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-none&#34; data-lang=&#34;none&#34;&gt;sudo passwd pi&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;Check &lt;code&gt;dmesg|tail&lt;/code&gt; output to see the newly connected devices.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
 </description>
     </item>
     
