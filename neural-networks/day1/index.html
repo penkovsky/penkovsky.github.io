@@ -99,7 +99,7 @@
   
   <meta property="article:published_time" content="2018-12-11T16:22:28&#43;01:00">
   
-  <meta property="article:modified_time" content="2023-06-06T21:20:35&#43;01:00">
+  <meta property="article:modified_time" content="2023-12-22T10:28:00&#43;01:00">
   
 
   
@@ -260,8 +260,8 @@
         Last updated on
     
     <meta content="2018-12-11 16:22:28 &#43;0100 CET" itemprop="datePublished">
-    <time datetime="2023-06-06 21:20:35 &#43;0100 &#43;0100" itemprop="dateModified">
-      Jun 6, 2023
+    <time datetime="2023-12-22 10:28:00 &#43;0100 CET" itemprop="dateModified">
+      Dec 22, 2023
     </time>
   </span>
   <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
@@ -271,7 +271,7 @@
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    15 min read
+    16 min read
   </span>
   
 
@@ -374,9 +374,9 @@ Anyone can develop an intuition about neural networks!</p>
 
 <h2 id="a-word-on-haskell">A Word On Haskell</h2>
 
-<p>This series of posts practically illustrate all the concepts
-in Haskell programming language.
-To motivate you, here are some Q &amp; A you always wanted to know.</p>
+<p>This series of posts will illustrate some concepts
+using Haskell programming language as an explanation tool.
+To motivate you, here are some Q &amp; A.</p>
 
 <p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/79l5y8/p_haskell_flexible_neural_networks_work_in/dp4a9az">Q:</a>
 Is there anything that makes Haskell particularly good for Neural Networks or are you simply doing it because you prefer to use Haskell?</strong></p>
@@ -390,12 +390,30 @@ As I am completely new to Haskell, would like to know what are the benefits of u
 <p><strong>A:</strong> The benefits of using Haskell:</p>
 
 <ol>
-<li>It is much easier to reason about what your program is doing.</li>
-<li>Great when refactoring existing code base.</li>
 <li>Haskell shapes your thinking towards problem solving
-in a pragmatic way.</li>
-<li>Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast">fast</a>.</li>
+in a <strong>pragmatic way</strong>.</li>
+<li>Compared to Python or many other languages, it is much easier to reason about
+what your program is doing. Haskell type signatures do magic to developer's brain.</li>
+<li>Thanks to purity, it is <strong>amazingly easy to refactor</strong> existing code base.</li>
+<li>Less bugs overall (even though, I must confess, I still managed to produce some).</li>
+<li>As with <a href="https://en.wikipedia.org/wiki/C++">some other</a> compiled languages,
+Haskell programs are <a href="https://stackoverflow.com/questions/35027952/why-is-haskell-ghc-so-darn-fast">fast</a>,
+even without sacrificing what was said above.</li>
+<li>Finally, mathematical purity helps to avoid <a href="https://www.reddit.com/r/haskell/comments/39qx15/is_this_the_right_way_to_understand_haskells/">success at all costs</a>.</li>
 </ol>
+
+<p>That being said, here comes <big><strong>a big fat disclaimer:</strong></big></p>
+
+<blockquote>
+<p><strong>WARNING!</strong></p>
+
+<p>If you are only looking to start with deep learning, you shall prefer
+<a href="https://python.org">Python</a>.
+Python has a large library and is a de facto tool in the machine learning
+community. If you do not know which language to choose, stick to Python.</p>
+</blockquote>
+
+<p>You've been warned.</p>
 
 <p><strong><a href="https://www.reddit.com/r/MachineLearning/comments/a57sqy/d_article_series_on_neural_networks/ebkmzu9">Q:</a>
 I figured my lack of Haskell knowledge would make it hard to read, but your code examples still make sense to me.</strong></p>
@@ -1035,10 +1053,12 @@ MathJax.Hub.Config({
 
     <p class="powered-by">
 
-      <a rel="me" href="https://sigmoid.social/@penkovsky">&copy; Bogdan Penkovsky 2023</a> &middot; 
+      &copy; Bogdan Penkovsky 2023 
+
+      &nbsp;<a rel="me" href="https://sigmoid.social/@penkovsky"><i class="fa fa-send"></i></a> &nbsp;
 
       Powered by
-      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>.
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>
 
       <span class="pull-right" aria-hidden="true">
         <a href="#" id="back_to_top">

@@ -29,8 +29,7 @@ Learning how to learn belongs here too.&lt;/p&gt;
 
 &lt;ol&gt;
 &lt;li&gt;&lt;a href=&#34;#models-analyzing-other-models&#34;&gt;Models Analyzing Other Models&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#updating-neural-network-during-run&#34;&gt;Updating Neural Network During
-Run&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#updating-neural-network-during-run&#34;&gt;Updating Neural Network During Run&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#self-modifying-learning-algorithms&#34;&gt;Self-Modifying Learning Algorithms&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;#conclusion&#34;&gt;Conclusion&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
@@ -81,8 +80,17 @@ to beware of malicious human actors out there.&lt;/p&gt;
 
 &lt;h2 id=&#34;updating-neural-network-during-run&#34;&gt;Updating Neural Network During Run&lt;/h2&gt;
 
+&lt;p&gt;Typical neural network weights are static. That means that once the network is
+trained, the weights are fixed and the network stops to learn.
+On the other hand, our brains continue to learn during the whole life.
+And it makes sense since our brains have evolved to survive in ever-changing
+environment. This ability is largely due to the brain&#39;s plasticity, which
+enables it to form new connections. What if artificial neural networks were
+plastic?&lt;/p&gt;
+
 &lt;p&gt;From the perspective of &lt;a href=&#34;https://penkovsky.com/neural-networks/beyond/&#34;&gt;reinforcement learning&lt;/a&gt;,
-meta-learning is about agents that learn from ongoing experience. For instance,
+meta-learning is about agents that learn from ongoing experience, even
+without explicit reward signal. For instance,
 a robotic dog was trained to walk on the grass. Now, as it crosses a patch of
 sandy terrain, can it adapt its walking gait?
 &lt;a href=&#34;https://arxiv.org/abs/2007.02686&#34;&gt;Najarro and Risi&lt;/a&gt; suggest a recipe of an agent that
