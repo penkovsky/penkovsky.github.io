@@ -474,6 +474,23 @@ a[data-fancybox] img {
   text-decoration-line: underline;
 }
 
+/* Light text - for dark backgrounds. */
+
+.hero-overlay .hero-lead .light {
+  color: #f1f1f1;
+}
+
+.hero-overlay .light {
+  color: white;
+}
+
+.hero-overlay .hero-lead .light a {
+  color: #ddd;
+  text-decoration-line: underline;
+}
+
+/* //Light text */
+
 .hero-overlay .btn-large {
   font-size: 1.1rem;
 }
