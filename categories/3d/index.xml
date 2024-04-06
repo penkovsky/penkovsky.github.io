@@ -14,10 +14,10 @@
     
     <item>
       <title>A Quadcopter From Scratch</title>
-      <link>https://penkovsky.com/homelab/quadcopter/</link>
+      <link>https://penkovsky.com/post/quad/</link>
       <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/quadcopter/</guid>
+      <guid>https://penkovsky.com/post/quad/</guid>
       <description>Recently NASA has made the first powered flight on Mars. They have deployed a drone called Ingenuity costing about $85 million. The helicopter was able to fly on about ten meters altitude (as of May, 7) over the surface of the Red Planet.
 Coincidently, I have also built a flying drone. This looked like a good challenge and an opportunity to learn about unmanned aerial vehicles (UAVs).
 Here is what I learned.</description>
@@ -25,10 +25,10 @@ Here is what I learned.</description>
     
     <item>
       <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
-      <link>https://penkovsky.com/homelab/beatle/</link>
+      <link>https://penkovsky.com/post/beatle/</link>
       <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/beatle/</guid>
+      <guid>https://penkovsky.com/post/beatle/</guid>
       <description>&lt;p&gt;Here is a step by step tutorial on how to design objects for 3D printing using
 OpenSCAD. We illustrate the design process by creating a micro quadcopter
 frame. This small drone bears the code name of Beatle-1.  After following the

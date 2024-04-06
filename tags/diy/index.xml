@@ -14,20 +14,20 @@
     
     <item>
       <title>A Quadcopter From Scratch: FPV Upgrade</title>
-      <link>https://penkovsky.com/homelab/fpv-quad/</link>
+      <link>https://penkovsky.com/post/fpv-quad/</link>
       <pubDate>Thu, 17 Feb 2022 00:10:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/fpv-quad/</guid>
+      <guid>https://penkovsky.com/post/fpv-quad/</guid>
       <description>It has been a while since I was thinking about upgrading my drone to a first person view version aka FPV. The idea was placing a camera for video streaming in real time. My first attempt was with a small raspi board and streaming image data from a raspi camera via WiFi. Because of the latency, range, and complicated setup this solution was not very practical.
 Therefore, I decided to make a &amp;quot;real&amp;quot; FPV drone.</description>
     </item>
     
     <item>
       <title>A Quadcopter From Scratch</title>
-      <link>https://penkovsky.com/homelab/quadcopter/</link>
+      <link>https://penkovsky.com/post/quad/</link>
       <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/quadcopter/</guid>
+      <guid>https://penkovsky.com/post/quad/</guid>
       <description>Recently NASA has made the first powered flight on Mars. They have deployed a drone called Ingenuity costing about $85 million. The helicopter was able to fly on about ten meters altitude (as of May, 7) over the surface of the Red Planet.
 Coincidently, I have also built a flying drone. This looked like a good challenge and an opportunity to learn about unmanned aerial vehicles (UAVs).
 Here is what I learned.</description>
@@ -35,10 +35,10 @@ Here is what I learned.</description>
     
     <item>
       <title>3D Printing Tutorial: Designing a Micro Drone Frame</title>
-      <link>https://penkovsky.com/homelab/beatle/</link>
+      <link>https://penkovsky.com/post/beatle/</link>
       <pubDate>Sun, 21 Mar 2021 18:40:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/beatle/</guid>
+      <guid>https://penkovsky.com/post/beatle/</guid>
       <description>&lt;p&gt;Here is a step by step tutorial on how to design objects for 3D printing using
 OpenSCAD. We illustrate the design process by creating a micro quadcopter
 frame. This small drone bears the code name of Beatle-1.  After following the
@@ -47,19 +47,19 @@ tutorial you will be able to conceive your own designs for 3D printing.&lt;/p&gt
     
     <item>
       <title>Making Your Self-Driving Robot</title>
-      <link>https://penkovsky.com/homelab/self-driving-robot/</link>
+      <link>https://penkovsky.com/post/self-driving-robot/</link>
       <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/self-driving-robot/</guid>
+      <guid>https://penkovsky.com/post/self-driving-robot/</guid>
       <description>We will build an autonomous robot. Captured by robot&#39;s camera, video stream will be analyzed by a neural network. The network will be running on the onboard Raspberry Pi that will steer the robot. Before you start with the project, I want you to answer two questions. First, how everything will be attached mechanically? Second, what will be the energy source? While your autonomous robot can work from a cardboard box, having a mechanically sound chassis will greatly improve the result on the AI training stage.</description>
     </item>
     
     <item>
       <title>Connecting To Raspberry Pi Over WiFi</title>
-      <link>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</link>
+      <link>https://penkovsky.com/post/raspi-ssh-over-wifi/</link>
       <pubDate>Sat, 25 Apr 2020 16:03:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</guid>
+      <guid>https://penkovsky.com/post/raspi-ssh-over-wifi/</guid>
       <description>Raspberry Pi is great. It is a small and cheap computer that can be used for a variety of projects. Sometimes you may wish to remotely control a Rasperry Pi that is in your local WiFi network. This is possible and even quite easy.
 We will use a Secure Shell aka SSH to establish a remote connection. I assume that you have previously connected your Raspberry Pi board to a WiFi network.</description>
     </item>

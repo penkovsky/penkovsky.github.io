@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/post/beatle/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/post/beatle/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/post/beatle/">
+  <meta property="og:title" content="3D Printing Tutorial: Designing a Micro Drone Frame | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing."><meta property="og:image" content="https://penkovsky.com/img/posts/beatle1/beatle-1.png">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2021-03-21T18:40:00&#43;02:00">
+  
+  <meta property="article:modified_time" content="2021-03-21T18:40:00&#43;02:00">
+  
+
+  
+
+  
+
+  <title>3D Printing Tutorial: Designing a Micro Drone Frame | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/post">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>AI</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/#talks">
+            
+            <span>Talks</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/beatle1/beatle-1.png" class="article-banner" itemprop="image">
+  
+
+  
+</div>
+
+
+
+  <div class="article-container">
+    <h1 itemprop="name">3D Printing Tutorial: Designing a Micro Drone Frame</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+    <meta content="2021-03-21 18:40:00 &#43;0200 &#43;0200" itemprop="datePublished">
+    <time datetime="2021-03-21 18:40:00 &#43;0200 &#43;0200" itemprop="dateModified">
+      Mar 21, 2021
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    12 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/3d/">3D</a>, 
+    
+    <a href="https://penkovsky.com/categories/homelab/">Homelab</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      <p>Here is a step by step tutorial on how to design objects for 3D printing using
+OpenSCAD. We illustrate the design process by creating a micro quadcopter
+frame. This small drone bears the code name of Beatle-1.  After following the
+tutorial you will be able to conceive your own designs for 3D printing.</p>
+
+<hr />
+
+<p><strong>Contents</strong></p>
+
+<ol>
+<li><a href="#3d-printing-intro">3D Printing Intro</a></li>
+<li><a href="#designing-a-drone-frame">Designing a Drone Frame</a></li>
+<li><a href="#building">Building</a></li>
+<li><a href="#demo">Demo</a></li>
+</ol>
+
+<hr />
+
+<h2 id="3d-printing-intro">3D Printing Intro</h2>
+
+<p>3D printing (known in the industry as <em>additive manufacturing</em>) is a process of
+fabrication of a 3D object from a digital model. 3D printer prices have
+significantly dropped during past decade, so 3D printing is much more
+common nowadays. The reason why we don't see such printers in every household
+is not economical, but rather psychological. People often prefer ready-made
+solutions to their problems.</p>
+
+<p>Despite that, maker communities such as
+<a href="https://www.thingiverse.com/thing:1221911">Thingiverse</a> provide millions of
+objects for free. Having access to a 3D printer means that you can download and
+fabricate things that you would need to buy otherwise. Last Christmas, for
+example, I have printed pegs to hang Christmas stockings :)</p>
+
+<h4 id="3d-printing-steps">3D printing steps</h4>
+
+<ul>
+<li>Computer-aided design (CAD)</li>
+<li>Export to STL model (de-facto standard format)</li>
+<li>File preparation (slicing) - transforming into the series of commands &quot;understood&quot; by a 3D printer</li>
+<li>Building (&quot;3D printing&quot;)</li>
+<li>Post-processing (removing fabricated parts from the printing bed, removing support, etc.)</li>
+</ul>
+
+<h4 id="materials">Materials</h4>
+
+<p>Plastics, such as <a href="https://pick3dprinter.com/pla-3d-printing/">PLA</a>, are the
+most common materials you can use to 3D print objects. While PLA is one of the
+popular materials to print with, it is also relatively fragile.  For increased
+robustness, it is possible to use e.g. nylon, which like PLA is also compatible
+with <a href="https://en.wikipedia.org/wiki/Fused_filament_fabrication">FFF (FDM)</a>, the most common 3D printing process. In the industry,
+there exist different other methods to fabricate objects in metal, carbon
+fiber, PEEK, and many other
+<a href="https://www.simplify3d.com/support/materials-guide/">materials</a>.</p>
+
+<h4 id="faq">FAQ</h4>
+
+<blockquote>
+<p>If you’ve ever written a simple blog post or email in HTML, you can handle OpenSCAD.</p>
+
+<p><small><a href="https://cubehero.com/2013/11/19/know-only-10-things-to-be-dangerous-in-openscad/">Cubehero</a></small></p>
+</blockquote>
+
+<p>OpenSCAD vs traditional graphic CAD interfaces</p>
+
+<p><strong>Q:</strong> Why should I use OpenSCAD?</p>
+
+<p><strong>A:</strong> There might be different reasons:</p>
+
+<ul>
+<li>OpenSCAD is a great project (and it is open source).</li>
+<li>You prefer programming to avoid wasting time for repeatable actions. Then, you can learn OpenSCAD in about an hour.</li>
+<li>Or maybe you have never done any programming, but would not mind to acquire this valuable skill.</li>
+<li>Your OpenSCAD models are easily parametrizable, virtually out-of-box.</li>
+</ul>
+
+<h2 id="designing-a-drone-frame">Designing a Drone Frame</h2>
+
+<p>Some requirements for the frame I had in mind:</p>
+
+<ol>
+<li>It should accommodate four motors of a given shape.</li>
+<li>The motor positions should be stable when flying (they should not wiggle).</li>
+<li>The propellers should be far enough from each other.</li>
+<li>Easy to print (fast, no support, one or two pieces).</li>
+<li>Lightweight frame.</li>
+</ol>
+
+<p>CAD design is an iterative process. My first attempt at designing a drone frame was naive and looked like this.</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/rev01.png" alt="First version. Don&#39;t recommend." width="500" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    First version. Don't recommend.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>A quadcopter's frame is simply a holder for four motors and a body. Right? Wrong. The biggest issue with this design was that the arms were fragile. In fact, one of them cracked while I was removing the newly fabricated frame from printer's platform. Clearly, a better solution was required.</p>
+
+<p>One improvement might be to orient the arms vertically, not horizontally as they are. That would make them more robust in the vertical direction and prevent undesired wiggling. I have also recalled that I have seen a micro quadcopter on Thingiverse some time ago. Indeed, <a href="https://www.thingiverse.com/thing:1221911">this copter's design</a> suggests a more robust frame. What I like about it is that each motor is supported not by one, but two segments making it more stable in the horizontal plane. So let's see what we can build with OpenSCAD.</p>
+
+<h3 id="basic-operations-motor-compartment-design">Basic Operations: Motor Compartment Design</h3>
+
+<p>I like to start my design from individual components (bottom-up), however, the opposite method (top-bottom) is also perfectly valid.
+For starters, I have created emplacements for <a href="https://www.olimex.com/Products/Robot-CNC-Parts/Micro-Motors/MOTOR-F1607/">F-1607 DC motors</a>,
+which I have ordered from Olimex. This part can be imagined as a shell around the motor, or a Boolean difference between the external box (gray cylinder) and the motor itself (red cylinder).</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/01a.png" alt="A motor holder is simply a difference between two cylinders: the outer (grey) and the inner (highlighted in red)." width="300" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    A motor holder is simply a difference between two cylinders: the outer (grey) and the inner (highlighted in red).
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>The motor dimensions given by Olimex are 7 mm diameter and 16.5 mm height. I have chosen shell size parameter to be 0.8 mm. I have lifted the inner cylinder by 0.8 mm (<code>translate</code>) so that the result is a box, not a tube. The red transparent cylinder only illustrates where the motor goes, so it will be not visible in the final rendering.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">shell<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>;
+
+difference() {
+  cylinder(d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> shell, h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>);
+  translate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, shell])
+    cylinder(d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>,  h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>);
+}</code></pre></div>
+
+<p>How about the motor wires? We can carve out a side and a bottom holes using Boolean <code>difference</code> and <code>union</code> transformations.</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/01.png" alt="A motor compartment: perspective view and top view. The holes will allow motor wires to escape comfortably." width="500" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    A motor compartment: perspective view and top view. The holes will allow motor wires to escape comfortably.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> SlotF1607(h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>,
+                 d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>,
+                 shell<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>,  <span style="color:#75715e">// Shell thickness
+</span><span style="color:#75715e"></span>                 slack<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>   <span style="color:#75715e">// Some extra space to accommodate a motor
+</span><span style="color:#75715e"></span>                 ) {
+    difference() {
+       <span style="color:#75715e">// Motor compartment
+</span><span style="color:#75715e"></span>       cylinder(d<span style="color:#f92672">=</span>d <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> shell, h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>);
+
+       union () {
+           <span style="color:#75715e">// Motor emplacement
+</span><span style="color:#75715e"></span>           translate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, shell])
+             cylinder(d<span style="color:#f92672">=</span>d <span style="color:#f92672">+</span> slack,  h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>);
+
+           <span style="color:#75715e">// Bottom hole for motor contacts/wires
+</span><span style="color:#75715e"></span>           cylinder(d<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>, h<span style="color:#f92672">=</span>h, center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+
+           <span style="color:#75715e">// Wires hole
+</span><span style="color:#75715e"></span>           translate([d<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+               cube([d, <span style="color:#ae81ff">2.5</span>, h <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>], center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+       }
+   }
+}</code></pre></div>
+
+<p>Last but not least you can see that I have also given some slack for a motor (0.1 mm) to more easily fit into its compartment.</p>
+
+<h3 id="placing-motor-compartments">Placing Motor Compartments</h3>
+
+<p>Usually quadcopter size is characterised by its diagonal, i.e. the largest
+distance between the centers of the propellers (thus the centers of the
+motors). Our microdrone is small and its diagonal will be only 92 mm (it can
+fit into a hand). The nearest distance between any two motors is then computed
+as $\sqrt{2} \cdot (\text{diagonal} / 2)$. This distance is an edge of a square
+with 92 mm diagonal. Now, we can easily place the four motors on the vertices
+of the imaginary square.</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/02a.png" width="400" />
+
+
+</figure>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">diagonal <span style="color:#f92672">=</span> <span style="color:#ae81ff">92</span>;
+
+motors_dist <span style="color:#f92672">=</span> sqrt(<span style="color:#ae81ff">2</span>) <span style="color:#f92672">*</span> (<span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> diagonal);
+
+<span style="color:#75715e">// Half distance between motors
+</span><span style="color:#75715e"></span>half_dist <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> motors_dist;
+
+<span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) {
+    <span style="color:#75715e">// Place the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> i, half_dist <span style="color:#f92672">*</span> j, <span style="color:#ae81ff">0</span>])
+        SlotF1607();
+}</code></pre></div>
+
+<p>Note that <code>for (i = [1, -1], j = [1, -1])</code> is simply a shortcut of two nested loops, i.e. it is the same as</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+  <span style="color:#66d9ef">for</span> (j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>])
+    <span style="color:#f92672">//</span> <span style="color:#960050;background-color:#1e0010">...</span></code></pre></div>
+
+<p>Anything wrong? Yes, we forgot to properly rotate the wire outlets.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) {
+    <span style="color:#75715e">// Place the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> i, half_dist <span style="color:#f92672">*</span> j, <span style="color:#ae81ff">0</span>])
+        rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">*</span> j <span style="color:#f92672">-</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])  <span style="color:#75715e">// &lt;--
+</span><span style="color:#75715e"></span>            SlotF1607();
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/02b.png" width="400" />
+
+
+</figure>
+
+<p>Now much better.</p>
+
+<h3 id="motors-support">Motors Support</h3>
+
+<p>We would like to connect the motors using something like an arc. How to do that? First, create and place a small segment:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">translate([<span style="color:#ae81ff">41</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+    square([<span style="color:#ae81ff">1.2</span>, <span style="color:#ae81ff">3.6</span>]);</code></pre></div>
+
+<p>Then, by rotating this segment in space (<a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Using_the_2D_Subsystem#Rotate_Extrude"><code>rotate_extrude</code></a>), we obtain a 90-degree arc:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> arc() {
+    rotate_extrude(angle<span style="color:#f92672">=</span><span style="color:#ae81ff">90</span>, $fn<span style="color:#f92672">=</span><span style="color:#ae81ff">70</span>)
+        translate([<span style="color:#ae81ff">41</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+            square([<span style="color:#ae81ff">1.2</span>, <span style="color:#ae81ff">3.6</span>]);
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/03a.png" alt="An arc created with rotate_extrude()" width="300" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    An arc created with rotate_extrude()
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Let us link those arcs to the motors.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) {
+    <span style="color:#75715e">// Place the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> i, half_dist <span style="color:#f92672">*</span> j, <span style="color:#ae81ff">0</span>])
+        rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">*</span> j <span style="color:#f92672">-</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+            SlotF1607(h<span style="color:#f92672">=</span><span style="color:#ae81ff">6.5</span>);
+
+    <span style="color:#75715e">// Connect the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>), half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">0</span>])
+        rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+            arc();
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/03b.png" width="400" />
+
+
+</figure>
+
+<p>I figured out that probably 6.5 mm slot heigh would be enough. That is why I
+have specified the height parameter <code>SlotF1607(h=6.5)</code>. Works like a charm!</p>
+
+<h3 id="the-platform">The Platform</h3>
+
+<p>By now I have realized that to create the body I could reuse the same method as
+for the motor emplacements to create an open box, a box with no top cover.
+However, the only distinction would be the shape (a Boolean difference between
+rectangular boxes rather than cylinders). Now, I would like to somehow
+generalize a method of creating an open box. Ideally, I would like to create
+boxes of any base shape (circle, square, etc.), thus parametrizing the method
+by a base shape.</p>
+
+<p>To help me with this idea, OpenSCAD provides <code>children()</code> method to access
+child modules. The new operation could be described as</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> openbox(delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) {
+    difference() {
+        resize_somehow(<span style="color:#960050;background-color:#1e0010">...</span>)
+            children();
+        translate([<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,delta])
+            children();
+    }
+}</code></pre></div>
+
+<p>So for example the motor compartment could be created simply as</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>, delta<span style="color:#f92672">=</span>shell) circle(d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>);</code></pre></div>
+
+<p>Where <code>openbox</code> would receive a 2D shape as a child (a circle, a square, or a
+polygon) and transform it into a 3D shape (a box) of a given height using the
+recipe from above. So how to transform a 2D circle into a 3D cylinder? Using a
+common method called <code>linear_extrude</code>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">linear_extrude(<span style="color:#ae81ff">16.5</span>) circle(d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>);</code></pre></div>
+
+<p>This method is similar to <code>rotate_extrude</code> that we used for the arc. However,
+it does not rotate the base 2D shape.</p>
+
+<p>Now, how to create a larger version of the cylinder (becoming the shell)? One
+way to do that would be to use <code>scale()</code> or <code>resize()</code>. However, a more
+efficient method would be to operate on the original 2D object, before
+extruding it (that is actually the reason why our <code>openbox</code> was assigned to
+operate on 2D objects). The <a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#offset"><code>offset()</code></a> transformation does
+exactly what we need to: enlarge the 2D object by a &quot;delta&quot; difference (see
+<a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#offset">documentation</a>).  Therefore, the complete <code>openbox</code> module
+becomes</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) {
+    difference() {
+        linear_extrude(h)
+            <span style="color:#75715e">// Create a larger base by offsetting the child module by delta
+</span><span style="color:#75715e"></span>            offset(delta<span style="color:#f92672">=</span>delta)
+                children();
+
+        translate([<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,delta])
+            linear_extrude(h)
+                children();
+    }
+}</code></pre></div>
+
+<p>Create a motor compartment as planned</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>, delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) circle(d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>);</code></pre></div>
+
+<p>Here is how to refactor the SlotF1607 module, making use of <code>openbox</code></p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> SlotF1607(h<span style="color:#f92672">=</span><span style="color:#ae81ff">16.5</span>,     <span style="color:#75715e">// Module height
+</span><span style="color:#75715e"></span>                 d<span style="color:#f92672">=</span><span style="color:#ae81ff">7</span>,        <span style="color:#75715e">// Motor diameter
+</span><span style="color:#75715e"></span>                 shell<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>,  <span style="color:#75715e">// Shell thickness
+</span><span style="color:#75715e"></span>                 slack<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>   <span style="color:#75715e">// Some extra space to accommodate a motor
+</span><span style="color:#75715e"></span>                 ) {
+        difference() {
+            <span style="color:#75715e">// Motor compartment shell
+</span><span style="color:#75715e"></span>            openbox(h<span style="color:#f92672">=</span>h, delta<span style="color:#f92672">=</span>shell) circle(d<span style="color:#f92672">=</span>d <span style="color:#f92672">+</span> slack);
+
+            union () {
+                <span style="color:#75715e">// Bottom hole for motor contacts/wires
+</span><span style="color:#75715e"></span>                cylinder(d<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>, h<span style="color:#f92672">=</span>h, center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+
+                <span style="color:#75715e">// Wires hole
+</span><span style="color:#75715e"></span>                translate([d<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+                    cube([d, <span style="color:#ae81ff">2.5</span>, h <span style="color:#f92672">*</span> <span style="color:#ae81ff">3</span>], center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+            }
+        }
+}</code></pre></div>
+
+<p>Similarly, create the body</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">3.6</span>, delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) square([<span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">23</span>], center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);</code></pre></div>
+
+<p>If it is hard to follow this section, note what we do in the
+line above is the same operation as with the cylinders in the
+very beginning:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">shell<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>;
+
+difference() {
+  cube([<span style="color:#ae81ff">46</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> shell, <span style="color:#ae81ff">23</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> shell, <span style="color:#ae81ff">3.6</span>]);
+  translate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, shell])
+    cube([<span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">23</span>, <span style="color:#ae81ff">3.6</span>]);
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/04a.png" width="400" />
+
+
+</figure>
+
+<p>We are essentially done. However, this design somewhat does not inspire me.
+Replacing the base square with a rounded one looks like a good idea. After all,
+we designed <code>openbox</code> to support any 2D base shape. Here is a common idiom:
+<a href="https://en.wikibooks.org/wiki/OpenSCAD_User_Manual/Transformations#minkowski">create a rounded square as a Minkowski sum</a>.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> rounded_square(dim<span style="color:#f92672">=</span>[<span style="color:#ae81ff">20</span>,<span style="color:#ae81ff">20</span>], r<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>) {
+    minkowski() {
+        square([dim[<span style="color:#ae81ff">0</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> r, dim[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> r], center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+        circle(r<span style="color:#f92672">=</span>r);
+    }
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/04b.png" width="400" />
+
+
+</figure>
+
+<p>So here we go:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) {
+    <span style="color:#75715e">// Place the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> i, half_dist <span style="color:#f92672">*</span> j, <span style="color:#ae81ff">0</span>])
+        rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">*</span> j <span style="color:#f92672">-</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+            SlotF1607(h<span style="color:#f92672">=</span><span style="color:#ae81ff">6.5</span>);
+
+    <span style="color:#75715e">// Connect the motors
+</span><span style="color:#75715e"></span>    translate([half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>), half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">0</span>])
+        rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+            arc();
+}
+
+openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">3.6</span>, delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>)
+    rounded_square([<span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">23</span>]);</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/04c.png" width="400" />
+
+
+</figure>
+
+<p>Much better!</p>
+
+<p>Now, I would like to shave off a bit of weight if possible. So I will introduce
+some holes as e.g. in the honeycomb pattern. I will generate an array of
+hexagonal cylinders and subtract it from the platform. A hexagonal cylinder is
+simply a cylinder with six fragments, i.e. <code>cylinder($fn=6, …);</code>. Here is an
+array of those generated with two nested loops <code>for (i = [-M:M], j = [-N:N])</code>:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#f92672">module</span> honey_comb(h<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, M<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, N<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, d1<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, d2<span style="color:#f92672">=</span><span style="color:#ae81ff">4.6</span>) {
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#f92672">-</span>M:M], j <span style="color:#f92672">=</span> [<span style="color:#f92672">-</span>N:N]) {
+        <span style="color:#75715e">// Shift the row by d1/4
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (abs(i) <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>)
+            translate([i <span style="color:#f92672">*</span> d1, j <span style="color:#f92672">*</span> d2 <span style="color:#f92672">+</span> d1<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>, <span style="color:#f92672">-</span>h])
+                cylinder(d <span style="color:#f92672">=</span> d1, h <span style="color:#f92672">=</span> h <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>, $fn<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>);
+        <span style="color:#75715e">// Shift the row by -d1/4
+</span><span style="color:#75715e"></span>        <span style="color:#66d9ef">else</span>
+            translate([i <span style="color:#f92672">*</span> d1, j <span style="color:#f92672">*</span> d2 <span style="color:#f92672">-</span> d1<span style="color:#f92672">/</span><span style="color:#ae81ff">4</span>, <span style="color:#f92672">-</span>h])
+                cylinder(d <span style="color:#f92672">=</span> d1, h <span style="color:#f92672">=</span> h <span style="color:#f92672">*</span> <span style="color:#ae81ff">2</span>, $fn<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>);
+    }
+}</code></pre></div>
+
+<p>Where <code>abs(i) % 2 == 0</code> simply checks if index <code>i</code> is an even value so that odd
+and even rows are shifted by a different amount.</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/honeycomb-array.png" width="400" />
+
+
+</figure>
+
+<p>Now I use an <code>intersection</code> with another shape to limit the span of the honeycomb pattern.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad">intersection() {
+    honey_comb(h<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span>, M<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>, N<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, d1<span style="color:#f92672">=</span><span style="color:#ae81ff">4.1</span>, d2<span style="color:#f92672">=</span><span style="color:#ae81ff">4.9</span>);
+
+    <span style="color:#75715e">// Limited by this volume
+</span><span style="color:#75715e"></span>    translate([<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span>])
+        linear_extrude(<span style="color:#ae81ff">10</span>)
+            rounded_square([dim[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>, dim[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>], r<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>);
+}</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/04d.png" width="300" />
+
+
+</figure>
+
+<p>Finally, I subtract the above pattern and some side holes.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-scad" data-lang="scad"><span style="color:#75715e">// The platform
+</span><span style="color:#75715e"></span><span style="color:#f92672">module</span> platform(dim<span style="color:#f92672">=</span>[<span style="color:#ae81ff">46</span>, <span style="color:#ae81ff">23</span>], shell<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) {
+    difference() {
+        openbox(h<span style="color:#f92672">=</span><span style="color:#ae81ff">3.6</span>, delta<span style="color:#f92672">=</span><span style="color:#ae81ff">0.8</span>) rounded_square(dim);
+
+        union () {
+            <span style="color:#75715e">// Honey-comb patterned floor
+</span><span style="color:#75715e"></span>            intersection() {
+                honey_comb(h<span style="color:#f92672">=</span><span style="color:#ae81ff">11</span>, M<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>, N<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>, d1<span style="color:#f92672">=</span><span style="color:#ae81ff">4.1</span>, d2<span style="color:#f92672">=</span><span style="color:#ae81ff">4.9</span>);
+
+                <span style="color:#75715e">// Limited by this volume
+</span><span style="color:#75715e"></span>                translate([<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">0</span>,<span style="color:#f92672">-</span><span style="color:#ae81ff">0.5</span>])
+                    linear_extrude(<span style="color:#ae81ff">10</span>)
+                        rounded_square([dim[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>, dim[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">-</span><span style="color:#ae81ff">2.5</span>], r<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>);
+            }
+
+            <span style="color:#75715e">// Side holes
+</span><span style="color:#75715e"></span>            <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>,<span style="color:#ae81ff">1</span>])
+                translate([<span style="color:#ae81ff">12.5</span> <span style="color:#f92672">*</span> i, <span style="color:#ae81ff">0</span>, shell <span style="color:#f92672">+</span> <span style="color:#ae81ff">4</span>])
+                    cube([<span style="color:#ae81ff">11</span>, <span style="color:#ae81ff">40</span>, <span style="color:#ae81ff">8</span>], center<span style="color:#f92672">=</span><span style="color:#ae81ff">true</span>);
+        }
+    }
+}
+
+<span style="color:#75715e">// The main module
+</span><span style="color:#75715e"></span><span style="color:#f92672">module</span> beatle1() {
+    <span style="color:#66d9ef">for</span> (i <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], j <span style="color:#f92672">=</span> [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]) {
+        <span style="color:#75715e">// Place the motors
+</span><span style="color:#75715e"></span>        translate([half_dist <span style="color:#f92672">*</span> i, half_dist <span style="color:#f92672">*</span> j, <span style="color:#ae81ff">0</span>])
+            rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">*</span> j <span style="color:#f92672">-</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+                SlotF1607(h<span style="color:#f92672">=</span><span style="color:#ae81ff">6.5</span>);
+
+        <span style="color:#75715e">// Connect the motors
+</span><span style="color:#75715e"></span>        translate([half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>), half_dist <span style="color:#f92672">*</span> j <span style="color:#f92672">*</span> (i <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>), <span style="color:#ae81ff">0</span>])
+            rotate([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">45</span> <span style="color:#f92672">*</span> i <span style="color:#f92672">+</span> <span style="color:#ae81ff">90</span> <span style="color:#f92672">*</span> j])
+                arc();
+    }
+
+    platform();
+}
+
+beatle1();</code></pre></div>
+
+<figure>
+
+<img src="/img/posts/beatle1/04e.png" width="500" />
+
+
+</figure>
+
+<p>That was quite easy. Wasn’t it?</p>
+
+<p>I made the complete design available on <a href="https://www.thingiverse.com/thing:4708493">Thingiverse</a>.</p>
+
+<hr />
+
+<p>To learn OpenSCAD, check its official <a href="https://www.openscad.org/cheatsheet/">cheatsheet</a>.
+For example, there you will find the magic parameter <code>$fn</code> (number of fragments) which I have used to make the shapes smooth
+(or conversely to create hexagonal cylinders).</p>
+
+<h2 id="building">Building</h2>
+
+<p>First, export the design as STL. This is quite straightforward:
+after rendering the design, press <F7> and save an .stl file.</p>
+
+<p>Parameters:</p>
+
+<ul>
+<li>Fabrication method: <a href="https://en.wikipedia.org/wiki/Fused_filament_fabrication">FFF</a></li>
+<li>Material: PLA</li>
+<li>0.2 mm layer height</li>
+<li>Three perimeters</li>
+<li>30 % infill</li>
+<li>Designed to be fabricated with no support</li>
+</ul>
+
+<p>Next, open your favorite slicer software that often comes with a 3D printer.
+You will need to specify 0.2 mm layer height and other settings from the list
+above.  After slicing (transforming into a series of commands that 3D printer
+can perform) the design can be inspected layer by layer.</p>
+
+<figure>
+
+<img src="/img/posts/beatle1/slicing.png" alt="Sliced Beatle-1. The pink lines (so-called skirt) will be printed first to stabilize the flow of plastic." width="650" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4></h4>
+  <p>
+    Sliced Beatle-1. The pink lines (so-called skirt) will be printed first to stabilize the flow of plastic.
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<h2 id="demo">Demo</h2>
+
+<p>I used a set of four F-1607 DC motors with propellers, a flight controller from
+a drone toy, and a 150 mAh LiPo battery.</p>
+
+
+<div style="position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+  <iframe src="//www.youtube-nocookie.com/embed/koSanik0-8I" style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;" allowfullscreen title="YouTube Video"></iframe>
+</div>
+
+
+<h3 id="some-of-the-challenges-i-have-faced">Some of the Challenges I Have Faced</h3>
+
+<ul>
+<li>The design from the very first version was impractical and fragile.</li>
+<li>Motor wires could be easily detached from the controller. To prevent this, I fixated the wires to the frame.</li>
+<li>I tried several methods to create the <code>openbox</code> module. The one presented here was the least ambiguous.</li>
+</ul>
+
+<hr />
+
+<p>As always, if you have any questions, remarks, or spotted any typos please
+send me a message.</p>
+
+<h2 id="learn-more">Learn More</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/Fused_filament_fabrication">Fused filament fabrication</a></li>
+<li><a href="https://www.openscad.org/cheatsheet/">OpenSCAD cheatsheet</a></li>
+</ul>
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/diy/">DIY</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/3d-printing/">3D Printing</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/drone/">Drone</a>
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/tutorial/">Tutorial</a>
+  
+</div>
+
+
+
+
+    
+    <div class="article-widget">
+      Next: <a href="https://penkovsky.com/post/quad/">A Quadcopter From Scratch</a>
+    </div>
+    
+
+    
+    
+    <div class="article-widget">
+      <div class="hr-light"></div>
+      <h3>Related</h3>
+      <ul>
+        
+        <li><a href="/post/self-driving-robot/">Making Your Self-Driving Robot</a></li>
+        
+        <li><a href="/post/raspi-ssh-over-wifi/">Connecting To Raspberry Pi Over WiFi</a></li>
+        
+        <li><a href="/neural-networks/day5/">Day 5: Convolutional Neural Networks Tutorial</a></li>
+        
+      </ul>
+    </div>
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      &copy; Bogdan Penkovsky 2024 
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky"><big>&sigma;</big></a>
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+
+    
+    
+
+    
+    
+
+  </body>
+</html>
+

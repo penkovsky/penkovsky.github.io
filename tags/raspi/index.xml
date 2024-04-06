@@ -14,19 +14,19 @@
     
     <item>
       <title>Making Your Self-Driving Robot</title>
-      <link>https://penkovsky.com/homelab/self-driving-robot/</link>
+      <link>https://penkovsky.com/post/self-driving-robot/</link>
       <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/self-driving-robot/</guid>
+      <guid>https://penkovsky.com/post/self-driving-robot/</guid>
       <description>We will build an autonomous robot. Captured by robot&#39;s camera, video stream will be analyzed by a neural network. The network will be running on the onboard Raspberry Pi that will steer the robot. Before you start with the project, I want you to answer two questions. First, how everything will be attached mechanically? Second, what will be the energy source? While your autonomous robot can work from a cardboard box, having a mechanically sound chassis will greatly improve the result on the AI training stage.</description>
     </item>
     
     <item>
       <title>Connecting To Raspberry Pi Over WiFi</title>
-      <link>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</link>
+      <link>https://penkovsky.com/post/raspi-ssh-over-wifi/</link>
       <pubDate>Sat, 25 Apr 2020 16:03:00 +0200</pubDate>
       
-      <guid>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</guid>
+      <guid>https://penkovsky.com/post/raspi-ssh-over-wifi/</guid>
       <description>Raspberry Pi is great. It is a small and cheap computer that can be used for a variety of projects. Sometimes you may wish to remotely control a Rasperry Pi that is in your local WiFi network. This is possible and even quite easy.
 We will use a Secure Shell aka SSH to establish a remote connection. I assume that you have previously connected your Raspberry Pi board to a WiFi network.</description>
     </item>
