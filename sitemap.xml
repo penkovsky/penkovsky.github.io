@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>https://penkovsky.com/post/productivity/</loc>
+      <lastmod>2024-04-06T12:56:34+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/neural-networks/meta-learning/</loc>
       <lastmod>2023-12-22T08:02:15+01:00</lastmod>
     </url>
@@ -52,7 +60,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/fpv-quad/</loc>
+      <loc>https://penkovsky.com/post/fpv-quad/</loc>
       <lastmod>2022-02-17T00:10:00+02:00</lastmod>
     </url>
     
@@ -84,7 +92,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/quadcopter/</loc>
+      <loc>https://penkovsky.com/post/quad/</loc>
       <lastmod>2021-05-09T11:33:00+02:00</lastmod>
     </url>
     
@@ -100,7 +108,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/beatle/</loc>
+      <loc>https://penkovsky.com/post/beatle/</loc>
       <lastmod>2021-03-21T18:40:00+02:00</lastmod>
     </url>
     
@@ -108,7 +116,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/self-driving-robot/</loc>
+      <loc>https://penkovsky.com/post/self-driving-robot/</loc>
       <lastmod>2020-11-15T23:00:00+02:00</lastmod>
     </url>
     
@@ -124,7 +132,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/raspi-ssh-over-wifi/</loc>
+      <loc>https://penkovsky.com/post/raspi-ssh-over-wifi/</loc>
       <lastmod>2020-04-25T16:03:00+02:00</lastmod>
     </url>
     
@@ -132,7 +140,7 @@
     
     <url>
     
-      <loc>https://penkovsky.com/homelab/</loc>
+      <loc>https://penkovsky.com/post/</loc>
       <lastmod>2020-04-24T12:00:00+02:00</lastmod>
     </url>
     
@@ -477,6 +485,15 @@
     
       <loc>https://penkovsky.com/categories/homelab/</loc>
       <lastmod>2022-02-17T00:10:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/categories/posts/</loc>
+      <lastmod>2024-04-06T12:56:34+02:00</lastmod>
       <priority>0</priority>
     </url>
     
