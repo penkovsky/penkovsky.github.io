@@ -4,6 +4,14 @@
     
     <url>
     
+      <loc>https://penkovsky.com/post/qc/</loc>
+      <lastmod>2024-04-13T15:55:03+02:00</lastmod>
+    </url>
+    
+  
+    
+    <url>
+    
       <loc>https://penkovsky.com/post/productivity/</loc>
       <lastmod>2024-04-06T12:56:34+02:00</lastmod>
     </url>
@@ -512,6 +520,24 @@
     
       <loc>https://penkovsky.com/publication_types/</loc>
       <lastmod>2020-06-15T00:00:00+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/tags/qc/</loc>
+      <lastmod>2024-04-13T15:55:03+02:00</lastmod>
+      <priority>0</priority>
+    </url>
+    
+  
+    
+    <url>
+    
+      <loc>https://penkovsky.com/categories/quantum-computing/</loc>
+      <lastmod>2024-04-13T15:55:03+02:00</lastmod>
       <priority>0</priority>
     </url>
     
