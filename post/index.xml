@@ -13,6 +13,23 @@
     
     
     <item>
+      <title>Quantum Computing for Hackers</title>
+      <link>https://penkovsky.com/post/qc/</link>
+      <pubDate>Sat, 13 Apr 2024 15:55:03 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/post/qc/</guid>
+      <description>&lt;p&gt;When I first learned about quantum computing, I thought it will be a long time
+before we actually see a quantum computer. Later, in 2019, I attended a
+brilliant talk by Alain Aspect who is known for his
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Bell_test&#34;&gt;experiments&lt;/a&gt; on Bell&#39;s theorem.
+The very same year, Google &lt;a href=&#34;https://www.nature.com/articles/s41586-019-1666-5&#34;&gt;claimed&lt;/a&gt;
+to have achieved quantum supremacy. These events made me realize that quantum
+computing is not just a theoretical concept. The idea that
+sparked my interest. I wanted to understand how is it even possible
+that the result does not exist until we measure it.&lt;/p&gt;</description>
+    </item>
+    
+    <item>
       <title>How To Be More Productive</title>
       <link>https://penkovsky.com/post/productivity/</link>
       <pubDate>Sat, 06 Apr 2024 12:56:34 +0200</pubDate>

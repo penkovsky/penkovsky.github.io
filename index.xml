@@ -11,6 +11,685 @@
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
+      <title>Quantum Computing for Hackers</title>
+      <link>https://penkovsky.com/post/qc/</link>
+      <pubDate>Sat, 13 Apr 2024 15:55:03 +0200</pubDate>
+      
+      <guid>https://penkovsky.com/post/qc/</guid>
+      <description>&lt;p&gt;When I first learned about quantum computing, I thought it will be a long time
+before we actually see a quantum computer. Later, in 2019, I attended a
+brilliant talk by Alain Aspect who is known for his
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Bell_test&#34;&gt;experiments&lt;/a&gt; on Bell&#39;s theorem.
+The very same year, Google &lt;a href=&#34;https://www.nature.com/articles/s41586-019-1666-5&#34;&gt;claimed&lt;/a&gt;
+to have achieved quantum supremacy. These events made me realize that quantum
+computing is not just a theoretical concept. The idea that
+sparked my interest. I wanted to understand how is it even possible
+that the result does not exist until we measure it.&lt;/p&gt;
+
+&lt;p&gt;In this article, we explain quantum computing with a minimal number of lines of
+code. To know how quantum computing works, you don&#39;t always need a quantum
+computer. We will simulate a beam splitter, a basic quantum circuit. We will
+also show how to express digital circuits with quantum gates. Finally, we will
+get a rough idea how quantum circuits are executed on physical quantum hardware.&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;The post is aimed at people with an engineering
+mindset. Some familiarity with linear algebra is
+advised. Also please let
+me know how this piece can be improved.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;quantum-computing-faq&#34;&gt;Quantum Computing FAQ&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;Q:&lt;/strong&gt; Will I be able to play [your favorite video game here] on a quantum computer?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; No&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;Q:&lt;/strong&gt; Will I be able to play Doom at least?&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;A:&lt;/strong&gt; No. See &lt;a href=&#34;#expressing-digital-circuits-with-quantum-gates&#34;&gt;Expressing Digital Circuits with Quantum
+Gates&lt;/a&gt; section.&lt;/p&gt;
+
+&lt;p&gt;TLDR; Even though any digital circuit &lt;em&gt;can be&lt;/em&gt; expressed in terms of quantum
+circuits, there would be a &lt;strong&gt;huge&lt;/strong&gt; overhead. Also you would need a cryostat and
+other expensive equipment to prepare quantum states. Making it a prohibitively
+expensive quantum computer to only simulate a classical one. This is not to
+mention that we live in the
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era&#34;&gt;NISQ era&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;qubits&#34;&gt;Qubits&lt;/h2&gt;
+
+&lt;p&gt;A qubit is a basic unit of quantum information.
+Unlike classical bits that can be either zero or one,
+qubits can be in a superposition of states&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-superpos&#34;&gt;&lt;a href=&#34;#fn:fn-superpos&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
+Instead of being just &amp;quot;up&amp;quot; ($|0\rangle$) or &amp;quot;down&amp;quot;, ($|1\rangle$),
+a qubit can be in a state 40% up and 60% down.
+Or more generally, a qubit can be in a state
+$|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$,
+where $\alpha$ and $\beta$ are complex numbers. The probability to measure
+a qubit in the state $|0\rangle$ is $|\alpha|^2$ and the probability to measure
+a qubit in the state $|1\rangle$ is $|\beta|^2$.
+A single qubit can be conveniently visualized using the &lt;em&gt;Bloch sphere&lt;/em&gt;.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/Bloch_sphere.png&#34; width=&#34;300px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Block sphere representing a single qubit.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;When we perform &lt;em&gt;any&lt;/em&gt; measurement, a quantum state collapses.
+Qubits become classical bits. And therefore the information
+about a quantum state is lost during the measurement&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-meas&#34;&gt;&lt;a href=&#34;#fn:fn-meas&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
+There is nothing we can do about that.
+A QHack meme well summarizes the situation.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/qmeme.png&#34; width=&#34;350px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;QHack 2024 meme: A qubit collapses when you look at it.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;minimal-quantum-computing-example-modeling-a-beam-splitter&#34;&gt;Minimal Quantum Computing Example: Modeling a Beam Splitter&lt;/h2&gt;
+
+&lt;p&gt;Here we will create a minimal demonstration of quantum computing.
+This demonstration will contain all the stages used in quantum computing.
+Which software framework shall we choose? One option is &lt;a href=&#34;https://pennylane.ai/&#34;&gt;Pennylane&lt;/a&gt;. It is
+a well-documented software framework. There are plenty of other options, such as
+&lt;a href=&#34;https://qiskit.org/&#34;&gt;Qiskit&lt;/a&gt; or &lt;a href=&#34;https://perceval.quandela.net/&#34;&gt;Perceval&lt;/a&gt;. The last one is actually simulating
+photonic circuits, which is neat. However, we want to show that there is no magic
+involved, so we will use good old Python with Numpy.&lt;/p&gt;
+
+&lt;p&gt;What we are going to do is to simulate an (idealized) beam splitter.
+This optical device will implement what we call a &lt;em&gt;Hadamard gate&lt;/em&gt;.
+How does a beam splitter work? In classical optics, you send a light beam
+with a certain intensity $I$ and it get&#39;s split into two beams of equal
+light intensity $\frac 1 2 I$. Beam splitters are typically implemented
+by semi-transparent mirrors that let only half of light through, while
+reflecting the other half.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/bs.png&#34; width=&#34;300px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Optical beam splitter contains a semi-transparent mirror that lets through some of the light. &lt;a href=&#34;https://physics.stackexchange.com/questions/39577/beam-splitters-direction-of-use&#34;&gt;Credit&lt;/a&gt;&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;That&#39;s great! But what happens in the quantum case? In the quantum case, we
+want to deal with individual photons, which are quantum objects&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-quanta&#34;&gt;&lt;a href=&#34;#fn:fn-quanta&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;.
+As it turns out, things start to work in a strange way on the quantum level.
+When we send a single photon through a beam splitter, it &amp;quot;decides&amp;quot; which
+way to send the photon in a probabilistic manner! When we have a semi-transparent window
+with a 50% reflectivity (a balanced beam-splitter), this means that a photon
+will be reflected with a 50% chance.
+For more insight, see &lt;a href=&#34;https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter&#34;&gt;QED&lt;/a&gt; by Richard Feynman.&lt;/p&gt;
+
+&lt;p&gt;So here is a rough sketch how we model a beam splitter:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;We send a photon (encoding our qubit).&lt;/li&gt;
+&lt;li&gt;We apply a transformation by the beam splitter.&lt;/li&gt;
+&lt;li&gt;We obtain a theoretical probability distribution.&lt;/li&gt;
+&lt;li&gt;We simulate &amp;quot;measurements&amp;quot;, which way the photon has gone as if we placed a photodetector on each of the two paths.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;Congratulations, we know how to simulate quantum computing!
+Now, more details. First, we prepare a qubit.
+By convention, $|0\rangle = [1, 0]^T$ and $|1\rangle = [0, 1]^T$.
+We deal with vectors of two complex numbers.
+In the language of quantum computing $|0\rangle$ means &amp;quot;the probability to
+measure a photon on the first photodetector is 100% and zero on the second
+one&amp;quot;. And as you have figured it out already,
+$|1\rangle$ is simply &amp;quot;a 100% chance to measure a photon on the second
+photodetector and zero on the first one&amp;quot;. More generally, we use
+a Greek letter $\psi$ to denote any quantum state $|\psi\rangle$.
+Don&#39;t be afraid of this &amp;quot;quantum physics&amp;quot; notation, it simply means vectors,
+squared sum of which is equal to one. That&#39;s it!&lt;/p&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;&lt;strong&gt;Remark&lt;/strong&gt; When we deal
+with quantum states, we use &lt;em&gt;amplitudes&lt;/em&gt;.
+The rule to convert amplitudes (quantum state representations) into probabilities
+(measurement probabilities of what we observe after the quantum state collapses),
+is to square the absolute value: $P = |\psi|^2$.
+For instance, let&#39;s take a quantum state
+$|\psi\rangle = |+\rangle := \frac 1 {\sqrt 2} [1, 1]^T$.
+Then, the probability distribution
+P = $|\frac 1 {\sqrt 2} [1, 1]^T|^2 = \frac 1 2 [1^2, 1^2]^T = [0.5, 0.5]^T$.
+That is, we have a 50% change to detect a photon
+on either photodetector.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;Second, we have to model a beam splitter. The beam splitter with 50%
+reflectivity is given by the following linear operator:&lt;/p&gt;
+
+&lt;p&gt;$$
+H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 &amp;amp; 1 \\ 1 &amp;amp; -1 \end{pmatrix}.
+$$&lt;/p&gt;
+
+&lt;p&gt;Note that these operators are supposed to play nicely with the amplitudes
+so that in the end of the experiment all the probabilities sum to one
+(conservation of probability)!
+Therefore, the only valid operators are
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Unitary_transformation&#34;&gt;unitary transformations&lt;/a&gt;
+preserving vector length. In other words, the operators are only allowed to
+rotate the amplitudes vector.&lt;/p&gt;
+
+&lt;p&gt;Third, to get a probability distribution, we apply unitary operators
+to our qubits. Suppose, we send a photon such that we
+would measure it on the first photodetector if there was no beam splitter.
+That is, we prepare $|0\rangle$.
+Then, we apply the $H$ operator:&lt;/p&gt;
+
+&lt;p&gt;$$
+H |0\rangle =
+  \frac{1}{\sqrt{2}} \begin{pmatrix} 1 &amp;amp; 1 \\ 1 &amp;amp; -1 \end{pmatrix} \begin{pmatrix} 1  \\ 0 \end{pmatrix} =
+  \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ 1 \end{pmatrix}.
+$$&lt;/p&gt;
+
+&lt;p&gt;Now, we obtain a probability distribution by squaring the amplitude vector.
+From the remark above, it is $[0.5, 0.5]^T$.&lt;/p&gt;
+
+&lt;p&gt;Fourth, we simulate measurements by drawing samples from that distribution.
+Here is a Python code for the beam splitter modeling.
+Once you understand it, everything else in quantum computing is just a
+matter of scaling up the number of qubits and applying more gates.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;prepare_state&lt;/span&gt;():
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    Prepare a qubit in the |0&amp;gt; state
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;bs&lt;/span&gt;(state):
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;Simulate a beam splitter&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    Hadamard &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]]) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;dot(Hadamard, state)
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;measure_state&lt;/span&gt;(state, n):
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    Measure a quantum state n times.
+&lt;/span&gt;&lt;span style=&#34;color:#e6db74&#34;&gt;    &amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;random&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;choice(
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;],
+        n,
+        &lt;span style=&#34;color:#75715e&#34;&gt;# Convert the amplitudes to probabilities&lt;/span&gt;
+        p&lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt;[np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;abs(state[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;, np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;abs(state[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]) &lt;span style=&#34;color:#f92672&#34;&gt;**&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;],
+    )
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;main&lt;/span&gt;():
+    &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;&amp;#34;&amp;#34;A minimal quantum computing example.&amp;#34;&amp;#34;&amp;#34;&lt;/span&gt;
+    &lt;span style=&#34;color:#75715e&#34;&gt;# A qubit in the |0&amp;gt; state&lt;/span&gt;
+    state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; prepare_state()
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Simulate a beam splitter&lt;/span&gt;
+    state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; bs(state)
+    &lt;span style=&#34;color:#75715e&#34;&gt;# Measure the state&lt;/span&gt;
+    n &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;1000&lt;/span&gt;
+    results &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; measure_state(state, n)
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Measured {results.sum()} ones out of {n} measurements&amp;#34;&lt;/span&gt;)
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;if&lt;/span&gt; __name__ &lt;span style=&#34;color:#f92672&#34;&gt;==&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;__main__&amp;#34;&lt;/span&gt;:
+    main()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;I run this program several times. Here is what I&#39;ve got&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Measured 493 ones out of 1000 measurements
+Measured 476 ones out of 1000 measurements
+Measured 504 ones out of 1000 measurements
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;As you have suspected, quantum computing is probabilistic.&lt;/p&gt;
+
+&lt;h2 id=&#34;expressing-digital-circuits-with-quantum-gates&#34;&gt;Expressing Digital Circuits with Quantum Gates&lt;/h2&gt;
+
+&lt;p&gt;Any combinatorial digital circuit can be simulated with quantum circuits (with
+an overhead).&lt;/p&gt;
+
+&lt;h3 id=&#34;background&#34;&gt;Background&lt;/h3&gt;
+
+&lt;p&gt;Here we briefly introduce Pauli gates, Toffoli gate,
+and Kronecker product.
+The &lt;a href=&#34;https://en.wikipedia.org/wiki/Pauli_matrices&#34;&gt;Pauli gates&lt;/a&gt; are the following:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{aligned}
+X &amp;amp;= \begin{pmatrix} 0 &amp;amp; 1 \\ 1 &amp;amp; 0 \end{pmatrix}, \&lt;br /&gt;
+Y &amp;amp;= \begin{pmatrix} 0 &amp;amp; -i \\ i &amp;amp; 0 \end{pmatrix}, \&lt;br /&gt;
+Z &amp;amp;= \begin{pmatrix} 1 &amp;amp; 0 \\ 0 &amp;amp; -1 \end{pmatrix}.
+\end{aligned}
+$$&lt;/p&gt;
+
+&lt;p&gt;The Pauli $X$ gate is often denoted by symbol $\oplus$. This gate is the quantum
+analogue of the classical NOT gate. It flips the state of a qubit.&lt;/p&gt;
+
+&lt;p&gt;The &lt;a href=&#34;https://en.wikipedia.org/wiki/Toffoli_gate&#34;&gt;Toffoli gate&lt;/a&gt; is a three-qubit gate that flips the third qubit if the first
+two qubits are in the state $|1\rangle$. The Toffoli gate is
+given by the following matrix:&lt;/p&gt;
+
+&lt;p&gt;$$
+\begin{pmatrix}
+1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 \end{pmatrix}.
+$$&lt;/p&gt;
+
+&lt;p&gt;Some readers may notice that I skipped the &lt;a href=&#34;https://en.wikipedia.org/wiki/Controlled_NOT_gate&#34;&gt;controlled NOT&lt;/a&gt; (CNOT) gate.
+The CNOT gate is applied to two qubits and flips the second qubit if the first
+qubit is in the state $|1\rangle$. The CNOT gate is a quantum analogue of the
+classical XOR gate. Try to infer the CNOT gate matrix by looking at the Toffoli
+gate matrix above.&lt;/p&gt;
+
+&lt;p&gt;Finally, the &lt;a href=&#34;https://en.wikipedia.org/wiki/Kronecker_product&#34;&gt;Kronecker product&lt;/a&gt; of two matrices $A$ and $B$&lt;/p&gt;
+
+&lt;p&gt;$$
+{A}\otimes{B} = \begin{pmatrix}
+  a_{11} {B} &amp;amp; \cdots &amp;amp; a_{1n}{B} \\ \vdots &amp;amp; \ddots &amp;amp;
+  \vdots \\ a_{m1} {B} &amp;amp; \cdots &amp;amp; a_{mn} {B}
+\end{pmatrix},
+$$&lt;/p&gt;
+
+&lt;p&gt;where $a_{ij}$ are the elements of the matrix $A$ and $B$ is the matrix to be
+repeated.
+The Kronecker product is useful when we want to apply a single-qubit gate to
+multiple qubits. For instance, the Pauli $X$ gate applied to the first of
+two qubits is given by&lt;/p&gt;
+
+&lt;p&gt;$$
+X \otimes I =
+\begin{pmatrix}
+0 &amp;amp; 1 \\ 1 &amp;amp; 0
+\end{pmatrix} \otimes
+\begin{pmatrix}
+1 &amp;amp; 0 \\ 0 &amp;amp; 1
+\end{pmatrix} =
+\begin{pmatrix}
+0 &amp;amp; 0 &amp;amp; 1 &amp;amp; 0 \\ 0 &amp;amp; 0 &amp;amp; 0 &amp;amp; 1 \\ 1 &amp;amp; 0 &amp;amp; 0 &amp;amp; 0 \\ 0 &amp;amp; 1 &amp;amp; 0 &amp;amp; 0
+\end{pmatrix}.
+$$&lt;/p&gt;
+
+&lt;p&gt;As we will see in the next section, multiple qubits are represented like musical notes.
+Only instead of notes, &amp;quot;wires&amp;quot; represent qubits and the gates are applied to them.
+One reads this notation from left to right.&lt;/p&gt;
+
+&lt;h3 id=&#34;quantum-or-circuit&#34;&gt;Quantum OR Circuit&lt;/h3&gt;
+
+&lt;p&gt;Let&#39;s take &lt;strong&gt;OR&lt;/strong&gt; digital gate as an example. The same method can be applied to
+emulate any digital gate. Below is an illustration of the classical OR gate.
+The output is &lt;code&gt;1&lt;/code&gt; if at least one of the inputs is &lt;code&gt;1&lt;/code&gt;.
+The gate is irreversible. That is, the information about the inputs is lost
+during the computation. For instance, if we get an output &lt;code&gt;1&lt;/code&gt;, we cannot tell
+which pair of inputs produced this output. This behavior is typical
+for gates in classical computing.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/quantum-or.png&#34; width=&#34;550px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Classical OR gate and reversible OR gate and their truth tables.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;In contrast, quantum gates are reversible. This means that quantum gates should
+work both in forward and also in backward directions. Therefore, we have to
+design a reversible gate that preserves information. On the image above, on the
+right, we see a reversible OR gate. Can we build a quantum circuit that
+implements this reversible OR gate? The answer is yes.&lt;/p&gt;
+
+&lt;p&gt;First, let&#39;s visualize the circuit graphically.
+The circuit consists of three qubits. The first two qubits are the inputs $a$
+and $b$. The third qubit will contain the output $c&#39;$.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/quantum-or-circuit.gif&#34; width=&#34;550px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Animated quantum &lt;strong&gt;OR&lt;/strong&gt; circuit. The circuit consists of three qubits and Pauli X and Toffoli gates applied to them. The first two qubits are the inputs $a$ and $b$. The third qubit will contain the output.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;The idea is first to check if the second (first) qubit is in the state
+$|1\rangle$. If it is, we have to flip the third qubit, which is initially in
+the state $|0\rangle$. Therefore, we
+apply the Pauli $X$ gate to the first (second) qubit first. This will invert the
+input: If it was $|0\rangle$, it will become $|1\rangle$. Then, we apply the
+Toffoli gate trying to flip the output. The Toffoli gate will flip the third
+qubit if the first two qubits are both in the state $|1\rangle$. Before
+proceeding to the next attempt, we have to undo the previous $X$ gate. Therefore,
+we apply the Pauli $X$ gate to the first (second) to undo the previous $X$ gate
+and try again with another input. Finally, we check if both initial inputs were
+$|1\rangle$, using the third Toffoli gate. Below is the Python code that
+manipulates the quantum states and simulates the quantum circuit from above.&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the first of three cubits&lt;/span&gt;
+X1_3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
+&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the second of three cubits&lt;/span&gt;
+X2_3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]])), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
+&lt;span style=&#34;color:#75715e&#34;&gt;# # PauliX gate operator applied to the third of three cubits&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# X3_3 = np.kron(np.kron(np.eye(2), np.eye(2)), np.array([[0, 1], [1, 0]]))&lt;/span&gt;
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Toffoli gate operator&lt;/span&gt;
+Toffoli &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array(
+    [
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;],
+        [&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;],
+    ]
+)
+
+states &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |0,0,0&amp;gt; state&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |0,1,0&amp;gt; state&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |1,0,0&amp;gt; state&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |1,1,0&amp;gt; state&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+]
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# After applying OR on first two qubits, the expected outputs are:&lt;/span&gt;
+expected_outputs &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; [
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |0,0,0&amp;gt;&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |0,1,1&amp;gt;&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |1,0,1&amp;gt;&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]),
+    &lt;span style=&#34;color:#75715e&#34;&gt;# |1,1,1&amp;gt; state&lt;/span&gt;
+    np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]),
+]
+
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Implementing a gate that maps from states to expected_outputs&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# using the following gates: X1_3, X2_3, X3_3, Toffoli&lt;/span&gt;
+&lt;span style=&#34;color:#66d9ef&#34;&gt;def&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;logic_gate_or&lt;/span&gt;(state):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;return&lt;/span&gt; Toffoli &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; X2_3 &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; Toffoli &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; X2_3 &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; X1_3 &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; Toffoli &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; X1_3 &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; state
+
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;for&lt;/span&gt; i, state &lt;span style=&#34;color:#f92672&#34;&gt;in&lt;/span&gt; enumerate(states):
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(logic_gate_or(state))
+    &lt;span style=&#34;color:#66d9ef&#34;&gt;assert&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;allclose(
+        logic_gate_or(state), expected_outputs[i]
+    ), f&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Test failed for state {state}&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;This provides a general idea of how quantum circuits can be used to build
+digital circuits. An additional constraint is
+the requirement for the quantum gates to be reversible.&lt;/p&gt;
+
+&lt;p&gt;Looking from the perspective of simulating digital circuits with quantum gates,
+we note a significant overhead. On the other hand, unlike conventional digital
+circuits, quantum circuits can accept such inputs as
+$a = |+\rangle := \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right).$
+Corresponding to a 50% chance to measure either &lt;code&gt;0&lt;/code&gt; or &lt;code&gt;1&lt;/code&gt; on that qubit - the
+result of applying a Hadamard gate.
+A superposition of inputs is also a valid input!
+Here is where the power of quantum computing comes from:
+The ability to process multiple inputs at the same time.
+This is known as &lt;em&gt;quantum parallelism&lt;/em&gt;, which lies at the heart of many quantum
+algorithms.&lt;/p&gt;
+
+&lt;p&gt;Okay, let&#39;s see what happens when we apply the OR gate to a superposition of
+inputs. We provide the following inputs:
+$a = \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right)$,
+$b = |0\rangle$,
+$c = |0\rangle$.
+To achieve a superposition on the input $a$,
+we apply the Hadamard gate to the first out of three qubits:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#75715e&#34;&gt;# Hadamard gate&lt;/span&gt;
+H &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#f92672&#34;&gt;-&lt;/span&gt;&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;]]) &lt;span style=&#34;color:#f92672&#34;&gt;/&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;sqrt(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Hadamard gate when applied to the first of three qubits&lt;/span&gt;
+H1_3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(H, np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Prepare |0,0,0&amp;gt; state: 100% probability to measure three zero bits.&lt;/span&gt;
+state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;])
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Apply the Hadamard gate to the first qubit:&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# 50% probability to measure 0 and 50% probability to measure 1&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# on the first qubit.&lt;/span&gt;
+state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; H1_3 &lt;span style=&#34;color:#960050;background-color:#1e0010&#34;&gt;@&lt;/span&gt; state
+
+&lt;span style=&#34;color:#75715e&#34;&gt;# Apply the OR gate&lt;/span&gt;
+state &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; logic_gate_or(state)
+
+&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(state)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Here is the result:&lt;/p&gt;
+
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;[0.70710678 0.         0.         0.         0.         0.70710678
+ 0.         0.        ]&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
+
+&lt;p&gt;Or, in other words, the quantum state is
+$\left[\frac 1 {\sqrt 2}, 0, 0, 0, 0, \frac 1 {\sqrt 2}, 0, 0\right]$.
+Once we square those amplitudes, we get the following probability distribution.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/or-gate-superposition.png&#34; width=&#34;550px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Probability distribution after applying the OR gate to initial state $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;This corresponds to a 50% chance to measure classical &lt;code&gt;000&lt;/code&gt; bits and
+a 50% chance to measure &lt;code&gt;101&lt;/code&gt;.
+Isn&#39;t it nice?&lt;/p&gt;
+
+&lt;p&gt;We were unsure whether the first input was 0 or 1.
+And therefore we have encoded this ambivalence into the quantum state
+without any difficulties. We were able to run the OR gate on this superposition
+of inputs. And as a result, we have processed two inputs at the same time! In
+contrast, in the classical case, we would have to run the OR gate twice to
+process both possible inputs.&lt;/p&gt;
+
+&lt;p&gt;Of course, if we were to perform the real experiment, we would have to run
+several repetitions to estimate the probability distribution. Here is what the
+result could look like if we performed 1000 measurements:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/or-gate-measurement.png&#34; width=&#34;550px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Of course, we would need to run the experiment many times to get
+a better estimate of the probability distribution.
+You can also play with the circuit in &lt;a href=&#34;https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%5D%7D&#34;&gt;Quirk&lt;/a&gt;!
+For instance, what happens when both inputs $a$ and $b$ are in
+the superposition $|+\rangle = \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right)$?&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/quantum-or-circuit_2.png&#34; width=&#34;550px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Quantum OR gate applied to $a=b=|+\rangle$, $c=|0\rangle$.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Right, we have a 75% chance to measure &lt;code&gt;1&lt;/code&gt; on the third qubit!
+By now, you should have developed a feeling for how quantum computing works.
+The drawback, if we can call it that, is that we have to
+deal with probabilities. Even though the quantum state exists in a
+superposition, that is, in several states simultaneously, we can only measure
+one of them at a time.&lt;/p&gt;
+
+&lt;h2 id=&#34;why-can-t-we-simulate-quantum-circuits-with-classical-computers&#34;&gt;Why Can&#39;t We Simulate Quantum Circuits with Classical Computers?&lt;/h2&gt;
+
+&lt;p&gt;This all is well. However, why can&#39;t we just simulate quantum circuits with
+classical computers as we have done above? The answer is that we can, when the
+number of qubits is small. However, to accurately represent a quantum state of
+$n$ qubits we need $2^n$ complex numbers. For example, to accurately represent
+an arbitrary quantum state of 100 qubits, we need
+$1,267,650,600,228,229,401,496,703,205,376 \approx 10^{30}$ complex numbers!
+This exponential state space growth requires an exponentially larger amount of
+computational resources.&lt;/p&gt;
+
+&lt;h2 id=&#34;transpilation&#34;&gt;Transpilation&lt;/h2&gt;
+
+&lt;p&gt;OK, so I&#39;ve expressed my quantum circuit in terms of logical
+qubits. How it gets executed on physical quantum hardware?&lt;/p&gt;
+
+&lt;p&gt;If you are at the point of asking this question, congratulations for following
+along! Here is what happens. There are three stages of the process known a
+&lt;em&gt;transpilation&lt;/em&gt;.&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Mapping&lt;/li&gt;
+&lt;li&gt;Placement&lt;/li&gt;
+&lt;li&gt;Routing&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;During the &lt;em&gt;mapping&lt;/em&gt; stage, logical quantum gates are mapped to
+natively supported ones. For instance, if we deal with photonics,
+quantum gates can be implemented using beam splitters and
+phase shifters (check e.g. &lt;a href=&#34;https://arxiv.org/pdf/quant-ph/0112088.pdf&#34;&gt;Ralph CNOT gate&lt;/a&gt;).
+And another example: This year&#39;s QHack had a challenge to implement a
+&lt;a href=&#34;https://arxiv.org/abs/2205.14081&#34;&gt;wormhole-inspired teleportation protocol&lt;/a&gt;
+in terms of the gates that are native to a superconducting device.&lt;/p&gt;
+
+&lt;p&gt;During the &lt;em&gt;placement&lt;/em&gt; stage, quantum circuits are allocated to
+certain areas on a physical device. It can happen that your circuit
+is too large for a specific device and thereby the circuit has to be
+redesigned.&lt;/p&gt;
+
+&lt;p&gt;Finally, during the &lt;em&gt;routing&lt;/em&gt; stage, quantum gates are being
+connected by physical wires. Sometimes, portions of a physical
+circuit are configured to identity transformations to satisfy
+the requirements. And this typically results in higher noise.
+Overall, if you are familiar with
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Field-programmable_gate_array&#34;&gt;FPGAs&lt;/a&gt;,
+the process of transpilation is quite similar.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/aspect2019.jpg&#34; alt=&#34;11/10/2019&#34; width=&#34;650px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Alain Aspect at Paris-Saclay: &#39;The result does not exist before it is measured.&#39;&lt;/h4&gt;
+  &lt;p&gt;
+    11/10/2019
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Quantum computing is a great puzzle. In quantum hardware or in software.
+This forces us to think in different terms.
+New related fields are also booming. We can think of quantum machine learning,
+quantum cryptography, quantum communication, and quantum chemistry.
+Note that we have only discussed the case of perfect quantum computers.
+Today, we have to deal with &lt;a href=&#34;https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era&#34;&gt;noisy intermediate-scale quantum&lt;/a&gt; devices.
+These devices are not perfect and have a limited number of qubits.
+Also we do not really know if there is any fundamental limit to the number of
+qubits that can be used in a quantum computer. This is an open question.&lt;/p&gt;
+
+&lt;h2 id=&#34;citation&#34;&gt;Citation&lt;/h2&gt;
+
+&lt;pre&gt;
+@article{penkovsky2024QC,
+ title   = &#34;Quantum Computing for Hackers&#34;,
+ author  = &#34;Penkovsky, Bogdan&#34;,
+ journal = &#34;penkovsky.com&#34;,
+ year    = &#34;2024&#34;,
+ month   = &#34;April&#34;,
+ url     = &#34;https://penkovsky.com/post/qc/&#34;
+}
+&lt;/pre&gt;
+
+&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter&#34;&gt;Richard Feynman. Quantum Electrodynamics&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=0USje5vTIKs&amp;amp;list=PLUl4u3cNGP60cspQn3N9dYRPiyVWDd80G&amp;amp;index=9&#34;&gt;Understand the notion of probability amplitudes&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://algassert.com/post/1716&#34;&gt;Visualizing 2-Qubit Entanglement&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://quantumatlas.umd.edu/entry/quantum-states/&#34;&gt;Quantum states&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Bell%27s_theorem&#34;&gt;Bell&#39;s theorem&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://archive.org/details/QuantumComputationAndQuantumInformation10thAnniversaryEdition&#34;&gt;Nielsen and Chuang. Quantum Computation And Quantum Information&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://juliaphysics.github.io/PhysicsTutorials.jl/tutorials/general/quantum_ising/quantum_ising.html&#34;&gt;Quantum Ising Phase Transition&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://algassert.com/quirk&#34;&gt;Quirk quantum circuit simulator&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-superpos&#34;&gt;A superposition is a linear combination.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-superpos&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-meas&#34;&gt;This is related to the Heisenberg Uncertainty Principle: You cannot measure a quantum state without disturbing it.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-meas&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-quanta&#34;&gt;Photons initially were called &amp;quot;quanta&amp;quot; by Einstein.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-quanta&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description>
+    </item>
+    
+    <item>
       <title>How To Be More Productive</title>
       <link>https://penkovsky.com/post/productivity/</link>
       <pubDate>Sat, 06 Apr 2024 12:56:34 +0200</pubDate>
@@ -43,7 +722,7 @@ I will share some of my experience and limit myself to three general guidelines.
 
 &lt;h2 id=&#34;generate-many-ideas&#34;&gt;Generate Many Ideas&lt;/h2&gt;
 
-&lt;p&gt;This one seems so obvious. Yet to me, it was less obvious. If you are like me, then you may enjoy the book by Adam Grant entitled Originals: How Non-Conformists Move the World&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-adam-grant&#34;&gt;&lt;a href=&#34;#fn:fn-adam-grant&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. Adam Grant argues that to increase the “chance of success”, one has to generate many ideas. The less obvious consequence perhaps is that the famous pieces of art, the most famous inventions and so on are only very few known contributions of their inventors. The tip of the ideas iceberg.&lt;/p&gt;
+&lt;p&gt;This one seems so obvious. Yet to me, it was less obvious. If you are like me, then you may enjoy the book by Adam Grant entitled Originals: How Non-Conformists Move the World&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-adam-grant&#34;&gt;&lt;a href=&#34;#fn:fn-adam-grant&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. The author argues that to increase the “chance of success”, one has to generate many ideas. The less obvious consequence perhaps is that the famous pieces of art, the most famous inventions and so on are only very few known contributions of their inventors. The tip of the ideas iceberg.&lt;/p&gt;
 
 &lt;p&gt;If you think you may not enjoy the book, then as a one-sentence summary I will adapt this one, from Chapter 2: “the rule is that you need to generate at least twenty-five ideas to strike gold“. I just opened the latest bookmark and it happened to be this one. Serendipity.&lt;/p&gt;
 
@@ -4943,441 +5622,6 @@ send me a message.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Fused_filament_fabrication&#34;&gt;Fused filament fabrication&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.openscad.org/cheatsheet/&#34;&gt;OpenSCAD cheatsheet&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;</description>
-    </item>
-    
-    <item>
-      <title>Making Your Self-Driving Robot</title>
-      <link>https://penkovsky.com/post/self-driving-robot/</link>
-      <pubDate>Sun, 15 Nov 2020 23:00:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/post/self-driving-robot/</guid>
-      <description>
-
-&lt;p&gt;We will build an autonomous robot. Captured by robot&#39;s camera,
-video stream will be analyzed by a neural network. The network will be running
-on the onboard Raspberry Pi that will steer the robot.  Before you start with
-the project, I want you to answer two questions.  First, how
-everything will be attached mechanically?  Second, what will be the energy
-source?  While your autonomous robot can work from a cardboard box, having a
-mechanically sound chassis will greatly improve the result on the AI training
-stage. And the question of the energy source is essential for any autonomous
-robot. Ready to answer? Then let&#39;s go!&lt;/p&gt;
-
-&lt;h2 id=&#34;parts-and-tools&#34;&gt;Parts And Tools&lt;/h2&gt;
-
-&lt;p&gt;For this project I used:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Raspberry Pi 3B, 1 GB RAM (priceless 😉)&lt;/li&gt;
-&lt;li&gt;Power bank (for mobile phone)&lt;/li&gt;
-&lt;li&gt;USB to micro-USB cable&lt;/li&gt;
-&lt;li&gt;SD memory card class 10, at least 16 GB, $11.99&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B07DNYQ3PX&#34;&gt;Chassis + 2 DC motors&lt;/a&gt; $13.99&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B07QKCGX1Z&#34;&gt;Raspberry Pi camera&lt;/a&gt; $17.21&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.com/gp/product/B014KMHSW6&#34;&gt;L298N dual H-bridge controller&lt;/a&gt; $6.89&lt;/li&gt;
-&lt;li&gt;9 V battery (local store)&lt;/li&gt;
-&lt;li&gt;Jumper wires&lt;/li&gt;
-&lt;li&gt;Something to attach the components to chassis (I used rubber bands and adhesive putty)&lt;/li&gt;
-&lt;li&gt;Enclosure for the electronics&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Tools:&lt;/p&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.amazon.fr/gp/product/B07N2QZPJP&#34;&gt;Soldering iron&lt;/a&gt; $20.07&lt;/li&gt;
-&lt;li&gt;A laptop with WiFi and SSH client (for robot training)&lt;/li&gt;
-&lt;li&gt;Multimeter (I didn&#39;t have one at hand, but it would have been useful)&lt;/li&gt;
-&lt;li&gt;Small screw driver&lt;/li&gt;
-&lt;li&gt;Wire strippers (optional)&lt;/li&gt;
-&lt;li&gt;Breadboard (optional)&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;Note that the prices may vary and they are here for indicative budget only.
-You can also order similar parts on AliExpress or other sites.
-The bottom line is that you can easily build a self-driving robot under $100.&lt;/p&gt;
-
-&lt;p&gt;I decided to power the Raspberry Pi board and motors separately so that the
-board will be reliably powered, even when the motors battery exhausts itself.
-The power bank for that purpose (originally, for a mobile phone) and a USB
-cable I already had at home, so they didn&#39;t count towards the budget.&lt;/p&gt;
-
-&lt;p&gt;I recommend at least 16 GB SD memory card so that you can install the Raspberry
-Pi OS and have some storage space for training data acquisition (images from
-the camera). Regarding camera itself, usually it is recommended to use a
-wide-angle camera. However, feel free to use any camera you have (as I did).&lt;/p&gt;
-
-&lt;p&gt;The H-bridge circuit is useful to allow DC motors to run forwards or backwards.
-Unlike some tutorials, mine H-bridge required between 7 V and 35 V driving
-voltage. To see if the circuit is working, check if the red LED is on.  With 6
-V driving voltage, it was still off. Therefore, I used a 9 V battery to power
-the motors.  Finally, using a laptop with Linux will make your life easier. But
-feel free to use whatever you have.&lt;/p&gt;
-
-&lt;h2 id=&#34;part-i-let-the-hack-begin&#34;&gt;Part I: Let The Hack Begin&lt;/h2&gt;
-
-&lt;h3 id=&#34;assemble-the-robot&#34;&gt;Assemble The Robot&lt;/h3&gt;
-
-&lt;h4 id=&#34;1-assemble-the-chassis&#34;&gt;1. Assemble the chassis.&lt;/h4&gt;
-
-&lt;p&gt;Attach the wheels, the ball caster, and the motors.
-Don&#39;t mind the battery holder, I didn&#39;t use it in the end.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/chassis.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h4 id=&#34;2-solder-wires-to-the-motors&#34;&gt;2. Solder wires to the motors.&lt;/h4&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/solder-wires.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h4 id=&#34;3-connect-motors-to-the-h-bridge-controller&#34;&gt;3. Connect motors to the H-bridge controller.&lt;/h4&gt;
-
-&lt;p&gt;Here you will need a small screw driver.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge1.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h4 id=&#34;4-connect-the-motors-controller-to-the-raspberry-pi&#34;&gt;4. Connect the motors controller to the Raspberry Pi.&lt;/h4&gt;
-
-&lt;p&gt;Here I use a breadboard in-between, but feel free to connect the jumper wires
-directly. You can choose any free (non-specialized) GPIOs pins.
-Please refer to the board&#39;s pinout.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/pinout.png&#34; alt=&#34;Raspberry Pi pinout. Source: [pinout.xyz](https://pinout.xyz/).&#34; width=&#34;500&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Raspberry Pi pinout. Source: &lt;a href=&#34;https://pinout.xyz/&#34;&gt;pinout.xyz&lt;/a&gt;.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;For instance, I have chosen pins &lt;code&gt;15&lt;/code&gt;, &lt;code&gt;11&lt;/code&gt;, &lt;code&gt;13&lt;/code&gt;, and &lt;code&gt;31&lt;/code&gt;. Note those
-are Raspberry Pi pins, not GPIO numbers.  For example, the above pins
-correspond to GPIO 22, GPIO 17, GPIO 27, and GPIO 6.  Remember those magic
-numbers.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;Please do not confuse pins and GPIO numbers.
-The &lt;code&gt;gpiozero&lt;/code&gt; Python module refers to GPIO numbers,
-whereas the software that we will use later requires Raspberry Pi pins.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;To determine the order in which you connect the jumper wires to the controller
-you may want to check the controller&#39;s data sheet. Or determine the pins
-experimentally, testing the digital inputs in isolation. There are four
-wires: two controlling the left wheel (&lt;code&gt;IN1&lt;/code&gt; and &lt;code&gt;IN2&lt;/code&gt;) and
-two for the right wheel control (&lt;code&gt;IN3&lt;/code&gt; and &lt;code&gt;IN4&lt;/code&gt;).
-For example, when both &lt;code&gt;IN1&lt;/code&gt; and &lt;code&gt;IN3&lt;/code&gt; digital signals are high,
-the robot will move forward.&lt;/p&gt;
-
-&lt;p&gt;Note that you will have to connect the ground (GND) of the controller board and
-the ground of Raspberry.  Otherwise, your controller may not be able to
-interpret the digital signal it receives from the Raspberry.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge2.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h4 id=&#34;5-power-up-the-motors-controller-with-a-9-v-battery&#34;&gt;5. Power up the motors controller with a 9 V battery.&lt;/h4&gt;
-
-&lt;p&gt;I didn&#39;t have a battery connector at hand, so I used a chewing gum to
-attach the wires to the battery.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/H-bridge3.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h4 id=&#34;6-power-up-the-raspberry-pi&#34;&gt;6. Power up the Raspberry Pi.&lt;/h4&gt;
-
-&lt;p&gt;Finally, power up the Raspberry Pi with a power bank using a small USB cable.&lt;/p&gt;
-
-&lt;blockquote&gt;
-&lt;p&gt;You may want to assemble the modules neatly so that the robot is actually
-autonomous. Make sure that the hardware is fixed well and will not move
-during the ride.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/proto.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;h3 id=&#34;sanity-check&#34;&gt;Sanity Check&lt;/h3&gt;
-
-&lt;p&gt;Let us test what robot we have built so far! First, we connect to the
-Raspberry Pi. This is done via SSH.
-&lt;a href=&#34;https://gist.github.com/masterdezign/5370fdfb113e84d39314f71281d3d7cb&#34;&gt;Setup Raspberry Pi WiFi connection&lt;/a&gt;
-and &lt;a href=&#34;https://penkovsky.com/post/raspi-ssh-over-wifi/&#34;&gt;connect to your board&lt;/a&gt;.
-Now, we can play with the robot interactively.
-Being connected to the Raspberry Pi via SSH, type
-&lt;code&gt;python&lt;/code&gt; to open up the Python interpreter.
-Then define your robot object&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gpiozero &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Robot
-robot &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Robot(left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;22&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;17&lt;/span&gt;), right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;27&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;))&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Note the GPIO numbers we have discussed before.
-Those are your connections to the bridge controller.
-To make the robot do something&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Here &lt;code&gt;0.4&lt;/code&gt; is the speed with which to rotate the left wheel.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/test1.gif&#34; width=&#34;300&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;p&gt;To stop the robot, issue&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Type &lt;code&gt;exit()&lt;/code&gt; (or press Ctrl-D) to exit the Python&#39;s interpreter&#39;s shell.  In
-your favourite text editor you can create a sequence of actions to pre-program
-your robot.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; gpiozero &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; Robot
-&lt;span style=&#34;color:#f92672&#34;&gt;from&lt;/span&gt; time &lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; sleep
-robot &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; Robot(left &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;22&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;17&lt;/span&gt;), right &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; (&lt;span style=&#34;color:#ae81ff&#34;&gt;27&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;6&lt;/span&gt;))
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Left&amp;#34;&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;left(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
-sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Right&amp;#34;&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;right(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
-sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()
-
-&lt;span style=&#34;color:#66d9ef&#34;&gt;print&lt;/span&gt;(&lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;Forward&amp;#34;&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;forward(&lt;span style=&#34;color:#ae81ff&#34;&gt;0.4&lt;/span&gt;)
-sleep(&lt;span style=&#34;color:#ae81ff&#34;&gt;3&lt;/span&gt;)
-robot&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;stop()&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Here we ask the robot to rotate left for a second,
-then rotate right for a second, and finally, move
-forward for three seconds.
-Save it to a file on your Raspberry Pi, e.g. &lt;code&gt;robo.py&lt;/code&gt;,
-and execute&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;python robo.py&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;If we have missed something, here is an official Raspberry Pi
-&lt;a href=&#34;https://projects.raspberrypi.org/en/projects/build-a-buggy/1&#34;&gt;tutorial&lt;/a&gt; to assist with assembling your robot.
-Before you continue, now is a good time to
-&lt;a href=&#34;https://www.dexterindustries.com/howto/installing-the-raspberry-pi-camera/&#34;&gt;attach the camera&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;part-ii-remote-control&#34;&gt;Part II: Remote Control&lt;/h2&gt;
-
-&lt;p&gt;Now that the robot is based on the Raspberry Pi,
-we can do amazing things with it.
-For example, we can benefit from the
-&lt;a href=&#34;https://github.com/autorope/donkeycar&#34;&gt;DonkeyCar&lt;/a&gt;,
-an open source platform to build a small scale self driving car.
-You will have to &lt;a href=&#34;http://docs.donkeycar.com/guide/install_software/&#34;&gt;follow the instructions&lt;/a&gt;
-to install the necessary software on your Raspberry Pi.&lt;/p&gt;
-
-&lt;p&gt;As soon as you finish with installation,
-&lt;a href=&#34;http://docs.donkeycar.com/guide/create_application/&#34;&gt;create your Donkeycar App&lt;/a&gt;. Connect to your Pi with SSH and type&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;donkey createcar --path ~/mycar&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Then check the newly created project in &lt;code&gt;~/mycar&lt;/code&gt;. Thankfully, Donkey
-supports our two-wheel robot almost out of the box. The remaining bits are to
-edit &lt;code&gt;config.py&lt;/code&gt;. Set&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;DRIVE_TRAIN_TYPE &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#e6db74&#34;&gt;&amp;#34;DC_TWO_WHEEL&amp;#34;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;This will select the appropriate motor&#39;s driver.
-Finally, set the pins as discussed before:&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;HBRIDGE_PIN_LEFT_FWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;15&lt;/span&gt;
-HBRIDGE_PIN_LEFT_BWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;11&lt;/span&gt;
-HBRIDGE_PIN_RIGHT_FWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;13&lt;/span&gt;
-HBRIDGE_PIN_RIGHT_BWD &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; &lt;span style=&#34;color:#ae81ff&#34;&gt;31&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;Now, test if everything was successful.&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;cd ~/mycar
-python manage.py drive&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;In under a minute, the Donkey server should be up
-and running. As a result, you will be able
-to access a control web interface
-using &lt;code&gt;http://&amp;lt;your car&#39;s IP&amp;gt;:8887&lt;/code&gt;.
-This will allow you to remotely control the car
-and capture the video stream with its camera.
-Like in this video.&lt;/p&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/oz7arGJ-uvM&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;h2 id=&#34;part-iii-making-it-self-driving&#34;&gt;Part III: Making It Self-Driving&lt;/h2&gt;
-
-&lt;p&gt;Being able to control your car remotely is useful
-to collect the training data for the neural network.
-But first we may want to set up a driving track like this.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/training.jpg&#34; width=&#34;400&#34; /&gt;
-
-
-&lt;/figure&gt;
-
-&lt;p&gt;Now, drive several laps on your track. The captured image data are automatically
-stored in &lt;code&gt;~/mycar/data&lt;/code&gt;.
-Having collected a sufficient amount of data
-we pass to the driving model (neural network) training.
-Here is how the world looks like from the car&#39;s viewpoint.&lt;/p&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/1L9VchNi3B0&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Green vector illustrates human-driver commands
-and the blue one is the model after training.&lt;/p&gt;
-
-&lt;p&gt;You want to revisit &lt;code&gt;~/mycar/config.py&lt;/code&gt; to set the neural network parameters,
-e.g. &lt;code&gt;LEARNING_RATE&lt;/code&gt; and &lt;code&gt;BATCH_SIZE&lt;/code&gt;.
-The key training command is&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;python manage.py train --type linear --model models/mypilot.h5&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-&lt;p&gt;You can experiment with any of the driving models:
-&lt;code&gt;linear&lt;/code&gt;, &lt;code&gt;categorical&lt;/code&gt;, &lt;code&gt;rnn&lt;/code&gt;, &lt;code&gt;imu&lt;/code&gt;, &lt;code&gt;behavior&lt;/code&gt;, etc.
-More housekeeping details can be found in
-&lt;a href=&#34;https://colab.research.google.com/drive/1lkQUvJ2Quu0m_LNLJvSicl9zDgCf4Qu6?usp=sharing&#34;&gt;this notebook&lt;/a&gt; adapted for TensorFlow 2.
-The original version can be found
-&lt;a href=&#34;http://github.com/robocarstore/donkey-car-training-on-google-colab/blob/master/Donkey_Car_Training_using_Google_Colab.ipynb&#34;&gt;here&lt;/a&gt;.&lt;/p&gt;
-
-&lt;p&gt;&lt;em&gt;Et voilà&lt;/em&gt;, your self-driving car is ready!&lt;/p&gt;
-
-&lt;hr style=&#34;width:50%&#34;&gt;
-
-&lt;p&gt;&lt;p&gt;
-Now, run the auto-pilot&lt;/p&gt;
-
-&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-shell&#34; data-lang=&#34;shell&#34;&gt;screen
-cd ~/mycar
-python manage.py drive --model models/mypilot.h5&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/k36-46wPwvA&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;h2 id=&#34;what-could-be-done-better&#34;&gt;What Could Be Done Better&lt;/h2&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;The mechanical part could be better. After I have mounted the
-acrylic chasssis, I have realized that the motors do not hold firmly.
-Moreover, there was a friction between one of the wheels and chassis.
-Therefore, I had to programmatically adjust the power
-to balance the wheels.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Moreover, I believe that having a streering wheel motor
-would be much more efficient, instead of
-&lt;a href=&#34;https://www.societyofrobots.com/programming_differentialdrive.shtml&#34;&gt;differential drive&lt;/a&gt;, as they call this construction in
-the robotics community. To test in the future.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Likewise, it is important to keep your camera in the same position during
-training and during self-piloting. Also make sure that the battery is
-always charged.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;It would be nice to have a 9 V battery connector, instead of a piece of
-putty. As simple as that.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Quality of the training data. The better is your driving strategy, the
-better training data you will produce, the better the car will learn its
-turns.&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Transfer learning. You can pretrain your driving model in a virtual
-environment such as
-&lt;a href=&#34;https://github.com/tawnkramer/gym-donkeycar&#34;&gt;Donkey Gym&lt;/a&gt;.
-See also this
-&lt;a href=&#34;https://www.youtube.com/watch?v=J6Ll5Obtuxk&amp;amp;feature=youtu.be&#34;&gt;video&lt;/a&gt;.&lt;/p&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/raspi/robo.jpg&#34; alt=&#34;A robot from 70s I have seen at Musée des Arts et Métiers in Paris. The robot inspired me for this project.&#34; width=&#34;590&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    A robot from 70s I have seen at Musée des Arts et Métiers in Paris. The robot inspired me for this project.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;I would like to thank the folks from the Integnano group who
-gave me a Raspberry Pi as a birthday gift.
-You are amazing!&lt;/p&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;As always, if you have any questions, remarks, or spotted any typos please send me
-a message.&lt;/p&gt;
-
-&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://projects.raspberrypi.org/en/projects/build-a-buggy/1&#34;&gt;Build a robot buggy tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.societyofrobots.com/programming_differentialdrive.shtml&#34;&gt;Differential drive&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://donkeycar.com&#34;&gt;Donkey Car platform&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://github.com/smellslikeml/LitterBug_donkey/wiki&#34;&gt;LitterBug donkey&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=4fXbDf_QWM4&amp;amp;feature=emb_logo&#34;&gt;Driving Tips to Train your Autonomous End-to-End NN Driver&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
     </item>
     
   </channel>

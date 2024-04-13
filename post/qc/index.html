@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-YZ04D85XM2"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'G-YZ04D85XM2');
+  </script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="generator" content="Source Themes Academic 2.4.0">
+  <meta name="generator" content="Hugo 0.53" />
+  <meta name="author" content="Bogdan Penkovsky">
+
+  
+  
+  
+  
+    
+  
+  <meta name="description" content="When I first learned about quantum computing, I thought it will be a long time
+before we actually see a quantum computer. Later, in 2019, I attended a
+brilliant talk by Alain Aspect who is known for his
+experiments on Bell&#39;s theorem.
+The very same year, Google claimed
+to have achieved quantum supremacy. These events made me realize that quantum
+computing is not just a theoretical concept. The idea that
+sparked my interest. I wanted to understand how is it even possible
+that the result does not exist until we measure it.">
+
+  
+  <link rel="alternate" hreflang="en-us" href="https://penkovsky.com/post/qc/">
+
+  
+
+
+  
+
+  
+  
+  
+  <meta name="theme-color" content="#0095eb">
+  
+
+  
+  
+  
+  
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha512-6MXa8B6uaO18Hid6blRMetEIoPqHf7Ux1tnyIQdpt9qI5OACx7C+O3IVTr98vwGnlcg0LOLa02i9Y1HpVhlfiw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/academicons/1.8.6/css/academicons.min.css" integrity="sha256-uFVgMKfistnJAfoCUQigIl+JfUaP47GrRKjf6CTPVmw=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha512-SfTiTlX6kk+qitfevl/7LibUOeJWlt9rbyDn92a1DqWOw9vWG2MFoays0sgObmWazO5BQPiFucnnEAjpAB+/Sw==" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.css" integrity="sha256-ygkqlh3CYSUri3LhQxzdcm0n1EQvH2Y+U5S2idbLtxs=" crossorigin="anonymous">
+
+    
+    
+    
+      
+    
+    
+      
+      
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/abap.min.css" crossorigin="anonymous">
+      
+    
+
+    
+
+    
+
+  
+
+  
+  
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Montserrat:400,700%7cRoboto:400,400italic,700%7cRoboto&#43;Mono">
+  
+
+  <link rel="stylesheet" href="/styles.css">
+  
+
+  
+  
+  
+
+  
+  <link rel="alternate" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  <link rel="feed" href="https://penkovsky.com/index.xml" type="application/rss+xml" title="Bogdan Penkovsky, PhD">
+  
+
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="icon" type="image/png" href="/img/icon.png">
+  <link rel="apple-touch-icon" type="image/png" href="/img/icon-192.png">
+
+  <link rel="canonical" href="https://penkovsky.com/post/qc/">
+
+  <meta property="twitter:card" content="summary_large_image">
+  
+  <meta property="og:site_name" content="Bogdan Penkovsky, PhD">
+  <meta property="og:url" content="https://penkovsky.com/post/qc/">
+  <meta property="og:title" content="Quantum Computing for Hackers | Bogdan Penkovsky, PhD">
+  <meta property="og:description" content="When I first learned about quantum computing, I thought it will be a long time
+before we actually see a quantum computer. Later, in 2019, I attended a
+brilliant talk by Alain Aspect who is known for his
+experiments on Bell&#39;s theorem.
+The very same year, Google claimed
+to have achieved quantum supremacy. These events made me realize that quantum
+computing is not just a theoretical concept. The idea that
+sparked my interest. I wanted to understand how is it even possible
+that the result does not exist until we measure it."><meta property="og:image" content="https://penkovsky.com/img/posts/qc/two-qubit.jpg">
+  <meta property="og:locale" content="en-us">
+  
+  <meta property="article:published_time" content="2024-04-13T15:55:03&#43;02:00">
+  
+  <meta property="article:modified_time" content="2024-04-13T15:55:03&#43;02:00">
+  
+
+  
+
+  
+
+  <title>Quantum Computing for Hackers | Bogdan Penkovsky, PhD</title>
+
+</head>
+<body id="top" data-spy="scroll" data-target="#toc" data-offset="71" >
+
+<nav class="navbar navbar-default navbar-fixed-top" id="navbar-main">
+  <div class="container">
+
+    
+    <div class="navbar-header">
+      
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+              data-target=".navbar-collapse" aria-expanded="false">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      
+      <a class="navbar-brand" href="/">Bogdan Penkovsky, PhD</a>
+    </div>
+
+    
+    <div class="collapse navbar-collapse">
+
+      
+      
+      <ul class="nav navbar-nav navbar-right">
+        
+
+        
+        
+        
+        
+        
+
+        <li class="nav-item">
+          <a href="/">
+            
+            <span>Home</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/post">
+            
+            <span>Posts</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+        
+
+        <li class="nav-item">
+          <a href="/neural-networks">
+            
+            <span>AI</span>
+            
+          </a>
+        </li>
+
+        
+        
+
+        
+        
+        
+        
+        
+          
+            
+          
+        
+
+        <li class="nav-item">
+          <a href="https://scholar.google.co.uk/citations?user=NrD1h9QAAAAJ" target="_blank" rel="noopener">
+            
+            <span>Publications</span>
+            
+          </a>
+        </li>
+
+        
+        
+      
+
+      
+      </ul>
+
+    </div>
+  </div>
+</nav>
+
+
+<article class="article" itemscope itemtype="http://schema.org/Article">
+
+  
+<div class="article-header">
+  
+  
+    <img src="/img/posts/qc/two-qubit.jpg" class="article-banner" itemprop="image">
+  
+
+  <span class="article-header-caption">Quantum states visualized. Image credit: <a href="https://algassert.com/post/1716">Craig Gidney</a> (<a href="https://creativecommons.org/licenses/by/4.0/">CC 4.0 BY</a>)</span>
+</div>
+
+
+
+  <div class="article-container">
+    <h1 itemprop="name">Quantum Computing for Hackers</h1>
+
+    
+
+<div class="article-metadata">
+
+  
+  
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
+  
+
+  <span class="article-date">
+    
+    <meta content="2024-04-13 15:55:03 &#43;0200 CEST" itemprop="datePublished">
+    <time datetime="2024-04-13 15:55:03 &#43;0200 CEST" itemprop="dateModified">
+      Apr 13, 2024
+    </time>
+  </span>
+  <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
+    <meta itemprop="name" content="Bogdan Penkovsky">
+  </span>
+
+  
+  <span class="middot-divider"></span>
+  <span class="article-reading-time">
+    18 min read
+  </span>
+  
+
+  
+  
+
+  
+  
+  
+  <span class="middot-divider"></span>
+  <span class="article-categories">
+    <i class="fa fa-folder"></i>
+    
+    <a href="https://penkovsky.com/categories/quantum-computing/">Quantum Computing</a>
+    
+  </span>
+  
+  
+
+  
+  
+
+  
+
+</div>
+
+
+    <div class="article-style" itemprop="articleBody">
+      <p>When I first learned about quantum computing, I thought it will be a long time
+before we actually see a quantum computer. Later, in 2019, I attended a
+brilliant talk by Alain Aspect who is known for his
+<a href="https://en.wikipedia.org/wiki/Bell_test">experiments</a> on Bell's theorem.
+The very same year, Google <a href="https://www.nature.com/articles/s41586-019-1666-5">claimed</a>
+to have achieved quantum supremacy. These events made me realize that quantum
+computing is not just a theoretical concept. The idea that
+sparked my interest. I wanted to understand how is it even possible
+that the result does not exist until we measure it.</p>
+
+<p>In this article, we explain quantum computing with a minimal number of lines of
+code. To know how quantum computing works, you don't always need a quantum
+computer. We will simulate a beam splitter, a basic quantum circuit. We will
+also show how to express digital circuits with quantum gates. Finally, we will
+get a rough idea how quantum circuits are executed on physical quantum hardware.</p>
+
+<blockquote>
+<p>The post is aimed at people with an engineering
+mindset. Some familiarity with linear algebra is
+advised. Also please let
+me know how this piece can be improved.</p>
+</blockquote>
+
+<h2 id="quantum-computing-faq">Quantum Computing FAQ</h2>
+
+<p><strong>Q:</strong> Will I be able to play [your favorite video game here] on a quantum computer?</p>
+
+<p><strong>A:</strong> No</p>
+
+<p><strong>Q:</strong> Will I be able to play Doom at least?</p>
+
+<p><strong>A:</strong> No. See <a href="#expressing-digital-circuits-with-quantum-gates">Expressing Digital Circuits with Quantum
+Gates</a> section.</p>
+
+<p>TLDR; Even though any digital circuit <em>can be</em> expressed in terms of quantum
+circuits, there would be a <strong>huge</strong> overhead. Also you would need a cryostat and
+other expensive equipment to prepare quantum states. Making it a prohibitively
+expensive quantum computer to only simulate a classical one. This is not to
+mention that we live in the
+<a href="https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era">NISQ era</a>.</p>
+
+<h2 id="qubits">Qubits</h2>
+
+<p>A qubit is a basic unit of quantum information.
+Unlike classical bits that can be either zero or one,
+qubits can be in a superposition of states<sup class="footnote-ref" id="fnref:fn-superpos"><a href="#fn:fn-superpos">1</a></sup>.
+Instead of being just &quot;up&quot; ($|0\rangle$) or &quot;down&quot;, ($|1\rangle$),
+a qubit can be in a state 40% up and 60% down.
+Or more generally, a qubit can be in a state
+$|\psi\rangle = \alpha |0\rangle + \beta |1\rangle$,
+where $\alpha$ and $\beta$ are complex numbers. The probability to measure
+a qubit in the state $|0\rangle$ is $|\alpha|^2$ and the probability to measure
+a qubit in the state $|1\rangle$ is $|\beta|^2$.
+A single qubit can be conveniently visualized using the <em>Bloch sphere</em>.</p>
+
+<figure>
+
+<img src="/img/posts/qc/Bloch_sphere.png" width="300px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Block sphere representing a single qubit.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>When we perform <em>any</em> measurement, a quantum state collapses.
+Qubits become classical bits. And therefore the information
+about a quantum state is lost during the measurement<sup class="footnote-ref" id="fnref:fn-meas"><a href="#fn:fn-meas">2</a></sup>.
+There is nothing we can do about that.
+A QHack meme well summarizes the situation.</p>
+
+<figure>
+
+<img src="/img/posts/qc/qmeme.png" width="350px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>QHack 2024 meme: A qubit collapses when you look at it.</h4>
+  
+</figcaption>
+
+</figure>
+
+<h2 id="minimal-quantum-computing-example-modeling-a-beam-splitter">Minimal Quantum Computing Example: Modeling a Beam Splitter</h2>
+
+<p>Here we will create a minimal demonstration of quantum computing.
+This demonstration will contain all the stages used in quantum computing.
+Which software framework shall we choose? One option is <a href="https://pennylane.ai/">Pennylane</a>. It is
+a well-documented software framework. There are plenty of other options, such as
+<a href="https://qiskit.org/">Qiskit</a> or <a href="https://perceval.quandela.net/">Perceval</a>. The last one is actually simulating
+photonic circuits, which is neat. However, we want to show that there is no magic
+involved, so we will use good old Python with Numpy.</p>
+
+<p>What we are going to do is to simulate an (idealized) beam splitter.
+This optical device will implement what we call a <em>Hadamard gate</em>.
+How does a beam splitter work? In classical optics, you send a light beam
+with a certain intensity $I$ and it get's split into two beams of equal
+light intensity $\frac 1 2 I$. Beam splitters are typically implemented
+by semi-transparent mirrors that let only half of light through, while
+reflecting the other half.</p>
+
+<figure>
+
+<img src="/img/posts/qc/bs.png" width="300px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Optical beam splitter contains a semi-transparent mirror that lets through some of the light. <a href="https://physics.stackexchange.com/questions/39577/beam-splitters-direction-of-use">Credit</a></h4>
+  
+</figcaption>
+
+</figure>
+
+<p>That's great! But what happens in the quantum case? In the quantum case, we
+want to deal with individual photons, which are quantum objects<sup class="footnote-ref" id="fnref:fn-quanta"><a href="#fn:fn-quanta">3</a></sup>.
+As it turns out, things start to work in a strange way on the quantum level.
+When we send a single photon through a beam splitter, it &quot;decides&quot; which
+way to send the photon in a probabilistic manner! When we have a semi-transparent window
+with a 50% reflectivity (a balanced beam-splitter), this means that a photon
+will be reflected with a 50% chance.
+For more insight, see <a href="https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter">QED</a> by Richard Feynman.</p>
+
+<p>So here is a rough sketch how we model a beam splitter:</p>
+
+<ol>
+<li>We send a photon (encoding our qubit).</li>
+<li>We apply a transformation by the beam splitter.</li>
+<li>We obtain a theoretical probability distribution.</li>
+<li>We simulate &quot;measurements&quot;, which way the photon has gone as if we placed a photodetector on each of the two paths.</li>
+</ol>
+
+<p>Congratulations, we know how to simulate quantum computing!
+Now, more details. First, we prepare a qubit.
+By convention, $|0\rangle = [1, 0]^T$ and $|1\rangle = [0, 1]^T$.
+We deal with vectors of two complex numbers.
+In the language of quantum computing $|0\rangle$ means &quot;the probability to
+measure a photon on the first photodetector is 100% and zero on the second
+one&quot;. And as you have figured it out already,
+$|1\rangle$ is simply &quot;a 100% chance to measure a photon on the second
+photodetector and zero on the first one&quot;. More generally, we use
+a Greek letter $\psi$ to denote any quantum state $|\psi\rangle$.
+Don't be afraid of this &quot;quantum physics&quot; notation, it simply means vectors,
+squared sum of which is equal to one. That's it!</p>
+
+<blockquote>
+<p><strong>Remark</strong> When we deal
+with quantum states, we use <em>amplitudes</em>.
+The rule to convert amplitudes (quantum state representations) into probabilities
+(measurement probabilities of what we observe after the quantum state collapses),
+is to square the absolute value: $P = |\psi|^2$.
+For instance, let's take a quantum state
+$|\psi\rangle = |+\rangle := \frac 1 {\sqrt 2} [1, 1]^T$.
+Then, the probability distribution
+P = $|\frac 1 {\sqrt 2} [1, 1]^T|^2 = \frac 1 2 [1^2, 1^2]^T = [0.5, 0.5]^T$.
+That is, we have a 50% change to detect a photon
+on either photodetector.</p>
+</blockquote>
+
+<p>Second, we have to model a beam splitter. The beam splitter with 50%
+reflectivity is given by the following linear operator:</p>
+
+<p>$$
+H = \frac{1}{\sqrt{2}} \begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix}.
+$$</p>
+
+<p>Note that these operators are supposed to play nicely with the amplitudes
+so that in the end of the experiment all the probabilities sum to one
+(conservation of probability)!
+Therefore, the only valid operators are
+<a href="https://en.wikipedia.org/wiki/Unitary_transformation">unitary transformations</a>
+preserving vector length. In other words, the operators are only allowed to
+rotate the amplitudes vector.</p>
+
+<p>Third, to get a probability distribution, we apply unitary operators
+to our qubits. Suppose, we send a photon such that we
+would measure it on the first photodetector if there was no beam splitter.
+That is, we prepare $|0\rangle$.
+Then, we apply the $H$ operator:</p>
+
+<p>$$
+H |0\rangle =
+  \frac{1}{\sqrt{2}} \begin{pmatrix} 1 &amp; 1 \\ 1 &amp; -1 \end{pmatrix} \begin{pmatrix} 1  \\ 0 \end{pmatrix} =
+  \frac{1}{\sqrt{2}} \begin{pmatrix} 1 \\ 1 \end{pmatrix}.
+$$</p>
+
+<p>Now, we obtain a probability distribution by squaring the amplitude vector.
+From the remark above, it is $[0.5, 0.5]^T$.</p>
+
+<p>Fourth, we simulate measurements by drawing samples from that distribution.
+Here is a Python code for the beam splitter modeling.
+Once you understand it, everything else in quantum computing is just a
+matter of scaling up the number of qubits and applying more gates.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">prepare_state</span>():
+    <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">    Prepare a qubit in the |0&gt; state
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>])
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">bs</span>(state):
+    <span style="color:#e6db74">&#34;&#34;&#34;Simulate a beam splitter&#34;&#34;&#34;</span>
+    Hadamard <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]]) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sqrt(<span style="color:#ae81ff">2</span>)
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>dot(Hadamard, state)
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">measure_state</span>(state, n):
+    <span style="color:#e6db74">&#34;&#34;&#34;
+</span><span style="color:#e6db74">    Measure a quantum state n times.
+</span><span style="color:#e6db74">    &#34;&#34;&#34;</span>
+    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>choice(
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>],
+        n,
+        <span style="color:#75715e"># Convert the amplitudes to probabilities</span>
+        p<span style="color:#f92672">=</span>[np<span style="color:#f92672">.</span>abs(state[<span style="color:#ae81ff">0</span>]) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>, np<span style="color:#f92672">.</span>abs(state[<span style="color:#ae81ff">1</span>]) <span style="color:#f92672">**</span> <span style="color:#ae81ff">2</span>],
+    )
+
+
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">main</span>():
+    <span style="color:#e6db74">&#34;&#34;&#34;A minimal quantum computing example.&#34;&#34;&#34;</span>
+    <span style="color:#75715e"># A qubit in the |0&gt; state</span>
+    state <span style="color:#f92672">=</span> prepare_state()
+    <span style="color:#75715e"># Simulate a beam splitter</span>
+    state <span style="color:#f92672">=</span> bs(state)
+    <span style="color:#75715e"># Measure the state</span>
+    n <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+    results <span style="color:#f92672">=</span> measure_state(state, n)
+    <span style="color:#66d9ef">print</span>(f<span style="color:#e6db74">&#34;Measured {results.sum()} ones out of {n} measurements&#34;</span>)
+
+
+<span style="color:#66d9ef">if</span> __name__ <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;__main__&#34;</span>:
+    main()</code></pre></div>
+
+<p>I run this program several times. Here is what I've got</p>
+
+<pre><code>Measured 493 ones out of 1000 measurements
+Measured 476 ones out of 1000 measurements
+Measured 504 ones out of 1000 measurements
+</code></pre>
+
+<p>As you have suspected, quantum computing is probabilistic.</p>
+
+<h2 id="expressing-digital-circuits-with-quantum-gates">Expressing Digital Circuits with Quantum Gates</h2>
+
+<p>Any combinatorial digital circuit can be simulated with quantum circuits (with
+an overhead).</p>
+
+<h3 id="background">Background</h3>
+
+<p>Here we briefly introduce Pauli gates, Toffoli gate,
+and Kronecker product.
+The <a href="https://en.wikipedia.org/wiki/Pauli_matrices">Pauli gates</a> are the following:</p>
+
+<p>$$
+\begin{aligned}
+X &amp;= \begin{pmatrix} 0 &amp; 1 \\ 1 &amp; 0 \end{pmatrix}, \<br />
+Y &amp;= \begin{pmatrix} 0 &amp; -i \\ i &amp; 0 \end{pmatrix}, \<br />
+Z &amp;= \begin{pmatrix} 1 &amp; 0 \\ 0 &amp; -1 \end{pmatrix}.
+\end{aligned}
+$$</p>
+
+<p>The Pauli $X$ gate is often denoted by symbol $\oplus$. This gate is the quantum
+analogue of the classical NOT gate. It flips the state of a qubit.</p>
+
+<p>The <a href="https://en.wikipedia.org/wiki/Toffoli_gate">Toffoli gate</a> is a three-qubit gate that flips the third qubit if the first
+two qubits are in the state $|1\rangle$. The Toffoli gate is
+given by the following matrix:</p>
+
+<p>$$
+\begin{pmatrix}
+1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 \\ 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 0 &amp; 1 &amp; 0 \end{pmatrix}.
+$$</p>
+
+<p>Some readers may notice that I skipped the <a href="https://en.wikipedia.org/wiki/Controlled_NOT_gate">controlled NOT</a> (CNOT) gate.
+The CNOT gate is applied to two qubits and flips the second qubit if the first
+qubit is in the state $|1\rangle$. The CNOT gate is a quantum analogue of the
+classical XOR gate. Try to infer the CNOT gate matrix by looking at the Toffoli
+gate matrix above.</p>
+
+<p>Finally, the <a href="https://en.wikipedia.org/wiki/Kronecker_product">Kronecker product</a> of two matrices $A$ and $B$</p>
+
+<p>$$
+{A}\otimes{B} = \begin{pmatrix}
+  a_{11} {B} &amp; \cdots &amp; a_{1n}{B} \\ \vdots &amp; \ddots &amp;
+  \vdots \\ a_{m1} {B} &amp; \cdots &amp; a_{mn} {B}
+\end{pmatrix},
+$$</p>
+
+<p>where $a_{ij}$ are the elements of the matrix $A$ and $B$ is the matrix to be
+repeated.
+The Kronecker product is useful when we want to apply a single-qubit gate to
+multiple qubits. For instance, the Pauli $X$ gate applied to the first of
+two qubits is given by</p>
+
+<p>$$
+X \otimes I =
+\begin{pmatrix}
+0 &amp; 1 \\ 1 &amp; 0
+\end{pmatrix} \otimes
+\begin{pmatrix}
+1 &amp; 0 \\ 0 &amp; 1
+\end{pmatrix} =
+\begin{pmatrix}
+0 &amp; 0 &amp; 1 &amp; 0 \\ 0 &amp; 0 &amp; 0 &amp; 1 \\ 1 &amp; 0 &amp; 0 &amp; 0 \\ 0 &amp; 1 &amp; 0 &amp; 0
+\end{pmatrix}.
+$$</p>
+
+<p>As we will see in the next section, multiple qubits are represented like musical notes.
+Only instead of notes, &quot;wires&quot; represent qubits and the gates are applied to them.
+One reads this notation from left to right.</p>
+
+<h3 id="quantum-or-circuit">Quantum OR Circuit</h3>
+
+<p>Let's take <strong>OR</strong> digital gate as an example. The same method can be applied to
+emulate any digital gate. Below is an illustration of the classical OR gate.
+The output is <code>1</code> if at least one of the inputs is <code>1</code>.
+The gate is irreversible. That is, the information about the inputs is lost
+during the computation. For instance, if we get an output <code>1</code>, we cannot tell
+which pair of inputs produced this output. This behavior is typical
+for gates in classical computing.</p>
+
+<figure>
+
+<img src="/img/posts/qc/quantum-or.png" width="550px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Classical OR gate and reversible OR gate and their truth tables.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>In contrast, quantum gates are reversible. This means that quantum gates should
+work both in forward and also in backward directions. Therefore, we have to
+design a reversible gate that preserves information. On the image above, on the
+right, we see a reversible OR gate. Can we build a quantum circuit that
+implements this reversible OR gate? The answer is yes.</p>
+
+<p>First, let's visualize the circuit graphically.
+The circuit consists of three qubits. The first two qubits are the inputs $a$
+and $b$. The third qubit will contain the output $c'$.</p>
+
+<figure>
+
+<img src="/img/posts/qc/quantum-or-circuit.gif" width="550px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Animated quantum <strong>OR</strong> circuit. The circuit consists of three qubits and Pauli X and Toffoli gates applied to them. The first two qubits are the inputs $a$ and $b$. The third qubit will contain the output.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>The idea is first to check if the second (first) qubit is in the state
+$|1\rangle$. If it is, we have to flip the third qubit, which is initially in
+the state $|0\rangle$. Therefore, we
+apply the Pauli $X$ gate to the first (second) qubit first. This will invert the
+input: If it was $|0\rangle$, it will become $|1\rangle$. Then, we apply the
+Toffoli gate trying to flip the output. The Toffoli gate will flip the third
+qubit if the first two qubits are both in the state $|1\rangle$. Before
+proceeding to the next attempt, we have to undo the previous $X$ gate. Therefore,
+we apply the Pauli $X$ gate to the first (second) to undo the previous $X$ gate
+and try again with another input. Finally, we check if both initial inputs were
+$|1\rangle$, using the third Toffoli gate. Below is the Python code that
+manipulates the quantum states and simulates the quantum circuit from above.</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
+
+<span style="color:#75715e"># PauliX gate operator applied to the first of three cubits</span>
+X1_3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>]]), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>)), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>))
+<span style="color:#75715e"># PauliX gate operator applied to the second of three cubits</span>
+X2_3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>), np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>]])), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>))
+<span style="color:#75715e"># # PauliX gate operator applied to the third of three cubits</span>
+<span style="color:#75715e"># X3_3 = np.kron(np.kron(np.eye(2), np.eye(2)), np.array([[0, 1], [1, 0]]))</span>
+
+<span style="color:#75715e"># Toffoli gate operator</span>
+Toffoli <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(
+    [
+        [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>],
+        [<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>],
+    ]
+)
+
+states <span style="color:#f92672">=</span> [
+    <span style="color:#75715e"># |0,0,0&gt; state</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |0,1,0&gt; state</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |1,0,0&gt; state</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |1,1,0&gt; state</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>]),
+]
+
+<span style="color:#75715e"># After applying OR on first two qubits, the expected outputs are:</span>
+expected_outputs <span style="color:#f92672">=</span> [
+    <span style="color:#75715e"># |0,0,0&gt;</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |0,1,1&gt;</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |1,0,1&gt;</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>]),
+    <span style="color:#75715e"># |1,1,1&gt; state</span>
+    np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>]),
+]
+
+
+<span style="color:#75715e"># Implementing a gate that maps from states to expected_outputs</span>
+<span style="color:#75715e"># using the following gates: X1_3, X2_3, X3_3, Toffoli</span>
+<span style="color:#66d9ef">def</span> <span style="color:#a6e22e">logic_gate_or</span>(state):
+    <span style="color:#66d9ef">return</span> Toffoli <span style="color:#960050;background-color:#1e0010">@</span> X2_3 <span style="color:#960050;background-color:#1e0010">@</span> Toffoli <span style="color:#960050;background-color:#1e0010">@</span> X2_3 <span style="color:#960050;background-color:#1e0010">@</span> X1_3 <span style="color:#960050;background-color:#1e0010">@</span> Toffoli <span style="color:#960050;background-color:#1e0010">@</span> X1_3 <span style="color:#960050;background-color:#1e0010">@</span> state
+
+
+<span style="color:#66d9ef">for</span> i, state <span style="color:#f92672">in</span> enumerate(states):
+    <span style="color:#66d9ef">print</span>(logic_gate_or(state))
+    <span style="color:#66d9ef">assert</span> np<span style="color:#f92672">.</span>allclose(
+        logic_gate_or(state), expected_outputs[i]
+    ), f<span style="color:#e6db74">&#34;Test failed for state {state}&#34;</span></code></pre></div>
+
+<p>This provides a general idea of how quantum circuits can be used to build
+digital circuits. An additional constraint is
+the requirement for the quantum gates to be reversible.</p>
+
+<p>Looking from the perspective of simulating digital circuits with quantum gates,
+we note a significant overhead. On the other hand, unlike conventional digital
+circuits, quantum circuits can accept such inputs as
+$a = |+\rangle := \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right).$
+Corresponding to a 50% chance to measure either <code>0</code> or <code>1</code> on that qubit - the
+result of applying a Hadamard gate.
+A superposition of inputs is also a valid input!
+Here is where the power of quantum computing comes from:
+The ability to process multiple inputs at the same time.
+This is known as <em>quantum parallelism</em>, which lies at the heart of many quantum
+algorithms.</p>
+
+<p>Okay, let's see what happens when we apply the OR gate to a superposition of
+inputs. We provide the following inputs:
+$a = \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right)$,
+$b = |0\rangle$,
+$c = |0\rangle$.
+To achieve a superposition on the input $a$,
+we apply the Hadamard gate to the first out of three qubits:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#75715e"># Hadamard gate</span>
+H <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]]) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>sqrt(<span style="color:#ae81ff">2</span>)
+
+<span style="color:#75715e"># Hadamard gate when applied to the first of three qubits</span>
+H1_3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>kron(H, np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>)), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>))
+
+<span style="color:#75715e"># Prepare |0,0,0&gt; state: 100% probability to measure three zero bits.</span>
+state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>])
+
+<span style="color:#75715e"># Apply the Hadamard gate to the first qubit:</span>
+<span style="color:#75715e"># 50% probability to measure 0 and 50% probability to measure 1</span>
+<span style="color:#75715e"># on the first qubit.</span>
+state <span style="color:#f92672">=</span> H1_3 <span style="color:#960050;background-color:#1e0010">@</span> state
+
+<span style="color:#75715e"># Apply the OR gate</span>
+state <span style="color:#f92672">=</span> logic_gate_or(state)
+
+<span style="color:#66d9ef">print</span>(state)</code></pre></div>
+
+<p>Here is the result:</p>
+
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-text" data-lang="text">[0.70710678 0.         0.         0.         0.         0.70710678
+ 0.         0.        ]</code></pre></div>
+
+<p>Or, in other words, the quantum state is
+$\left[\frac 1 {\sqrt 2}, 0, 0, 0, 0, \frac 1 {\sqrt 2}, 0, 0\right]$.
+Once we square those amplitudes, we get the following probability distribution.</p>
+
+<figure>
+
+<img src="/img/posts/qc/or-gate-superposition.png" width="550px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Probability distribution after applying the OR gate to initial state $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>This corresponds to a 50% chance to measure classical <code>000</code> bits and
+a 50% chance to measure <code>101</code>.
+Isn't it nice?</p>
+
+<p>We were unsure whether the first input was 0 or 1.
+And therefore we have encoded this ambivalence into the quantum state
+without any difficulties. We were able to run the OR gate on this superposition
+of inputs. And as a result, we have processed two inputs at the same time! In
+contrast, in the classical case, we would have to run the OR gate twice to
+process both possible inputs.</p>
+
+<p>Of course, if we were to perform the real experiment, we would have to run
+several repetitions to estimate the probability distribution. Here is what the
+result could look like if we performed 1000 measurements:</p>
+
+<figure>
+
+<img src="/img/posts/qc/or-gate-measurement.png" width="550px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>Of course, we would need to run the experiment many times to get
+a better estimate of the probability distribution.
+You can also play with the circuit in <a href="https://algassert.com/quirk#circuit=%7B%22cols%22%3A%5B%5B%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B%22X%22%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%2C%5B1%2C%22X%22%5D%2C%5B%22%E2%80%A2%22%2C%22%E2%80%A2%22%2C%22X%22%5D%5D%7D">Quirk</a>!
+For instance, what happens when both inputs $a$ and $b$ are in
+the superposition $|+\rangle = \frac 1 {\sqrt 2} \left( |0\rangle + |1\rangle \right)$?</p>
+
+<figure>
+
+<img src="/img/posts/qc/quantum-or-circuit_2.png" width="550px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Quantum OR gate applied to $a=b=|+\rangle$, $c=|0\rangle$.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>Right, we have a 75% chance to measure <code>1</code> on the third qubit!
+By now, you should have developed a feeling for how quantum computing works.
+The drawback, if we can call it that, is that we have to
+deal with probabilities. Even though the quantum state exists in a
+superposition, that is, in several states simultaneously, we can only measure
+one of them at a time.</p>
+
+<h2 id="why-can-t-we-simulate-quantum-circuits-with-classical-computers">Why Can't We Simulate Quantum Circuits with Classical Computers?</h2>
+
+<p>This all is well. However, why can't we just simulate quantum circuits with
+classical computers as we have done above? The answer is that we can, when the
+number of qubits is small. However, to accurately represent a quantum state of
+$n$ qubits we need $2^n$ complex numbers. For example, to accurately represent
+an arbitrary quantum state of 100 qubits, we need
+$1,267,650,600,228,229,401,496,703,205,376 \approx 10^{30}$ complex numbers!
+This exponential state space growth requires an exponentially larger amount of
+computational resources.</p>
+
+<h2 id="transpilation">Transpilation</h2>
+
+<p>OK, so I've expressed my quantum circuit in terms of logical
+qubits. How it gets executed on physical quantum hardware?</p>
+
+<p>If you are at the point of asking this question, congratulations for following
+along! Here is what happens. There are three stages of the process known a
+<em>transpilation</em>.</p>
+
+<ol>
+<li>Mapping</li>
+<li>Placement</li>
+<li>Routing</li>
+</ol>
+
+<p>During the <em>mapping</em> stage, logical quantum gates are mapped to
+natively supported ones. For instance, if we deal with photonics,
+quantum gates can be implemented using beam splitters and
+phase shifters (check e.g. <a href="https://arxiv.org/pdf/quant-ph/0112088.pdf">Ralph CNOT gate</a>).
+And another example: This year's QHack had a challenge to implement a
+<a href="https://arxiv.org/abs/2205.14081">wormhole-inspired teleportation protocol</a>
+in terms of the gates that are native to a superconducting device.</p>
+
+<p>During the <em>placement</em> stage, quantum circuits are allocated to
+certain areas on a physical device. It can happen that your circuit
+is too large for a specific device and thereby the circuit has to be
+redesigned.</p>
+
+<p>Finally, during the <em>routing</em> stage, quantum gates are being
+connected by physical wires. Sometimes, portions of a physical
+circuit are configured to identity transformations to satisfy
+the requirements. And this typically results in higher noise.
+Overall, if you are familiar with
+<a href="https://en.wikipedia.org/wiki/Field-programmable_gate_array">FPGAs</a>,
+the process of transpilation is quite similar.</p>
+
+<h2 id="summary">Summary</h2>
+
+<figure>
+
+<img src="/img/posts/qc/aspect2019.jpg" alt="11/10/2019" width="650px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Alain Aspect at Paris-Saclay: 'The result does not exist before it is measured.'</h4>
+  <p>
+    11/10/2019
+    
+    
+    
+  </p> 
+</figcaption>
+
+</figure>
+
+<p>Quantum computing is a great puzzle. In quantum hardware or in software.
+This forces us to think in different terms.
+New related fields are also booming. We can think of quantum machine learning,
+quantum cryptography, quantum communication, and quantum chemistry.
+Note that we have only discussed the case of perfect quantum computers.
+Today, we have to deal with <a href="https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era">noisy intermediate-scale quantum</a> devices.
+These devices are not perfect and have a limited number of qubits.
+Also we do not really know if there is any fundamental limit to the number of
+qubits that can be used in a quantum computer. This is an open question.</p>
+
+<h2 id="citation">Citation</h2>
+
+<pre>
+@article{penkovsky2024QC,
+ title   = "Quantum Computing for Hackers",
+ author  = "Penkovsky, Bogdan",
+ journal = "penkovsky.com",
+ year    = "2024",
+ month   = "April",
+ url     = "https://penkovsky.com/post/qc/"
+}
+</pre>
+
+<h2 id="learn-more">Learn More</h2>
+
+<ul>
+<li><a href="https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter">Richard Feynman. Quantum Electrodynamics</a></li>
+<li><a href="https://www.youtube.com/watch?v=0USje5vTIKs&amp;list=PLUl4u3cNGP60cspQn3N9dYRPiyVWDd80G&amp;index=9">Understand the notion of probability amplitudes</a></li>
+<li><a href="https://algassert.com/post/1716">Visualizing 2-Qubit Entanglement</a></li>
+<li><a href="https://quantumatlas.umd.edu/entry/quantum-states/">Quantum states</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Bell%27s_theorem">Bell's theorem</a></li>
+<li><a href="https://archive.org/details/QuantumComputationAndQuantumInformation10thAnniversaryEdition">Nielsen and Chuang. Quantum Computation And Quantum Information</a></li>
+<li><a href="https://juliaphysics.github.io/PhysicsTutorials.jl/tutorials/general/quantum_ising/quantum_ising.html">Quantum Ising Phase Transition</a></li>
+<li><a href="https://algassert.com/quirk">Quirk quantum circuit simulator</a></li>
+</ul>
+<div class="footnotes">
+
+<hr />
+
+<ol>
+<li id="fn:fn-superpos">A superposition is a linear combination.
+ <a class="footnote-return" href="#fnref:fn-superpos"><sup>^</sup></a></li>
+<li id="fn:fn-meas">This is related to the Heisenberg Uncertainty Principle: You cannot measure a quantum state without disturbing it.
+ <a class="footnote-return" href="#fnref:fn-meas"><sup>^</sup></a></li>
+<li id="fn:fn-quanta">Photons initially were called &quot;quanta&quot; by Einstein.
+ <a class="footnote-return" href="#fnref:fn-quanta"><sup>^</sup></a></li>
+</ol>
+</div>
+    </div>
+
+    
+
+
+<div class="article-tags">
+  
+  <a class="label label-default" href="https://penkovsky.com/tags/qc/">QC</a>
+  
+</div>
+
+
+
+
+    
+
+    
+    
+
+    
+
+
+  </div>
+</article>
+
+<footer class="site-footer">
+  <div class="container">
+
+    
+
+    <p class="powered-by">
+
+      &copy; Bogdan Penkovsky 2024 
+
+      <a rel="me" href="https://sigmoid.social/@penkovsky"><big>&sigma;</big></a>
+
+      Powered by
+      <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a>
+
+      <span class="pull-right" aria-hidden="true">
+        <a href="#" id="back_to_top">
+          <span class="button_icon">
+            <i class="fa fa-chevron-up fa-2x"></i>
+          </span>
+        </a>
+      </span>
+
+    </p>
+  </div>
+</footer>
+
+
+<div id="modal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close btn-large" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title">Cite</h4>
+      </div>
+      <div>
+        <pre><code class="modal-body tex"></code></pre>
+      </div>
+      <div class="modal-footer">
+        <a class="btn btn-primary btn-outline js-copy-cite" href="#" target="_blank">
+          <i class="fa fa-copy"></i> Copy
+        </a>
+        <a class="btn btn-primary btn-outline js-download-cite" href="#" target="_blank">
+          <i class="fa fa-download"></i> Download
+        </a>
+        <div id="modal-error"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    
+
+    
+    
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        CommonHTML: { linebreaks: { automatic: true } },
+        tex2jax: { inlineMath: [ ['$', '$'], ['\\(','\\)'] ], displayMath: [ ['$$','$$'], ['\\[', '\\]'] ], processEscapes: false },
+        TeX: { noUndefined: { attributes: { mathcolor: 'red', mathbackground: '#FFEEEE', mathsize: '90%' } } },
+        messageStyle: 'none'
+      });
+    </script>
+    
+
+    
+    
+    
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js" integrity="sha512-3P8rXCuGJdNZOnUx/03c1jOTnMn3rP63nBip5gOP2qmUh5YAdVAvFZ1E+QLZZbC1rtMrQb+mah3AfYW11RUrWA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.imagesloaded/4.1.3/imagesloaded.pkgd.min.js" integrity="sha512-umsR78NN0D23AzgoZ11K7raBD+R6hqKojyBZs1w8WvYlsI+QuKRGBx3LFCwhatzBunCjDuJpDHwxD13sLMbpRA==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha512-iztkobsvnjKfAtTNdHkGVjAYTrrtlC7mGp/54c40wowO7LhURYl3gVzzcEqGl/qKXQltJ2HwMrdLcNUdo+N/RQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.isotope/3.0.4/isotope.pkgd.min.js" integrity="sha512-VDBOIlDbuC4VWxGJNmuFRQ0Li0SKkDpmGyuhAG5LTDLd/dJ/S0WMVxriR2Y+CyPL5gzjpN4f/6iqWVBJlht0tQ==" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.2.5/jquery.fancybox.min.js" integrity="sha256-X5PoE3KU5l+JcX+w09p/wHl9AzK333C4hJ2I9S5mD4M=" crossorigin="anonymous"></script>
+
+      
+        
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js" integrity="sha256-/BfiIkHlHoVihZdc6TFuj7MmJ0TWcWsMXkeDFwhi0zw=" crossorigin="anonymous"></script>
+        
+        <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/languages/haskell.min.js"></script>
+        
+      
+
+      
+      
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_CHTML-full" integrity="sha256-GhM+5JHb6QUzOQPXSJLEWP7R73CbkisjzK5Eyij4U9w=" crossorigin="anonymous" async></script>
+      
+    
+
+    <script src="/js/hugo-academic.js"></script>
+    
+
+    
+    
+
+    
+    
+    
+
+    
+    
+    <script>hljs.initHighlightingOnLoad();</script>
+    
+
+    
+
+    
+    
+
+    
+    
+
+  </body>
+</html>
+
