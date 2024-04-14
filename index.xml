@@ -26,11 +26,19 @@ computing is not just a theoretical concept. The idea that
 sparked my interest. I wanted to understand how is it even possible
 that the result does not exist until we measure it.&lt;/p&gt;
 
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Edit 14/04/2024:&lt;/strong&gt; Added results running the quantum OR circuit on a real quantum computer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
 &lt;p&gt;In this article, we explain quantum computing with a minimal number of lines of
 code. To know how quantum computing works, you don&#39;t always need a quantum
 computer. We will simulate a beam splitter, a basic quantum circuit. We will
-also show how to express digital circuits with quantum gates. Finally, we will
-get a rough idea how quantum circuits are executed on physical quantum hardware.&lt;/p&gt;
+also show how to express digital circuits with quantum gates. Moreover, we will
+run a quantum OR circuit on a real quantum computer and compare the results with
+the theoretical ones. Finally, we will get a rough idea how quantum circuits are
+compiled and executed on physical quantum hardware.&lt;/p&gt;
 
 &lt;blockquote&gt;
 &lt;p&gt;The post is aimed at people with an engineering
@@ -396,11 +404,11 @@ manipulates the quantum states and simulates the quantum circuit from above.&lt;
 
 &lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span style=&#34;color:#f92672&#34;&gt;import&lt;/span&gt; numpy &lt;span style=&#34;color:#f92672&#34;&gt;as&lt;/span&gt; np
 
-&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the first of three cubits&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the first of three qubits&lt;/span&gt;
 X1_3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]]), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;)), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
-&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the second of three cubits&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# PauliX gate operator applied to the second of three qubits&lt;/span&gt;
 X2_3 &lt;span style=&#34;color:#f92672&#34;&gt;=&lt;/span&gt; np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;kron(np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;array([[&lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;], [&lt;span style=&#34;color:#ae81ff&#34;&gt;1&lt;/span&gt;, &lt;span style=&#34;color:#ae81ff&#34;&gt;0&lt;/span&gt;]])), np&lt;span style=&#34;color:#f92672&#34;&gt;.&lt;/span&gt;eye(&lt;span style=&#34;color:#ae81ff&#34;&gt;2&lt;/span&gt;))
-&lt;span style=&#34;color:#75715e&#34;&gt;# # PauliX gate operator applied to the third of three cubits&lt;/span&gt;
+&lt;span style=&#34;color:#75715e&#34;&gt;# # PauliX gate operator applied to the third of three qubits&lt;/span&gt;
 &lt;span style=&#34;color:#75715e&#34;&gt;# X3_3 = np.kron(np.kron(np.eye(2), np.eye(2)), np.array([[0, 1], [1, 0]]))&lt;/span&gt;
 
 &lt;span style=&#34;color:#75715e&#34;&gt;# Toffoli gate operator&lt;/span&gt;
@@ -540,7 +548,7 @@ result could look like if we performed 1000 measurements:&lt;/p&gt;
 
 
 &lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.&lt;/h4&gt;
+  &lt;h4&gt;Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$ on a perfect quantum computer.&lt;/h4&gt;
   
 &lt;/figcaption&gt;
 
@@ -571,6 +579,51 @@ The drawback, if we can call it that, is that we have to
 deal with probabilities. Even though the quantum state exists in a
 superposition, that is, in several states simultaneously, we can only measure
 one of them at a time.&lt;/p&gt;
+
+&lt;h3 id=&#34;run-on-a-real-quantum-computer&#34;&gt;Run on a Real Quantum Computer&lt;/h3&gt;
+
+&lt;p&gt;&lt;em&gt;Excellent, but why don&#39;t we run this on a real quantum computer?&lt;/em&gt; you may ask.
+And you will be right! So I went through the trouble to register for an IBMid
+to run the circuit on a real &lt;a href=&#34;https://quantum.ibm.com/&#34;&gt;quantum computer&lt;/a&gt;.
+And if you want to reproduce my results, you can do it too.
+Here is the &lt;a href=&#34;https://github.com/penkovsky/qc/&#34;&gt;code&lt;/a&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-token&#34;&gt;&lt;a href=&#34;#fn:fn-token&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+
+&lt;p&gt;I ran the quantum OR circuit on &lt;a href=&#34;https://quantum.ibm.com/services/resources?tab=systems&amp;amp;system=ibm_osaka&#34;&gt;ibm_osaka&lt;/a&gt; instance.
+And I checked the two cases:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;$a = |+\rangle$, $b = |0\rangle$, $c = |0\rangle$.&lt;/li&gt;
+&lt;li&gt;$a = b = |+\rangle$, $c = |0\rangle$.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/results-qpu1.png&#34; width=&#34;500px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Real QC measurements of quantum OR gate applied to $a = |+\rangle$, $b=c=|0\rangle$ (ibm_osaka).&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/results-qpu2.png&#34; width=&#34;500px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Real QC measurements of quantum OR gate applied to $a=b=|+\rangle$, $c=|0\rangle$ (ibm_osaka).&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;&lt;/p&gt;
+
+&lt;p&gt;As expected, the results are &lt;a href=&#34;https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era&#34;&gt;noisy&lt;/a&gt;. Because the quantum computer is not
+perfect. Still, we can see that the quantum OR gate behaves as expected. The
+probability distribution is close to the theoretical one&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-msb&#34;&gt;&lt;a href=&#34;#fn:fn-msb&#34;&gt;5&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;h2 id=&#34;why-can-t-we-simulate-quantum-circuits-with-classical-computers&#34;&gt;Why Can&#39;t We Simulate Quantum Circuits with Classical Computers?&lt;/h2&gt;
 
@@ -614,8 +667,43 @@ redesigned.&lt;/p&gt;
 &lt;p&gt;Finally, during the &lt;em&gt;routing&lt;/em&gt; stage, quantum gates are being
 connected by physical wires. Sometimes, portions of a physical
 circuit are configured to identity transformations to satisfy
-the requirements. And this typically results in higher noise.
-Overall, if you are familiar with
+the requirements. And this typically results in higher noise.&lt;/p&gt;
+
+&lt;p&gt;For instance, the quantum OR circuit we have discussed above
+looks like this after transpilation to the IBM quantum computer:&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/transpiled.png&#34; width=&#34;600px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Quantum OR circuit translated to native gates.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Notice that our &lt;em&gt;logical&lt;/em&gt; qubits q0, q1, and q2 are mapped to
+&lt;em&gt;physical&lt;/em&gt; qubits q33, q39, and q40. I have encircled those physical
+qubits on the image below. They are neighbors and therefore, the
+routing is much simpler.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qc/ibm_osaka.png&#34; width=&#34;650px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;ibm_osaka quantum computer.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Overall, if you are familiar with
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Field-programmable_gate_array&#34;&gt;FPGAs&lt;/a&gt;,
 the process of transpilation is quite similar.&lt;/p&gt;
 
@@ -667,10 +755,10 @@ qubits that can be used in a quantum computer. This is an open question.&lt;/p&g
 &lt;ul&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter&#34;&gt;Richard Feynman. Quantum Electrodynamics&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=0USje5vTIKs&amp;amp;list=PLUl4u3cNGP60cspQn3N9dYRPiyVWDd80G&amp;amp;index=9&#34;&gt;Understand the notion of probability amplitudes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://algassert.com/post/1716&#34;&gt;Visualizing 2-Qubit Entanglement&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://quantumatlas.umd.edu/entry/quantum-states/&#34;&gt;Quantum states&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Bell%27s_theorem&#34;&gt;Bell&#39;s theorem&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://archive.org/details/QuantumComputationAndQuantumInformation10thAnniversaryEdition&#34;&gt;Nielsen and Chuang. Quantum Computation And Quantum Information&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://algassert.com/post/1716&#34;&gt;Visualizing 2-Qubit Entanglement&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://juliaphysics.github.io/PhysicsTutorials.jl/tutorials/general/quantum_ising/quantum_ising.html&#34;&gt;Quantum Ising Phase Transition&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://algassert.com/quirk&#34;&gt;Quirk quantum circuit simulator&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
@@ -685,6 +773,10 @@ qubits that can be used in a quantum computer. This is an open question.&lt;/p&g
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-meas&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;li id=&#34;fn:fn-quanta&#34;&gt;Photons initially were called &amp;quot;quanta&amp;quot; by Einstein.
  &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-quanta&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-token&#34;&gt;You will also need to register for an account and get an API token to run the code on a quantum computer in the cloud (it&#39;s free).
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-token&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;li id=&#34;fn:fn-msb&#34;&gt;Qiskit uses different conventions for the order of qubits. For instance, they would write $q2,q1,q0$, while I used $q0,q1,q2$ order. This does not affect the results, just be aware of the order when working with Qiskit.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-msb&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;/div&gt;</description>
     </item>

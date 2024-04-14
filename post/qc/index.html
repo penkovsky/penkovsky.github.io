@@ -115,7 +115,7 @@ that the result does not exist until we measure it."><meta property="og:image" c
   
   <meta property="article:published_time" content="2024-04-13T15:55:03&#43;02:00">
   
-  <meta property="article:modified_time" content="2024-04-13T15:55:03&#43;02:00">
+  <meta property="article:modified_time" content="2024-04-14T23:26:00&#43;02:00">
   
 
   
@@ -272,9 +272,11 @@ that the result does not exist until we measure it."><meta property="og:image" c
 
   <span class="article-date">
     
+        Last updated on
+    
     <meta content="2024-04-13 15:55:03 &#43;0200 CEST" itemprop="datePublished">
-    <time datetime="2024-04-13 15:55:03 &#43;0200 CEST" itemprop="dateModified">
-      Apr 13, 2024
+    <time datetime="2024-04-14 23:26:00 &#43;0200 CEST" itemprop="dateModified">
+      Apr 14, 2024
     </time>
   </span>
   <span itemscope itemprop="publisher" itemtype="http://schema.org/Person">
@@ -284,7 +286,7 @@ that the result does not exist until we measure it."><meta property="og:image" c
   
   <span class="middot-divider"></span>
   <span class="article-reading-time">
-    18 min read
+    19 min read
   </span>
   
 
@@ -323,11 +325,19 @@ computing is not just a theoretical concept. The idea that
 sparked my interest. I wanted to understand how is it even possible
 that the result does not exist until we measure it.</p>
 
+<hr />
+
+<p><strong>Edit 14/04/2024:</strong> Added results running the quantum OR circuit on a real quantum computer.</p>
+
+<hr />
+
 <p>In this article, we explain quantum computing with a minimal number of lines of
 code. To know how quantum computing works, you don't always need a quantum
 computer. We will simulate a beam splitter, a basic quantum circuit. We will
-also show how to express digital circuits with quantum gates. Finally, we will
-get a rough idea how quantum circuits are executed on physical quantum hardware.</p>
+also show how to express digital circuits with quantum gates. Moreover, we will
+run a quantum OR circuit on a real quantum computer and compare the results with
+the theoretical ones. Finally, we will get a rough idea how quantum circuits are
+compiled and executed on physical quantum hardware.</p>
 
 <blockquote>
 <p>The post is aimed at people with an engineering
@@ -693,11 +703,11 @@ manipulates the quantum states and simulates the quantum circuit from above.</p>
 
 <div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-python" data-lang="python"><span style="color:#f92672">import</span> numpy <span style="color:#f92672">as</span> np
 
-<span style="color:#75715e"># PauliX gate operator applied to the first of three cubits</span>
+<span style="color:#75715e"># PauliX gate operator applied to the first of three qubits</span>
 X1_3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>]]), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>)), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>))
-<span style="color:#75715e"># PauliX gate operator applied to the second of three cubits</span>
+<span style="color:#75715e"># PauliX gate operator applied to the second of three qubits</span>
 X2_3 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>kron(np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>), np<span style="color:#f92672">.</span>array([[<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>], [<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>]])), np<span style="color:#f92672">.</span>eye(<span style="color:#ae81ff">2</span>))
-<span style="color:#75715e"># # PauliX gate operator applied to the third of three cubits</span>
+<span style="color:#75715e"># # PauliX gate operator applied to the third of three qubits</span>
 <span style="color:#75715e"># X3_3 = np.kron(np.kron(np.eye(2), np.eye(2)), np.array([[0, 1], [1, 0]]))</span>
 
 <span style="color:#75715e"># Toffoli gate operator</span>
@@ -837,7 +847,7 @@ result could look like if we performed 1000 measurements:</p>
 
 
 <figcaption data-pre="Figure " data-post=":" >
-  <h4>Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$.</h4>
+  <h4>Histogram of the quantum OR gate applied to $a=|+\rangle$, $b=|0\rangle$, $c=|0\rangle$ on a perfect quantum computer.</h4>
   
 </figcaption>
 
@@ -868,6 +878,51 @@ The drawback, if we can call it that, is that we have to
 deal with probabilities. Even though the quantum state exists in a
 superposition, that is, in several states simultaneously, we can only measure
 one of them at a time.</p>
+
+<h3 id="run-on-a-real-quantum-computer">Run on a Real Quantum Computer</h3>
+
+<p><em>Excellent, but why don't we run this on a real quantum computer?</em> you may ask.
+And you will be right! So I went through the trouble to register for an IBMid
+to run the circuit on a real <a href="https://quantum.ibm.com/">quantum computer</a>.
+And if you want to reproduce my results, you can do it too.
+Here is the <a href="https://github.com/penkovsky/qc/">code</a><sup class="footnote-ref" id="fnref:fn-token"><a href="#fn:fn-token">4</a></sup>.</p>
+
+<p>I ran the quantum OR circuit on <a href="https://quantum.ibm.com/services/resources?tab=systems&amp;system=ibm_osaka">ibm_osaka</a> instance.
+And I checked the two cases:</p>
+
+<ol>
+<li>$a = |+\rangle$, $b = |0\rangle$, $c = |0\rangle$.</li>
+<li>$a = b = |+\rangle$, $c = |0\rangle$.</li>
+</ol>
+
+<p><figure>
+
+<img src="/img/posts/qc/results-qpu1.png" width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Real QC measurements of quantum OR gate applied to $a = |+\rangle$, $b=c=|0\rangle$ (ibm_osaka).</h4>
+  
+</figcaption>
+
+</figure>
+<figure>
+
+<img src="/img/posts/qc/results-qpu2.png" width="500px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Real QC measurements of quantum OR gate applied to $a=b=|+\rangle$, $c=|0\rangle$ (ibm_osaka).</h4>
+  
+</figcaption>
+
+</figure></p>
+
+<p>As expected, the results are <a href="https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era">noisy</a>. Because the quantum computer is not
+perfect. Still, we can see that the quantum OR gate behaves as expected. The
+probability distribution is close to the theoretical one<sup class="footnote-ref" id="fnref:fn-msb"><a href="#fn:fn-msb">5</a></sup>.</p>
 
 <h2 id="why-can-t-we-simulate-quantum-circuits-with-classical-computers">Why Can't We Simulate Quantum Circuits with Classical Computers?</h2>
 
@@ -911,8 +966,43 @@ redesigned.</p>
 <p>Finally, during the <em>routing</em> stage, quantum gates are being
 connected by physical wires. Sometimes, portions of a physical
 circuit are configured to identity transformations to satisfy
-the requirements. And this typically results in higher noise.
-Overall, if you are familiar with
+the requirements. And this typically results in higher noise.</p>
+
+<p>For instance, the quantum OR circuit we have discussed above
+looks like this after transpilation to the IBM quantum computer:</p>
+
+<figure>
+
+<img src="/img/posts/qc/transpiled.png" width="600px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>Quantum OR circuit translated to native gates.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>Notice that our <em>logical</em> qubits q0, q1, and q2 are mapped to
+<em>physical</em> qubits q33, q39, and q40. I have encircled those physical
+qubits on the image below. They are neighbors and therefore, the
+routing is much simpler.</p>
+
+<figure>
+
+<img src="/img/posts/qc/ibm_osaka.png" width="650px" />
+
+
+
+<figcaption data-pre="Figure " data-post=":" >
+  <h4>ibm_osaka quantum computer.</h4>
+  
+</figcaption>
+
+</figure>
+
+<p>Overall, if you are familiar with
 <a href="https://en.wikipedia.org/wiki/Field-programmable_gate_array">FPGAs</a>,
 the process of transpilation is quite similar.</p>
 
@@ -964,10 +1054,10 @@ qubits that can be used in a quantum computer. This is an open question.</p>
 <ul>
 <li><a href="https://en.wikipedia.org/wiki/QED:_The_Strange_Theory_of_Light_and_Matter">Richard Feynman. Quantum Electrodynamics</a></li>
 <li><a href="https://www.youtube.com/watch?v=0USje5vTIKs&amp;list=PLUl4u3cNGP60cspQn3N9dYRPiyVWDd80G&amp;index=9">Understand the notion of probability amplitudes</a></li>
-<li><a href="https://algassert.com/post/1716">Visualizing 2-Qubit Entanglement</a></li>
 <li><a href="https://quantumatlas.umd.edu/entry/quantum-states/">Quantum states</a></li>
 <li><a href="https://en.wikipedia.org/wiki/Bell%27s_theorem">Bell's theorem</a></li>
 <li><a href="https://archive.org/details/QuantumComputationAndQuantumInformation10thAnniversaryEdition">Nielsen and Chuang. Quantum Computation And Quantum Information</a></li>
+<li><a href="https://algassert.com/post/1716">Visualizing 2-Qubit Entanglement</a></li>
 <li><a href="https://juliaphysics.github.io/PhysicsTutorials.jl/tutorials/general/quantum_ising/quantum_ising.html">Quantum Ising Phase Transition</a></li>
 <li><a href="https://algassert.com/quirk">Quirk quantum circuit simulator</a></li>
 </ul>
@@ -982,6 +1072,10 @@ qubits that can be used in a quantum computer. This is an open question.</p>
  <a class="footnote-return" href="#fnref:fn-meas"><sup>^</sup></a></li>
 <li id="fn:fn-quanta">Photons initially were called &quot;quanta&quot; by Einstein.
  <a class="footnote-return" href="#fnref:fn-quanta"><sup>^</sup></a></li>
+<li id="fn:fn-token">You will also need to register for an account and get an API token to run the code on a quantum computer in the cloud (it's free).
+ <a class="footnote-return" href="#fnref:fn-token"><sup>^</sup></a></li>
+<li id="fn:fn-msb">Qiskit uses different conventions for the order of qubits. For instance, they would write $q2,q1,q0$, while I used $q0,q1,q2$ order. This does not affect the results, just be aware of the order when working with Qiskit.
+ <a class="footnote-return" href="#fnref:fn-msb"><sup>^</sup></a></li>
 </ol>
 </div>
     </div>
