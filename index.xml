@@ -7,7 +7,7 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>&amp;copy; Bogdan Penkovsky 2024</copyright>
-    <lastBuildDate>Thu, 02 Jul 2020 00:00:00 +0200</lastBuildDate>
+    <lastBuildDate>Wed, 14 Aug 2024 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
     
     <item>
@@ -127,20 +127,18 @@ a parametrized quantum circuit computes a unitary transformation $U$:&lt;/p&gt;
 &lt;p&gt;where $R_x(x)$ is the rotation operator around the x-axis by an angle $x$, and
 $\text{Rot}(\theta_1, \theta_2, \theta_3)$ is a general rotation operator.&lt;/p&gt;
 
-&lt;p&gt;The circuit is visualized in the figure below:&lt;/p&gt;
+&lt;p&gt;The circuit is schematized below:&lt;/p&gt;
 
-&lt;figure&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;pre style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;                                                             
+    ┌────┐    ┌───────┐   ┌───────────────┐                  
+    │|0&amp;gt; ├────│ Rx(x) ├───┤ Rot(θ1,θ2,θ3) ├──── Measurement  
+    └────┘    └───────┘   └───────────────┘                  
+                                                             &lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;
 
-&lt;img src=&#34;https://penkovsky.com/img/posts/qml/circ1.png&#34; width=&#34;330px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;Rotation around X axis $R_x(x)$ followed by a general qubit rotation $\text{Rot}(\theta_1, \theta_2, \theta_3)$ and measurement operation. Initially, the qubit is in the ground state $|0\rangle$.&lt;/h4&gt;
-  
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
+&lt;p&gt;Initially, the qubit is in the ground state $|0\rangle$.
+Then, it is rotated around $X$ axis ($R_x(x)$ operator). And then rotated again.
+This time, by a general qubit
+rotation $\text{Rot}(\theta_1, \theta_2, \theta_3)$. Finally, we have the measurement operation.&lt;/p&gt;
 
 &lt;div class=&#34;alert alert-info&#34;&gt;
 &lt;h4&gt;Rotation Operators&lt;/h4&gt;
@@ -222,6 +220,19 @@ where $\theta = \pi / 2$ would fit equally well!
 Therefore, we have an ambiguity.
 We could try to reduce the ambiguity by collecting more data points.&lt;/p&gt;
 
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/fit1.png&#34; width=&#34;400px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Machine learning models are not unique. There exist an infinite number of ways to fit the data.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
 &lt;p&gt;Let&#39;s imagine that now we have worked hard to collect more data:&lt;/p&gt;
 
 &lt;table&gt;
@@ -271,7 +282,7 @@ We could try to reduce the ambiguity by collecting more data points.&lt;/p&gt;
 the $f(x) = \sin(5 x + \pi / 2)$ model
 would have perfectly fit the data points if not for the noise.
 Note the value of $f(0) = -0.2$, whereas $\sin(\pi / 2) = 1$.
-We realize that our data is probably corrupted by noise.
+We realize that our data are probably corrupted by noise.
 That is $y = \hat y + \epsilon$,
 where $\epsilon$ is a random noise.
 Therefore, it is very hard to tell whether $f(0) = -0.2$ is an
@@ -298,8 +309,9 @@ but make poor predictions on new data.&lt;/p&gt;
 
 &lt;p&gt;&lt;strong&gt;Challenge #4&lt;/strong&gt;: Verification.&lt;/p&gt;
 
-&lt;p&gt;To resolve the issue, we may want to use a simpler model.
-But how do we know that the model actually makes good predictions?
+&lt;p&gt;To resolve the issue, we may want to &lt;a href=&#34;https://en.wikipedia.org/wiki/Regularization_(mathematics)&#34;&gt;regularize&lt;/a&gt; or use a
+simpler model.
+But how do we actually know that the model makes good predictions?
 We need to validate it on data unseen during training.
 In practice this means that we
 train the model on a part of the data and validate it on the
@@ -568,13 +580,13 @@ the &lt;a href=&#34;https://arxiv.org/abs/1909.02108&#34;&gt;Quantum Natural Gra
 &lt;a href=&#34;https://pennylane.ai/qml/glossary/parameter_shift/&#34;&gt;parameter shift rule&lt;/a&gt;.&lt;/p&gt;
 
 &lt;p&gt;The goal is to minimize the average loss over the training dataset. Our square
-of differences loss is minimized when the fidelity maximized (i.e. close to 1).&lt;/p&gt;
+of difference loss is minimized when the fidelity maximized (i.e. close to 1).&lt;/p&gt;
 
-&lt;p&gt;$$ \text{loss} = \frac{1}{N} \sum_{i=1}^{N} (1 - F(|\psi(x_i)\rangle, |\psi_{target}\rangle))^2, $$&lt;/p&gt;
+&lt;p&gt;$$ \text{loss} = \frac{1}{N} \sum_{i=1}^{N} \left(1 - F(\psi_{\theta}(x_i), \psi_{target}) \right)^2, $$&lt;/p&gt;
 
-&lt;p&gt;where $\psi$ comes from the circuit, $x_i$ is the input data point,
+&lt;p&gt;where $\psi_{\theta}$ comes from the circuit, $x_i$ is the input data point,
 and $N$ is the number of data points in the training set.
-Finally, here is the circuit:&lt;/p&gt;
+Finally, here is the circuit itself:&lt;/p&gt;
 
 &lt;figure&gt;
 
@@ -703,10 +715,20 @@ the associated code is available from &lt;a href=&#34;https://github.com/penkovs
 computing in general and quantum machine learning in particular.&lt;/p&gt;
 
 &lt;ul&gt;
-&lt;li&gt;Currently available NISQ devices are noisy and have limited qubit count.&lt;/li&gt;
-&lt;li&gt;Cryogenic cooling is required.&lt;/li&gt;
-&lt;li&gt;Quantum algorithms are not always faster than classical algorithms.&lt;/li&gt;
-&lt;li&gt;Quantum machine learning is in its infancy.&lt;/li&gt;
+&lt;li&gt;The most important limitation is that currently available NISQ devices are &lt;em&gt;noisy&lt;/em&gt;
+and have &lt;em&gt;limited qubit count&lt;/em&gt;. This means that we can&#39;t just run different
+quantum algorithms and see what works best. In contrast to
+graphical processing units availability,
+which arguably led to success in deep learning.&lt;/li&gt;
+&lt;li&gt;Cryogenic cooling is required. So you can&#39;t just put a quantum computer on your desk.&lt;/li&gt;
+&lt;li&gt;Quantum machine learning is in its infancy. Therefore, there are not many
+real-life problems solved with quantum machine learning that cannot be
+efficiently solved with classical machine learning.&lt;/li&gt;
+&lt;li&gt;Quantum algorithms are &lt;em&gt;not always&lt;/em&gt; faster than classical algorithms.&lt;/li&gt;
+&lt;li&gt;Classical machine learning proved to be incredibly successful to solve
+real life problems. On the other hand, in today&#39;s quantum computing, problems
+are &lt;a href=&#34;https://arxiv.org/abs/2203.01340&#34;&gt;carefully selected&lt;/a&gt; to be provably difficult for classical computers.&lt;/li&gt;
+&lt;li&gt;Today&#39;s quantum computers are typically applied to &lt;a href=&#34;https://arxiv.org/abs/2203.01340&#34;&gt;well-structured&lt;/a&gt; problems.&lt;/li&gt;
 &lt;/ul&gt;
 
 &lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
@@ -750,6 +772,7 @@ the number of qubits is limited and the noise is high.&lt;/p&gt;
 &lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
 
 &lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/2203.01340&#34;&gt;Is quantum advantage the right goal for quantum machine learning?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/2008.08605&#34;&gt;Effect of data encoding on the expressive power of variational quantum-machine-learning models&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://link.springer.com/book/10.1007/978-3-030-83098-4&#34;&gt;Machine Learning with Quantum Computers&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=XQKV-hpsurs&amp;amp;list=PLUl4u3cNGP60cspQn3N9dYRPiyVWDd80G&amp;amp;index=38&#34;&gt;Expectation values of operators&lt;/a&gt;&lt;/li&gt;
