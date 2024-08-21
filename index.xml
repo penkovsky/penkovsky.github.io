@@ -26,6 +26,12 @@
 &lt;li&gt;This is the very beginning of the QML field, so there are many opportunities for breakthroughs.&lt;/li&gt;
 &lt;/ul&gt;
 
+&lt;hr /&gt;
+
+&lt;p&gt;&lt;strong&gt;Edit 21/08/2024:&lt;/strong&gt; Added results running the ML model on a real quantum computer.&lt;/p&gt;
+
+&lt;hr /&gt;
+
 &lt;p&gt;It is probably worth mentioning that by quantum machine learning we usually mean
 a form of machine learning where a &lt;em&gt;part of&lt;/em&gt; algorithm is executed on a quantum
 computer.
@@ -371,7 +377,7 @@ any square-integrable function with a Fourier-type sum.&lt;/p&gt;
 &lt;h2 id=&#34;somewhat-detailed-example&#34;&gt;Somewhat Detailed Example&lt;/h2&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;Here is the &lt;a href=&#34;https://github.com/penkovsky/qml&#34;&gt;code&lt;/a&gt; if you want to follow along&lt;/p&gt;
+&lt;p&gt;The associated code is on &lt;a href=&#34;https://github.com/penkovsky/qml&#34;&gt;Github&lt;/a&gt; if you want to follow along.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Let us consider a simple example where
@@ -705,9 +711,258 @@ states.&lt;/p&gt;
 &lt;/figure&gt;
 
 &lt;p&gt;I would suggest that the model captures the essence of the dataset
-quite well.
-If you want to repeat these experiments,
-the associated code is available from &lt;a href=&#34;https://github.com/penkovsky/qml&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+quite well.&lt;/p&gt;
+
+&lt;h2 id=&#34;testing-on-ibm-quantum&#34;&gt;Testing on IBM Quantum&lt;/h2&gt;
+
+&lt;p&gt;This all is nice, but is probably worth not much if it does not work on a real
+quantum machine. To confirm our results,
+I ran a pretrained model on the IBM Brisbane quantum computer.
+The characteristics of the QPU (quantum processing unit)
+are shown below.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/ibm_brisbane_details.png&#34; width=&#34;650px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/ibm_brisbane.png&#34; width=&#34;650px&#34; /&gt;
+
+
+&lt;/figure&gt;
+
+&lt;p&gt;It is a 127-qubit Eagle type quantum processor. The native gates can be found
+&lt;a href=&#34;https://docs.quantum.ibm.com/guides/native-gates#eagle&#34;&gt;here&lt;/a&gt;.
+As you can see, there are no universal rotations available.
+Therefore, during &lt;a href=&#34;https://penkovsky.com/post/qc/#transpilation&#34;&gt;transpilation&lt;/a&gt;, the
+gates are decomposed into the native gates.
+That is, the universal rotations will be represented in terms
+of $R_z$ (&lt;a href=&#34;https://docs.quantum.ibm.com/api/qiskit/qiskit.circuit.library.RZGate&#34;&gt;RZ&lt;/a&gt;) and $\sqrt X$ (&lt;a href=&#34;https://docs.quantum.ibm.com/api/qiskit/qiskit.circuit.library.SXGate&#34;&gt;SX&lt;/a&gt;) gates.&lt;/p&gt;
+
+&lt;p&gt;For the sake of test, I have validated the model on the first 20 data points
+unseen during training.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/spirals_val.png&#34; width=&#34;450px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Data points tested on a real quantum computer.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Below are a few example circuits that were run on the IBM quantum computer. You
+can easily verify that the first two have a high fidelity of measuring $|0\rangle$,
+while the last two have a high fidelity of measuring $|1\rangle$.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/isa_circuits0-1.png&#34; width=&#34;500px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Circuits representing the $|0\rangle$ target.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/qml/isa_circuits10-11.png&#34; width=&#34;500px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;Circuits representing the $|1\rangle$ target.&lt;/h4&gt;
+  
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;You might be surprised first that the circuits are so simple. However, there is nothing
+wrong with that. To run a circuit, we have to provide all the parameters $\theta$ and $x$.
+During the &lt;a href=&#34;https://penkovsky.com/post/qc/#transpilation&#34;&gt;transpilation&lt;/a&gt; process,
+therefore, the circuit is simplified. And instead of 30 rotations, we have only
+one. This single rotation is then represented in terms of the native gates
+$R_z$ and $\sqrt X$.
+Note also that we can only run a single circuit at a time.&lt;/p&gt;
+
+&lt;p&gt;Using 1024 shots per data point, the workload
+consumed 7.6 seconds of the QPU time.
+Below are the results summarized in a form of table.
+Those are the probabilities of measuring the states $|0\rangle$
+and $|1\rangle$ for the 20 data points.&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;#&lt;/th&gt;
+&lt;th&gt;Proba  0&lt;/th&gt;
+&lt;th&gt;Proba  1&lt;/th&gt;
+&lt;th&gt;$\hat y$ Label&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.91&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.09&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;2&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.93&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.07&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;3&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.83&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.17&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;4&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.84&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.16&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;5&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.86&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.14&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;6&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.83&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.17&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;7&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.92&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.08&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;8&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.74&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.26&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;9&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.88&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.12&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;10&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.91&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;0.09&lt;/td&gt;
+&lt;td&gt;0&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;11&lt;/td&gt;
+&lt;td&gt;0.03&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.97&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;12&lt;/td&gt;
+&lt;td&gt;0.06&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.94&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;13&lt;/td&gt;
+&lt;td&gt;0.03&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.97&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;14&lt;/td&gt;
+&lt;td&gt;0.04&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.96&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;15&lt;/td&gt;
+&lt;td&gt;0.02&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.98&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;16&lt;/td&gt;
+&lt;td&gt;0.09&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.91&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;17&lt;/td&gt;
+&lt;td&gt;0.02&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.98&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;18&lt;/td&gt;
+&lt;td&gt;0.07&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.93&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;19&lt;/td&gt;
+&lt;td&gt;0.04&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.96&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;20&lt;/td&gt;
+&lt;td&gt;0.02&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;0.98&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;We can see that the model performs well on the unseen data points,
+despite the noise in the NISQ device. This is not surprising
+since (1) the theoretical fidelities were close to 1, and (2) the model
+was simplified to only five native gates during the transpilation process.
+Less gates mean less noise.
+To reproduce my experiments on a quantum computer,
+you can run this &lt;a href=&#34;https://github.com/penkovsky/qml/blob/master/spirals-ibm.ipynb&#34;&gt;notebook&lt;/a&gt; (IBM account required).&lt;/p&gt;
 
 &lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
 
