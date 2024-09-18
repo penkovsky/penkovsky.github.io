@@ -377,7 +377,7 @@ any square-integrable function with a Fourier-type sum.&lt;/p&gt;
 &lt;h2 id=&#34;somewhat-detailed-example&#34;&gt;Somewhat Detailed Example&lt;/h2&gt;
 
 &lt;blockquote&gt;
-&lt;p&gt;The associated code is on &lt;a href=&#34;https://github.com/penkovsky/qml&#34;&gt;Github&lt;/a&gt; if you want to follow along.&lt;/p&gt;
+&lt;p&gt;The associated code is on &lt;a href=&#34;https://gitlab.com/quadrant27/qml&#34;&gt;Gitlab&lt;/a&gt; if you want to follow along.&lt;/p&gt;
 &lt;/blockquote&gt;
 
 &lt;p&gt;Let us consider a simple example where
@@ -399,10 +399,10 @@ $|\phi\rangle$ is defined as their inner product squared:&lt;/p&gt;
 
 &lt;p&gt;$$ F(\psi, \phi) = |\langle \psi | \phi \rangle|^2. $$&lt;/p&gt;
 
-&lt;p&gt;The inner product determines the overlap between the two states. Therefore, we
-want to maximize the fidelity when measuring $|0\rangle$ given that
-the input data is a &amp;quot;no cat&amp;quot;. Likewise, we want to maximize the fidelity when
-measuring $|1\rangle$ given that the input data is a &amp;quot;cat&amp;quot;,
+&lt;p&gt;Fidelity represents the overlap or &amp;quot;closeness&amp;quot; between the two states.
+Therefore, we want to maximize the fidelity when measuring $|0\rangle$ given
+that the input data is a &amp;quot;no cat&amp;quot;. Likewise, we want to maximize the fidelity
+when measuring $|1\rangle$ given that the input data is a &amp;quot;cat&amp;quot;,
 whatever that means in the context of the dataset.&lt;/p&gt;
 
 &lt;p&gt;The intuitive explanation of this particular
@@ -962,7 +962,7 @@ since (1) the theoretical fidelities were close to 1, and (2) the model
 was simplified to only five native gates during the transpilation process.
 Less gates mean less noise.
 To reproduce my experiments on a quantum computer,
-you can run this &lt;a href=&#34;https://github.com/penkovsky/qml/blob/master/spirals-ibm.ipynb&#34;&gt;notebook&lt;/a&gt; (IBM account required).&lt;/p&gt;
+you can run this &lt;a href=&#34;https://gitlab.com/quadrant27/qml/blob/master/spirals-ibm.ipynb&#34;&gt;notebook&lt;/a&gt; (IBM account required).&lt;/p&gt;
 
 &lt;h2 id=&#34;limitations&#34;&gt;Limitations&lt;/h2&gt;
 
@@ -1620,7 +1620,7 @@ one of them at a time.&lt;/p&gt;
 And you will be right! So I went through the trouble to register for an IBMid
 to run the circuit on a real &lt;a href=&#34;https://quantum.ibm.com/&#34;&gt;quantum computer&lt;/a&gt;.
 And if you want to reproduce my results, you can do it too.
-Here is the &lt;a href=&#34;https://github.com/penkovsky/qc/&#34;&gt;code&lt;/a&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-token&#34;&gt;&lt;a href=&#34;#fn:fn-token&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
+Here is the &lt;a href=&#34;https://gitlab.com/quadrant27/qc/&#34;&gt;code&lt;/a&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-token&#34;&gt;&lt;a href=&#34;#fn:fn-token&#34;&gt;4&lt;/a&gt;&lt;/sup&gt;.&lt;/p&gt;
 
 &lt;p&gt;I ran the quantum OR circuit on &lt;a href=&#34;https://quantum.ibm.com/services/resources?tab=systems&amp;amp;system=ibm_osaka&#34;&gt;ibm_osaka&lt;/a&gt; instance.
 And I checked the two cases:&lt;/p&gt;
