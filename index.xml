@@ -1062,7 +1062,11 @@ that the result does not exist until we measure it.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;&lt;strong&gt;Edit 14/04/2024:&lt;/strong&gt; Added results running the quantum OR circuit on a real quantum computer.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Edit 14/04/2024:&lt;/strong&gt; Added results running the quantum OR circuit on a real quantum computer.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edit 20/09/2024:&lt;/strong&gt; Comparison table between classical and quantum computing.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Edit 14/10/2024:&lt;/strong&gt; An explanation of how measurement is related to the (absence of) quantum effects.&lt;/li&gt;
+&lt;/ul&gt;
 
 &lt;hr /&gt;
 
@@ -1099,7 +1103,119 @@ expensive quantum computer to only simulate a classical one. This is not to
 mention that we live in the
 &lt;a href=&#34;https://en.wikipedia.org/wiki/Noisy_intermediate-scale_quantum_era&#34;&gt;NISQ era&lt;/a&gt;.&lt;/p&gt;
 
+&lt;p&gt;Below is a comparison table between classical and quantum computing:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;&lt;/th&gt;
+&lt;th&gt;Classical computing&lt;/th&gt;
+&lt;th&gt;Quantum computing&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;Units of information&lt;/td&gt;
+&lt;td&gt;Bits ($1$ or $0$)&lt;/td&gt;
+&lt;td&gt;Qubits (simultaneously containing $1$ &lt;strong&gt;and&lt;/strong&gt; $0$)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Data representation&lt;/td&gt;
+&lt;td&gt;Binary format&lt;/td&gt;
+&lt;td&gt;Superposition (multiple states at once)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Distinctive features&lt;/td&gt;
+&lt;td&gt;Easy to copy information&lt;/td&gt;
+&lt;td&gt;Entanglement (correlations)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Nature of computation&lt;/td&gt;
+&lt;td&gt;Inherently sequential&lt;/td&gt;
+&lt;td&gt;Quantum parallelism&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;&lt;/td&gt;
+&lt;td&gt;Irreversible&lt;/td&gt;
+&lt;td&gt;Reversible (information preservation)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Hardware&lt;/td&gt;
+&lt;td&gt;Transistors&lt;/td&gt;
+&lt;td&gt;Superconducting qubits, trapped ions, photons&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Error correction&lt;/td&gt;
+&lt;td&gt;Well established&lt;/td&gt;
+&lt;td&gt;Complex; Work in progress&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Major challenges&lt;/td&gt;
+&lt;td&gt;von Neumann bottleneck, &lt;a href=&#34;https://en.wikipedia.org/wiki/Amdahl%27s_law&#34;&gt;Amdahl&#39;s law&lt;/a&gt;&lt;/td&gt;
+&lt;td&gt;No exact cloning, noise, qubit coherence time&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Universality&lt;/td&gt;
+&lt;td&gt;Universal&lt;/td&gt;
+&lt;td&gt;Problem-specific (see FAQ above)&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Nature of computation&lt;/td&gt;
+&lt;td&gt;Inherently sequential&lt;/td&gt;
+&lt;td&gt;Quantum parallelism&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Output&lt;/td&gt;
+&lt;td&gt;Deterministic&lt;/td&gt;
+&lt;td&gt;Probabilistic&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Nature of computation&lt;/td&gt;
+&lt;td&gt;Inherently sequential&lt;/td&gt;
+&lt;td&gt;Quantum parallelism&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Practical limitations&lt;/td&gt;
+&lt;td&gt;Huge datasets; NP-hard problems&lt;/td&gt;
+&lt;td&gt;Largely experimental&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Algorithm examples&lt;/td&gt;
+&lt;td&gt;Sorting, dynamic programming&lt;/td&gt;
+&lt;td&gt;Shor&#39;s algorithm, Grover&#39;s algorithm&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;Magic&lt;/td&gt;
+&lt;td&gt;Does not exist&lt;/td&gt;
+&lt;td&gt;Does not exist&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;Hopefully, this article will clarify some of the points in the table above.&lt;/p&gt;
+
 &lt;h2 id=&#34;qubits&#34;&gt;Qubits&lt;/h2&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;Nature does not know what you are looking at, and she behaves
+the way she is going to behave whether you bother to take down the data or not.
+(Richard Feynman)&lt;/p&gt;
+&lt;/blockquote&gt;
 
 &lt;p&gt;A qubit is a basic unit of quantum information.
 Unlike classical bits that can be either zero or one,
@@ -1144,6 +1260,32 @@ A QHack meme well summarizes the situation.&lt;/p&gt;
 &lt;/figcaption&gt;
 
 &lt;/figure&gt;
+
+&lt;div class=&#34;alert alert-info&#34;&gt;
+&lt;h4&gt;How Measurement is Related to the Final State&lt;/h4&gt;
+My current understanding how this works is the following. In order to observe
+quantum effects, there should be a certain symmetry, which manifests itself in a
+number of &lt;em&gt;indistinguishable&lt;/em&gt; ways that a quantum object can take. If we are
+talking about a photon, this can be a number of paths that a photon can take in
+a
+&lt;a href=&#34;https://en.wikipedia.org/wiki/Double-slit_experiment&#34;&gt;double-slit experiment&lt;/a&gt;.
+Once this symmetry is broken, the quantum effects disappear. The measurement
+itself is &lt;em&gt;not&lt;/em&gt; a cause of the wave function collapse. It is the symmetry breaking
+that is responsible for the absence of quantum effects. Meaning that
+the quantum effects are not destroyed by the measurement. Instead, the
+&lt;em&gt;ability&lt;/em&gt; to measure anything implies that there must be a certain
+distinction between the final or &#34;measured&#34; states
+(the result of the absence of symmetry).
+This reasoning explains why registering the path of a photon in a double-slit
+experiment destroys the interference pattern.
+&lt;br&gt;&lt;br&gt;
+An alternative explanation is that the measurement itself acts as an
+operator that collapses the wave function. I am less convinced by this
+explanation. Instead, I would suggest that for you to be able to &#34;look&#34; at a qubit,
+the quantum state &lt;em&gt;must&lt;/em&gt; collapse, independently of whether you actually look at it or not.
+As Feynman famously said, &#34;Nature does not know what you are looking at, and she behaves
+the way she is going to behave whether you bother to take down the data or not.&#34;
+&lt;/div&gt;
 
 &lt;h2 id=&#34;minimal-quantum-computing-example-modeling-a-beam-splitter&#34;&gt;Minimal Quantum Computing Example: Modeling a Beam Splitter&lt;/h2&gt;
 
@@ -1207,19 +1349,29 @@ a Greek letter $\psi$ to denote any quantum state $|\psi\rangle$.
 Don&#39;t be afraid of this &amp;quot;quantum physics&amp;quot; notation, it simply means vectors,
 squared sum of which is equal to one. That&#39;s it!&lt;/p&gt;
 
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Remark&lt;/strong&gt; When we deal
-with quantum states, we use &lt;em&gt;amplitudes&lt;/em&gt;.
-The rule to convert amplitudes (quantum state representations) into probabilities
-(measurement probabilities of what we observe after the quantum state collapses),
-is to square the absolute value: $P = |\psi|^2$.
+&lt;div class=&#34;alert alert-info&#34;&gt;
+&lt;h4&gt;Remark&lt;/h4&gt;
+In classical world, &lt;em&gt;amplitudes&lt;/em&gt; are associated with the energy. That is, the
+energy transported by a wave is proportional to the square of its amplitude.
+For instance, the amplitude of sound waves is related to the intensity of the
+sound.
+However, the wave amplitude of a quantum mechanical wave does not describe any
+real quantity. Quantum mechanical amplitudes are associated with the probability
+of observing a particular state (e.g. finding a photon in a certain location).
+See also
+&lt;a href=&#34;https://ee.stanford.edu/~dabm/QMbook.html&#34;&gt;Quantum Mechanics for Scientists and Engineers&lt;/a&gt;
+by David A. B. Miller.
+&lt;br&gt;&lt;br&gt;
+The probability $P$
+is given by the &lt;b&gt;the absolute value squared of the amplitude&lt;/b&gt;:
+$P = |\psi|^2$.
 For instance, let&#39;s take a quantum state
 $|\psi\rangle = |+\rangle := \frac 1 {\sqrt 2} [1, 1]^T$.
 Then, the probability distribution
 P = $|\frac 1 {\sqrt 2} [1, 1]^T|^2 = \frac 1 2 [1^2, 1^2]^T = [0.5, 0.5]^T$.
 That is, we have a 50% change to detect a photon
-on either photodetector.&lt;/p&gt;
-&lt;/blockquote&gt;
+on either photodetector.
+&lt;/div&gt;
 
 &lt;p&gt;Second, we have to model a beam splitter. The beam splitter with 50%
 reflectivity is given by the following linear operator:&lt;/p&gt;
