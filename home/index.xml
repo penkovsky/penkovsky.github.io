@@ -6,7 +6,7 @@
     <description>Recent content in Homes on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; Bogdan Penkovsky 2024</copyright>
+    <copyright>&amp;copy; Bogdan Penkovsky 2025</copyright>
     <lastBuildDate>Wed, 14 Aug 2024 00:00:00 +0200</lastBuildDate>
     
 	<atom:link href="https://penkovsky.com/home/index.xml" rel="self" type="application/rss+xml" />
@@ -36,7 +36,7 @@
       <pubDate>Fri, 23 Feb 2024 00:00:00 +0100</pubDate>
       
       <guid>https://penkovsky.com/home/about/</guid>
-      <description>About Hi! I am in charge of R&amp;amp;D at Alysophil. Alysophil&#39;s mission is sustainable chemistry for XXI century. Thanks to two core technologies: flow chemistry and AI. We use a technique called reinforcement learning to train adaptive AI agents. Those agents act as &amp;quot;chemistry robots&amp;quot;, they learn to efficiently control chemical processes. There is a lot of cross-disciplinary knowledge involved. That is challenging yet exciting. Our goal is to build a &amp;quot;3D printer&amp;quot; for molecules.</description>
+      <description>About My research interests are brain-inspired computing, quantum computing, and non-von Neumann architectures. The story began in May 2012, at the conference in Crimea, Ukraine where I attended a brilliant talk by Prof. Laurent Larger. I was already familiar with artificial neural networks, and the talk had further ignited my interest. I learned that those structures can be implemented with the help of a laser or even a bucket of water.</description>
     </item>
     
     <item>
@@ -105,6 +105,17 @@
     </item>
     
     <item>
+      <title>Teaching</title>
+      <link>https://penkovsky.com/home/teaching/</link>
+      <pubDate>Sun, 12 Jan 2025 13:34:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/home/teaching/</guid>
+      <description>Between 2021 and 2024, I delivered several lectures, workshops, and training sessions on various aspects of AI and Machine Learning.
+In Fall 2024 I have given a 12h course &amp;quot;Advanced Deep Learning for Chemistry&amp;quot; at European School of Chemistry, Polymers and Materials, University of Strasbourg. Here is the syllabus.
+I also wrote a few articles on neural networks from the first principles.</description>
+    </item>
+    
+    <item>
       <title></title>
       <link>https://penkovsky.com/home/skills/</link>
       <pubDate>Tue, 21 Nov 2017 00:00:00 +0000</pubDate>
@@ -161,10 +172,10 @@
     <item>
       <title>Contact</title>
       <link>https://penkovsky.com/home/contact/</link>
-      <pubDate>Wed, 20 Apr 2016 00:00:00 +0200</pubDate>
+      <pubDate>Wed, 25 Dec 2024 00:00:00 +0100</pubDate>
       
       <guid>https://penkovsky.com/home/contact/</guid>
-      <description></description>
+      <description>To pass spam filters, please add today&#39;s date to the subject in DDMM format. Please replace &amp;lt;&amp;gt; with the appropriate sign.</description>
     </item>
     
   </channel>

@@ -11,14 +11,3 @@ Allow: /neural-networks/
 User-agent: DuckDuckBot
 Allow: /post/
 Allow: /neural-networks/
-
-User-agent: Bingbot
-Allow: /post/
-Allow: /neural-networks/
-
-User-agent: ia_archiver
-Disallow: /
-
-User-agent: ia_archiver
-Allow: /post/
-Allow: /neural-networks/

@@ -6,9 +6,570 @@
     <description>Recent content in Bogdan Penkovsky, PhD on Bogdan Penkovsky, PhD</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
-    <copyright>&amp;copy; Bogdan Penkovsky 2024</copyright>
+    <copyright>&amp;copy; Bogdan Penkovsky 2025</copyright>
     <lastBuildDate>Wed, 14 Aug 2024 00:00:00 +0200</lastBuildDate>
     <atom:link href="/" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Soft Actor-Critic with Attention</title>
+      <link>https://penkovsky.com/neural-networks/attention/</link>
+      <pubDate>Wed, 22 Jan 2025 22:18:09 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/neural-networks/attention/</guid>
+      <description>&lt;p&gt;The &lt;em&gt;attention&lt;/em&gt; mechanism is the driving force behind modern neural network
+architectures, such as &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;transformers&lt;/a&gt;. Understanding attention is the first
+step towards understand the inner workings of ChatGPT.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;The accompanying code is available on &lt;a href=&#34;https://github.com/penkovsky/attention&#34;&gt;Github&lt;/a&gt;.&lt;/p&gt;
+
+&lt;hr /&gt;
+
+&lt;p&gt;We will train an AI agent to land on the lunar surface using
+&lt;a href=&#34;https://penkovsky.com/neural-networks/beyond/&#34;&gt;deep reinforcement learning&lt;/a&gt; approach.
+We will solve the &lt;a href=&#34;https://gymnasium.farama.org/environments/box2d/lunar_lander/&#34;&gt;Lunar lander&lt;/a&gt; &lt;a href=&#34;https://gymnasium.farama.org&#34;&gt;Gymnasium&lt;/a&gt;
+environment. The agent will learn to control a space vehicle in a 2D setting.
+The agent observes eight environmental features: X and Y coordinates of the
+lander, X and Y velocities, lander&#39;s angle and angular velocity, and two flags
+indicating whether each lander&#39;s leg is in contact with the ground. We would
+like to see how the agent attends to these features in order to get some
+insights what it has learned.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/lunar.png&#34; alt=&#34;Lunar lander environment: The goal is to safely land on the flat area between the flags.&#34; width=&#34;600px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Lunar lander environment: The goal is to safely land on the flat area between the flags.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Let us consider a simple scenario: a two-layer neural network, i.e. a network
+with a single hidden layer. This network will represent the control policy,
+that is, it will transform the observations from the environment into a
+actions. The network will consist of an &lt;em&gt;attention&lt;/em&gt; layer and a linear layer
+(Figure below).
+We will use &lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;soft actor-critic&lt;/a&gt; for training, but many other
+algorithms would do. Then, once we train the agent, we will finally visualize
+how attention weights change during an episode. To push things even further, we
+will consider the attention layer with only one attention &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;head&lt;/a&gt;.
+Will this be enough?&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/policy-with-attention.png&#34; alt=&#34;Policy network with attention: attention layer and a linear layer.&#34; width=&#34;700px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Policy network with attention: attention layer and a linear layer.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;h2 id=&#34;attention-mechanism-basics&#34;&gt;Attention Mechanism Basics&lt;/h2&gt;
+
+&lt;p&gt;There are several variations on the attention mechanism, yet they are
+conceptually similar. Here we consider a scaled dot-product
+&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;attention&lt;/a&gt; that is used in transformers.&lt;/p&gt;
+
+&lt;p&gt;$$
+\text{Attention}(Q, K, V) = \text{softmax}\left(\frac{QK^T}{\sqrt{d_k}}\right)V,
+$$&lt;/p&gt;
+
+&lt;p&gt;where $Q := W^{(Q)} Q_0$, $K := W^{(K)} K_0$, $V := W^{(V)} V_0$.
+Tensors $Q_0$, $K_0$, and $V_0$ are conventionally called &lt;em&gt;queries&lt;/em&gt;, &lt;em&gt;keys&lt;/em&gt;, and
+&lt;em&gt;values&lt;/em&gt; (in our case they all are equal to the input vector $\mathbf{x}$ cast
+as a matrix). Matrices $W^{(i)}$ are trainable linear transformations. For
+convenience, I omit biases assuming that input (feature) vectors are augmented
+with a constant feature. The first layer&#39;s attention mechanism is illustrated
+schematically in the Figure above.&lt;/p&gt;
+
+&lt;p&gt;The output of the &lt;em&gt;softmax&lt;/em&gt; transformation is known as &lt;em&gt;attention weights&lt;/em&gt;.
+Those are created dynamically from the context (the input). Those
+weights will be applied to transform keys $K$.
+Note that the output vector is a linear combination of the input features.
+Last but not least, the input scaling factor $\sqrt{d_k}$
+empirically seems to play a crucial role. Try to verify.&lt;/p&gt;
+
+&lt;h2 id=&#34;visualizing-attention&#34;&gt;Visualizing Attention&lt;/h2&gt;
+
+&lt;p&gt;Let us take an example from natural language processing. In order to interpret a sentence,
+one needs to correlate the words in it. Sometimes, the related words are not neighbors.
+This is the &lt;a href=&#34;https://arxiv.org/abs/1409.0473&#34;&gt;initial motivation&lt;/a&gt; of the attention mechanism,
+without using recurrent neural networks.
+To illustrate the concept, we reproduce a figure from the transformer &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;paper&lt;/a&gt;.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/Vaswani2017_Fig5.png&#34; alt=&#34;Visualizing attention from the [transformer article](https://arxiv.org/pdf/1706.03762).&#34; width=&#34;700px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Visualizing attention from the &lt;a href=&#34;https://arxiv.org/pdf/1706.03762&#34;&gt;transformer article&lt;/a&gt;.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;The visualization might remind of fully connected layers. However, there is a
+difference. Attention weights adjust dynamically, depending on the actual
+input! Also attention is non-negative because of softmax transformation.
+Now that we have our network, let us learn a control policy
+and to visualize what happens in the attention layer during an episode.&lt;/p&gt;
+
+
+
+&lt;video width=&#34;600&#34; height=&#34;700&#34; autoplay loop controls&gt;
+  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__3__1737493538.mp4&#34; type=&#34;video/mp4&#34;&gt;
+  Your browser does not support the video tag.
+&lt;/video&gt;
+
+
+&lt;p align=&#34;right&#34;&gt;
+&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__3__1737493538.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
+&lt;/p&gt;
+
+
+
+&lt;video width=&#34;600&#34; height=&#34;700&#34; autoplay loop controls&gt;
+  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__6__1737495015.mp4&#34; type=&#34;video/mp4&#34;&gt;
+  Your browser does not support the video tag.
+&lt;/video&gt;
+
+
+&lt;p align=&#34;right&#34;&gt;
+&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__6__1737495015.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
+&lt;/p&gt;
+
+&lt;h2 id=&#34;video-analysis&#34;&gt;Video Analysis&lt;/h2&gt;
+
+&lt;p&gt;By observing the evolution of the attention weights during the episode,
+we may suggest that the agent has learned several distinctive phases.&lt;/p&gt;
+
+&lt;p&gt;The &lt;strong&gt;first phase&lt;/strong&gt; when the lander is high, the agent pays special
+attention to its vertical position Y. While the lander descends,
+the agent&#39;s attention gradually changes.&lt;/p&gt;
+
+&lt;p&gt;During the &lt;strong&gt;second phase&lt;/strong&gt; when the lander is close to the ground,
+the agent attends also to the horizontal velocity and angular velocity omega.
+This information can be useful to learn how land vertically.&lt;/p&gt;
+
+&lt;p&gt;During the &lt;strong&gt;final phase&lt;/strong&gt;, when the ground contact flags are high,
+the agent pays significant attention to lander&#39;s angle.
+This state usually precedes the end of the episode.&lt;/p&gt;
+
+&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+
+&lt;p&gt;It seems somewhat surprising that a policy network with only six
+hidden neurons was sufficient to learn an efficient control strategy.
+On the other hand, this reveals the power of the attention mechanism as it is.
+In the actual transformer architecture, there are implemented many other tricks to
+teach the neural network some very impressive feats. For instance, instead of a
+single attention mechanism in each layer there are several of them (so-called
+&lt;em&gt;heads&lt;/em&gt;) analyzing information in parallel. Position information is encoded
+using positional encodings (e.g. sine and cosine functions). To enforce
+causality, masking is performed (to prevent from attending to future word
+tokens during training). These are well described in
+&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Attention Is All You Need&lt;/a&gt;.&lt;/p&gt;
+
+&lt;h2 id=&#34;citation&#34;&gt;Citation&lt;/h2&gt;
+
+&lt;pre&gt;
+@article{penkovsky2025attn,
+ title   = &#34;Soft Actor-Critic with Attention&#34;,
+ author  = &#34;Penkovsky, Bogdan&#34;,
+ journal = &#34;penkovsky.com&#34;,
+ year    = &#34;2025&#34;,
+ month   = &#34;January&#34;,
+ url     = &#34;https://penkovsky.com/neural-networks/attention/&#34;
+}
+&lt;/pre&gt;
+
+&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;Soft Actor-Critic&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1409.0473&#34;&gt;Neural machine translation by jointly learning to align and translate&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Attention Is All You Need (transformer paper)&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title>5/25 Rule</title>
+      <link>https://penkovsky.com/post/goals/</link>
+      <pubDate>Mon, 20 Jan 2025 20:13:10 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/post/goals/</guid>
+      <description>&lt;p&gt;The method was popularized by Warren Buffett. Write down 25
+goals you want to achieve in the next few years. How about career, family,
+health or personal development? It is the best to pick a quiet place and
+dedicate some time to this exercise.
+Take your time to write all 25 goals. Should
+you continue later, the entries will be waiting for you on this page.&lt;/p&gt;
+
+&lt;style&gt;
+    body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 20px;
+        background-color: #f4f4f4;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
+    h1 {
+        text-align: center;
+        color: #333;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;  
+    }
+    input[type=&#34;text&#34;] {
+        width: calc(100% - 20px);  
+        padding: 10px;
+        border: 2px solid #ccc;
+        border-radius: 4px;
+        font-size: 16px;
+    }
+    input[type=&#34;text&#34;].valid {
+        border-color: green;
+    }
+    input[type=&#34;text&#34;].invalid {
+        border-color: red;
+    }
+    button {
+        padding: 10px;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        font-size: 16px;
+        width: 30%;  
+    }
+    button#readyButton {
+        background-color: #007BFF;  
+    }
+    button#clearButton {
+        background-color: #ccc;  
+        color: black;  
+    }
+    button#finalizeButton {
+        background-color: #28a745;  
+        transition: box-shadow 0.3s ease;  
+    }
+    button#finalizeButton:hover {
+        box-shadow: 0 4px 15px rgba(0, 128, 0, 0.5);  
+    }
+    button#printButton {
+        background-color: #17a2b8;  
+    }
+    button:hover {
+        opacity: 0.9;  
+    }
+    .hidden { display: none; }
+    #goalSelection, #results {
+        margin-top: 20px;  
+    }
+    .button-container {
+        display: flex;
+        justify-content: space-between;  
+    }
+    .saved-message {
+        color: green;
+        font-weight: bold;
+        text-align: center;
+    }
+
+     
+    #goalList input[type=checkbox] {
+        margin-right: 10px;  
+        width: 20px;  
+        height: 20px;  
+        accent-color: blue;  
+    }
+
+     
+    @media print {
+        body * {
+            visibility: hidden;  
+            position: absolute;  
+            left: -9999px;  
+            top: -9999px;
+            width:auto;
+            height:auto;
+          }
+
+          #results, #results * {
+            visibility: visible;  
+            position: static;  
+            left:auto;
+            top:auto;
+            width:auto;  
+            margin-top :0;
+            padding-top :20px;  
+            background-color:white;  
+          }
+
+          h1, h2, p, ol {
+            page-break-inside:auto;
+            break-inside:auto;
+            page-break-after:auto;
+            break-after:auto;
+          }
+
+          #printButton {
+              display:none !important;  
+          }
+      }
+&lt;/style&gt;
+
+&lt;form id=&#34;dynamicForm&#34;&gt;
+    &lt;p&gt;&lt;strong&gt;Notice:&lt;/strong&gt; The data you enter in this form are stored locally
+    in your browser using local storage. This means that your information is not
+    sent over the internet and remains only on your device. Your entries will
+    persist even if you close the browser or refresh the page, ensuring that your
+    entries are accessible when you return.&lt;/p&gt;
+
+    &lt;div id=&#34;formFields&#34;&gt;&lt;/div&gt;
+    &lt;div class=&#34;button-container&#34;&gt;
+        &lt;button type=&#34;submit&#34; id=&#34;readyButton&#34;&gt;Ready!&lt;/button&gt;
+        &lt;button type=&#34;button&#34; id=&#34;clearButton&#34;&gt;Clear&lt;/button&gt;
+    &lt;/div&gt;
+    &lt;div id=&#34;savedMessage&#34; class=&#34;hidden saved-message&#34;&gt;Saved&lt;/div&gt;
+&lt;/form&gt;
+
+&lt;div id=&#34;goalSelection&#34; class=&#34;hidden&#34;&gt;
+    &lt;h2&gt;Select Top 5 Goals&lt;/h2&gt;
+    &lt;p&gt;Select your top 5 goals and click &#34;Finalize&#34; below.&lt;/p&gt;
+    &lt;div id=&#34;goalList&#34;&gt;&lt;/div&gt;
+    &lt;button id=&#34;finalizeButton&#34; class=&#34;hidden&#34;&gt;Finalize&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;div id=&#34;results&#34; class=&#34;hidden&#34;&gt;
+    &lt;h2&gt;The Priorities&lt;/h2&gt;
+    &lt;p&gt;Here are your top 5 goals. These should be the goals that you believe will have the most significant impact on your life or career.&lt;/p&gt;
+    &lt;ol id=&#34;prioritiesList&#34;&gt;&lt;/ol&gt;
+
+    &lt;h2&gt;Avoid-At-All-Costs&lt;/h2&gt;
+    &lt;p&gt;&#34;Avoid-At-All-Costs&#34; list prevents you from spreading your efforts too thin. Instead, concentrate solely on your top priorities. Once they are done, you can move on to the next set of goals. As Buffett puts it: &#34;No matter what happens, these goals should get no attention from you until you&#39;ve achieved your top 5.&#34;&lt;/p&gt;
+
+    &lt;ol id=&#34;othersList&#34;&gt;&lt;/ol&gt;
+
+    &lt;p&gt;
+    Regularly review your progress to stay on track and adjust as necessary.
+    &lt;/p&gt;
+
+    &lt;button id=&#34;printButton&#34; class=&#34;hidden&#34;&gt;Print&lt;/button&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+
+const formFieldsDiv = document.getElementById(&#39;formFields&#39;);
+for (let i = 1; i &lt;= 25; i++) {
+    const input = document.createElement(&#39;input&#39;);
+    input.type = &#39;text&#39;;
+    input.name = `field${i}`;
+    input.placeholder = `Goal ${i}`;
+    input.required = true;
+
+    
+    const savedValue = localStorage.getItem(`field${i}`);
+    if (savedValue) {
+        input.value = savedValue;
+    }
+
+    
+    input.addEventListener(&#39;input&#39;, () =&gt; {
+        localStorage.setItem(input.name, input.value);
+
+        
+        const savedMessage = document.getElementById(&#39;savedMessage&#39;);
+        savedMessage.classList.remove(&#39;hidden&#39;);
+
+        
+        setTimeout(() =&gt; {
+            savedMessage.classList.add(&#39;hidden&#39;);
+        }, 3000); 
+    });
+
+    formFieldsDiv.appendChild(input);
+}
+
+
+document.getElementById(&#39;clearButton&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+    const confirmation = window.confirm(&#34;Both the form AND saved entries are going to be erased, continue?&#34;);
+
+    if (confirmation) {
+        const inputs = document.querySelectorAll(&#39;#dynamicForm input&#39;);
+
+        
+        inputs.forEach(input =&gt; {
+            input.value = &#39;&#39;;
+            localStorage.removeItem(input.name); 
+        });
+
+        
+        document.getElementById(&#39;savedMessage&#39;).classList.add(&#39;hidden&#39;);
+
+        
+        document.getElementById(&#39;goalSelection&#39;).classList.add(&#39;hidden&#39;);
+        document.getElementById(&#39;results&#39;).classList.add(&#39;hidden&#39;);
+
+      }
+});
+
+
+document.getElementById(&#39;dynamicForm&#39;).addEventListener(&#39;submit&#39;, (event) =&gt; {
+    event.preventDefault();
+
+    const inputs = document.querySelectorAll(&#39;#dynamicForm input&#39;);
+    let allFilled = true;
+
+    inputs.forEach(input =&gt; {
+      if (input.value.trim() === &#39;&#39;) {
+          allFilled = false;
+          input.classList.add(&#39;invalid&#39;);
+      } else {
+          input.classList.remove(&#39;invalid&#39;);
+          input.classList.add(&#39;valid&#39;);
+      }
+   });
+
+   if (!allFilled) {
+       alert(&#34;Please fill out all fields.&#34;);
+       return;
+   }
+
+   
+   document.getElementById(&#39;dynamicForm&#39;).classList.add(&#39;hidden&#39;);
+   showGoalSelection(inputs);
+   window.scrollTo({ top: 0, behavior: &#39;smooth&#39; }); 
+});
+
+function showGoalSelection(inputs) {
+   const goalSelectionDiv = document.getElementById(&#39;goalSelection&#39;);
+   goalSelectionDiv.classList.remove(&#39;hidden&#39;);
+
+   const goalListDiv = document.getElementById(&#39;goalList&#39;);
+   goalListDiv.innerHTML = &#39;&#39;;
+
+   inputs.forEach((input, index) =&gt; {
+       const checkboxContainer = document.createElement(&#39;div&#39;); 
+       const checkbox = document.createElement(&#39;input&#39;);
+
+       checkbox.type = &#39;checkbox&#39;;
+       checkbox.id = `goal${index}`;
+       checkbox.value = input.value;
+
+       checkbox.addEventListener(&#39;change&#39;, checkGoals);
+
+       const label = document.createElement(&#39;label&#39;);
+       label.htmlFor = `goal${index}`;
+       label.textContent = input.value;
+
+       checkboxContainer.appendChild(checkbox);
+       checkboxContainer.appendChild(label);
+
+       goalListDiv.appendChild(checkboxContainer);
+   });
+}
+
+function checkGoals() {
+   const checkboxes = document.querySelectorAll(&#39;#goalList input[type=checkbox]&#39;);
+
+   const selectedCount = Array.from(checkboxes).filter(checkbox =&gt; checkbox.checked).length;
+
+   const finalizeButton = document.getElementById(&#39;finalizeButton&#39;);
+
+   if (selectedCount === 5) {
+       finalizeButton.classList.remove(&#39;hidden&#39;);
+
+       finalizeButton.onclick = () =&gt; finalizeGoals(checkboxes);
+   } else {
+       finalizeButton.classList.add(&#39;hidden&#39;);
+   }
+}
+
+function finalizeGoals(checkboxes) {
+   const prioritiesList = document.getElementById(&#39;prioritiesList&#39;);
+   const othersList = document.getElementById(&#39;othersList&#39;);
+
+   prioritiesList.innerHTML = &#39;&#39;;
+   othersList.innerHTML = &#39;&#39;;
+
+   checkboxes.forEach(checkbox =&gt; {
+       if (checkbox.checked) {
+           const li = document.createElement(&#39;li&#39;);
+           li.textContent = checkbox.value;
+           prioritiesList.appendChild(li);
+       } else {
+           const li = document.createElement(&#39;li&#39;);
+           li.textContent = checkbox.value;
+           othersList.appendChild(li);
+       }
+   });
+
+   
+   document.getElementById(&#39;goalSelection&#39;).classList.add(&#39;hidden&#39;);
+
+   
+   document.getElementById(&#39;results&#39;).classList.remove(&#39;hidden&#39;);
+   
+   window.scrollTo({ top: 0, behavior: &#39;smooth&#39; });
+   
+}
+
+
+document.getElementById(&#39;printButton&#39;).addEventListener(&#39;click&#39;, () =&gt; {
+    window.print(); 
+});
+
+
+window.onload = () =&gt; {
+     for (let i = 1; i &lt;= 25; i++) {
+         const input = document.querySelector(`input[name=field${i}]`);
+         const savedValue = localStorage.getItem(`field${i}`);
+         if (savedValue) {
+             input.value = savedValue;
+         }
+     }
+};
+
+&lt;/script&gt;</description>
+    </item>
+    
+    <item>
+      <title>Quantum Machine Learning: Myths and Reality</title>
+      <link>https://penkovsky.com/talk/qml-myths/</link>
+      <pubDate>Sat, 14 Dec 2024 00:00:00 +0100</pubDate>
+      
+      <guid>https://penkovsky.com/talk/qml-myths/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>Gentle Introduction to Quantum Machine Learning</title>
@@ -1985,21 +2546,71 @@ qubits that can be used in a quantum computer. This is an open question.&lt;/p&g
 
 &lt;h2 id=&#34;create-a-lot-of-free-space&#34;&gt;Create A Lot Of Free Space&lt;/h2&gt;
 
-&lt;p&gt;There is nothing new here. Obviously, having a very busy schedule has its opportunity cost. And the associated cost is not even reduced creativity. It is reduced productivity. Here is how I realized that.&lt;/p&gt;
+&lt;p&gt;Common sense suggests that a very busy schedule has its opportunity cost. And
+the associated cost is not even reduced creativity. It is reduced productivity.
+Here is how I realized that.&lt;/p&gt;
 
-&lt;p&gt;A few years ago I started a side project which has substantially altered my schedule. During my PhD and later years, I was accustomed to finishing my working day after 8pm. I enjoyed my work, or so I thought. However, because of the new side project I was forced to finish my day job by 5pm. This way I returned home earlier and had a few hours to spend on my extra project. To my surprise, I was not simply doing “two jobs”. This new schedule boosted my enthusiasm about the day job. And enthusiasm in it’s turn helped to produce better results on that first job. My ideas became also more diverse. And I felt that the days became more meaningful overall.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;big&gt;The act of creating space is also an act of power and of freedom of
+choice.&lt;/big&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
 
-&lt;p&gt;One way to look at that experience is to guess that in fact I have become busier. Well, I cannot deny that I had more responsibilities by then. The other way of thinking is that I have created a time slot, a free space, which was beneficial to do something new.&lt;/p&gt;
+&lt;p&gt;A few years ago I started a side project which has substantially altered my
+schedule. During my PhD and later years, I was accustomed to finishing my
+working day after 8pm. I enjoyed my work, or so I thought. However, because of
+the new side project I was forced to finish my day job by 5pm. This way I
+returned home earlier and had a few hours to spend on my extra project. To my
+surprise, I was not simply doing “two jobs”. (The right term here is
+&lt;em&gt;interleaving&lt;/em&gt;.) This new schedule boosted my enthusiasm. And enthusiasm in it’s
+turn helped to produce better results on the first job. My ideas became also
+more diverse. And I felt that the days became more meaningful overall.&lt;/p&gt;
 
-&lt;p&gt;The act of creating space is also an act of power and of freedom of choice. From this perspective, being “lucky” correlates with that freedom. Call it a serendipity if you will. Psyche journal &lt;a href=&#34;https://psyche.co/guides/how-to-open-up-to-serendipity-and-create-your-own-luck&#34;&gt;article&lt;/a&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-luck&#34;&gt;&lt;a href=&#34;#fn:fn-luck&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; suggests that being lucky is about being alert to the unexpected. In a social experiment, the “lucky” person finds a banknote on a pavement, comes inside a nearby coffee shop, and starts a conversation with a random visitor in there. And that random person happens to be a business man, a new connection. Whereas the “unlucky” person fails to accomplish any of those. My impression is that the “unlucky” person in the experiment does not allow themself for any “free” space in any possible meaning such as time, money, personal freedom, etc.&lt;/p&gt;
+&lt;p&gt;One way to look at that experience is to guess that in fact I have become
+busier. Well, I cannot deny that I had more responsibilities by then. The other
+way of thinking is that I have created a time slot, a free space, which was
+beneficial to do something new.&lt;/p&gt;
 
-&lt;p&gt;Speaking of money. Two years before the 2020 pandemic (and that also implies, before the above article appeared in Psyche journal), I took an airplane when coming from a conference. I cannot call myself a spender. I am typically careful with money, this is my upbringing. However, that time I decided to “upgrade” the airplane ticket. Just for the sake of change. And guess what? I am sitting in the “premium economy” class (not even some fancy “business class”) next to a VP of some quite large company (more than 3000 employees). Honestly, I didn’t care about the position of the person. What I was actually impressed about was how quick was their brain to find analogies in many linguistic questions. And they gave some great advice about creating a start-up.&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;&lt;big&gt;Being lucky is about being alert to the unexpected.&lt;/big&gt;&lt;br&gt;
+(Psyche journal)&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;The act of creating space is also an act of power and of freedom of choice. From
+this perspective, being “lucky” is nourished by that freedom. Call it
+&lt;em&gt;serendipity&lt;/em&gt; if you will. Psyche journal &lt;a href=&#34;https://psyche.co/guides/how-to-open-up-to-serendipity-and-create-your-own-luck&#34;&gt;article&lt;/a&gt;&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-luck&#34;&gt;&lt;a href=&#34;#fn:fn-luck&#34;&gt;1&lt;/a&gt;&lt;/sup&gt; suggests
+that being lucky is about being alert to the unexpected. In a social experiment,
+the “lucky” person finds a banknote on a pavement, comes inside a nearby coffee
+shop, and starts a conversation with a random visitor in there. And that random
+person happens to be a business man, a new connection. Whereas the “unlucky”
+person fails to accomplish any of those. My impression is that the “unlucky”
+person in the experiment does not allow themself for any “free” space in any
+possible meaning such as time, money, personal freedom, etc.&lt;/p&gt;
+
+&lt;p&gt;Speaking of money. Two years before the 2020 pandemic (and that also implies,
+before the above article appeared in Psyche journal), I took an airplane when
+coming from a conference. I cannot call myself a spender. I am typically careful
+with money, this is my upbringing. However, that time I decided to “upgrade” the
+airplane ticket. Just for the sake of change. And guess what? I am sitting in
+the “premium economy” class (not even some fancy “business class”) next to a VP
+of some quite large company (more than 3000 employees). Honestly, I didn’t care
+about the position of the person. What I was actually impressed about was how
+quick was their brain to find analogies in many linguistic questions. And they
+gave some great advice about creating a start-up.&lt;/p&gt;
 
 &lt;h2 id=&#34;generate-many-ideas&#34;&gt;Generate Many Ideas&lt;/h2&gt;
 
-&lt;p&gt;This one seems so obvious. Yet to me, it was less obvious. If you are like me, then you may enjoy the book by Adam Grant entitled Originals: How Non-Conformists Move the World&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-adam-grant&#34;&gt;&lt;a href=&#34;#fn:fn-adam-grant&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. The author argues that to increase the “chance of success”, one has to generate many ideas. The less obvious consequence perhaps is that the famous pieces of art, the most famous inventions and so on are only very few known contributions of their inventors. The tip of the ideas iceberg.&lt;/p&gt;
+&lt;p&gt;This one seems so obvious. Yet to me, it was not obvious at all. If you are like
+me, then you may pick some ideas from Originals: How Non-Conformists Move the
+World by Adam Grant&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-adam-grant&#34;&gt;&lt;a href=&#34;#fn:fn-adam-grant&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;. The author argues that to increase the
+“chance of success”, one has to generate many ideas. The less obvious
+consequence perhaps is that the famous pieces of art, the most famous inventions
+and so on are only very few known contributions of their inventors. The tip of
+the ideas iceberg.&lt;/p&gt;
 
-&lt;p&gt;If you think you may not enjoy the book, then as a one-sentence summary I will adapt this one, from Chapter 2: “the rule is that you need to generate at least twenty-five ideas to strike gold“. I just opened the latest bookmark and it happened to be this one. Serendipity.&lt;/p&gt;
+&lt;p&gt;If you think you may not enjoy the book, then as a one-sentence summary I will
+adapt this one, from Chapter 2: “the rule is that you need to generate at least
+twenty-five ideas to strike gold“. I just opened the latest bookmark and it
+happened to be this one. Serendipity.&lt;/p&gt;
 
 &lt;p&gt;Critics (those who won’t read) will ask, &lt;em&gt;why twenty-five&lt;/em&gt;? Please read carefully, “at least twenty-five”. Twenty-six. Forty. You name it.&lt;/p&gt;
 
@@ -2030,8 +2641,8 @@ a few considerations that I find useful.&lt;/p&gt;
 
 &lt;p&gt;Mark Mortier from 2Circle says that Wellbeing = Productivity. This is quite
 self-explanatory. Get back to the basics. Sleep well, eat well, exercise. Once
-you&#39;ve got this all right, you can start thinking about the rest.
-There is also a related idea that before improving the world, start with yourself.&lt;/p&gt;
+you&#39;ve got these all right, start thinking about the rest.
+As they say, before improving the world, start with yourself.&lt;/p&gt;
 
 &lt;p&gt;James Clear (the author of Atomic Habits) came up with the following
 observation: In the long-run, &lt;a href=&#34;https://jamesclear.com/3-2-1/may-12-2022&#34;&gt;prioritization beats
@@ -2168,10 +2779,10 @@ essential for survival in a complex environment.&lt;/p&gt;
 &lt;p&gt;&amp;quot;So how about &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;transformers&lt;/a&gt;?&amp;quot; you might ask, &amp;quot;They use attention.&amp;quot;
 Yes, transformers technically belong to the category of dynamic neural networks,
 too. What happens with GPT models (&lt;em&gt;T&lt;/em&gt; is for transformer of course) is that
-when you provide a text prompt, it serves as a context. The &lt;em&gt;attention&lt;/em&gt;
-mechanism underpinning the transformer architecture is transforming the neural
-network weights, as a function of that context. And that is what makes
-transformers flexible.&lt;/p&gt;
+when you provide a text prompt, it serves as a context. The
+&lt;em&gt;&lt;a href=&#34;https://penkovsky.com/neural-networks/attention/&#34;&gt;attention&lt;/a&gt;&lt;/em&gt; mechanism underpinning the
+transformer architecture is transforming the neural network weights, as a
+function of that context. And that is what makes transformers flexible.&lt;/p&gt;
 
 &lt;p&gt;By the way don&#39;t be misled thinking that the attention mechanism/dynamically
 updated weights is the reason why transformer models are called &lt;em&gt;generative&lt;/em&gt;!
@@ -3758,6 +4369,7 @@ random noise $\varepsilon$ is drawn from the normal distribution.&lt;/p&gt;
 &lt;li&gt;&lt;a href=&#34;https://magenta.tensorflow.org/music-vae&#34;&gt;Interpolating Music&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://openreview.net/pdf?id=Sy2fzU9gl&#34;&gt;β-VAE: Learning Basic Visual Concepts With A Constrained Variational Framework&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://gregorygundersen.com/blog/2018/04/29/reparameterization/&#34;&gt;The Reparameterization Trick&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://blog.alexalemi.com/kl-is-all-you-need.html&#34;&gt;KL is All You Need&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1906.00446&#34;&gt;Generating Diverse High-Fidelity Images with VQ-VAE-2&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://openaccess.thecvf.com/content/CVPR2021/papers/Peng_Generating_Diverse_Structure_for_Image_Inpainting_With_Hierarchical_VQ-VAE_CVPR_2021_paper.pdf&#34;&gt;Generating Diverse Structure for Image Inpainting With Hierarchical VQ-VAE&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://vincentcartillier.github.io/papers/variational-image-inpainting.pdf&#34;&gt;Variational Image Inpainting&lt;/a&gt;&lt;/li&gt;
@@ -5802,486 +6414,6 @@ but the latency is only about 6ms!&lt;/p&gt;
       <pubDate>Thu, 14 Oct 2021 07:00:00 +0200</pubDate>
       
       <guid>https://penkovsky.com/project/autonomous-factory/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>Reservoir computing with biocompatible organic electrochemical networks for brain-inspired biosignal classification</title>
-      <link>https://penkovsky.com/publication/biocompatible-reservoir-computing/</link>
-      <pubDate>Tue, 24 Aug 2021 00:00:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/publication/biocompatible-reservoir-computing/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title>A Quadcopter From Scratch</title>
-      <link>https://penkovsky.com/post/quad/</link>
-      <pubDate>Sun, 09 May 2021 11:33:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/post/quad/</guid>
-      <description>
-
-&lt;p&gt;Recently NASA has made the first powered flight on Mars.
-They have deployed a drone called &lt;a href=&#34;https://en.wikipedia.org/wiki/Ingenuity_(helicopter)&#34;&gt;Ingenuity&lt;/a&gt;
-costing about $85 million. The helicopter was able to fly
-on about ten meters altitude (as of May, 7)
-over the surface of the Red Planet.&lt;/p&gt;
-
-&lt;p&gt;Coincidently, I have also built a flying drone.
-This looked like a good challenge and an opportunity to
-learn about unmanned aerial vehicles (UAVs).&lt;/p&gt;
-
-&lt;p&gt;Here is what I learned.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/quad/copter.gif&#34; alt=&#34;Ingenuity helicopter hovering on Mars (2021). Image credit: NASA/JPL-Caltech.&#34; width=&#34;590&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Ingenuity helicopter hovering on Mars (2021). Image credit: NASA/JPL-Caltech.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;hr /&gt;
-
-&lt;p&gt;&lt;strong&gt;Contents&lt;/strong&gt;&lt;/p&gt;
-
-&lt;ol&gt;
-&lt;li&gt;&lt;a href=&#34;#parts&#34;&gt;Parts&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#assembling-a-drone&#34;&gt;Assembling a Drone&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;#some-of-the-challenges-i-have-faced&#34;&gt;Some of the Challenges I Have Faced&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-
-&lt;hr /&gt;
-
-&lt;h2 id=&#34;parts&#34;&gt;Parts&lt;/h2&gt;
-
-&lt;p&gt;What you will essentially need is propellers, motors, and some way to power and control them.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/quad/parts-flat.jpg&#34; alt=&#34;Our quadcopter parts&#34; width=&#34;700&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Our quadcopter parts
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Part&lt;/th&gt;
-&lt;th&gt;Qty&lt;/th&gt;
-&lt;th&gt;Unit W. (g)&lt;/th&gt;
-&lt;th&gt;Weight (g)&lt;/th&gt;
-&lt;th&gt;Price (EUR)&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;Arm (printed)&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;13&lt;/td&gt;
-&lt;td&gt;52&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Arm support (printed)&lt;/td&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;3.5&lt;/td&gt;
-&lt;td&gt;7&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Base (v1.1) (printed)&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;30&lt;/td&gt;
-&lt;td&gt;30&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Top (v1.1) (printed)&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;21&lt;/td&gt;
-&lt;td&gt;21&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/ZOP-Power-11_1V-1100mAh-65C-3S-Lipo-Battery-XT60-Plug-p-1085893.html&#34;&gt;1100 mAh Battery 3S&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;117&lt;/td&gt;
-&lt;td&gt;117&lt;/td&gt;
-&lt;td&gt;14.72&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;2300 KV Motors 2204&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;25&lt;/td&gt;
-&lt;td&gt;100&lt;/td&gt;
-&lt;td&gt;14.02&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Racerstar-RS20Ax4-20A-4-in-1-Blheli_S-Opto-ESC-2-4S-Support-Dshot150-Dshot300-for-RC-FPV-Racing-Drone-p-1068210.html&#34;&gt;ESC (4 in 1)&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;19&lt;/td&gt;
-&lt;td&gt;19&lt;/td&gt;
-&lt;td&gt;24.84&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/F3-Flight-Controller-6-DOF-or-10-DOF-for-RC-Multirotor-FPV-Racing-Drone-p-1010232.html&#34;&gt;F3 flight controller&lt;/a&gt;*&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;17&lt;/td&gt;
-&lt;td&gt;17&lt;/td&gt;
-&lt;td&gt;18.87&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Radio receiver (FS-iA10B)&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;17.6&lt;/td&gt;
-&lt;td&gt;17.6&lt;/td&gt;
-&lt;td&gt;19&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/DC-DC-Converter-Step-Down-Module-UBEC-3A-5V-or-12V-BEC-For-RC-Airplane-FPV-for-RC-Drone-FPV-Racing-p-981978.html&#34;&gt;UBEC 3A 5V&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;3.13&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Wires*&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;20&lt;/td&gt;
-&lt;td&gt;20&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Bolts and nuts*&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;18&lt;/td&gt;
-&lt;td&gt;18&lt;/td&gt;
-&lt;td&gt;&amp;lt;10&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/10-Pairs-GEPRC-5040-V2-5-Inch-3-Blade-Propeller-Transparent-Color-For-RC-Multirotor-FPV-Racing-Drone-p-1169484.html&#34;&gt;5040 Propellers&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;7.38&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Suleve-M3NH12-50Pcs-M3-Nylon-Hex-Hexagonal-Female-Thread-PCB-Standoff-Spacers-2025303540mm-p-1262027.html&#34;&gt;Nylon spacers 40 mm&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;6&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;5.72&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/10PCS-Eachine-Lipo-Battery-Tie-Down-Strap-260mm-For-FPV-RC-Drone-p-1137622.html&#34;&gt;&amp;quot;Velcro&amp;quot; fasteners&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;2-3&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;1.63&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/Amass-XT60-Male-Female-Plug-Connector-12AWG-10cm-Power-Cable-p-1155466.html&#34;&gt;XT60 connector&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;?&lt;/td&gt;
-&lt;td&gt;3.27&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;a href=&#34;https://www.banggood.com/fr/4-PCS-22XX-Series-Motor-Silicone-Anti-vibration-Pad-in-for-RC-Drone-FPV-Racing-Drone-p-1153904.html&#34;&gt;Motor anti-vibration pads&lt;/a&gt;&lt;/td&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;2.01&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;/tr&gt;
-
-&lt;tr&gt;
-&lt;td&gt;Total**&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;&lt;/td&gt;
-&lt;td&gt;418.6&lt;/td&gt;
-&lt;td&gt;124.59&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;small&gt;* Approximate weight.
-&lt;/small&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;small&gt;** Total price without LiPo charger (iMAX B6), radio transmitter, and
-camera. You can reuse those from other projects.  The prices are given for
-indicative purpose only. The parts are not guaranteed to be optimal or
-cheapest.
-&lt;/small&gt;&lt;/p&gt;
-
-&lt;p&gt;The 3D printed frame was downloaded from Thingiverse: design called
-&lt;a href=&#34;https://www.thingiverse.com/thing:629338&#34;&gt;Peon230&lt;/a&gt;. Initially I printed everything in PLA. However, I have found
-out that, when crashing, base and top parts tend to break. Now, I use nylon
-for those two parts: they are lighter in nylon and do not break so easily.  By
-the way, I did not use glue for platform adhesion when printing with PLA&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-1&#34;&gt;&lt;a href=&#34;#fn:fn-1&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
-Printing directly on the glass platform gave parts a shiny finish.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/quad/3dprinting.gif&#34; alt=&#34;Fabricating quadcopter frame. Overall it took 11 hours to print all the parts.&#34; width=&#34;520&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Fabricating quadcopter frame. Overall it took 11 hours to print all the parts.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;h3 id=&#34;some-jargon&#34;&gt;Some Jargon&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;ESC&lt;/strong&gt; = electronic speed controller. Those translate control pulses coming
-from the flight controller into voltage actually driving motors. The ESC I used
-in this build contains actually four ESCs, permitting to control all four
-motors. That reduces the copter&#39;s weight, which is great.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;UBEC&lt;/strong&gt; = universal battery elimination circuit (DC-DC converter). Helped me
-to use a single battery both for the motors (12 V) and for the flight
-controller (5 V). UBECs are switching converters and they are recommended over
-linear DC converters, which dissipate a lot of heat when stepping down the
-voltage.&lt;/p&gt;
-
-&lt;p&gt;(Battery) &lt;strong&gt;3S&lt;/strong&gt; = 3 cells. Each cell contributes 3.7 V, therefore 11.1 V
-total. I used a battery with capacity of 1100 mAh. This battery gave me up to
-15 minutes to fly.&lt;/p&gt;
-
-&lt;p&gt;Motor characteristics. &lt;strong&gt;2300 KV&lt;/strong&gt;: 2300 revolutions per minute (RPMs) per volt
-(with no load attached to that motor). Therefore, at 12 volts, these motors are
-expected to achieve 12 * 2300 = 27600 RPMs. &lt;strong&gt;2204&lt;/strong&gt;: 22  is the rotor diameter
-and 04 is the stator height. Larger motors give you more torque, which is
-related to the uplift force you want to generate. This is especially important
-when considering the vehicle&#39;s weight.  Racing drones have high thrust to
-weight ratio enhancing their maneuverability and ability to rapidly accelerate
-Camera drones, on the other hand, have lower thrust to weight ratio making them
-more stable and easier to pilot.&lt;/p&gt;
-
-&lt;h3 id=&#34;battery-safety&#34;&gt;Battery Safety&lt;/h3&gt;
-
-&lt;!-- Speaking about the battery, --&gt;
-
-&lt;p&gt;The nominal voltage of a lithium-polymer (LiPo) battery cell (3.7 V) is
-actually closer to its storage voltage (3.8 V). When a battery cell is fully
-charged, it reaches 4.2 V. The battery should never be overcharged because of
-an explosion/fire hazard. Also discharging under 3 V is not recommended as the
-battery may break. It is a good idea using a balance charger that controls each
-cell individually. &lt;strong&gt;Be careful with your batteries&lt;/strong&gt;. There exist special
-safety bags designed for LiPo charging.  Never charge your batteries
-unattended.&lt;/p&gt;
-
-&lt;!-- The video below gives an idea what can happen if such battery is
-improperly handled.
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/CnNId0mDnBo&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
- --&gt;
-
-&lt;h2 id=&#34;assembling-a-drone&#34;&gt;Assembling a Drone&lt;/h2&gt;
-
-&lt;h3 id=&#34;soldering-motor-wires&#34;&gt;Soldering Motor Wires&lt;/h3&gt;
-
-&lt;p&gt;First of all we need to make sure that our electronic part (flight controller, ESCs, motors, etc.) works properly.
-We solder three wires of each motor directly to ESCs.
-Please pay attention to the motor wiring as neighboring motors rotate
-&lt;em&gt;in opposite directions&lt;/em&gt;.
-Then, we solder an XT60 battery connector.&lt;/p&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/4Ry7khyMQZo&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;In parallel to motors we solder a UBEC, not shown on the video&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-2&#34;&gt;&lt;a href=&#34;#fn:fn-2&#34;&gt;2&lt;/a&gt;&lt;/sup&gt;.
-We connect UBEC to power the flight controller from the same battery.&lt;/p&gt;
-
-&lt;p&gt;Here is an example diagram how the flight controller can be connected to the
-receiver via the iBus protocol. It is also shown how the four motor outputs are
-connected to electronic speed controllers. Usually ground (black) wires are
-connected to the ESCs for the ground reference&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-3&#34;&gt;&lt;a href=&#34;#fn:fn-3&#34;&gt;3&lt;/a&gt;&lt;/sup&gt;. If you decide to power
-the flight controller from ESCs (provided that your ESCs have BEC circuits), it
-is not recommended to provide more then one VCC (typically red) wire. In my
-configuration I do not power the flight controller from ESCs. Instead, I use a
-separate UBEC connected to the battery in parallel.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/quad/diag-ibus.png&#34; alt=&#34;Wiring the receiver and, flight controller, and motor ESCs&#34; width=&#34;590&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Wiring the receiver and, flight controller, and motor ESCs
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;The diagram above also illustrates the direction of the motor rotation. Pay
-attention as it is equally important to install the appropriate propellers
-before the flight. Crucially, all four propellers will have to push the air
-down. It is also a good idea to test every motor individually (without
-propellers of course) to verify if signals are arriving to the correct motors
-(see &lt;a href=&#34;#tuning-the-flight-controller&#34;&gt;Tuning the Flight Controller&lt;/a&gt; section
-below).&lt;/p&gt;
-
-&lt;h3 id=&#34;complete-build&#34;&gt;Complete Build&lt;/h3&gt;
-
-&lt;p&gt;In this video we assemble the frame from earlier printed parts.  We put motors,
-ESCs, flight controller, and the receiver on the frame.  The flight controller
-is bolted on top of the 4-in-1 ESC.  Then, we connect the radio receiver to the
-flight controller.  We also connect flight controller output wires to ESCs.  We
-could solder everything instead, but these connections are already good for the
-test. We test connection with a transmitter and the motors. We finalize the build
-by putting the remaining part of the frame on top.&lt;/p&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/kusp-hsykl8&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;p&gt;Please also note that it is crucial that your final build is tight.  No wire,
-nothing should be in the way of your propellers.&lt;/p&gt;
-
-&lt;h3 id=&#34;tuning-the-flight-controller&#34;&gt;Tuning the Flight Controller&lt;/h3&gt;
-
-&lt;p&gt;While your UAV may seem functional, it is probably not yet ready to fly. In
-fact, the flight controller is probably the most important part, it acts as a
-&amp;quot;quadcopter&#39;s brain&amp;quot;. The controller interprets the received radio commands and
-the data coming from its sensors, most notably from the inertia measurement
-unit (IMU), to stabilize and steer the vehicle. In fact, without a flight
-controller it would be virtually impossible for a human to pilot a quadcopter.&lt;/p&gt;
-
-&lt;p&gt;To make sure the copter interprets the flight situation adequately, the
-controller has to be properly calibrated. This includes calibrating the IMU and
-compass. It is also important to verify that the remote control commands are
-properly interpreted. And that the appropriate motors are activated. To perform
-these individual checks and calibrations, I used
-&lt;a href=&#34;http://cleanflight.com&#34;&gt;Clean Flight&lt;/a&gt; software. However, there exist multiple
-alternative options, such as &lt;a href=&#34;https://betaflight.com/&#34;&gt;Beta Flight&lt;/a&gt;, which is a
-popular fork of Clean Flight.&lt;/p&gt;
-
-&lt;h2 id=&#34;some-of-the-challenges-i-have-faced&#34;&gt;Some of the Challenges I Have Faced&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;Vibrations on captured videos from the quadcopter turned out to be mostly because of slightly damaged propellers (after emergency landings)&lt;/li&gt;
-&lt;li&gt;The best way to position antennas turned out to be along the body. This way they don&#39;t get into the way if crashing.&lt;/li&gt;
-&lt;li&gt;Regulations. In Europe, you need to obtain a special permission to fly a drone. Also there are very strict limitations where you can fly as a hobbyist.&lt;/li&gt;
-&lt;/ul&gt;
-
-&lt;p&gt;I am still learning to fly this thing.&lt;/p&gt;
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/kVYTW7eJe7k&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-
-&lt;div style=&#34;position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;&#34;&gt;
-  &lt;iframe src=&#34;//www.youtube-nocookie.com/embed/7OXhmJnP2sY&#34; style=&#34;position: absolute; top: 0; left: 0; width: 100%; height: 100%; border:0;&#34; allowfullscreen title=&#34;YouTube Video&#34;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-
-
-&lt;h2 id=&#34;next-episode&#34;&gt;Next Episode&lt;/h2&gt;
-
-&lt;p&gt;Learn how to &lt;a href=&#34;https://penkovsky.com/post/fpv-quad/&#34;&gt;upgrade to FPV&lt;/a&gt;.&lt;/p&gt;
-
-&lt;h2 id=&#34;learn-more&#34;&gt;Learn More&lt;/h2&gt;
-
-&lt;ul&gt;
-&lt;li&gt;&lt;a href=&#34;https://en.wikipedia.org/wiki/Ingenuity_(helicopter)&#34;&gt;Ingenuity helicopter&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;http://cleanflight.com&#34;&gt;Clean Flight&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://fpv-freerider.itch.io/fpv-freerider&#34;&gt;FPV FreeRider simulator&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=391D5dX7LKg&#34;&gt;Lessons how to fly an FPV drone&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;div class=&#34;footnotes&#34;&gt;
-
-&lt;hr /&gt;
-
-&lt;ol&gt;
-&lt;li id=&#34;fn:fn-1&#34;&gt;It is always advised to apply 3d printing glue for nylon prints because of high warping forces of this material.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-1&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-2&#34;&gt;I used UBEC in the second build. In the first build, I had a separate battery and a linear step-up DC converter to power the flight controller.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-2&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;li id=&#34;fn:fn-3&#34;&gt;Since I use a 4-in-1 ESC, it is a single ground wire.
- &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-3&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;/div&gt;
-</description>
-    </item>
-    
-    <item>
-      <title>Optical Computing Applications</title>
-      <link>https://penkovsky.com/talk/optical-computing-applications2021/</link>
-      <pubDate>Wed, 21 Apr 2021 15:40:00 +0200</pubDate>
-      
-      <guid>https://penkovsky.com/talk/optical-computing-applications2021/</guid>
       <description></description>
     </item>
     
