@@ -56,13 +56,13 @@ insights what it has learned.&lt;/p&gt;
 
 &lt;p&gt;Let us consider a simple scenario: a two-layer neural network, i.e. a network
 with a single hidden layer. This network will represent the control policy,
-that is, it will transform the observations from the environment into a
+that is, it will transform the observations from the environment into
 actions. The network will consist of an &lt;em&gt;attention&lt;/em&gt; layer and a linear layer
 (Figure below).
 We will use &lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;soft actor-critic&lt;/a&gt; for training, but many other
-algorithms would do. Then, once we train the agent, we will finally visualize
-how attention weights change during an episode. To push things even further, we
-will consider the attention layer with only one attention &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;head&lt;/a&gt;.
+algorithms would do. Then, once we have trained the agent, we will visualize
+how attention weights change during an episode. To push things even further,
+we will consider the attention layer with only one attention &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;head&lt;/a&gt;.
 Will this be enough?&lt;/p&gt;
 
 &lt;figure&gt;

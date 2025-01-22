@@ -287,9 +287,14 @@ step towards understand the inner workings of ChatGPT."><meta property="og:image
 
   
   
-  <span itemscope itemprop="author" itemtype="http://schema.org/Person">
-    <meta itemprop="name" content="Bogdan Penkovsky">
-  </span>
+  
+  <div>
+    
+    <span itemscope itemprop="author" itemtype="http://schema.org/Person">
+      <span itemprop="name">Bogdan Penkovsky</span>
+    </span>
+    
+  </div>
   
 
   <span class="article-date">
@@ -367,13 +372,13 @@ insights what it has learned.</p>
 
 <p>Let us consider a simple scenario: a two-layer neural network, i.e. a network
 with a single hidden layer. This network will represent the control policy,
-that is, it will transform the observations from the environment into a
+that is, it will transform the observations from the environment into
 actions. The network will consist of an <em>attention</em> layer and a linear layer
 (Figure below).
 We will use <a href="https://spinningup.openai.com/en/latest/algorithms/sac.html">soft actor-critic</a> for training, but many other
-algorithms would do. Then, once we train the agent, we will finally visualize
-how attention weights change during an episode. To push things even further, we
-will consider the attention layer with only one attention <a href="https://arxiv.org/abs/1706.03762">head</a>.
+algorithms would do. Then, once we have trained the agent, we will visualize
+how attention weights change during an episode. To push things even further,
+we will consider the attention layer with only one attention <a href="https://arxiv.org/abs/1706.03762">head</a>.
 Will this be enough?</p>
 
 <figure>
