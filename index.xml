@@ -26,63 +26,6 @@ step towards understand the inner workings of ChatGPT.&lt;/p&gt;
 
 &lt;hr /&gt;
 
-&lt;p&gt;We will train an AI agent to land on the lunar surface using
-&lt;a href=&#34;https://penkovsky.com/neural-networks/beyond/&#34;&gt;deep reinforcement learning&lt;/a&gt; approach.
-We will solve the &lt;a href=&#34;https://gymnasium.farama.org/environments/box2d/lunar_lander/&#34;&gt;Lunar lander&lt;/a&gt; &lt;a href=&#34;https://gymnasium.farama.org&#34;&gt;Gymnasium&lt;/a&gt;
-environment. The agent will learn to control a space vehicle in a 2D setting.
-The agent observes eight environmental features: X and Y coordinates of the
-lander, X and Y velocities, lander&#39;s angle and angular velocity, and two flags
-indicating whether each lander&#39;s leg is in contact with the ground. We would
-like to see how the agent attends to these features in order to get some
-insights what it has learned.&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/lunar.png&#34; alt=&#34;Lunar lander environment: The goal is to safely land on the flat area between the flags.&#34; width=&#34;600px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Lunar lander environment: The goal is to safely land on the flat area between the flags.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
-&lt;p&gt;Let us consider a simple scenario: a two-layer neural network, i.e. a network
-with a single hidden layer. This network will represent the control policy,
-that is, it will transform the observations from the environment into
-actions. The network will consist of an &lt;em&gt;attention&lt;/em&gt; layer and a linear layer
-(Figure below).
-We will use &lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;soft actor-critic&lt;/a&gt; for training, but many other
-algorithms would do. Then, once we have trained the agent, we will visualize
-how attention weights change during an episode. To push things even further,
-we will consider the attention layer with only one attention &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;head&lt;/a&gt;.
-Will this be enough?&lt;/p&gt;
-
-&lt;figure&gt;
-
-&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/policy-with-attention.png&#34; alt=&#34;Policy network with attention: attention layer and a linear layer.&#34; width=&#34;700px&#34; /&gt;
-
-
-
-&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
-  &lt;h4&gt;&lt;/h4&gt;
-  &lt;p&gt;
-    Policy network with attention: attention layer and a linear layer.
-    
-    
-    
-  &lt;/p&gt; 
-&lt;/figcaption&gt;
-
-&lt;/figure&gt;
-
 &lt;h2 id=&#34;attention-mechanism-basics&#34;&gt;Attention Mechanism Basics&lt;/h2&gt;
 
 &lt;p&gt;There are several variations on the attention mechanism, yet they are
@@ -99,14 +42,18 @@ Tensors $Q_0$, $K_0$, and $V_0$ are conventionally called &lt;em&gt;queries&lt;/
 as a matrix). Matrices $W^{(i)}$ are trainable linear transformations. For
 convenience, I omit biases assuming that input (feature) vectors are augmented
 with a constant feature. The first layer&#39;s attention mechanism is illustrated
-schematically in the Figure above.&lt;/p&gt;
+schematically in the cover image.&lt;/p&gt;
 
 &lt;p&gt;The output of the &lt;em&gt;softmax&lt;/em&gt; transformation is known as &lt;em&gt;attention weights&lt;/em&gt;.
 Those are created dynamically from the context (the input). Those
-weights will be applied to transform keys $K$.
+weights will be applied to transform values $V$.
 Note that the output vector is a linear combination of the input features.
 Last but not least, the input scaling factor $\sqrt{d_k}$
-empirically seems to play a crucial role. Try to verify.&lt;/p&gt;
+is used to deal with exponentially small gradients of &lt;em&gt;softmax&lt;/em&gt; for large inputs.
+The logic behind this constant: if we assume that the elements of query and key
+vectors are independent random variables with zero mean and unit variance,
+the variance of the dot product is $d_k$. Hence dividing by $\sqrt d_k$,
+the standard deviation.&lt;/p&gt;
 
 &lt;h2 id=&#34;visualizing-attention&#34;&gt;Visualizing Attention&lt;/h2&gt;
 
@@ -136,35 +83,91 @@ To illustrate the concept, we reproduce a figure from the transformer &lt;a href
 
 &lt;p&gt;The visualization might remind of fully connected layers. However, there is a
 difference. Attention weights adjust dynamically, depending on the actual
-input! Also attention is non-negative because of softmax transformation.
-Now that we have our network, let us learn a control policy
-and to visualize what happens in the attention layer during an episode.&lt;/p&gt;
+input! Also attention is non-negative because of softmax transformation.&lt;/p&gt;
+
+&lt;h2 id=&#34;benchmarks&#34;&gt;Benchmarks&lt;/h2&gt;
+
+&lt;h3 id=&#34;lunar-lander&#34;&gt;Lunar Lander&lt;/h3&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/lunar.png&#34; alt=&#34;Lunar lander environment: The goal is to safely land on the flat area between the flags.&#34; width=&#34;600px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Lunar lander environment: The goal is to safely land on the flat area between the flags.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;We train an AI agent to land on the lunar surface using
+&lt;a href=&#34;https://penkovsky.com/neural-networks/beyond/&#34;&gt;deep reinforcement learning&lt;/a&gt; approach.
+We will solve the &lt;a href=&#34;https://gymnasium.farama.org/environments/box2d/lunar_lander/&#34;&gt;Lunar lander&lt;/a&gt; &lt;a href=&#34;https://gymnasium.farama.org&#34;&gt;Gymnasium&lt;/a&gt;
+environment. The agent will learn to control a space vehicle in a 2D setting.
+The agent observes eight environmental features: X and Y coordinates of the
+lander, X and Y velocities, lander&#39;s angle and angular velocity, and two flags
+indicating whether each lander&#39;s leg is in contact with the ground. We would
+like to see how the agent attends to these features in order to get some
+insights what it has learned.&lt;/p&gt;
+
+&lt;figure&gt;
+
+&lt;img src=&#34;https://penkovsky.com/img/posts/neural-networks/attention/policy-with-attention.png&#34; alt=&#34;Policy network with attention: attention layer and a linear layer.&#34; width=&#34;700px&#34; /&gt;
+
+
+
+&lt;figcaption data-pre=&#34;Figure &#34; data-post=&#34;:&#34; &gt;
+  &lt;h4&gt;&lt;/h4&gt;
+  &lt;p&gt;
+    Policy network with attention: attention layer and a linear layer.
+    
+    
+    
+  &lt;/p&gt; 
+&lt;/figcaption&gt;
+
+&lt;/figure&gt;
+
+&lt;p&gt;Let us consider a simple scenario: a two-layer neural network, i.e. a network
+with a single hidden layer. This network will represent the control policy,
+that is, it will transform the observations from the environment into
+actions. The network will consist of an &lt;em&gt;attention&lt;/em&gt; layer and a linear layer.
+We will use &lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;soft actor-critic&lt;/a&gt; for training, but many other
+algorithms would do. Then, once we have trained the agent, we will visualize
+how attention weights change during an episode. To push things even further,
+we will consider the attention layer with only one attention &lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;head&lt;/a&gt;.
+Will this be enough?&lt;/p&gt;
 
 
 
 &lt;video width=&#34;600&#34; height=&#34;700&#34; autoplay loop controls&gt;
-  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__3__1737493538.mp4&#34; type=&#34;video/mp4&#34;&gt;
+  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v3__sac_continuous_action__3__1737753957.mp4&#34; type=&#34;video/mp4&#34;&gt;
   Your browser does not support the video tag.
 &lt;/video&gt;
 
 
 &lt;p align=&#34;right&#34;&gt;
-&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__3__1737493538.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
+&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v3__sac_continuous_action__3__1737753957.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
 &lt;/p&gt;
 
 
 
 &lt;video width=&#34;600&#34; height=&#34;700&#34; autoplay loop controls&gt;
-  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__6__1737495015.mp4&#34; type=&#34;video/mp4&#34;&gt;
+  &lt;source src=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v3__sac_continuous_action__6__1737753916.mp4&#34; type=&#34;video/mp4&#34;&gt;
   Your browser does not support the video tag.
 &lt;/video&gt;
 
 
 &lt;p align=&#34;right&#34;&gt;
-&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v2__sac_continuous_action__6__1737495015.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
+&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/LunarLanderContinuous-v3__sac_continuous_action__6__1737753916.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
 &lt;/p&gt;
-
-&lt;h2 id=&#34;video-analysis&#34;&gt;Video Analysis&lt;/h2&gt;
 
 &lt;p&gt;By observing the evolution of the attention weights during the episode,
 we may suggest that the agent has learned several distinctive phases.&lt;/p&gt;
@@ -181,15 +184,41 @@ This information can be useful to learn how land vertically.&lt;/p&gt;
 the agent pays significant attention to lander&#39;s angle.
 This state usually precedes the end of the episode.&lt;/p&gt;
 
-&lt;h2 id=&#34;summary&#34;&gt;Summary&lt;/h2&gt;
+&lt;h2 id=&#34;bipedal-walker&#34;&gt;Bipedal Walker&lt;/h2&gt;
 
-&lt;p&gt;It seems somewhat surprising that a policy network with only six
+&lt;p&gt;It might interesting to look how our attention-enabled architecture performs on
+other tasks. &lt;a href=&#34;https://gymnasium.farama.org/environments/box2d/bipedal_walker/&#34;&gt;Bipedal Walker&lt;/a&gt; is yet another 2D Gymnasium
+environment. This time, the observation space contains information about 24
+variables:
+hull angle speed, angular velocity, horizontal speed, vertical speed, position
+of joints and joints angular speed, legs contact with ground, and 10 lidar
+rangefinder measurements.&lt;/p&gt;
+
+
+
+&lt;video width=&#34;600&#34; height=&#34;700&#34; autoplay loop controls&gt;
+  &lt;source src=&#34;https://penkovsky.com/vid/BipedalWalker-v3__sac_continuous_action__2__1737753153.mp4&#34; type=&#34;video/mp4&#34;&gt;
+  Your browser does not support the video tag.
+&lt;/video&gt;
+
+&lt;p align=&#34;right&#34;&gt;
+&lt;small&gt;&lt;a href=&#34;https://penkovsky.com/vid/BipedalWalker-v3__sac_continuous_action__2__1737753153.mp4&#34; title=&#34;Download&#34;&gt;&amp;#x1f4e5;&amp;#xfe0e; Video&lt;/a&gt;&lt;/small&gt;
+&lt;/p&gt;
+
+
+&lt;p&gt;We see that attention is periodically switched. This is likely related to the
+agent&#39;s walking pattern (left leg? right leg?).&lt;/p&gt;
+
+&lt;h2 id=&#34;from-attention-to-transformer&#34;&gt;From Attention To Transformer&lt;/h2&gt;
+
+&lt;p&gt;It seems somewhat surprising that a policy network with very few
 hidden neurons was sufficient to learn an efficient control strategy.
-On the other hand, this reveals the power of the attention mechanism as it is.
+On the other hand, this hints on the power of the attention mechanism as it is&lt;sup class=&#34;footnote-ref&#34; id=&#34;fnref:fn-note&#34;&gt;&lt;a href=&#34;#fn:fn-note&#34;&gt;1&lt;/a&gt;&lt;/sup&gt;.
 In the actual transformer architecture, there are implemented many other tricks to
 teach the neural network some very impressive feats. For instance, instead of a
 single attention mechanism in each layer there are several of them (so-called
-&lt;em&gt;heads&lt;/em&gt;) analyzing information in parallel. Position information is encoded
+&lt;em&gt;heads&lt;/em&gt;) analyzing information in parallel. &lt;em&gt;Layer normalization&lt;/em&gt; is used
+to improve training efficiency. Position information is encoded
 using positional encodings (e.g. sine and cosine functions). To enforce
 causality, masking is performed (to prevent from attending to future word
 tokens during training). These are well described in
@@ -214,7 +243,17 @@ tokens during training). These are well described in
 &lt;li&gt;&lt;a href=&#34;https://spinningup.openai.com/en/latest/algorithms/sac.html&#34;&gt;Soft Actor-Critic&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/pdf/1409.0473&#34;&gt;Neural machine translation by jointly learning to align and translate&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://arxiv.org/abs/1706.03762&#34;&gt;Attention Is All You Need (transformer paper)&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;</description>
+&lt;li&gt;&lt;a href=&#34;https://www.bishopbook.com&#34;&gt;Deep Learning - Foundations and Concepts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class=&#34;footnotes&#34;&gt;
+
+&lt;hr /&gt;
+
+&lt;ol&gt;
+&lt;li id=&#34;fn:fn-note&#34;&gt;A bit more work is required to show this more rigorously: Train several baseline linear models and compare the average rewards over several episodes with average rewards given by models with attention.
+ &lt;a class=&#34;footnote-return&#34; href=&#34;#fnref:fn-note&#34;&gt;&lt;sup&gt;^&lt;/sup&gt;&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/div&gt;</description>
     </item>
     
     <item>
